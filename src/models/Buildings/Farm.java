@@ -9,5 +9,4 @@ public class Farm {
     private Quarry quarry;
     private ArrayList<Barn> barns = new ArrayList<>();
     private ArrayList<Coop> Coops = new ArrayList<>();
-
 }
