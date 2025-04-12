@@ -11,6 +11,7 @@ public class Player {
     private BackPack backPack;
     private int money;
     private final HashMap<Player, Integer> friendships = new HashMap<>();
+    private boolean isPassedOut = false;
 
     public Player(int energy, ShippingBin shippingBin, BackPack backPack, int money) {
         this.energy = energy;
@@ -53,5 +54,13 @@ public class Player {
 
     public HashMap<Player, Integer> getFriendships() {
         return friendships;
+    }
+
+    public boolean isPassedOut() {
+        return isPassedOut;
+    }
+
+    public void setPassedOut(boolean passedOut) {
+        isPassedOut = passedOut;
     }
 }
