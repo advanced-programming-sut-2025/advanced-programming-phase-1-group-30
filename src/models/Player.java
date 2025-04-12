@@ -3,6 +3,7 @@ package models;
 import models.Invetory.BackPack;
 import models.Invetory.ShippingBin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Player {
@@ -11,6 +12,7 @@ public class Player {
     private BackPack backPack;
     private int money;
     private final HashMap<Player, Integer> friendships = new HashMap<>();
+    private final ArrayList<Skills> skills = new ArrayList<>();
 
     public Player(int energy, ShippingBin shippingBin, BackPack backPack, int money) {
         this.energy = energy;
@@ -53,5 +55,9 @@ public class Player {
 
     public HashMap<Player, Integer> getFriendships() {
         return friendships;
+    }
+
+    public ArrayList<Skills> getSkills() {
+        return skills;
     }
 }

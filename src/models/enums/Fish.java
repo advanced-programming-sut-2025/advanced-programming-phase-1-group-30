@@ -33,4 +33,14 @@ public enum Fish {
         this.basePrice = basePrice;
         this.season = season;
     }
+    
+    public String getDisplayName() {
+        return displayName;
+    }
+    public int getBasePrice() {
+        return basePrice;
+    }
+    public Season getSeason() {
+        return season;
+    }
 }
