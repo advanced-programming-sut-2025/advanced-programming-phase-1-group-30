@@ -3,6 +3,7 @@ package models;
 import models.Invetory.BackPack;
 import models.Invetory.ShippingBin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Player {
@@ -11,6 +12,7 @@ public class Player {
     private BackPack backPack;
     private int money;
     private final HashMap<Player, Integer> friendships = new HashMap<>();
+
     private boolean isPassedOut = false;
 
     public Player(int energy, ShippingBin shippingBin, BackPack backPack, int money) {
@@ -55,7 +57,6 @@ public class Player {
     public HashMap<Player, Integer> getFriendships() {
         return friendships;
     }
-
     public boolean isPassedOut() {
         return isPassedOut;
     }
