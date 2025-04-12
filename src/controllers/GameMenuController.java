@@ -84,4 +84,5 @@ public class GameMenuController {
     public static void FriendshipNPCList() {}
     public static void QuestList() {}
     public static void QuestFinish() {}
+    public static void PassOut() {}
 }
