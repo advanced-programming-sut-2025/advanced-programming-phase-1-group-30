@@ -1,0 +1,910 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>/home/hamed/Desktop/XXX/advanced-programming-phase-1-group-30/src</OriginalElement>
+  <nodes>
+    <node x="4061.174936083484" y="6839.679621104851">models.Buildings.FishShopCosts</node>
+    <node x="2688.9194708177215" y="4375.92893821653">models.NPC.Job</node>
+    <node x="2552.5871948013355" y="5835.80515777174">models.Buildings.Saloon</node>
+    <node x="3634.294152593534" y="6371.482577682136">models.enums.Ability</node>
+    <node x="2563.1363124268705" y="6456.844230592838">views.RegisterMenu</node>
+    <node x="2333.1860203986657" y="4353.194064248447">models.Tools.Axe</node>
+    <node x="3677.6658286685906" y="634.621288122726">models.StoneType</node>
+    <node x="3245.530514422578" y="4927.383462552837">models.Tools.Scythe</node>
+    <node x="2699.607158766963" y="5407.18870083889">models.Buildings.Blacksmith</node>
+    <node x="2260.4932661643734" y="322.29100275417534">models.enums.Fish</node>
+    <node x="2089.57594618598" y="4882.282628499337">models.Tools.FishingPole</node>
+    <node x="-72.1735679676566" y="1430.05077486223">models.Buildings.JojaMartCosts</node>
+    <node x="886.8175660070866" y="4915.29957112407">models.Products.Tree</node>
+    <node x="3283.2764035013706" y="6928.514202421765">controllers.LoginMenuController</node>
+    <node x="1769.4976298523595" y="2062.207219658787">models.Product</node>
+    <node x="1178.5525950117851" y="589.5402152868097">models.Products.AnimalProductType</node>
+    <node x="1207.5259497320687" y="6497.899725321126">models.NPC.Morris</node>
+    <node x="9.901588400904842" y="4850.675679777875">models.DaysOfWeek</node>
+    <node x="1872.3162835795222" y="3691.6970570721433">models.Invetory.ShippingBin</node>
+    <node x="3435.6767960814527" y="3735.571469587289">models.Tool</node>
+    <node x="2857.012260040074" y="6440.026673478368">views.LoginMenu</node>
+    <node x="2452.5362758629567" y="3589.2121833910865">models.Tools.AxeType</node>
+    <node x="2982.6679244683087" y="3565.489725031903">models.Tools.BasketType</node>
+    <node x="3379.4718319101453" y="7364.126787038659">controllers.RegisterMenuController</node>
+    <node x="2805.3950798223364" y="5836.843984739232">models.Buildings.GeneralStore</node>
+    <node x="1412.3466545921958" y="7014.133636752568">models.NPC.Rob</node>
+    <node x="931.0592292634" y="5681.654495961159">models.Trade</node>
+    <node x="3194.015310058318" y="7613.825542500988">models.enums.Commands.LoginMenuCommands</node>
+    <node x="3146.4140827663973" y="6442.319396209381">views.MainMenu</node>
+    <node x="3121.825607728914" y="3246.342153383961">models.IndustrialProduct</node>
+    <node x="3430.932504237086" y="6442.632730894552">views.GameMenu</node>
+    <node x="2096.2432255033177" y="2059.048934454501">models.Invetory.Inventory</node>
+    <node x="1932.10362490996" y="4151.26616643256">models.Buildings.BuildingsInfo</node>
+    <node x="2978.538286972417" y="5406.0359066009">models.Buildings.FishShop</node>
+    <node x="3421.985929780932" y="5444.332586405892">models.Buildings.Lake</node>
+    <node x="3890.626953374858" y="6220.581060862118">models.Buildings.Farm</node>
+    <node x="4177.292162176887" y="3234.3265390797574">models.TIleTypes</node>
+    <node x="2996.9241312132076" y="6743.446835784785">models.Buildings.SaloonCosts</node>
+    <node x="-121.87042367705357" y="3401.1211175215644">models.Products.CropType</node>
+    <node x="2495.1628166700325" y="4894.62799895517">models.Tools.Hoe</node>
+    <node x="2821.6014382990356" y="4912.492958206067">models.Tools.Basket</node>
+    <node x="624.5361095150093" y="7568.369471461308">models.App</node>
+    <node x="3523.0520284943786" y="4937.691284279456">models.Tools.Pickaxe</node>
+    <node x="1371.6134303569543" y="6486.649485091854">models.NPC.Marnie</node>
+    <node x="2715.033315792505" y="3587.1169014941574">models.Tools.HoeType</node>
+    <node x="3582.4454830137656" y="5866.446706907389">models.Buildings.Quarry</node>
+    <node x="3835.1762388639518" y="5843.05042652483">models.Buildings.JojaMart</node>
+    <node x="4077.2178570442875" y="1877.5829119416517">models.Foods.FoodType</node>
+    <node x="2323.935540118269" y="5287.140437238047">models.NPC.NPC</node>
+    <node x="3030.507797429653" y="7419.88458427643">models.enums.Commands.GameMenuCommands</node>
+    <node x="2687.3549153284443" y="6780.56811366585">models.Buildings.BlacksmithCosts</node>
+    <node x="4100.486613260941" y="5831.991695092606">models.Buildings.Carpenter</node>
+    <node x="3663.885348826998" y="5447.187035061805">models.Buildings.Barn</node>
+    <node x="-33.839810230551336" y="5775.274106981889">models.Time</node>
+    <node x="3904.362715034657" y="5447.816345166382">models.Buildings.Coop</node>
+    <node x="2840.781073473782" y="7609.109769666433">models.enums.Commands.ProfileMenuCommands</node>
+    <node x="2669.490640155791" y="7414.3416803545215">models.enums.Commands.MainMenuCommands</node>
+    <node x="941.5072200212174" y="1999.6872644989585">models.Products.ForgingSeedType</node>
+    <node x="2542.001039953603" y="7622.070930209376">controllers.MainMenuController</node>
+    <node x="3601.1940233093546" y="3599.1731118824073">models.Tools.PickaxeType</node>
+    <node x="1566.6565025733664" y="4738.866681168241">models.Player</node>
+    <node x="1567.2563825704938" y="7016.366335226411">models.NPC.Willy</node>
+    <node x="3718.4060021070923" y="1074.9504079778108">controllers.GameMenuController</node>
+    <node x="4373.4899145236495" y="5821.940417422308">models.Buildings.Ranch</node>
+    <node x="1896.242609521547" y="570.2567094223512">models.Products.FruitType</node>
+    <node x="2942.8219556665217" y="4158.552014276775">models.NPC.Quest</node>
+    <node x="1325.5316404073892" y="5813.790256082961">models.enums.Weather</node>
+    <node x="3569.844634496641" y="6969.915552772272">views.ExitMenu</node>
+    <node x="3969.0528711508587" y="4947.0332829285635">models.Tile</node>
+    <node x="2304.4644120664993" y="7417.546856540652">models.enums.Commands.RegisterMenuCommands</node>
+    <node x="4148.032849315784" y="5429.613656933056">models.Buildings.GreenHouse</node>
+    <node x="4438.454178842853" y="5381.458337801272">models.Buildings.Hut</node>
+    <node x="2079.0412160967353" y="3526.2859829279337">models.Tools.FishingPoleType</node>
+    <node x="126.78239389693087" y="3221.330852454936">models.Products.ForgingSeed</node>
+    <node x="492.9780801934062" y="6766.020506272668">models.Game</node>
+    <node x="1955.1005144038081" y="3255.7896273111323">models.Invetory.BackPack</node>
+    <node x="1705.903722014081" y="3230.968955272343">models.Products.Fruit</node>
+    <node x="3802.0006060561077" y="6962.9301920042635">views.ProfileMenu</node>
+    <node x="2889.6266029063554" y="1911.1032448069354">models.IndustrialProducts.IndustrialProductType</node>
+    <node x="2244.269491980513" y="7607.964239223634">models.NPC.Lia</node>
+    <node x="1813.6133380275448" y="5625.096581750997">models.Buildings.RanchCosts</node>
+    <node x="1625.4525204879653" y="3637.9295403488686">models.Skills</node>
+    <node x="2338.377281627604" y="6392.745674908754">models.Animal</node>
+    <node x="2786.6787569991225" y="3232.3976676507173">models.ArtisanGood</node>
+    <node x="1159.8789694961624" y="3377.32915546775">models.Products.TreeType</node>
+    <node x="4164.09163568176" y="4336.630039627543">models.Buildings.Buildings</node>
+    <node x="234.73016552768058" y="1968.9404400443268">models.Products.ForagingTreeType</node>
+    <node x="351.68713222606465" y="3671.7213499238987">models.Products.ForagingCrop</node>
+    <node x="1880.4315019488442" y="7017.416329877212">models.NPC.Gus</node>
+    <node x="2137.2926693598956" y="7453.727799728336">models.NPC.Harvey</node>
+    <node x="2149.540289020969" y="7015.273510020078">models.NPC.Pierre</node>
+    <node x="267.031115379027" y="4388.664553872436">models.Products.Crop</node>
+    <node x="3396.2881665682107" y="5879.075753413587">views.AppMenu</node>
+    <node x="2056.3501415402716" y="7616.801864761324">models.GreatMap</node>
+    <node x="802.5029775916797" y="3716.43885459532">models.Products.AnimalProduct</node>
+    <node x="1972.2265098318378" y="7464.405238297559">models.Fishes</node>
+    <node x="993.7097236541897" y="6791.177294050194">models.User</node>
+    <node x="2187.0800661623853" y="6474.811211955663">models.NPC.Clint</node>
+    <node x="4002.384237107983" y="3708.9936069142304">models.Food</node>
+    <node x="2310.183120145712" y="7011.231534190547">models.NPC.Sebastian</node>
+    <node x="3582.860723643364" y="7595.9496580523755">views.AppView</node>
+    <node x="2521.356279401832" y="7007.997048094378">models.NPC.Abigail</node>
+    <node x="3424.0073744477863" y="4378.569772520674">models.Tools.Shear</node>
+    <node x="2579.797010465014" y="3261.7771305451347">models.Invetory.Refrigerator</node>
+    <node x="1388.470777876031" y="1523.7900771343925">models.Buildings.GeneralStoreCosts</node>
+    <node x="1830.6615347216148" y="7604.704028520362">Main</node>
+    <node x="134.9397467110451" y="-13.578974974967792">models.enums.Season</node>
+    <node x="3098.532435902501" y="5845.871832073313">models.Map</node>
+    <node x="615.1226550806166" y="3246.168419151876">models.Products.ForagingTree</node>
+    <node x="3360.4894424079166" y="1808.3130258267697">models.Buildings.CarpenterCosts</node>
+    <node x="1902.4292822564855" y="6391.873899833754">controllers.ProfileMenuController</node>
+    <node x="1540.1306919711315" y="6370.866210977206">models.Products.ForagingMineralType</node>
+    <node x="2416.8167748774126" y="1891.792694554823">models.ArtisanGoods.ArtisanGoodType</node>
+    <node x="3850.650375374308" y="56.63251438876459">models.Item</node>
+    <node x="3741.559355648011" y="4353.480803040699">models.Tools.MilkPail</node>
+    <node x="563.6025335151356" y="1932.190398299435">models.Products.ForagingCropType</node>
+    <node x="1773.3009056184992" y="7454.902422566369">models.NPC.Robin</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="models.Tools.Scythe" target="models.Tool" relationship="GENERALIZATION">
+      <point x="88.00048557742184" y="-4.625528372343979E-4" />
+      <point x="3473.0" y="4986.883" />
+      <point x="3473.0" y="4808.0" />
+      <point x="3394.0" y="4808.0" />
+      <point x="3394.0" y="3767.071" />
+      <point x="-52.49979608145259" y="-4.695872889897146E-4" />
+    </edge>
+    <edge source="models.Buildings.GeneralStore" target="models.Buildings.Buildings" relationship="GENERALIZATION">
+      <point x="-7.982233637449099E-5" y="-57.49998473923188" />
+      <point x="2921.895" y="5709.0" />
+      <point x="3874.0" y="5709.0" />
+      <point x="3874.0" y="5218.0" />
+      <point x="4267.092000000001" y="5218.0" />
+      <point x="3.6431823991733836E-4" y="131.49996037245728" />
+    </edge>
+    <edge source="models.Buildings.GeneralStoreCosts" target="models.enums.Season" relationship="TO_ONE">
+      <point x="2.2212396902432374E-4" y="587.4999228656075" />
+      <point x="1548.471" y="2986.0" />
+      <point x="534.0" y="2986.0" />
+      <point x="534.0" y="105.921" />
+      <point x="96.5002532889549" y="-2.5025032201142494E-5" />
+    </edge>
+    <edge source="models.Tile" target="models.Item" relationship="TO_ONE">
+      <point x="116.00012884914122" y="-2.8292856313782977E-4" />
+      <point x="4511.0" y="5016.533" />
+      <point x="4511.0" y="128.13299999999998" />
+      <point x="93.99962462569192" y="4.8561123540480367E-4" />
+    </edge>
+    <edge source="models.Invetory.Inventory" target="models.Item" relationship="TO_MANY">
+      <point x="-2.2550331777893007E-4" y="-45.49993445450082" />
+      <point x="2189.243" y="1647.0" />
+      <point x="2713.5" y="1647.0" />
+      <point x="2713.5" y="1057.45" />
+      <point x="4511.0" y="1057.45" />
+      <point x="4511.0" y="128.13299999999998" />
+      <point x="93.99962462569192" y="4.8561123540480367E-4" />
+    </edge>
+    <edge source="models.Products.AnimalProduct" target="models.Product" relationship="GENERALIZATION">
+      <point x="148.50002240832032" y="1.4540467964252457E-4" />
+      <point x="1130.0" y="3775.939" />
+      <point x="1130.0" y="3207.0" />
+      <point x="1832.998" y="3207.0" />
+      <point x="3.7014764052401006E-4" y="31.499780341212954" />
+    </edge>
+    <edge source="models.Products.AnimalProduct" target="models.Products.AnimalProductType" relationship="TO_ONE">
+      <point x="-26.995757570462274" y="-59.5" />
+      <point x="924.0072200212174" y="709.0402152868097" />
+      <point x="-134.0" y="0.0" />
+    </edge>
+    <edge source="models.Trade" target="models.Player" relationship="TO_ONE">
+      <point x="166.9997707366" y="-4.959611587764812E-4" />
+      <point x="1296.0" y="5933.154" />
+      <point x="1296.0" y="5002.367" />
+      <point x="-161.9995025733665" y="3.1883175961411325E-4" />
+    </edge>
+    <edge source="models.Product" target="models.Item" relationship="GENERALIZATION">
+      <point x="63.500370147640524" y="-2.1965878704577335E-4" />
+      <point x="1937.601" y="2093.707" />
+      <point x="1937.601" y="3416.0" />
+      <point x="3984.906" y="3416.0" />
+      <point x="40.25562462569178" y="71.50048561123542" />
+    </edge>
+    <edge source="models.NPC.NPC" target="models.Tile" relationship="TO_MANY">
+      <point x="4.5988173133082455E-4" y="-153.5004372380463" />
+      <point x="2449.436" y="5155.0" />
+      <point x="4085.053" y="5155.0" />
+      <point x="1.2884914121968905E-4" y="69.49971707143686" />
+    </edge>
+    <edge source="models.Products.Tree" target="models.Products.TreeType" relationship="TO_ONE">
+      <point x="0.0" y="-59.5" />
+      <point x="974.3175660070866" y="3852.93885459532" />
+      <point x="-202.5" y="164.10969912757037" />
+    </edge>
+    <edge source="models.App" target="models.User" relationship="TO_MANY">
+      <point x="107.5" y="0.0" />
+      <point x="1172.7097236541897" y="7649.869471461308" />
+      <point x="0.0" y="287.5" />
+    </edge>
+    <edge source="models.ArtisanGood" target="models.ArtisanGoods.ArtisanGoodType" relationship="TO_ONE">
+      <point x="-101.86198212170984" y="-59.5" />
+      <point x="198.5" y="215.5" />
+    </edge>
+    <edge source="models.Game" target="models.Player" relationship="TO_MANY">
+      <point x="-6.978080193406186" y="-251.49950627266844" />
+      <point x="706.0" y="6202.154" />
+      <point x="1296.0" y="6202.154" />
+      <point x="1296.0" y="5002.367" />
+      <point x="-161.9995025733665" y="3.1883175961411325E-4" />
+    </edge>
+    <edge source="models.Game" target="models.Time" relationship="TO_ONE">
+      <point x="-220.0" y="0.0" />
+      <point x="68.16018976944866" y="7017.520506272668" />
+      <point x="0.0" y="117.5" />
+    </edge>
+    <edge source="models.Buildings.Farm" target="models.Buildings.GreenHouse" relationship="TO_ONE">
+      <point x="220.5" y="0.0" />
+      <point x="4628.954178842853" y="6472.081060862118" />
+      <point x="4628.954178842853" y="5461.958337801272" />
+      <point x="115.0" y="0.8446808682165283" />
+    </edge>
+    <edge source="models.Buildings.Farm" target="models.Buildings.Barn" relationship="TO_MANY">
+      <point x="-220.5" y="-184.0" />
+      <point x="3791.9454830137656" y="6288.081060862118" />
+      <point x="39.060134186767755" y="31.5" />
+    </edge>
+    <edge source="models.Player" target="models.Skills" relationship="TO_MANY">
+      <point x="-15.0" y="-263.5" />
+      <point x="-0.7960179145989059" y="95.5" />
+    </edge>
+    <edge source="models.Buildings.Hut" target="models.Buildings.Buildings" relationship="GENERALIZATION">
+      <point x="-1.7884285352920415E-4" y="31.499662198727492" />
+      <point x="4524.954" y="5542.0" />
+      <point x="3874.0" y="5542.0" />
+      <point x="3874.0" y="5218.0" />
+      <point x="4267.092000000001" y="5218.0" />
+      <point x="3.6431823991733836E-4" y="131.49996037245728" />
+    </edge>
+    <edge source="models.Tools.FishingPole" target="models.Tools.FishingPoleType" relationship="TO_ONE">
+      <point x="-14.999946185979525" y="-71.5" />
+      <point x="-29.965216096735276" y="191.5" />
+    </edge>
+    <edge source="models.Buildings.RanchCosts" target="models.Buildings.BuildingsInfo" relationship="TO_ONE">
+      <point x="-3.3802754478529096E-4" y="-287.4995817509971" />
+      <point x="1957.613" y="5425.64" />
+      <point x="1912.0" y="5425.64" />
+      <point x="1912.0" y="4414.766" />
+      <point x="-113.49962490995995" y="-1.6643256003590068E-4" />
+    </edge>
+    <edge source="views.LoginMenu" target="views.AppMenu" relationship="REALIZATION">
+      <point x="-2.6004007395386E-4" y="45.500326521631905" />
+      <point x="2925.512" y="6588.0" />
+      <point x="3413.433" y="6588.0" />
+      <point x="-45.355166568210734" y="31.500246586412686" />
+    </edge>
+    <edge source="models.Game" target="models.enums.Weather" relationship="TO_ONE">
+      <point x="8.021919806593814" y="-251.5" />
+      <point x="721.0" y="6288.081060862118" />
+      <point x="1425.5316404073892" y="6288.081060862118" />
+      <point x="0.0" y="107.5" />
+    </edge>
+    <edge source="models.Tile" target="models.TIleTypes" relationship="TO_ONE">
+      <point x="0.0" y="-69.5" />
+      <point x="4085.0528711508587" y="4241.052014276775" />
+      <point x="4280.792162176887" y="4241.052014276775" />
+      <point x="0.0" y="95.5" />
+    </edge>
+    <edge source="models.Tools.Basket" target="models.Tools.BasketType" relationship="TO_ONE">
+      <point x="-16.06812250653047" y="-71.5" />
+      <point x="2911.533315792505" y="4104.621117521565" />
+      <point x="3092.6679244683087" y="4104.621117521565" />
+      <point x="0.0" y="167.5" />
+    </edge>
+    <edge source="models.Products.ForagingTree" target="models.Product" relationship="GENERALIZATION">
+      <point x="3.449193834512698E-4" y="-59.50041915187603" />
+      <point x="758.123" y="3207.0" />
+      <point x="1832.998" y="3207.0" />
+      <point x="3.7014764052401006E-4" y="31.499780341212954" />
+    </edge>
+    <edge source="models.NPC.Sebastian" target="models.NPC.NPC" relationship="GENERALIZATION">
+      <point x="-1.2014571211693692E-4" y="-31.49953419054691" />
+      <point x="2374.183" y="6990.0" />
+      <point x="2301.0" y="6990.0" />
+      <point x="2301.0" y="5440.64" />
+      <point x="-125.49954011826867" y="-4.3723804628825746E-4" />
+    </edge>
+    <edge source="models.Tools.Hoe" target="models.Tool" relationship="GENERALIZATION">
+      <point x="1.8332996751269093E-4" y="-71.49999895517067" />
+      <point x="2593.163" y="4869.0" />
+      <point x="3394.0" y="4869.0" />
+      <point x="3394.0" y="3767.071" />
+      <point x="-52.49979608145259" y="-4.695872889897146E-4" />
+    </edge>
+    <edge source="models.Buildings.Coop" target="models.Buildings.Buildings" relationship="GENERALIZATION">
+      <point x="-91.49971503465713" y="-3.451663824307616E-4" />
+      <point x="3874.0" y="5479.316" />
+      <point x="3874.0" y="5218.0" />
+      <point x="4267.092000000001" y="5218.0" />
+      <point x="3.6431823991733836E-4" y="131.49996037245728" />
+    </edge>
+    <edge source="models.Tools.Pickaxe" target="models.Tools.PickaxeType" relationship="TO_ONE">
+      <point x="0.0" y="-71.5" />
+      <point x="-140.141994814976" y="167.5" />
+    </edge>
+    <edge source="models.NPC.Marnie" target="models.NPC.NPC" relationship="GENERALIZATION">
+      <point x="-4.3035695421167475E-4" y="31.49951490814601" />
+      <point x="1424.113" y="6725.0" />
+      <point x="2301.0" y="6725.0" />
+      <point x="2301.0" y="5440.64" />
+      <point x="-125.49954011826867" y="-4.3723804628825746E-4" />
+    </edge>
+    <edge source="models.Products.ForgingSeed" target="models.Product" relationship="GENERALIZATION">
+      <point x="140.99960610306914" y="1.475450640100462E-4" />
+      <point x="480.187" y="3280.831" />
+      <point x="480.187" y="3207.0" />
+      <point x="1832.998" y="3207.0" />
+      <point x="3.7014764052401006E-4" y="31.499780341212954" />
+    </edge>
+    <edge source="models.Invetory.ShippingBin" target="models.Invetory.Inventory" relationship="GENERALIZATION">
+      <point x="-7.215283579522065" y="-31.500057072143136" />
+      <point x="1937.601" y="3533.786" />
+      <point x="1920.0" y="3533.786" />
+      <point x="1920.0" y="2108.707" />
+      <point x="-93.00022550331778" y="4.158065545499085" />
+    </edge>
+    <edge source="models.Map" target="models.Tile" relationship="TO_MANY">
+      <point x="-4.3590250106717576E-4" y="-57.49983207331297" />
+      <point x="3217.032" y="5155.0" />
+      <point x="4085.053" y="5155.0" />
+      <point x="1.2884914121968905E-4" y="69.49971707143686" />
+    </edge>
+    <edge source="models.Buildings.JojaMart" target="models.Buildings.Buildings" relationship="GENERALIZATION">
+      <point x="-2.3886395183581044E-4" y="-57.50042652482989" />
+      <point x="3937.176" y="5709.0" />
+      <point x="3874.0" y="5709.0" />
+      <point x="3874.0" y="5218.0" />
+      <point x="4267.092000000001" y="5218.0" />
+      <point x="3.6431823991733836E-4" y="131.49996037245728" />
+    </edge>
+    <edge source="models.App" target="models.Game" relationship="TO_ONE">
+      <point x="-19.058029321603158" y="-81.5" />
+      <point x="0.0" y="251.5" />
+    </edge>
+    <edge source="models.Tools.Axe" target="models.Tools.AxeType" relationship="TO_ONE">
+      <point x="29.850255464290967" y="-71.5" />
+      <point x="-93.5" y="143.5" />
+    </edge>
+    <edge source="views.RegisterMenu" target="views.AppMenu" relationship="REALIZATION">
+      <point x="-3.1242687055055285E-4" y="45.49976940716169" />
+      <point x="2641.636" y="6588.0" />
+      <point x="3413.433" y="6588.0" />
+      <point x="-45.355166568210734" y="31.500246586412686" />
+    </edge>
+    <edge source="models.NPC.Abigail" target="models.NPC.NPC" relationship="GENERALIZATION">
+      <point x="-52.000279401831904" y="-4.809437814401463E-5" />
+      <point x="2455.683" y="7039.497" />
+      <point x="2455.683" y="6990.0" />
+      <point x="2301.0" y="6990.0" />
+      <point x="2301.0" y="5440.64" />
+      <point x="-125.49954011826867" y="-4.3723804628825746E-4" />
+    </edge>
+    <edge source="models.Buildings.Farm" target="models.Buildings.Lake" relationship="TO_MANY">
+      <point x="-220.5" y="-139.0" />
+      <point x="3538.7881665682107" y="6333.081060862118" />
+      <point x="27.302236787278616" y="31.5" />
+    </edge>
+    <edge source="models.Products.ForgingSeedType" target="models.enums.Season" relationship="TO_ONE">
+      <point x="-2.200212175011984E-4" y="119.49973550104141" />
+      <point x="1073.507" y="2986.0" />
+      <point x="534.0" y="2986.0" />
+      <point x="534.0" y="105.921" />
+      <point x="96.5002532889549" y="-2.5025032201142494E-5" />
+    </edge>
+    <edge source="models.Player" target="models.Invetory.ShippingBin" relationship="TO_ONE">
+      <point x="154.5" y="-263.5" />
+      <point x="-61.659781006155754" y="31.5" />
+    </edge>
+    <edge source="models.Products.Crop" target="models.Product" relationship="GENERALIZATION">
+      <point x="88.49988462097298" y="4.461275639187079E-4" />
+      <point x="721.0" y="4448.165" />
+      <point x="721.0" y="3662.0" />
+      <point x="1130.0" y="3662.0" />
+      <point x="1130.0" y="3207.0" />
+      <point x="1832.998" y="3207.0" />
+      <point x="3.7014764052401006E-4" y="31.499780341212954" />
+    </edge>
+    <edge source="models.Products.Fruit" target="models.Products.FruitType" relationship="TO_ONE">
+      <point x="-14.999722014081044" y="-59.49995527234296" />
+      <point x="1778.404" y="2865.0" />
+      <point x="1739.0" y="2865.0" />
+      <point x="1739.0" y="689.757" />
+      <point x="-103.49960952154697" y="2.9057764879780734E-4" />
+    </edge>
+    <edge source="models.Products.Tree" target="models.Product" relationship="GENERALIZATION">
+      <point x="87.50043399291337" y="4.2887593008344993E-4" />
+      <point x="1130.0" y="4974.8" />
+      <point x="1130.0" y="3207.0" />
+      <point x="1832.998" y="3207.0" />
+      <point x="3.7014764052401006E-4" y="31.499780341212954" />
+    </edge>
+    <edge source="views.ExitMenu" target="views.AppMenu" relationship="REALIZATION">
+      <point x="3.65503358807473E-4" y="-45.49955277227218" />
+      <point x="3632.345" y="6665.0" />
+      <point x="3073.5" y="6665.0" />
+      <point x="3073.5" y="6588.0" />
+      <point x="3413.433" y="6588.0" />
+      <point x="-45.355166568210734" y="31.500246586412686" />
+    </edge>
+    <edge source="models.NPC.Gus" target="models.NPC.NPC" relationship="GENERALIZATION">
+      <point x="4.980511557732825E-4" y="-31.500329877211698" />
+      <point x="1923.932" y="6990.0" />
+      <point x="2301.0" y="6990.0" />
+      <point x="2301.0" y="5440.64" />
+      <point x="-125.49954011826867" y="-4.3723804628825746E-4" />
+    </edge>
+    <edge source="models.NPC.NPC" target="models.NPC.Quest" relationship="TO_MANY">
+      <point x="-106.35959393228904" y="-153.5" />
+      <point x="2343.07594618598" y="5118.5332829285635" />
+      <point x="3152.8219556665217" y="5118.5332829285635" />
+      <point x="0.0" y="287.5" />
+    </edge>
+    <edge source="models.Time" target="models.enums.Season" relationship="TO_ONE">
+      <point x="-102.00018976944867" y="-1.069818890755414E-4" />
+      <point x="-146.0" y="5892.774" />
+      <point x="-146.0" y="2986.0" />
+      <point x="534.0" y="2986.0" />
+      <point x="534.0" y="105.921" />
+      <point x="96.5002532889549" y="-2.5025032201142494E-5" />
+    </edge>
+    <edge source="views.MainMenu" target="views.AppMenu" relationship="REALIZATION">
+      <point x="-8.276639709947631E-5" y="45.4996037906194" />
+      <point x="3211.914" y="6588.0" />
+      <point x="3413.433" y="6588.0" />
+      <point x="-45.355166568210734" y="31.500246586412686" />
+    </edge>
+    <edge source="models.Invetory.Refrigerator" target="models.Invetory.Inventory" relationship="GENERALIZATION">
+      <point x="-1.046501392920618E-5" y="-31.500130545134652" />
+      <point x="2651.297" y="2850.0" />
+      <point x="1920.0" y="2850.0" />
+      <point x="1920.0" y="2108.707" />
+      <point x="-93.00022550331778" y="4.158065545499085" />
+    </edge>
+    <edge source="models.Buildings.GreenHouse" target="models.Buildings.Buildings" relationship="GENERALIZATION">
+      <point x="1.506842158960353E-4" y="31.50034306694397" />
+      <point x="4263.032999999999" y="5542.0" />
+      <point x="3874.0" y="5542.0" />
+      <point x="3874.0" y="5218.0" />
+      <point x="4267.092000000001" y="5218.0" />
+      <point x="3.6431823991733836E-4" y="131.49996037245728" />
+    </edge>
+    <edge source="models.Buildings.Ranch" target="models.Buildings.Buildings" relationship="GENERALIZATION">
+      <point x="8.547635025024647E-5" y="-57.5004174223086" />
+      <point x="4467.49" y="5709.0" />
+      <point x="3874.0" y="5709.0" />
+      <point x="3874.0" y="5218.0" />
+      <point x="4267.092000000001" y="5218.0" />
+      <point x="3.6431823991733836E-4" y="131.49996037245728" />
+    </edge>
+    <edge source="views.AppView" target="views.ExitMenu" relationship="CREATE">
+      <point x="45.0" y="-45.5" />
+      <point x="55.51608914672306" y="45.5" />
+    </edge>
+    <edge source="models.Invetory.BackPack" target="models.Invetory.Inventory" relationship="GENERALIZATION">
+      <point x="-63.49951440380801" y="3.7268886762831244E-4" />
+      <point x="1920.0" y="3287.29" />
+      <point x="1920.0" y="2108.707" />
+      <point x="-93.00022550331778" y="4.158065545499085" />
+    </edge>
+    <edge source="views.AppView" target="views.RegisterMenu" relationship="CREATE">
+      <point x="0.0" y="-45.5" />
+      <point x="3642.860723643364" y="7335.946835784785" />
+      <point x="2642.856279401832" y="7335.946835784785" />
+      <point x="2642.856279401832" y="6888.677294050194" />
+      <point x="2617.856279401832" y="6888.677294050194" />
+      <point x="-23.780033025038392" y="45.5" />
+    </edge>
+    <edge source="models.Buildings.Farm" target="models.Buildings.Hut" relationship="TO_ONE">
+      <point x="220.5" y="15.0" />
+      <point x="4643.954178842853" y="6487.081060862118" />
+      <point x="4643.954178842853" y="5412.958337801272" />
+      <point x="86.5" y="0.0" />
+    </edge>
+    <edge source="models.NPC.Pierre" target="models.NPC.NPC" relationship="GENERALIZATION">
+      <point x="-2.890209691486234E-4" y="-31.49951002007765" />
+      <point x="2199.04" y="6990.0" />
+      <point x="2301.0" y="6990.0" />
+      <point x="2301.0" y="5440.64" />
+      <point x="-125.49954011826867" y="-4.3723804628825746E-4" />
+    </edge>
+    <edge source="models.IndustrialProduct" target="models.Item" relationship="GENERALIZATION">
+      <point x="3.9227108618433704E-4" y="59.49984661603912" />
+      <point x="3286.326" y="3416.0" />
+      <point x="3984.906" y="3416.0" />
+      <point x="40.25562462569178" y="71.50048561123542" />
+    </edge>
+    <edge source="models.NPC.NPC" target="models.Buildings.BuildingsInfo" relationship="TO_ONE">
+      <point x="-125.49954011826867" y="-15.000437238046288" />
+      <point x="1912.0" y="5425.64" />
+      <point x="1912.0" y="4414.766" />
+      <point x="-113.49962490995995" y="-1.6643256003590068E-4" />
+    </edge>
+    <edge source="models.IndustrialProducts.IndustrialProductType" target="models.Item" relationship="TO_MANY">
+      <point x="3.970936445512052E-4" y="-191.50024480693537" />
+      <point x="3094.627" y="1647.0" />
+      <point x="2713.5" y="1647.0" />
+      <point x="2713.5" y="1057.45" />
+      <point x="4511.0" y="1057.45" />
+      <point x="4511.0" y="128.13299999999998" />
+      <point x="93.99962462569192" y="4.8561123540480367E-4" />
+    </edge>
+    <edge source="models.Products.ForagingTree" target="models.Products.ForagingCropType" relationship="TO_ONE">
+      <point x="-142.9996550806166" y="-4.1915187603080994E-4" />
+      <point x="573.0" y="3305.668" />
+      <point x="573.0" y="2969.5" />
+      <point x="722.103" y="2969.5" />
+      <point x="4.6648486431877245E-4" y="167.4996017005651" />
+    </edge>
+    <edge source="models.ArtisanGoods.ArtisanGoodType" target="models.Item" relationship="TO_MANY">
+      <point x="2.2512258738061064E-4" y="-215.499694554823" />
+      <point x="2622.817" y="1647.0" />
+      <point x="2713.5" y="1647.0" />
+      <point x="2713.5" y="1057.45" />
+      <point x="4511.0" y="1057.45" />
+      <point x="4511.0" y="128.13299999999998" />
+      <point x="93.99962462569192" y="4.8561123540480367E-4" />
+    </edge>
+    <edge source="views.AppView" target="views.GameMenu" relationship="CREATE">
+      <point x="30.0" y="-45.5" />
+      <point x="3672.860723643364" y="7163.014202421765" />
+      <point x="3514.933" y="7163.014202421765" />
+      <point x="15.000495762913943" y="45.5" />
+    </edge>
+    <edge source="models.Game" target="models.Map" relationship="TO_ONE">
+      <point x="181.33948581368043" y="-251.5" />
+      <point x="894.3175660070866" y="6333.081060862118" />
+      <point x="3217.032435902501" y="6333.081060862118" />
+      <point x="0.0" y="57.5" />
+    </edge>
+    <edge source="models.Products.ForagingCrop" target="models.Products.ForagingCropType" relationship="TO_ONE">
+      <point x="-1.3222606463614284E-4" y="-59.50034992389874" />
+      <point x="495.187" y="3320.668" />
+      <point x="573.0" y="3320.668" />
+      <point x="573.0" y="2969.5" />
+      <point x="722.103" y="2969.5" />
+      <point x="4.6648486431877245E-4" y="167.4996017005651" />
+    </edge>
+    <edge source="views.AppView" target="views.LoginMenu" relationship="CREATE">
+      <point x="-36.88889173321877" y="-45.5" />
+      <point x="3605.9718319101453" y="7575.869471461308" />
+      <point x="2968.990640155791" y="7575.869471461308" />
+      <point x="43.478380115716845" y="45.5" />
+    </edge>
+    <edge source="models.Tools.FishingPole" target="models.Tool" relationship="GENERALIZATION">
+      <point x="5.3814020475329016E-5" y="-71.49962849933672" />
+      <point x="2220.076" y="4808.0" />
+      <point x="3394.0" y="4808.0" />
+      <point x="3394.0" y="3767.071" />
+      <point x="-52.49979608145259" y="-4.695872889897146E-4" />
+    </edge>
+    <edge source="models.NPC.Morris" target="models.NPC.NPC" relationship="GENERALIZATION">
+      <point x="5.0267931328562554E-5" y="31.50027467887321" />
+      <point x="1258.526" y="6725.0" />
+      <point x="2301.0" y="6725.0" />
+      <point x="2301.0" y="5440.64" />
+      <point x="-125.49954011826867" y="-4.3723804628825746E-4" />
+    </edge>
+    <edge source="views.AppView" target="views.ProfileMenu" relationship="CREATE">
+      <point x="60.0" y="0.0" />
+      <point x="3873.5006060561077" y="7641.4496580523755" />
+      <point x="0.0" y="45.5" />
+    </edge>
+    <edge source="views.GameMenu" target="views.AppMenu" relationship="REALIZATION">
+      <point x="4.95762913942599E-4" y="45.50026910544784" />
+      <point x="3499.933" y="6588.0" />
+      <point x="3413.433" y="6588.0" />
+      <point x="-45.355166568210734" y="31.500246586412686" />
+    </edge>
+    <edge source="models.Tools.Shear" target="models.Tool" relationship="GENERALIZATION">
+      <point x="-88.00037444778627" y="2.274793259857688E-4" />
+      <point x="3394.0" y="4462.07" />
+      <point x="3394.0" y="3767.071" />
+      <point x="-52.49979608145259" y="-4.695872889897146E-4" />
+    </edge>
+    <edge source="models.Products.TreeType" target="models.Products.FruitType" relationship="TO_ONE">
+      <point x="33.59203050383758" y="-311.50015546774966" />
+      <point x="1395.971" y="3001.0" />
+      <point x="1739.0" y="3001.0" />
+      <point x="1739.0" y="689.757" />
+      <point x="-103.49960952154697" y="2.9057764879780734E-4" />
+    </edge>
+    <edge source="models.Products.TreeType" target="models.Products.ForgingSeedType" relationship="TO_ONE">
+      <point x="-202.4999694961624" y="-0.3291554677498425" />
+      <point x="1102.0" y="3688.5" />
+      <point x="1102.0" y="2971.0" />
+      <point x="1121.5" y="2971.0" />
+      <point x="47.99277997878255" y="119.49973550104141" />
+    </edge>
+    <edge source="models.Tool" target="models.Item" relationship="GENERALIZATION">
+      <point x="2.0391854741319548E-4" y="-31.50046958728899" />
+      <point x="3488.177" y="3476.0" />
+      <point x="2976.5" y="3476.0" />
+      <point x="2976.5" y="3416.0" />
+      <point x="3984.906" y="3416.0" />
+      <point x="40.25562462569178" y="71.50048561123542" />
+    </edge>
+    <edge source="models.Trade" target="models.Item" relationship="TO_ONE">
+      <point x="69.31977073660005" y="-251.50049596115878" />
+      <point x="1167.379" y="4017.829" />
+      <point x="4511.0" y="4017.829" />
+      <point x="4511.0" y="128.13299999999998" />
+      <point x="93.99962462569192" y="4.8561123540480367E-4" />
+    </edge>
+    <edge source="models.Buildings.Carpenter" target="models.Buildings.Buildings" relationship="GENERALIZATION">
+      <point x="3.867390587402042E-4" y="-57.49969509260609" />
+      <point x="4206.987" y="5709.0" />
+      <point x="3874.0" y="5709.0" />
+      <point x="3874.0" y="5218.0" />
+      <point x="4267.092000000001" y="5218.0" />
+      <point x="3.6431823991733836E-4" y="131.49996037245728" />
+    </edge>
+    <edge source="models.Buildings.Barn" target="models.Buildings.Buildings" relationship="GENERALIZATION">
+      <point x="-3.488269976514857E-4" y="31.499964938195262" />
+      <point x="3752.885" y="5542.0" />
+      <point x="3874.0" y="5542.0" />
+      <point x="3874.0" y="5218.0" />
+      <point x="4267.092000000001" y="5218.0" />
+      <point x="3.6431823991733836E-4" y="131.49996037245728" />
+    </edge>
+    <edge source="models.Products.CropType" target="models.enums.Season" relationship="TO_ONE">
+      <point x="-202.99957632294644" y="-1.1752156433431082E-4" />
+      <point x="-146.0" y="3736.621" />
+      <point x="-146.0" y="2986.0" />
+      <point x="534.0" y="2986.0" />
+      <point x="534.0" y="105.921" />
+      <point x="96.5002532889549" y="-2.5025032201142494E-5" />
+    </edge>
+    <edge source="models.Products.ForgingSeed" target="models.Products.ForagingCropType" relationship="TO_ONE">
+      <point x="140.99960610306914" y="15.00014754506401" />
+      <point x="573.0" y="3295.831" />
+      <point x="573.0" y="2969.5" />
+      <point x="722.103" y="2969.5" />
+      <point x="4.6648486431877245E-4" y="167.4996017005651" />
+    </edge>
+    <edge source="models.Tools.Pickaxe" target="models.Tool" relationship="GENERALIZATION">
+      <point x="-108.50002849437851" y="-2.8427945653675124E-4" />
+      <point x="3473.0" y="5009.191" />
+      <point x="3473.0" y="4808.0" />
+      <point x="3394.0" y="4808.0" />
+      <point x="3394.0" y="3767.071" />
+      <point x="-52.49979608145259" y="-4.695872889897146E-4" />
+    </edge>
+    <edge source="models.Products.CropType" target="models.Products.ForgingSeedType" relationship="TO_ONE">
+      <point x="203.00042367705356" y="-89.62111752156443" />
+      <point x="1102.0" y="3647.0" />
+      <point x="1102.0" y="2971.0" />
+      <point x="1121.5" y="2971.0" />
+      <point x="47.99277997878255" y="119.49973550104141" />
+    </edge>
+    <edge source="models.NPC.NPC" target="models.NPC.Job" relationship="TO_ONE">
+      <point x="-121.35959393228904" y="-153.5" />
+      <point x="2328.07594618598" y="5072.992958206067" />
+      <point x="2773.9194708177215" y="5072.992958206067" />
+      <point x="0.0" y="57.5" />
+    </edge>
+    <edge source="models.Buildings.JojaMartCosts" target="models.enums.Season" relationship="TO_ONE">
+      <point x="122.99956796765659" y="2.2513777003041469E-4" />
+      <point x="205.0" y="2089.551" />
+      <point x="205.0" y="2986.0" />
+      <point x="534.0" y="2986.0" />
+      <point x="534.0" y="105.921" />
+      <point x="96.5002532889549" y="-2.5025032201142494E-5" />
+    </edge>
+    <edge source="models.Products.ForagingCropType" target="models.enums.Season" relationship="TO_ONE">
+      <point x="-158.49953351513562" y="-3.982994348916691E-4" />
+      <point x="534.0" y="2099.69" />
+      <point x="534.0" y="105.921" />
+      <point x="96.5002532889549" y="-2.5025032201142494E-5" />
+    </edge>
+    <edge source="views.AppView" target="views.MainMenu" relationship="CREATE">
+      <point x="15.0" y="-45.5" />
+      <point x="3657.860723643364" y="7261.179621104851" />
+      <point x="3239.4241312132076" y="7261.179621104851" />
+      <point x="27.510048446810288" y="45.5" />
+    </edge>
+    <edge source="models.User" target="models.Player" relationship="TO_ONE">
+      <point x="2.7634581033453287E-4" y="-287.5002940501945" />
+      <point x="1172.71" y="6202.154" />
+      <point x="1296.0" y="6202.154" />
+      <point x="1296.0" y="5002.367" />
+      <point x="-161.9995025733665" y="3.1883175961411325E-4" />
+    </edge>
+    <edge source="models.Food" target="models.Foods.FoodType" relationship="TO_ONE">
+      <point x="14.99976289201686" y="-59.5" />
+      <point x="-173.33385704428747" y="215.5" />
+    </edge>
+    <edge source="models.Tools.MilkPail" target="models.Tool" relationship="GENERALIZATION">
+      <point x="-3.5564801100917975E-4" y="119.50019695930041" />
+      <point x="3830.059" y="4808.0" />
+      <point x="3394.0" y="4808.0" />
+      <point x="3394.0" y="3767.071" />
+      <point x="-52.49979608145259" y="-4.695872889897146E-4" />
+    </edge>
+    <edge source="models.Time" target="models.DaysOfWeek" relationship="TO_ONE">
+      <point x="55.24139863145618" y="-117.5" />
+      <point x="0.0" y="143.5" />
+    </edge>
+    <edge source="models.ArtisanGood" target="models.Item" relationship="GENERALIZATION">
+      <point x="2.4300087761730538E-4" y="59.50033234928287" />
+      <point x="2923.179" y="3416.0" />
+      <point x="3984.906" y="3416.0" />
+      <point x="40.25562462569178" y="71.50048561123542" />
+    </edge>
+    <edge source="models.Buildings.Farm" target="models.Buildings.Quarry" relationship="TO_ONE">
+      <point x="-220.5" y="-154.0" />
+      <point x="3678.4454830137656" y="6318.081060862118" />
+      <point x="0.0" y="31.5" />
+    </edge>
+    <edge source="models.Tools.FishingPoleType" target="models.enums.Fish" relationship="TO_MANY">
+      <point x="126.95205006763808" y="-191.5" />
+      <point x="0.0" y="371.4999999999999" />
+    </edge>
+    <edge source="models.Game" target="models.Trade" relationship="TO_MANY">
+      <point x="-21.978080193406186" y="-251.5" />
+      <point x="691.0" y="5933.154495961159" />
+      <point x="-167.0" y="0.0" />
+    </edge>
+    <edge source="models.Tools.Basket" target="models.Tool" relationship="GENERALIZATION">
+      <point x="-4.382990355225047E-4" y="-71.49995820606637" />
+      <point x="2927.601" y="4869.0" />
+      <point x="3394.0" y="4869.0" />
+      <point x="3394.0" y="3767.071" />
+      <point x="-52.49979608145259" y="-4.695872889897146E-4" />
+    </edge>
+    <edge source="models.Food" target="models.Item" relationship="GENERALIZATION">
+      <point x="-2.3710798313913983E-4" y="-59.4996069142303" />
+      <point x="4092.884" y="3476.0" />
+      <point x="2976.5" y="3476.0" />
+      <point x="2976.5" y="3416.0" />
+      <point x="3984.906" y="3416.0" />
+      <point x="40.25562462569178" y="71.50048561123542" />
+    </edge>
+    <edge source="models.Tools.Hoe" target="models.Tools.HoeType" relationship="TO_ONE">
+      <point x="-14.999816670032487" y="-71.5" />
+      <point x="2578.163" y="4256.052014276775" />
+      <point x="2817.033315792505" y="4256.052014276775" />
+      <point x="0.0" y="143.5" />
+    </edge>
+    <edge source="models.Tools.PickaxeType" target="models.StoneType" relationship="TO_MANY">
+      <point x="-70.78802120226237" y="-167.5" />
+      <point x="-84.25982656149836" y="57.5" />
+    </edge>
+    <edge source="models.IndustrialProduct" target="models.IndustrialProducts.IndustrialProductType" relationship="TO_ONE">
+      <point x="0.0" y="-59.5" />
+      <point x="191.69900482255844" y="191.5" />
+    </edge>
+    <edge source="models.NPC.Rob" target="models.NPC.NPC" relationship="GENERALIZATION">
+      <point x="3.454078041613684E-4" y="-31.49963675256822" />
+      <point x="1455.347" y="6990.0" />
+      <point x="2301.0" y="6990.0" />
+      <point x="2301.0" y="5440.64" />
+      <point x="-125.49954011826867" y="-4.3723804628825746E-4" />
+    </edge>
+    <edge source="models.enums.Fish" target="models.enums.Season" relationship="TO_ONE">
+      <point x="-101.50026616437344" y="-141.0340027541754" />
+      <point x="534.0" y="552.757" />
+      <point x="534.0" y="105.921" />
+      <point x="96.5002532889549" y="-2.5025032201142494E-5" />
+    </edge>
+    <edge source="models.NPC.Willy" target="models.NPC.NPC" relationship="GENERALIZATION">
+      <point x="-3.8257049368439766E-4" y="-31.500335226411153" />
+      <point x="1612.256" y="6990.0" />
+      <point x="2301.0" y="6990.0" />
+      <point x="2301.0" y="5440.64" />
+      <point x="-125.49954011826867" y="-4.3723804628825746E-4" />
+    </edge>
+    <edge source="models.Map" target="models.Buildings.Buildings" relationship="TO_MANY">
+      <point x="14.999564097498933" y="-57.5" />
+      <point x="3232.032" y="5185.0" />
+      <point x="4252.092000000001" y="5185.0" />
+      <point x="-14.999635681760083" y="131.5" />
+    </edge>
+    <edge source="models.Tools.Axe" target="models.Tool" relationship="GENERALIZATION">
+      <point x="-2.0398665583343245E-5" y="71.4999357515535" />
+      <point x="2430.186" y="4808.0" />
+      <point x="3394.0" y="4808.0" />
+      <point x="3394.0" y="3767.071" />
+      <point x="-52.49979608145259" y="-4.695872889897146E-4" />
+    </edge>
+    <edge source="models.Products.Crop" target="models.Products.CropType" relationship="TO_ONE">
+      <point x="-78.9015390560806" y="-59.5" />
+      <point x="195.5" y="335.5" />
+    </edge>
+    <edge source="models.Buildings.FishShop" target="models.Buildings.Buildings" relationship="GENERALIZATION">
+      <point x="-2.8697241714326083E-4" y="57.50009339910048" />
+      <point x="3082.538" y="5542.0" />
+      <point x="3874.0" y="5542.0" />
+      <point x="3874.0" y="5218.0" />
+      <point x="4267.092000000001" y="5218.0" />
+      <point x="3.6431823991733836E-4" y="131.49996037245728" />
+    </edge>
+    <edge source="models.Buildings.Saloon" target="models.Buildings.Buildings" relationship="GENERALIZATION">
+      <point x="-1.9480133551041945E-4" y="-57.500157771739396" />
+      <point x="2648.587" y="5709.0" />
+      <point x="3874.0" y="5709.0" />
+      <point x="3874.0" y="5218.0" />
+      <point x="4267.092000000001" y="5218.0" />
+      <point x="3.6431823991733836E-4" y="131.49996037245728" />
+    </edge>
+    <edge source="models.Buildings.Farm" target="models.Buildings.Coop" relationship="TO_MANY">
+      <point x="-31.264238340201246" y="-251.5" />
+      <point x="84.0" y="31.5" />
+    </edge>
+    <edge source="models.Foods.FoodType" target="models.Item" relationship="TO_MANY">
+      <point x="204.00014295571236" y="8.80583484104136E-5" />
+      <point x="4511.0" y="2093.083" />
+      <point x="4511.0" y="128.13299999999998" />
+      <point x="93.99962462569192" y="4.8561123540480367E-4" />
+    </edge>
+    <edge source="models.Products.ForagingCrop" target="models.Product" relationship="GENERALIZATION">
+      <point x="143.49986777393536" y="-3.499238987387798E-4" />
+      <point x="721.0" y="3731.221" />
+      <point x="721.0" y="3662.0" />
+      <point x="1130.0" y="3662.0" />
+      <point x="1130.0" y="3207.0" />
+      <point x="1832.998" y="3207.0" />
+      <point x="3.7014764052401006E-4" y="31.499780341212954" />
+    </edge>
+    <edge source="models.Player" target="models.Invetory.BackPack" relationship="TO_ONE">
+      <point x="0.0" y="-263.5" />
+      <point x="1728.6565025733664" y="3876.4295403488686" />
+      <point x="2034.8162835795222" y="3876.4295403488686" />
+      <point x="16.21576917571406" y="31.5" />
+    </edge>
+    <edge source="views.ProfileMenu" target="views.AppMenu" relationship="REALIZATION">
+      <point x="-11.0006060561077" y="-45.500192004263226" />
+      <point x="3862.5" y="6665.0" />
+      <point x="3073.5" y="6665.0" />
+      <point x="3073.5" y="6588.0" />
+      <point x="3413.433" y="6588.0" />
+      <point x="-45.355166568210734" y="31.500246586412686" />
+    </edge>
+    <edge source="models.Products.Fruit" target="models.Product" relationship="GENERALIZATION">
+      <point x="2.77985918955892E-4" y="-59.49995527234296" />
+      <point x="1793.404" y="3207.0" />
+      <point x="1832.998" y="3207.0" />
+      <point x="3.7014764052401006E-4" y="31.499780341212954" />
+    </edge>
+    <edge source="models.Products.TreeType" target="models.enums.Season" relationship="TO_ONE">
+      <point x="3.0503837479045615E-5" y="-311.50015546774966" />
+      <point x="1362.379" y="2986.0" />
+      <point x="534.0" y="2986.0" />
+      <point x="534.0" y="105.921" />
+      <point x="96.5002532889549" y="-2.5025032201142494E-5" />
+    </edge>
+    <edge source="models.Buildings.Blacksmith" target="models.Buildings.Buildings" relationship="GENERALIZATION">
+      <point x="-1.587669630680466E-4" y="57.50029916110998" />
+      <point x="2807.607" y="5709.0" />
+      <point x="3874.0" y="5709.0" />
+      <point x="3874.0" y="5218.0" />
+      <point x="4267.092000000001" y="5218.0" />
+      <point x="3.6431823991733836E-4" y="131.49996037245728" />
+    </edge>
+    <edge source="models.Buildings.Quarry" target="models.Buildings.Buildings" relationship="GENERALIZATION">
+      <point x="-4.8301376546078245E-4" y="-31.499706907388827" />
+      <point x="3678.445" y="5709.0" />
+      <point x="3874.0" y="5709.0" />
+      <point x="3874.0" y="5218.0" />
+      <point x="4267.092000000001" y="5218.0" />
+      <point x="3.6431823991733836E-4" y="131.49996037245728" />
+    </edge>
+    <edge source="models.Buildings.Lake" target="models.Buildings.Buildings" relationship="GENERALIZATION">
+      <point x="7.021906776571996E-5" y="31.500413594108068" />
+      <point x="3511.486" y="5542.0" />
+      <point x="3874.0" y="5542.0" />
+      <point x="3874.0" y="5218.0" />
+      <point x="4267.092000000001" y="5218.0" />
+      <point x="3.6431823991733836E-4" y="131.49996037245728" />
+    </edge>
+    <edge source="models.NPC.Clint" target="models.NPC.NPC" relationship="GENERALIZATION">
+      <point x="44.99993383761466" y="-2.1195566296228208E-4" />
+      <point x="2301.0" y="6506.311" />
+      <point x="2301.0" y="5440.64" />
+      <point x="-125.49954011826867" y="-4.3723804628825746E-4" />
+    </edge>
+    <edge source="models.Products.ForagingTreeType" target="models.enums.Season" relationship="TO_ONE">
+      <point x="-134.0001655276806" y="-4.400443267513765E-4" />
+      <point x="205.0" y="2088.44" />
+      <point x="205.0" y="2986.0" />
+      <point x="534.0" y="2986.0" />
+      <point x="534.0" y="105.921" />
+      <point x="96.5002532889549" y="-2.5025032201142494E-5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="0.32768000000000014" showDependencies="true" x="1957.8361793372305" y="499.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
