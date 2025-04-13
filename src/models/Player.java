@@ -11,6 +11,7 @@ public class Player {
     private BackPack backPack;
     private int money;
     private final HashMap<Player, Integer> friendships = new HashMap<>();
+    private final ArrayList<Skills> skills = new ArrayList<>();
 
     private boolean isPassedOut = false;
 
@@ -62,5 +63,9 @@ public class Player {
 
     public void setPassedOut(boolean passedOut) {
         isPassedOut = passedOut;
+    }
+    
+    public ArrayList<Skills> getSkills() {
+        return skills;
     }
 }

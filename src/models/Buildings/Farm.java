@@ -10,13 +10,16 @@ public class Farm {
     private ArrayList<Barn> barns = new ArrayList<>();
     private ArrayList<Coop> Coops = new ArrayList<>();
 
-    public Farm(Hut hut, GreenHouse greenHouse, ArrayList<Lake> lakes, Quarry quarry) {
+    public Farm(Hut hut, GreenHouse greenHouse, ArrayList<Lake> lakes, Quarry quarry, ArrayList<Barn> barns,
+            ArrayList<Coop> coops) {
         this.hut = hut;
         this.greenHouse = greenHouse;
         this.lakes = lakes;
         this.quarry = quarry;
+        this.barns = barns;
+        Coops = coops;
     }
-    
+
     public Hut getHut() {
         return hut;
     }
