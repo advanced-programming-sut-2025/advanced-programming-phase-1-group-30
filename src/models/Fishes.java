@@ -1,5 +1,5 @@
 package models;
 
-public class Fish {
+public class Fishes {
     
 }

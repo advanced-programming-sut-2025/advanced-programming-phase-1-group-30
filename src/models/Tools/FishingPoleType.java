@@ -2,7 +2,8 @@ package models.Tools;
 
 import java.util.ArrayList;
 
-import models.Fish;
+import models.Fishes;
+import models.enums.Fish;
 
 public enum FishingPoleType {
     NORMAL_PICKAXE(0,0, null),
