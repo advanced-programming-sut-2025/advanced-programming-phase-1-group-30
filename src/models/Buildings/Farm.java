@@ -9,6 +9,7 @@ public class Farm {
     private Quarry quarry;
     private ArrayList<Barn> barns = new ArrayList<>();
     private ArrayList<Coop> Coops = new ArrayList<>();
+
     public Farm(Hut hut, GreenHouse greenHouse, ArrayList<Lake> lakes, Quarry quarry, ArrayList<Barn> barns,
             ArrayList<Coop> coops) {
         this.hut = hut;
@@ -18,6 +19,7 @@ public class Farm {
         this.barns = barns;
         Coops = coops;
     }
+
     public Hut getHut() {
         return hut;
     }
