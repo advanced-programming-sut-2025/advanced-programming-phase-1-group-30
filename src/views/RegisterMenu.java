@@ -43,4 +43,9 @@ public class RegisterMenu implements AppMenu {
             return;
         }
     }
+
+    @Override
+    public void printResult(String result) {
+        System.out.println(result);
+    }
 }
