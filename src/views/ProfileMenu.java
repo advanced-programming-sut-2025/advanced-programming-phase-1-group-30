@@ -10,6 +10,26 @@ public class ProfileMenu implements AppMenu {
     public void check(String command) {
         Matcher matcher;
 
+        matcher = ProfileMenuCommands.MENU_ENTER.regexMatcher(command);
+        if (matcher.matches()) {
+            String menuName = matcher.group("menuName");
+
+            ProfileMenuController.ChangeMenu(menuName);
+            return;
+        }
+
+        matcher = ProfileMenuCommands.MENU_EXIT.regexMatcher(command);
+        if (matcher.matches()) {
+            ProfileMenuController.Exit();
+            return;
+        }
+
+        matcher = ProfileMenuCommands.SHOW_CURRENT_MENU.regexMatcher(command);
+        if (matcher.matches()) {
+            ProfileMenuController.ShowCurrentMenu();
+            return;
+        }
+        
         matcher = ProfileMenuCommands.CHANGE_USERNAME.regexMatcher(command);
         if (matcher.matches()) {
             String username = matcher.group("username");
