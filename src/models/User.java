@@ -8,15 +8,17 @@ public class User {
     private int maxMoney;
     private int  numOfGames;
     private Player player;
+    private String gender;
+    private String Answer;
 
-    public User(String username, String password, String nickname, String email, int maxMoney, Player player, int numOfGames) {
+    public User(String username, String password, String nickname, String email, String answer, String gender) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
         this.email = email;
-        this.maxMoney = maxMoney;
-        this.player = player;
-        this.numOfGames = numOfGames;
+        this.numOfGames = 0;
+        this.gender = gender;
+        this.Answer = answer;
     }
 
     public String getUsername() {

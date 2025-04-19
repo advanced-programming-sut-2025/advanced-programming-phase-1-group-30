@@ -5,4 +5,8 @@ public class RegisterMenu implements AppMenu {
     public void check() {
 
     }
+
+    public static void printResult(String message) {
+        System.out.println(message);
+    }
 }
