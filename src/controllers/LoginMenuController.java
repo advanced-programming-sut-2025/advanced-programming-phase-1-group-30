@@ -5,29 +5,27 @@ import models.User;
 import models.enums.Commands.Menus;
 
 public class LoginMenuController {
-    public static void Login(String username, String password) {
+    public static String Login(String username, String password) {
         User user = getUserByUsername(username);
         if (App.getCurrentUser() != null) {
-            System.out.println("You are logged in as " + App.getCurrentUser().getUsername());
-            return;
+            return "You are logged in as " + App.getCurrentUser().getUsername();
         }
         if (user == null) {
-            System.out.println("User not found");
-            return;
+            return "User not found";
         }
         if (!user.getPassword().equals(password)) {
-            System.out.println("Wrong password");
-            return;
+            return "Wrong password";
         }
         App.setCurrentUser(user);    // TODO flag stay logged in ro ok kon!
+        return "User logged in";
     }
     public static void ForgotPassword(String username) {  // TODO aval oon question taeed piade sazi shavad
     }
     public static void ChangeMenu(String menuName) {
         ProfileMenuController.FindMenu(menuName);
     }
-    public static void ShowCurrentMenu() {
-        System.out.println("Current menu: " + App.getCurrentMenu().getName());
+    public static String ShowCurrentMenu() {
+        return "Current menu: " + App.getCurrentMenu().getName();
     }
     public static void Exit() {
         App.setCurrentMenu(Menus.ExitMenu);
