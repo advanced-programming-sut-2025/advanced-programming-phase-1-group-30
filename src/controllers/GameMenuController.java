@@ -1,8 +1,8 @@
 package controllers;
 
 public class GameMenuController {
-    public static void NewGame() {}
-    public static void GameMap() {}
+    public static void NewGame(String username1, String username2, String username3) {}
+    public static void GameMap(String mapNumber) {}
     public static void LoadGame() {}
     public static void ExitGame() {}
     public static void NextTurn() {}
@@ -10,79 +10,80 @@ public class GameMenuController {
     public static void Date() {}
     public static void DateTime() {}
     public static void DayOfTheWeek() {}
-    public static void CheatAdvanceTime() {}
-    public static void CheatAdvanceDate() {}
+    public static void CheatAdvanceTime(String amount) {}
+    public static void CheatAdvanceDate(String amount) {}
     public static void Season() {}
-    public static void CheatThor() {}
+    public static void CheatThor(String x, String y) {}
     public static void Weather() {}
     public static void WeatherForecast() {}
-    public static void CheatWeatherSet() {}
+    public static void CheatWeatherSet(String type) {}
     public static void GreenHouseBuild() {}
-    public static void walk() {}
-    public static void PrintMap() {}
+    public static void walk(String x, String y) {}
+    public static void PrintMap(String x, String y, String size) {}
     public static void HelpReadingMap() {}
     public static void EnergyShow() {}
-    public static void CheatEnergySet() {}
+    public static void CheatEnergySet(String value) {}
     public static void CheatUnlimitedEnergySet() {}
     public static void InventoryShow() {}
-    public static void InventoryTrash() {}
-    public static void ToolsEquip() {}
+    public static void InventoryTrash(String name, String number) {}
+    public static void ToolsEquip(String name) {}
     public static void ShowCurrentTool() {}
     public static void ShowAvailableTools() {}
-    public static void UpgradeTools() {}
-    public static void ToolUse() {}
-    public static void CraftInfo() {}
-    public static void Plant() {}
-    public static void ShowPlant() {}
-    public static void Fertilize() {}
+    public static void UpgradeTools(String name) {}
+    public static void ToolUse(String direction) {}
+    public static void CraftInfo(String name) {}
+    public static void Plant(String seed, String direction) {}
+    public static void ShowPlant(String x, String y) {}
+    public static void Fertilize(String fetilizer, String direction) {}
     public static void HowMuchWater() {}
-    public static void ShowCraftingRecipe() {}
-    public static void Crafting() {}
-    public static void PlaceItem() {}
-    public static void CheatAddItem() {}
-    public static void PutRefrigerator() {}
-    public static void PickRefrigerator() {}
+    public static void ShowCraftingRecipes() {}
+    public static void Crafting(String name) {}
+    public static void PlaceItem(String name, String direction) {}
+    public static void CheatAddItem(String name, String count) {}
+    public static void PutRefrigerator(String item) {}
+    public static void PickRefrigerator(String item) {}
     public static void ShowCookingRecipe(){}
-    public static void Cooking() {}
-    public static void Eat() {}
-    public static void Build(){}
-    public static void BuyAnimal() {}
-    public static void Pet(){}
-    public static void CheatSetFriendship() {}
+    public static void Cooking(String name) {}
+    public static void Eat(String name) {}
+    public static void Build(String name, String x, String y){}
+    public static void BuyAnimal(String animal, String name) {}
+    public static void Pet(String name){}
+    public static void CheatSetFriendship(String name, String amount) {}
     public static void Animals() {}
-    public static void ShepherdAnimals(){}
-    public static void FeedHay(){}
+    public static void ShepherdAnimals(String name, String x, String y){}
+    public static void FeedHay(String name){}
     public static void Produces(){}
-    public static void CollectProduce(){}
-    public static void SellAnimal(){}
-    public static void Fishing(){}
-    public static void ArtisanUse() {}
-    public static void ArtisanGet() {}
+    public static void CollectProduce(String name){}
+    public static void SellAnimal(String name){}
+    public static void Fishing(String fishingPole){}
+    public static void ArtisanUse(String artisanName, String itemName) {}
+    public static void ArtisanGet(String name) {}
     public static void ShowAllProducts() {}
     public static void ShowAvailableProducts() {}
-    public static void purchase(){}
-    public static void CheatAddMoney(){}
-    public static void Sell(){}
+    public static void purchase(String name, String amount){}
+    public static void CheatAddMoney(String amount){}
+    public static void Sell(String name, String amount){}
     public static void Friendship(){}
-    public static void Talk(){}
-    public static void TalkHistory(){}
-    public static void Gift(){}
+    public static void Talk(String username, String message){}
+    public static void TalkHistory(String username){}
+    public static void Gift(String Username, String item, String amount){}
     public static void GiftList(){}
-    public static void GiftRate(){}
-    public static void GiftHistory(){}
-    public static void Hug(){}
-    public static void Flower(){}
-    public static void AskMarriage(){}
-    public static void Respond(){}
+    public static void GiftRate(String giftNumber, String rate){}
+    public static void GiftHistory(String username){}
+    public static void Hug(String username){}
+    public static void Flower(String username){}
+    public static void AskMarriage(String username, String ring){}
+    public static void Respond(String username){}
     public static void StartTrade() {}
-    public static void Trade(){}
+    public static void Trade(String username, String type, String item, String amount, String price){}
+    public static void TradeProducts(String username, String type, String item, String amount, String targetItem, String targetAmount){}
     public static void TradeList(){}
-    public static void TradeResponse(){}
+    public static void TradeResponse(String id){}
     public static void TradeHistory(){}
-    public static void MeetNPC() {}
-    public static void GiftNPC() {}
+    public static void MeetNPC(String name) {}
+    public static void GiftNPC(String name, String item) {}
     public static void FriendshipNPCList() {}
     public static void QuestList() {}
-    public static void QuestFinish() {}
+    public static void QuestFinish(String index) {}
     public static void PassOut() {}
 }

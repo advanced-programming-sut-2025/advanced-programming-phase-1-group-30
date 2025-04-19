@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegisterMenuController {
+
     public static void register(Matcher matcher, Scanner scanner) {
         String username = matcher.group("username").trim();
         String password = matcher.group("password").trim();
@@ -125,6 +126,5 @@ public class RegisterMenuController {
 
 
     public static void ChangeMenu() {
-
     }
 }

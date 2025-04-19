@@ -2,7 +2,6 @@ package models.Tools;
 
 import java.util.ArrayList;
 
-import models.Fishes;
 import models.enums.Fish;
 
 public enum FishingPoleType {

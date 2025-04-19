@@ -7,4 +7,11 @@ public class Saloon extends Buildings {
     }
     private final int startHour = 12;
     private final int endHour = 12;
+    
+    public int getStartHour() {
+        return startHour;
+    }
+    public int getEndHour() {
+        return endHour;
+    }
 }

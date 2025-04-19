@@ -1,5 +1,6 @@
 package views;
 
 public interface AppMenu {
-    public void check();
+    void check(String command);
+    void printResult(String result);
 }
