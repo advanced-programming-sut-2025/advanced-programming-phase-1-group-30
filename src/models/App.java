@@ -3,13 +3,17 @@ package models;
 import models.enums.Commands.Menus;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class App {
     private static User currentUser;
     private static ArrayList<User> appUsers = new ArrayList<>();
+    private static ArrayList<String> questions = new ArrayList<>();
     private static Menus currentMenu;
     private static Game currentGame;
-
+  
+    public static ArrayList<String> getQuestions() {return questions;}
+    
     public static User getCurrentUser() {
         return currentUser;
     }

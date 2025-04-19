@@ -48,4 +48,8 @@ public class RegisterMenu implements AppMenu {
     public void printResult(String result) {
         System.out.println(result);
     }
+
+    public static void printResult(String message) {
+        System.out.println(message);
+    }
 }
