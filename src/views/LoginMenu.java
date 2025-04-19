@@ -1,10 +1,9 @@
 package views;
 
-import java.util.Scanner;
-
 public class LoginMenu implements AppMenu {
     @Override
-    public void check(Scanner scanner) {
-
+    public void check(String command) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'check'");
     }
 }
