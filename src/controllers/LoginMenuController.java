@@ -3,7 +3,6 @@ package controllers;
 import models.App;
 import models.User;
 import models.enums.Commands.Menus;
-import views.ExitMenu;
 
 public class LoginMenuController {
     public static void Login(String username, String password) {

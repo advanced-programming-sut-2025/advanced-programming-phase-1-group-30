@@ -49,11 +49,11 @@ public class ProfileMenuController {
 
     public static void FindMenu(String menuName) {
         switch (menuName){
-            case "Register Menu" -> App.setCurrentMenu(Menus.RegisterMenu);
-            case "Login Menu" -> App.setCurrentMenu(Menus.LoginMenu);
-            case "Game Menu" -> App.setCurrentMenu(Menus.GameMenu);
-            case "Profile Menu" -> App.setCurrentMenu(Menus.ProfileMenu);
-            case "Main Menu" -> App.setCurrentMenu(Menus.MainMenu);
+            case "Register Menu":  App.setCurrentMenu(Menus.RegisterMenu);
+            case "Login Menu": App.setCurrentMenu(Menus.LoginMenu);
+            case "Game Menu": App.setCurrentMenu(Menus.GameMenu);
+            case "Profile Menu": App.setCurrentMenu(Menus.ProfileMenu);
+            case "Main Menu": App.setCurrentMenu(Menus.MainMenu);
         }
     }
 
