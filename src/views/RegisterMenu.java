@@ -14,19 +14,19 @@ public class RegisterMenu implements AppMenu {
         if (matcher.matches()) {
             String menuName = matcher.group("menuName");
 
-            System.out.println(RegisterMenuController.changeMenu(menuName));
+            RegisterMenuController.changeMenu(menuName);
             return;
         }
 
         matcher = RegisterMenuCommands.MENU_EXIT.regexMatcher(command);
         if (matcher.matches()) {
-            System.out.println(RegisterMenuController.exit());
+            RegisterMenuController.exit();
             return;
         }
 
         matcher = RegisterMenuCommands.SHOW_CURRENT_MENU.regexMatcher(command);
         if (matcher.matches()) {
-            System.out.println(RegisterMenuController.showCurrentMenu());
+            RegisterMenuController.showCurrentMenu();
             return;
         }
 
@@ -39,7 +39,7 @@ public class RegisterMenu implements AppMenu {
             String email = matcher.group("email");
             String gender = matcher.group("gender");
 
-            System.out.println(RegisterMenuController.register(username, passwordConfirm, password, nickname, email, gender));
+            RegisterMenuController.register(username, passwordConfirm, password, nickname, email, gender);
             return;
         }
     }

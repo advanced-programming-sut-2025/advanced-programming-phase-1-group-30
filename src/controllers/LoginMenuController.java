@@ -5,7 +5,7 @@ import models.User;
 import models.enums.Commands.Menus;
 
 public class LoginMenuController {
-    public static String Login(String username, String password) {
+    public static String Login(String username, String password, boolean stayLoggedInBoolean) {
         User user = getUserByUsername(username);
         if (App.getCurrentUser() != null) {
             return "You are logged in as " + App.getCurrentUser().getUsername();
