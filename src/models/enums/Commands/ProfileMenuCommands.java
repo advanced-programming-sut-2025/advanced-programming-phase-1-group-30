@@ -4,9 +4,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum ProfileMenuCommands {
-    MENU_ENTER("^\\s*menu\\s+enter\\s+(?<menuName>.*\\S)\\s*$"),
-    MENU_EXIT("^\\s*menu\\s+exit\\s*$"),
-    SHOW_CURRENT_MENU("^\\s*show\\s+current\\s+menu\\s*$"),
     CHANGE_USERNAME("^\\s*change\\s+username\\s+-u\\s+(?<username>.*\\S)\\s*$"),
     CHANGE_NICKNAME("^\\s*change\\s+nickname\\s+-u\\s+(?<nickname>.*\\S)\\s*$"),
     CHANGE_EMAIL("^\\s*change\\s+email\\s+-e\\s+(?<email>.*\\S)\\s*$"),
