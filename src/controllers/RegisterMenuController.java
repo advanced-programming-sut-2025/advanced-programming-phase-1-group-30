@@ -3,6 +3,8 @@ package controllers;
 import models.App;
 import models.User;
 import models.enums.Commands.Menus;
+import models.enums.Commands.RegisterMenuCommands;
+import models.enums.RegisterQuestions;
 import views.RegisterMenu;
 
 import java.security.SecureRandom;
@@ -24,6 +26,7 @@ public class RegisterMenuController {
         for(User users : App.getAppUsers()){
             if(users.getUsername().equals(username)){
                 RegisterMenu.printResult("Username is already in use!");
+                return;
             }
         }
 
@@ -59,22 +62,22 @@ public class RegisterMenuController {
             return;
         }
 
-        if(!Pattern.compile("(?=.*A-Z)").matcher(password).matches()){
+        if(!Pattern.compile("(?=.*[A-Z]).*").matcher(password).matches()){
             RegisterMenu.printResult("Password has to have at least one Uppercase letter!");
             return;
         }
 
-        if(!Pattern.compile("(?=.*a-z)").matcher(password).matches()){
+        if(!Pattern.compile("(?=.*[a-z]).*").matcher(password).matches()){
             RegisterMenu.printResult("Password has to have at least one Lowercase letter!");
             return;
         }
 
-        if(!Pattern.compile("(?=.*0-9)").matcher(password).matches()) {
+        if(!Pattern.compile("(?=.*[0-9]).*").matcher(password).matches()) {
             RegisterMenu.printResult("Password has to have at least one digit!");
             return;
         }
 
-        if(!Pattern.compile("(?=.*[?><,\"';\\\\:\\/|\\]\\[}{+=)(*&^%$#!])").matcher(password).matches()) {
+        if(!Pattern.compile("(?=.*[?><,\"';\\\\:\\/|\\]\\[}{+=)(*&^%$#!]).*").matcher(password).matches()) {
             RegisterMenu.printResult("Password has to have at least one special character!");
             return;
         }
@@ -84,32 +87,38 @@ public class RegisterMenuController {
             return;
         }
 
+        RegisterMenu.printResult("Ok answer a question!");
+
         int number = 1;
-        for(String questions : App.getQuestions()){
-            RegisterMenu.printResult(number + "- " + questions + "\n");
+        for(RegisterQuestions registerQuestions : RegisterQuestions.values()){
+            RegisterMenu.printResult(number + "- " + registerQuestions.question + "\n");
             number++;
         }
 
-        String pickQuestion = scanner.nextLine();
-        Matcher matcherQuestion;
         String answer;
         String confirmAnswer;
+        int questionIndex;
 
-        if((matcherQuestion = Pattern.compile("").matcher(pickQuestion)).matches()){
-            int questionIndex = Integer.parseInt(matcherQuestion.group("questionNumber").trim());
-            answer = matcherQuestion.group("answer").trim();
-            confirmAnswer = matcherQuestion.group("answerConfirm").trim();
-            if (!answer.equals(confirmAnswer)) {
-                RegisterMenu.printResult("Answers do not match!");
-                return;
+        while (true){
+            String pickQuestion = scanner.nextLine();
+            Matcher matcherQuestion;
+
+            if ((matcherQuestion = RegisterMenuCommands.PICK_QUESTION.regexMatcher(pickQuestion)).matches()) {
+                questionIndex = Integer.parseInt(matcherQuestion.group("questionNumber").trim());
+                answer = matcherQuestion.group("answer").trim();
+                confirmAnswer = matcherQuestion.group("answerConfirm").trim();
+                if (!answer.equals(confirmAnswer)) {
+                    RegisterMenu.printResult("Answers do not match!");
+                }else{
+                    break;
+                }
+
+            } else {
+                RegisterMenu.printResult("invalid command!");
             }
-
-        } else{
-            RegisterMenu.printResult("invalid command!");
-            return;
         }
 
-        User newUser = new User(username,password,nickname,email,answer,gender);
+        User newUser = new User(username,password,nickname,email,questionIndex,answer,gender);
         App.getAppUsers().add(newUser);
         RegisterMenu.printResult("User created successfully!");
     }
