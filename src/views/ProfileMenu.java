@@ -1,5 +1,6 @@
 package views;
 
+import java.util.Scanner;
 import java.util.regex.Matcher;
 
 import controllers.ProfileMenuController;
@@ -7,7 +8,7 @@ import models.enums.Commands.ProfileMenuCommands;
 
 public class ProfileMenu implements AppMenu {
     @Override
-    public void check(String command) {
+    public void check(String command, Scanner scanner) {
         Matcher matcher;
 
         matcher = ProfileMenuCommands.MENU_ENTER.regexMatcher(command);
@@ -68,10 +69,5 @@ public class ProfileMenu implements AppMenu {
             ProfileMenuController.UserInfo();
             return;
         }
-    }
-
-    @Override
-    public void printResult(String result) {
-        System.out.println(result);
     }
 }

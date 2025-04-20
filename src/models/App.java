@@ -9,7 +9,7 @@ public class App {
     private static User currentUser;
     private static ArrayList<User> appUsers = new ArrayList<>();
     private static ArrayList<String> questions = new ArrayList<>();
-    private static Menus currentMenu;
+    private static Menus currentMenu = Menus.RegisterMenu;
     private static Game currentGame;
   
     public static ArrayList<String> getQuestions() {return questions;}

@@ -1,5 +1,6 @@
 package views;
 
+import java.util.Scanner;
 import java.util.regex.Matcher;
 
 import controllers.LoginMenuController;
@@ -7,7 +8,7 @@ import models.enums.Commands.LoginMenuCommands;
 
 public class LoginMenu implements AppMenu {
     @Override
-    public void check(String command) {
+    public void check(String command, Scanner scanner) {
         Matcher matcher;
 
         matcher = LoginMenuCommands.MENU_ENTER.regexMatcher(command);
@@ -46,8 +47,7 @@ public class LoginMenu implements AppMenu {
         matcher = LoginMenuCommands.FORGET_PASSWORD.regexMatcher(command);
         if (matcher.matches()) {
             String username = matcher.group("username");
-
-            LoginMenuController.ForgotPassword(username);
+            LoginMenuController.ForgotPassword(username, scanner);
             return;
         }
 
@@ -58,10 +58,5 @@ public class LoginMenu implements AppMenu {
             // LoginMenuController.Logout();
             return;
         }
-    }
-    
-    @Override
-    public void printResult(String result) {
-        System.out.println(result);
     }
 }

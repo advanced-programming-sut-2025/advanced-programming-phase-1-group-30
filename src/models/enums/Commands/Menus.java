@@ -2,6 +2,8 @@ package models.enums.Commands;
 
 import views.*;
 
+import java.util.Scanner;
+
 public enum Menus {
     LoginMenu(new LoginMenu(), "Login Menu"),
     MainMenu(new MainMenu(), "Main Menu"),
@@ -15,8 +17,8 @@ public enum Menus {
         this.menu = menu;
         this.name = name;
     }
-    public void checkCommand(String command) {
-        this.menu.check(command);
+    public void checkCommand(String command, Scanner scanner) {
+        this.menu.check(command, scanner);
     }
 
     public String getName() {

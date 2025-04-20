@@ -1,55 +1,43 @@
 package views;
 
+import java.util.Scanner;
 import java.util.regex.Matcher;
 
 import controllers.RegisterMenuController;
 import models.enums.Commands.RegisterMenuCommands;
 
 public class RegisterMenu implements AppMenu {
+    public static void printResult(String result) {
+        System.out.println(result);
+    }
     @Override
-    public void check(String command) {
+    public void check(String command, Scanner scanner) {
         Matcher matcher;
 
         matcher = RegisterMenuCommands.MENU_ENTER.regexMatcher(command);
         if (matcher.matches()) {
             String menuName = matcher.group("menuName");
 
-            RegisterMenuController.changeMenu(menuName);
+            RegisterMenuController.ChangeMenu(menuName);
             return;
         }
 
         matcher = RegisterMenuCommands.MENU_EXIT.regexMatcher(command);
         if (matcher.matches()) {
-            RegisterMenuController.exit();
+            RegisterMenuController.Exit();
             return;
         }
 
         matcher = RegisterMenuCommands.SHOW_CURRENT_MENU.regexMatcher(command);
         if (matcher.matches()) {
-            RegisterMenuController.showCurrentMenu();
+            RegisterMenuController.ShowCurrentMenu();
             return;
         }
 
         matcher = RegisterMenuCommands.REGISTER.regexMatcher(command);
         if (matcher.matches()) {
-            String username = matcher.group("username");
-            String password = matcher.group("password");
-            String passwordConfirm = matcher.group("passwordConfirm");
-            String nickname = matcher.group("nickname");
-            String email = matcher.group("email");
-            String gender = matcher.group("gender");
-
-            RegisterMenuController.register(username, passwordConfirm, password, nickname, email, gender);
-            return;
+            RegisterMenuController.register(matcher, scanner);
         }
     }
 
-    @Override
-    public void printResult(String result) {
-        System.out.println(result);
-    }
-
-    public static void printResult(String message) {
-        System.out.println(message);
-    }
 }

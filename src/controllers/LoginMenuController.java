@@ -3,29 +3,52 @@ package controllers;
 import models.App;
 import models.User;
 import models.enums.Commands.Menus;
+import views.RegisterMenu;
+
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LoginMenuController {
-    public static String Login(String username, String password, boolean stayLoggedInBoolean) {
+    public static void Login(String username, String password, boolean stayLoggedInBoolean) {
         User user = getUserByUsername(username);
         if (App.getCurrentUser() != null) {
-            return "You are logged in as " + App.getCurrentUser().getUsername();
+            RegisterMenu.printResult("You are logged in as " + App.getCurrentUser().getUsername());
+            return;
         }
         if (user == null) {
-            return "User not found";
+            RegisterMenu.printResult("User not found");
+            return;
         }
         if (!user.getPassword().equals(password)) {
-            return "Wrong password";
+            RegisterMenu.printResult("Wrong password");
+            return;
         }
         App.setCurrentUser(user);    // TODO flag stay logged in ro ok kon!
-        return "User logged in";
+        RegisterMenu.printResult("User logged in");
     }
-    public static void ForgotPassword(String username) {  // TODO aval oon question taeed piade sazi shavad
+    public static void ForgotPassword(String username, Scanner scanner) {  // TODO aval oon question taeed piade sazi shavad
+        User user = getUserByUsername(username);
+        if (user == null) {
+            RegisterMenu.printResult("User not found");
+            return;
+        }
+        RegisterMenu.printResult("Enter the answer of the security question: ");
+        Matcher matcher;
+        if ((matcher = Pattern.compile("answer\\s+-a\\s+(?<answer>.+?)\\s*").matcher(scanner.nextLine())).matches()) {
+            if (matcher.group("answer").equals(user.getAnswer())) {
+                RegisterMenu.printResult("Your password is: " + user.getPassword());
+            } else {
+                RegisterMenu.printResult("Wrong answer");
+            }
+        }
     }
     public static void ChangeMenu(String menuName) {
         ProfileMenuController.FindMenu(menuName);
+        RegisterMenu.printResult("Redirecting to " + menuName);
     }
-    public static String ShowCurrentMenu() {
-        return "Current menu: " + App.getCurrentMenu().getName();
+    public static void ShowCurrentMenu() {
+        RegisterMenu.printResult("Current menu: " + App.getCurrentMenu().getName());
     }
     public static void Exit() {
         App.setCurrentMenu(Menus.ExitMenu);

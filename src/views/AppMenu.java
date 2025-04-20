@@ -1,6 +1,7 @@
 package views;
 
+import java.util.Scanner;
+
 public interface AppMenu {
-    void check(String command);
-    void printResult(String result);
+    void check(String command, Scanner scanner);
 }

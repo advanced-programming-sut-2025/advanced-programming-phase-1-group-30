@@ -11,7 +11,7 @@ public class AppView {
         String command = scanner.nextLine();
 
         while (!App.getCurrentMenu().equals(Menus.ExitMenu)) {
-            App.getCurrentMenu().checkCommand(command);
+            App.getCurrentMenu().checkCommand(command, scanner);
 
             command = scanner.nextLine();
         }

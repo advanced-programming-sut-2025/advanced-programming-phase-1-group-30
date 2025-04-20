@@ -2,17 +2,19 @@ package controllers;
 
 import models.App;
 import models.enums.Commands.Menus;
+import views.RegisterMenu;
 
 public class MainMenuController {
-    public static String logout() {
+    public static void logout() {
         App.setCurrentUser(null);
-        return "User logged out successfully";
+        RegisterMenu.printResult("User logged out successfully");
     }
     public static void ChangeMenu(String menuName) {
         ProfileMenuController.FindMenu(menuName);
+        RegisterMenu.printResult("Redirecting to " + menuName);
     }
-    public static String ShowCurrentMenu() {
-        return App.getCurrentMenu().getName();
+    public static void ShowCurrentMenu() {
+        RegisterMenu.printResult("Current menu: " + App.getCurrentMenu().getName());
     }
     public static void Exit() {
         App.setCurrentMenu(Menus.ExitMenu);

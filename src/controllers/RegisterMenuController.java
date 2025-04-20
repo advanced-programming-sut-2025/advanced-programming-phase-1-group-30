@@ -2,6 +2,7 @@ package controllers;
 
 import models.App;
 import models.User;
+import models.enums.Commands.Menus;
 import views.RegisterMenu;
 
 import java.security.SecureRandom;
@@ -14,7 +15,7 @@ public class RegisterMenuController {
     public static void register(Matcher matcher, Scanner scanner) {
         String username = matcher.group("username").trim();
         String password = matcher.group("password").trim();
-        String passwordConfirm = matcher.group("password_confirm").trim();
+        String passwordConfirm = matcher.group("passwordConfirm").trim();
         String nickname = matcher.group("nickname").trim();
         String email = matcher.group("email").trim();
         String gender = matcher.group("gender").trim();
@@ -95,9 +96,13 @@ public class RegisterMenuController {
         String confirmAnswer;
 
         if((matcherQuestion = Pattern.compile("").matcher(pickQuestion)).matches()){
-            int questionIndex = Integer.parseInt(matcherQuestion.group("question_number").trim());
+            int questionIndex = Integer.parseInt(matcherQuestion.group("questionNumber").trim());
             answer = matcherQuestion.group("answer").trim();
-            confirmAnswer = matcherQuestion.group("answer_confirm").trim();
+            confirmAnswer = matcherQuestion.group("answerConfirm").trim();
+            if (!answer.equals(confirmAnswer)) {
+                RegisterMenu.printResult("Answers do not match!");
+                return;
+            }
 
         } else{
             RegisterMenu.printResult("invalid command!");
@@ -106,7 +111,7 @@ public class RegisterMenuController {
 
         User newUser = new User(username,password,nickname,email,answer,gender);
         App.getAppUsers().add(newUser);
-        RegisterMenu.printResult("User created!");
+        RegisterMenu.printResult("User created successfully!");
     }
 
     public static String RandomPasswordGenerator() {
@@ -124,7 +129,16 @@ public class RegisterMenuController {
         return password.toString();
     }
 
+    public static void ChangeMenu(String menuName) {
+        ProfileMenuController.FindMenu(menuName);
+        RegisterMenu.printResult("Redirecting to " + menuName);
+    }
 
-    public static void ChangeMenu() {
+    public static void ShowCurrentMenu() {
+        RegisterMenu.printResult("Current menu: " + App.getCurrentMenu().getName());
+    }
+
+    public static void Exit() {
+        App.setCurrentMenu(Menus.ExitMenu);
     }
 }

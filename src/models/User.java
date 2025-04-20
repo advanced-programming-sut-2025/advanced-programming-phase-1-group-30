@@ -76,4 +76,12 @@ public class User {
     public void setPlayer(Player player) {
         this.player = player;
     }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public String getAnswer() {
+        return Answer;
+    }
 }
