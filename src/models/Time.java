@@ -1,5 +1,6 @@
 package models;
 
+import models.enums.DaysOfWeek;
 import models.enums.Season;
 
 public class Time {

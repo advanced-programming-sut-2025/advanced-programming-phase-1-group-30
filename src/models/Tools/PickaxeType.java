@@ -2,7 +2,7 @@ package models.Tools;
 
 import java.util.ArrayList;
 
-import models.StoneType;
+import models.enums.StoneType;
 
 public enum PickaxeType {
     NORMAL_PICKAXE(0, null),

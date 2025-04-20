@@ -9,15 +9,17 @@ public class User {
     private int  numOfGames;
     private Player player;
     private String gender;
+    private int registerQuestionNumber;
     private String Answer;
 
-    public User(String username, String password, String nickname, String email, String answer, String gender) {
+    public User(String username, String password, String nickname, String email, int registerQuestionNumber, String answer, String gender) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
         this.email = email;
         this.numOfGames = 0;
         this.gender = gender;
+        this.registerQuestionNumber = registerQuestionNumber;
         this.Answer = answer;
     }
 

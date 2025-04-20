@@ -1,5 +1,7 @@
 package models;
 
+import models.enums.TIleTypes;
+
 import java.util.ArrayList;
 
 public class Tile {
