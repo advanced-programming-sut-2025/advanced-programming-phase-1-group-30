@@ -41,6 +41,8 @@ public class LoginMenuController {
             } else {
                 RegisterMenu.printResult("Wrong answer");
             }
+        } else {
+            RegisterMenu.printResult("Invalid input format. Please use: answer -a <your_answer>");
         }
     }
     public static void ChangeMenu(String menuName) {
