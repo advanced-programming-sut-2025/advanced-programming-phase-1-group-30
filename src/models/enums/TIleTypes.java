@@ -1,8 +1,10 @@
 package models.enums;
 
 public enum TIleTypes {
-    GRASS,
+    PLANTABLE,
+    DIRT,
     WATER,
-    STONE;
-    // And more
+    BUILDING,
+    GRASS,
+    QUARRY;
 }

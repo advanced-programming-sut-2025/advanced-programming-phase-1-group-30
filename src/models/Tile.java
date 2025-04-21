@@ -6,12 +6,16 @@ import java.util.ArrayList;
 
 public class Tile {
     private TIleTypes type;
-    private final ArrayList<Tile> neighborTiles = new ArrayList<>();
     private Item item;
+    private int x;
+    private int y;
+    private boolean walkable;
 
-    public Tile(TIleTypes type, Item item) {
-        this.type = type;
-        this.item = item;
+    public Tile(int x, int y) {
+        this.type = TIleTypes.DIRT;
+        this.x = x;
+        this.y = y;
+        this.walkable = true;
     }
     
     public TIleTypes getType() {
@@ -19,10 +23,12 @@ public class Tile {
     }
     public void setType(TIleTypes type) {
         this.type = type;
+        switch (type) {
+            case WATER, BUILDING: this.walkable = false; break;
+            case GRASS, PLANTABLE, QUARRY, DIRT: this.walkable = true; break;
+        }
     }
-    public ArrayList<Tile> getNeighborTiles() {
-        return neighborTiles;
-    }
+
     public Item getItem() {
         return item;
     }

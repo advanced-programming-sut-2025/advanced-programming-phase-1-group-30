@@ -21,6 +21,8 @@ public class Game {
         this.players = players;
         this.trades = trades;
     }
+
+
     
     public Map getMap() {
         return map;
