@@ -48,18 +48,24 @@ public class ProfileMenuController {
         RegisterMenu.printResult("Password changed successfully");
     }
     public static void ChangeMenu(String menuName) {
-        FindMenu(menuName);
+        String nameMenu = App.getCurrentMenu().getName();
+        Menus menu = FindMenu(menuName);
+        if (nameMenu.equals(App.getCurrentMenu().getName())) {
+            RegisterMenu.printResult("Invalid menu name");
+            return;
+        }
         RegisterMenu.printResult("Redirecting to " + menuName);
     }
 
-    public static void FindMenu(String menuName) {
-        switch (menuName){
-            case "Register Menu":  App.setCurrentMenu(Menus.RegisterMenu);
-            case "Login Menu": App.setCurrentMenu(Menus.LoginMenu);
-            case "Game Menu": App.setCurrentMenu(Menus.GameMenu);
-            case "Profile Menu": App.setCurrentMenu(Menus.ProfileMenu);
-            case "Main Menu": App.setCurrentMenu(Menus.MainMenu);
-        }
+    public static Menus FindMenu(String menuName) {
+        return switch (menuName) {
+            case "Register Menu" -> Menus.RegisterMenu;
+            case "Login Menu" -> Menus.LoginMenu;
+            case "Game Menu" -> Menus.GameMenu;
+            case "Profile Menu" -> Menus.ProfileMenu;
+            case "Main Menu" -> Menus.MainMenu;
+            default -> null;
+        };
     }
 
     public static void ShowCurrentMenu() {

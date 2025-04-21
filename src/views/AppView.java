@@ -8,13 +8,12 @@ import models.enums.Commands.Menus;
 public class AppView {
     public static void run() {
         Scanner scanner = new Scanner(System.in);
-        String command = scanner.nextLine();
+        String command;
 
-        while (!App.getCurrentMenu().equals(Menus.ExitMenu)) {
-            App.getCurrentMenu().checkCommand(command, scanner);
-
+        do {
             command = scanner.nextLine();
-        }
+            App.getCurrentMenu().checkCommand(command, scanner);
+        } while (!App.getCurrentMenu().equals(Menus.ExitMenu));
 
         scanner.close();
     }

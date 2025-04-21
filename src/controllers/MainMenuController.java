@@ -10,7 +10,12 @@ public class MainMenuController {
         RegisterMenu.printResult("User logged out successfully");
     }
     public static void ChangeMenu(String menuName) {
-        ProfileMenuController.FindMenu(menuName);
+        String nameMenu = App.getCurrentMenu().getName();
+        Menus menu = ProfileMenuController.FindMenu(menuName);
+        if (nameMenu.equals(App.getCurrentMenu().getName())) {
+            RegisterMenu.printResult("Invalid menu name");
+            return;
+        }
         RegisterMenu.printResult("Redirecting to " + menuName);
     }
     public static void ShowCurrentMenu() {

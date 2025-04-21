@@ -4,6 +4,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 
 import controllers.RegisterMenuController;
+import models.App;
 import models.enums.Commands.RegisterMenuCommands;
 
 public class RegisterMenu implements AppMenu {

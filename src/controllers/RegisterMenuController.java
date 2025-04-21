@@ -139,8 +139,7 @@ public class RegisterMenuController {
     }
 
     public static void ChangeMenu(String menuName) {
-        ProfileMenuController.FindMenu(menuName);
-        RegisterMenu.printResult("Redirecting to " + menuName);
+        LoginMenuController.ChangeMenu(menuName);
     }
 
     public static void ShowCurrentMenu() {
@@ -148,6 +147,6 @@ public class RegisterMenuController {
     }
 
     public static void Exit() {
-        App.setCurrentMenu(Menus.ExitMenu);
+        App.setCurrentMenu(Menus.MainMenu);
     }
 }
