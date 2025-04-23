@@ -49,11 +49,10 @@ public class Map {
         for (int i = 0; i < 80; i++) {
             for (int j = 0; j < 60; j++) {
                 if (tiles[i][j].getType() == TIleTypes.DIRT) {
-
+                    tiles[i][j].setItem(null);
                 }
             }
         }
-
     }
 
     public ArrayList<Buildings> getBuildings() {
