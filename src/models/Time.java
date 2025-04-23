@@ -7,16 +7,14 @@ public class Time {
     private int hour;
     private int minute;
     private int day;
-    private int month;
     private Season season;
     private final Season startSeason = Season.SPRING;
     private DaysOfWeek dayOfWeek;
 
-    public Time(int hour, int minute, int day, int month, Season season, DaysOfWeek dayOfWeek) {
+    public Time(int hour, int minute, int day, Season season, DaysOfWeek dayOfWeek) {
         this.hour = hour;
         this.minute = minute;
         this.day = day;
-        this.month = month;
         this.season = season;
         this.dayOfWeek = dayOfWeek;
     }
@@ -38,12 +36,6 @@ public class Time {
     }
     public void setDay(int day) {
         this.day = day;
-    }
-    public int getMonth() {
-        return month;
-    }
-    public void setMonth(int month) {
-        this.month = month;
     }
     public Season getSeason() {
         return season;
