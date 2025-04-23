@@ -1,23 +1,6 @@
 package controllers;
 
 public class GameMenuController {
-    public static void NewGame(String username1, String username2, String username3) {}
-    public static void GameMap(String mapNumber) {}
-    public static void LoadGame() {}
-    public static void ExitGame() {}
-    public static void NextTurn() {}
-    public static void Time() {}
-    public static void Date() {}
-    public static void DateTime() {}
-    public static void DayOfTheWeek() {}
-    public static void CheatAdvanceTime(String amount) {}
-    public static void CheatAdvanceDate(String amount) {}
-    public static void Season() {}
-    public static void CheatThor(String x, String y) {}
-    public static void Weather() {}
-    public static void WeatherForecast() {}
-    public static void CheatWeatherSet(String type) {}
-    public static void GreenHouseBuild() {}
     public static void walk(String x, String y) {}
     public static void PrintMap(String x, String y, String size) {}
     public static void HelpReadingMap() {}
