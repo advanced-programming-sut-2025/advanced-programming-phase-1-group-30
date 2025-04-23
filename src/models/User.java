@@ -88,6 +88,9 @@ public class User {
         return Answer;
     }
 
+    public int getRegisterQuestionNumber() {
+        return registerQuestionNumber;
+    }
     public boolean isInGame() {
         return isInGame;
     }

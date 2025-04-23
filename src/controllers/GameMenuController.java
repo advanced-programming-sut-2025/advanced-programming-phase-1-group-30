@@ -1,6 +1,7 @@
 package controllers;
 
 public class GameMenuController {
+    public static void GreenHouseBuild() {}
     public static void walk(String x, String y) {}
     public static void PrintMap(String x, String y, String size) {}
     public static void HelpReadingMap() {}

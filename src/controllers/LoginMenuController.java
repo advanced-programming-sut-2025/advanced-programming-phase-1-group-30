@@ -3,6 +3,7 @@ package controllers;
 import models.App;
 import models.User;
 import models.enums.Commands.Menus;
+import models.enums.RegisterQuestions;
 import views.RegisterMenu;
 
 import java.util.Scanner;
@@ -33,7 +34,17 @@ public class LoginMenuController {
             RegisterMenu.printResult("User not found");
             return;
         }
-        RegisterMenu.printResult("Enter the answer of the security question: ");
+
+        int counter = 1;
+        String registerQ = "";
+        for(RegisterQuestions questions : RegisterQuestions.values()){
+            if(counter == user.getRegisterQuestionNumber()){
+                registerQ = questions.question;
+            }
+            counter++;
+        }
+
+        RegisterMenu.printResult("Enter the answer of the security question: \n" + registerQ);
         Matcher matcher;
         if ((matcher = Pattern.compile("answer\\s+-a\\s+(?<answer>.+?)\\s*").matcher(scanner.nextLine())).matches()) {
             if (matcher.group("answer").equals(user.getAnswer())) {
