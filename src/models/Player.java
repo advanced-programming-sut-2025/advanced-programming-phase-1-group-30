@@ -17,11 +17,11 @@ public class Player {
 
     private boolean isPassedOut = false;
 
-    public Player(int energy, ShippingBin shippingBin, BackPack backPack, int money) {
-        this.energy = energy;
-        this.shippingBin = shippingBin;
-        this.backPack = backPack;
-        this.money = money;
+    public Player() {
+        this.energy = 100;
+        this.shippingBin = null;
+        this.backPack = null;
+        this.money = 0;
     }
 
     public int getEnergy() {
