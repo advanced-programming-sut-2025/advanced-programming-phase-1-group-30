@@ -1,24 +1,13 @@
 package views;
 
 import controllers.DateAndWeatherController;
-import controllers.LoginMenuController;
 import controllers.NewGameController;
 import models.enums.Commands.GameMenuCommands;
-import models.enums.Commands.LoginMenuCommands;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
-import controllers.NewGameController;
-import models.enums.Commands.GameMenuCommands;
 
 public class GameMenu implements AppMenu {
-    public static void PrintResult(String message){
-        System.out.println(message);
-    }
-    @Override
-    public void check(String command, Scanner scanner) {
-        throw new UnsupportedOperationException("Unimplemented method 'check'");
-
     public static void printResult(String result) {
         System.out.println(result);
     }

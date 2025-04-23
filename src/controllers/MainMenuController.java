@@ -11,7 +11,7 @@ public class MainMenuController {
     }
     public static void ChangeMenu(String menuName) {
         String nameMenu = App.getCurrentMenu().getName();
-        Menus menu = ProfileMenuController.FindMenu(menuName);
+        // Menus menu = ProfileMenuController.FindMenu(menuName);
         if (nameMenu.equals(App.getCurrentMenu().getName())) {
             RegisterMenu.printResult("Invalid menu name");
             return;

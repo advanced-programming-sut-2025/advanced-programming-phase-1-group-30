@@ -2,7 +2,6 @@ package models.Tools;
 
 import java.util.ArrayList;
 
-import models.Products.ForagingTree;
 import models.Products.Stone;
 
 public enum PickaxeType {

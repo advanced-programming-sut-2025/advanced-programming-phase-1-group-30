@@ -49,7 +49,7 @@ public class ProfileMenuController {
     }
     public static void ChangeMenu(String menuName) {
         String nameMenu = App.getCurrentMenu().getName();
-        Menus menu = FindMenu(menuName);
+        // Menus menu = FindMenu(menuName);
         if (nameMenu.equals(App.getCurrentMenu().getName())) {
             RegisterMenu.printResult("Invalid menu name");
             return;

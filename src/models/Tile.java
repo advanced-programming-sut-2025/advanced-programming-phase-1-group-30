@@ -2,13 +2,11 @@ package models;
 
 import models.enums.TIleTypes;
 
-import java.util.ArrayList;
-
 public class Tile {
     private TIleTypes type;
     private Item item;
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
     private boolean walkable;
 
     public Tile(int x, int y) {
@@ -38,5 +36,19 @@ public class Tile {
     }
     public void setItem(Item item) {
         this.item = item;
+    }
+    
+    public int getX() {
+        return x;
+    }
+    public int getY() {
+        return y;
+    }
+
+    public boolean isWalkable() {
+        return walkable;
+    }
+    public void setWalkable(boolean walkable) {
+        this.walkable = walkable;
     }
 }

@@ -3,7 +3,6 @@ package models;
 import models.enums.Commands.Menus;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class App {
     private static User currentUser;
@@ -40,7 +39,7 @@ public class App {
     }
 
     public static void setMaps(ArrayList<Map> maps) {
-        maps = maps;
+        App.maps = maps;
     }
 
     public static void setCurrentMenu(Menus currentMenu) {

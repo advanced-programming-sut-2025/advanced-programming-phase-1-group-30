@@ -2,7 +2,6 @@ package controllers;
 
 import models.App;
 import models.enums.Weather;
-import models.Game;
 import models.enums.Season;
 import views.GameMenu;
 
@@ -67,10 +66,10 @@ public class DateAndWeatherController {
     }
     public static void CheatThor(String x, String y) {}
     public static void Weather() {
-        GameMenu.PrintResult(App.getCurrentGame().getCurrentWeather().name());
+        GameMenu.printResult(App.getCurrentGame().getCurrentWeather().name());
     }
     public static void WeatherForecast() {
-        GameMenu.PrintResult(App.getCurrentGame().getTomorrowWeather().name());
+        GameMenu.printResult(App.getCurrentGame().getTomorrowWeather().name());
     }
     public static void CheatWeatherSet(String weather) {
         for(Weather weather1 :Weather.values()){
