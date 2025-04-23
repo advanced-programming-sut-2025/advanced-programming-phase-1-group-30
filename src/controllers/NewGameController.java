@@ -5,5 +5,7 @@ public class NewGameController {
     public static void GameMap(String mapNumber) {}
     public static void LoadGame() {}
     public static void ExitGame() {}
-    public static void NextTurn() {}
+    public static void NextTurn() {
+        
+    }
 }

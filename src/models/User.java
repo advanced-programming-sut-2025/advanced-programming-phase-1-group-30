@@ -86,4 +86,8 @@ public class User {
     public String getAnswer() {
         return Answer;
     }
+
+    public int getRegisterQuestionNumber() {
+        return registerQuestionNumber;
+    }
 }

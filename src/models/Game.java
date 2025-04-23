@@ -9,15 +9,16 @@ public class Game {
     private Player currentPlayer;
     private Time currentTime;
     private Weather currentWeather;
+    private Weather tomorrowWeather;
     private ArrayList<Player> players = new ArrayList<>();
     private ArrayList<Trade> trades = new ArrayList<>();
     
-    public Game(Map map, Player currentPlayer, Time currentTime, Weather currentWeather, ArrayList<Player> players,
+    public Game(Map map, Player currentPlayer, Time currentTime, ArrayList<Player> players,
             ArrayList<Trade> trades) {
         this.map = map;
         this.currentPlayer = currentPlayer;
         this.currentTime = currentTime;
-        this.currentWeather = currentWeather;
+        this.currentWeather = Weather.SUNNY;
         this.players = players;
         this.trades = trades;
     }
@@ -59,5 +60,11 @@ public class Game {
     }
     public void setTrades(ArrayList<Trade> trades) {
         this.trades = trades;
+    }
+    public Weather getTomorrowWeather() {
+        return tomorrowWeather;
+    }
+    public void setTomorrowWeather(Weather tomorrowWeather) {
+        this.tomorrowWeather = tomorrowWeather;
     }
 }

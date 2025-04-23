@@ -3,9 +3,11 @@ package views;
 import java.util.Scanner;
 
 public class GameMenu implements AppMenu {
+    public static void PrintResult(String message){
+        System.out.println(message);
+    }
     @Override
     public void check(String command, Scanner scanner) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'check'");
     }
 }
