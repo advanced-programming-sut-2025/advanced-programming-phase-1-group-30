@@ -5,30 +5,27 @@ import java.util.ArrayList;
 import models.enums.Weather;
 
 public class Game {
-    private Map map;
+    private GreatMap map;
     private Player currentPlayer;
     private Time currentTime;
     private Weather currentWeather;
     private Weather tomorrowWeather;
     private ArrayList<Player> players = new ArrayList<>();
     private ArrayList<Trade> trades = new ArrayList<>();
-    
-    public Game(Map map, Player currentPlayer, Time currentTime, ArrayList<Player> players,
-            ArrayList<Trade> trades) {
-        this.map = map;
-        this.currentPlayer = currentPlayer;
-        this.currentTime = currentTime;
+
+    public Game(ArrayList<Player> players) {
+        this.map = null;
+        this.currentPlayer = App.getCurrentUser().getPlayer();
+        this.currentTime = new Time();
         this.currentWeather = Weather.SUNNY;
         this.players = players;
-        this.trades = trades;
+        this.trades = null;
     }
-
-
     
-    public Map getMap() {
+    public GreatMap getMap() {
         return map;
     }
-    public void setMap(Map map) {
+    public void setMap(GreatMap map) {
         this.map = map;
     }
     public Player getCurrentPlayer() {
