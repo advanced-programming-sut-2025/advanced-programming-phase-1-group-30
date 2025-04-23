@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Player {
+    private final String username;
+    private Map map;
     private int energy;
     private ShippingBin shippingBin;
     private BackPack backPack;
@@ -17,11 +19,25 @@ public class Player {
 
     private boolean isPassedOut = false;
 
-    public Player() {
+    public Player(String username) {
+        this.username = username;
+        this.map = null;
         this.energy = 100;
         this.shippingBin = null;
         this.backPack = null;
         this.money = 0;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public Map getMap() {
+        return map;
+    }
+
+    public void setMap(Map map) {
+        this.map = map;
     }
 
     public int getEnergy() {

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import models.enums.Weather;
 
 public class Game {
-    private Map map;
+    private GreatMap map;
     private Player currentPlayer;
     private Time currentTime;
     private Weather currentWeather;
@@ -20,13 +20,11 @@ public class Game {
         this.players = players;
         this.trades = null;
     }
-
-
     
-    public Map getMap() {
+    public GreatMap getMap() {
         return map;
     }
-    public void setMap(Map map) {
+    public void setMap(GreatMap map) {
         this.map = map;
     }
     public Player getCurrentPlayer() {

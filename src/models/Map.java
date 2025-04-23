@@ -6,10 +6,12 @@ import models.enums.TIleTypes;
 import java.util.ArrayList;
 
 public class Map {
+    private final int id;
     private final Tile[][]  tiles = new Tile[80][60];
     private final ArrayList<Buildings> buildings = new ArrayList<>();
     
-    public Map() {
+    public Map(int id) {
+        this.id = id;
         for (int i = 0; i < 80; i++) {
             for (int j = 0; j < 60; j++) {
                 Tile tile = new Tile(i, j);
@@ -57,5 +59,13 @@ public class Map {
 
     public ArrayList<Buildings> getBuildings() {
         return buildings;
+    }
+
+    public static Map getMapById(int id) {
+        for (Map map : App.getMaps()) {
+            if (id == map.id) return map;
+        }
+
+        return null;
     }
 }
