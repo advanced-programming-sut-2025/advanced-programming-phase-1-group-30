@@ -3,6 +3,7 @@ package models.Tools;
 import java.util.ArrayList;
 
 import models.Products.ForagingTree;
+import models.Products.Stone;
 
 public enum PickaxeType {
     NORMAL_PICKAXE(0, null),
@@ -12,9 +13,9 @@ public enum PickaxeType {
     IRIDIUM_PICKAXE(0, null);
 
     private final int energyUsed;
-    private final ArrayList<ForagingTree.StoneType> stonesCanDestroy;
+    private final ArrayList<Stone> stonesCanDestroy;
 
-    private PickaxeType(int energyUsed, ArrayList<ForagingTree.StoneType> stonesCanDestroy) {
+    private PickaxeType(int energyUsed, ArrayList<Stone> stonesCanDestroy) {
         this.energyUsed = energyUsed;
         this.stonesCanDestroy = stonesCanDestroy;
     }
@@ -23,7 +24,7 @@ public enum PickaxeType {
         return energyUsed;
     }
 
-    public ArrayList<ForagingTree.StoneType> getStonesCanDestroy() {
+    public ArrayList<Stone> getStonesCanDestroy() {
         return stonesCanDestroy;
     }
 }

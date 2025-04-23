@@ -24,8 +24,12 @@ public class Tile {
     public void setType(TIleTypes type) {
         this.type = type;
         switch (type) {
-            case WATER, BUILDING: this.walkable = false; break;
-            case GRASS, PLANTABLE, QUARRY, DIRT: this.walkable = true; break;
+            case WATER: this.walkable = false; break;
+            case BUILDING: this.walkable = false; break;
+            case GRASS: this.walkable = true; break;
+            case PLANTABLE: this.walkable = true; break;
+            case DIRT: this.walkable = true; break;
+            case QUARRY: this.walkable = true; break;
         }
     }
 

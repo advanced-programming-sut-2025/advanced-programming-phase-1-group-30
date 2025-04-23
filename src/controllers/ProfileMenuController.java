@@ -58,14 +58,14 @@ public class ProfileMenuController {
     }
 
     public static Menus FindMenu(String menuName) {
-        return switch (menuName) {
-            case "Register Menu" -> Menus.RegisterMenu;
-            case "Login Menu" -> Menus.LoginMenu;
-            case "Game Menu" -> Menus.GameMenu;
-            case "Profile Menu" -> Menus.ProfileMenu;
-            case "Main Menu" -> Menus.MainMenu;
-            default -> null;
-        };
+        switch (menuName) {
+            case "Register Menu" : return Menus.RegisterMenu;
+            case "Login Menu" : return Menus.LoginMenu;
+            case "Game Menu" : return Menus.GameMenu;
+            case "Profile Menu" : return Menus.ProfileMenu;
+            case "Main Menu" : return Menus.MainMenu;
+            default : return null;
+        }
     }
 
     public static void ShowCurrentMenu() {
