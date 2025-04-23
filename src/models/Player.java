@@ -16,16 +16,18 @@ public class Player {
     private int money;
     private final HashMap<Player, Integer> friendships = new HashMap<>();
     private final ArrayList<Skills> skills = new ArrayList<>();
+    private int selectionNumber;
 
     private boolean isPassedOut = false;
 
-    public Player(String username) {
+    public Player(String username, int selectionNumber) {
         this.username = username;
         this.map = null;
         this.energy = 100;
         this.shippingBin = null;
         this.backPack = null;
         this.money = 0;
+        this.selectionNumber = selectionNumber;
     }
 
     public String getUsername() {
@@ -85,5 +87,13 @@ public class Player {
     
     public ArrayList<Skills> getSkills() {
         return skills;
+    }
+
+    public int getSelectionNumber() {
+        return selectionNumber;
+    }
+
+    public void setSelectionNumber(int selectionNumber) {
+        this.selectionNumber = selectionNumber;
     }
 }

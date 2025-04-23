@@ -49,7 +49,7 @@ public class DateAndWeatherController {
         }
     }
 
-    private static void ChangeSeason() {
+    static void ChangeSeason() {
         if (App.getCurrentGame().getCurrentTime().getSeason().getNumber() == 4) {
             App.getCurrentGame().getCurrentTime().setSeason(Season.SPRING);
         } else if (App.getCurrentGame().getCurrentTime().getSeason().getNumber() == 3) {
