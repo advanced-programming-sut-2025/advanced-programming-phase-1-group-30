@@ -7,23 +7,23 @@ import views.GameMenu;
 
 public class DateAndWeatherController {
     public static void Time() {
-        GameMenu.PrintResult((App.getCurrentGame().getCurrentTime().getHour()) + ":"
+        GameMenu.printResult((App.getCurrentGame().getCurrentTime().getHour()) + ":"
                 + App.getCurrentGame().getCurrentTime().getMinute());
     }
     public static void Date() {
-        GameMenu.PrintResult(App.getCurrentGame().getCurrentTime().getSeason().getName() + " " + App.getCurrentGame().getCurrentTime().getDay() + "th");
+        GameMenu.printResult(App.getCurrentGame().getCurrentTime().getSeason().getName() + " " + App.getCurrentGame().getCurrentTime().getDay() + "th");
     }
     public static void DateTime() {
-        GameMenu.PrintResult(App.getCurrentGame().getCurrentTime().getSeason().getName() + " " + App.getCurrentGame().getCurrentTime().getDay() + "th " +
+        GameMenu.printResult(App.getCurrentGame().getCurrentTime().getSeason().getName() + " " + App.getCurrentGame().getCurrentTime().getDay() + "th " +
                 App.getCurrentGame().getCurrentTime().getHour() + ":" + App.getCurrentGame().getCurrentTime().getMinute());
     }
     public static void DayOfTheWeek() {
-        GameMenu.PrintResult(App.getCurrentGame().getCurrentTime().getDayOfWeek().getName());
+        GameMenu.printResult(App.getCurrentGame().getCurrentTime().getDayOfWeek().getName());
     }
     public static void CheatAdvanceTime(String amount) {
         int x = Integer.parseInt(amount);
         if (x >= 13) {
-            GameMenu.PrintResult("You can't cheat more than 13 hours");
+            GameMenu.printResult("You can't cheat more than 13 hours");
             return;
         }
         if (x + App.getCurrentGame().getCurrentTime().getHour() > 22) {
@@ -35,12 +35,12 @@ public class DateAndWeatherController {
                 App.getCurrentGame().getCurrentTime().setDay(App.getCurrentGame().getCurrentTime().getDay() + 1);
         } else
             App.getCurrentGame().getCurrentTime().setHour(App.getCurrentGame().getCurrentTime().getHour() + x);
-        GameMenu.PrintResult("Cheat code activated: " + x + " hours passed");
+        GameMenu.printResult("Cheat code activated: " + x + " hours passed");
     }
     public static void CheatAdvanceDate(String amount) {
         int x = Integer.parseInt(amount);
         if (x >= 28) {
-            GameMenu.PrintResult("You can't cheat more than 28 days");
+            GameMenu.printResult("You can't cheat more than 28 days");
             return;
         }
         if (x + App.getCurrentGame().getCurrentTime().getDay() > 28) {
@@ -62,7 +62,7 @@ public class DateAndWeatherController {
     }
 
     public static void Season() {
-        GameMenu.PrintResult(App.getCurrentGame().getCurrentTime().getSeason().getName());
+        GameMenu.printResult(App.getCurrentGame().getCurrentTime().getSeason().getName());
     }
     public static void CheatThor(String x, String y) {}
     public static void Weather() {}
