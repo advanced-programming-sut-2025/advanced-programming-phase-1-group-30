@@ -8,6 +8,7 @@ import java.util.Scanner;
 public class App {
     private static User currentUser;
     private static ArrayList<User> appUsers = new ArrayList<>();
+    private static ArrayList<Map> maps = new ArrayList<>();
     private static ArrayList<String> questions = new ArrayList<>();
     private static Menus currentMenu = Menus.RegisterMenu;
     private static Game currentGame;
@@ -32,6 +33,14 @@ public class App {
 
     public static Menus getCurrentMenu() {
         return currentMenu;
+    }
+
+    public static ArrayList<Map> getMaps() {
+        return maps;
+    }
+
+    public static void setMaps(ArrayList<Map> maps) {
+        maps = maps;
     }
 
     public static void setCurrentMenu(Menus currentMenu) {

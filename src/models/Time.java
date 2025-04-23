@@ -8,15 +8,14 @@ public class Time {
     private int minute;
     private int day;
     private Season season;
-    private final Season startSeason = Season.SPRING;
     private DaysOfWeek dayOfWeek;
 
-    public Time(int hour, int minute, int day, Season season, DaysOfWeek dayOfWeek) {
-        this.hour = hour;
-        this.minute = minute;
-        this.day = day;
-        this.season = season;
-        this.dayOfWeek = dayOfWeek;
+    public Time() {
+        this.hour = 9;
+        this.minute = 0;
+        this.day = 1;
+        this.season = Season.SPRING;
+        this.dayOfWeek = DaysOfWeek.MONDAY;
     }
     
     public int getHour() {
@@ -42,9 +41,6 @@ public class Time {
     }
     public void setSeason(Season season) {
         this.season = season;
-    }
-    public Season getStartSeason() {
-        return startSeason;
     }
     public DaysOfWeek getDayOfWeek() {
         return dayOfWeek;

@@ -11,6 +11,7 @@ public class User {
     private String gender;
     private int registerQuestionNumber;
     private String Answer;
+    private boolean isInGame;
 
     public User(String username, String password, String nickname, String email, int registerQuestionNumber, String answer, String gender) {
         this.username = username;
@@ -85,5 +86,21 @@ public class User {
 
     public String getAnswer() {
         return Answer;
+    }
+
+    public boolean isInGame() {
+        return isInGame;
+    }
+
+    public void changeInGame() {
+        this.isInGame = !this.isInGame;
+    }
+    
+    public static User findUserByUsername(String username) {
+        for (User user : App.getAppUsers()) {
+            if (user.getUsername().equals(username)) return user;
+        }
+
+        return null;
     }
 }
