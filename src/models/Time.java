@@ -7,7 +7,6 @@ public class Time {
     private int hour;
     private int minute;
     private int day;
-    private int month;
     private Season season;
     private DaysOfWeek dayOfWeek;
 
@@ -15,7 +14,6 @@ public class Time {
         this.hour = 9;
         this.minute = 0;
         this.day = 1;
-        this.month = 1;
         this.season = Season.SPRING;
         this.dayOfWeek = DaysOfWeek.MONDAY;
     }
@@ -37,12 +35,6 @@ public class Time {
     }
     public void setDay(int day) {
         this.day = day;
-    }
-    public int getMonth() {
-        return month;
-    }
-    public void setMonth(int month) {
-        this.month = month;
     }
     public Season getSeason() {
         return season;
