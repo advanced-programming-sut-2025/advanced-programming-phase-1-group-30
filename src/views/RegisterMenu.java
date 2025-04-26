@@ -3,6 +3,7 @@ package views;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
+import controllers.MaintainerController;
 import controllers.RegisterMenuController;
 import models.enums.Commands.RegisterMenuCommands;
 
@@ -19,6 +20,11 @@ public class RegisterMenu implements AppMenu {
             String menuName = matcher.group("menuName");
 
             RegisterMenuController.ChangeMenu(menuName);
+            return;
+        }
+        matcher = RegisterMenuCommands.LOADMAP.regexMatcher(command);
+        if (matcher.matches()) {
+            MaintainerController.loadMap();
             return;
         }
 
