@@ -1,10 +1,12 @@
 package models.enums;
 
-public enum TIleTypes {
+public enum TileTypes {
     PLANTABLE,
     DIRT,
     WATER,
     BUILDING,
+    HUT,
+    GREENHOUSE,
     GRASS,
     QUARRY;
 }
