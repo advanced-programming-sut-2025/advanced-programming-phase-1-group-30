@@ -1,6 +1,7 @@
 package views;
 
 import controllers.DateAndWeatherController;
+import controllers.GameMenuController;
 import controllers.NewGameController;
 import models.enums.Commands.GameMenuCommands;
 
@@ -75,5 +76,21 @@ public class GameMenu implements AppMenu {
             DateAndWeatherController.WeatherForecast();
             return;
         }
+        matcher = GameMenuCommands.PRINT_MAP.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.printMap(matcher.group("x"), matcher.group("y"), matcher.group("size"));
+            return;
+        }
+        matcher = GameMenuCommands.HELPREADINGMAP.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.helpReadingMap();
+            return;
+        }
+        matcher = GameMenuCommands.WALK.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.walk(matcher.group("x"), matcher.group("y"));
+            return;
+        }
+        System.out.println("Invalid command.");
     }
 }

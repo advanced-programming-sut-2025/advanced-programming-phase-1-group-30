@@ -1,13 +1,17 @@
 package models.enums;
 
 public enum Weather {
-    SUNNY("spring"),
-    RAIN("spring"),
+    SUNNY("sunny"),
+    RAIN("rainy"),
     STORM("storm"),
-    SNOW("snow");
+    SNOW("snowy");
     public final String name;
 
     Weather(String name) {
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }

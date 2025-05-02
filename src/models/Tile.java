@@ -2,6 +2,8 @@ package models;
 
 import models.enums.TileTypes;
 
+import java.util.Objects;
+
 public class Tile {
     private TileTypes type;
     private Item item;
@@ -9,26 +11,26 @@ public class Tile {
     private final int y;
     private boolean walkable;
 
-    public Tile(int x, int y, TileTypes type) {
+    public Tile(int x, int y, TileTypes type, boolean walkable) {
         this.type = type;
         this.x = x;
         this.y = y;
-        this.walkable = true;
+        this.walkable = walkable;
     }
     public static Tile createTileFromType(int x, int y, String tileType) {
         switch (tileType.toLowerCase()) {
             case "dirt":
-                return new Tile(x, y, TileTypes.DIRT);
+                return new Tile(x, y, TileTypes.DIRT, true);
             case "grass":
-                return new Tile(x, y, TileTypes.GRASS);
+                return new Tile(x, y, TileTypes.GRASS, true);
             case "river":
-                return new Tile(x, y, TileTypes.WATER);
+                return new Tile(x, y, TileTypes.WATER, false);
             case "hut":
-                return new Tile(x, y, TileTypes.HUT);
+                return new Tile(x, y, TileTypes.HUT, false);
             case "greenhouse":
-                return new Tile(x, y, TileTypes.GREENHOUSE);
+                return new Tile(x, y, TileTypes.GREENHOUSE, false);
             case "quarry":
-                return new Tile(x, y, TileTypes.QUARRY);
+                return new Tile(x, y, TileTypes.QUARRY, false);
             default:
                 throw new IllegalArgumentException("Unknown tile type: " + tileType);
         }
@@ -69,4 +71,17 @@ public class Tile {
     public void setWalkable(boolean walkable) {
         this.walkable = walkable;
     }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Tile other = (Tile) obj;
+        return this.x == other.x && this.y == other.y;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
+    }
+
 }

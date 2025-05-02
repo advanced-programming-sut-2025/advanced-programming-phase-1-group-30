@@ -63,11 +63,12 @@ public class LoginMenuController {
             RegisterMenu.printResult("You should login first");
             return;
         }
-        if (nameMenu.equals(App.getCurrentMenu().getName())) {
+        if (nameMenu.equals(menuName)) {
             RegisterMenu.printResult("Invalid menu name");
             return;
         }
         RegisterMenu.printResult("Redirecting to " + menuName);
+        App.setCurrentMenu(menu);
     }
     public static void ShowCurrentMenu() {
         RegisterMenu.printResult("Current menu: " + App.getCurrentMenu().getName());

@@ -43,7 +43,9 @@ public class RegisterMenu implements AppMenu {
         matcher = RegisterMenuCommands.REGISTER.regexMatcher(command);
         if (matcher.matches()) {
             RegisterMenuController.register(matcher, scanner);
+            return;
         }
+        System.out.println("Invalid command");
     }
 
 }

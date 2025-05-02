@@ -5,6 +5,8 @@ import models.enums.Weather;
 import models.enums.Season;
 import views.GameMenu;
 
+import java.util.Random;
+
 public class DateAndWeatherController {
     public static void Time() {
         GameMenu.printResult((App.getCurrentGame().getCurrentTime().getHour()) + ":"
@@ -28,6 +30,7 @@ public class DateAndWeatherController {
         }
         if (x + App.getCurrentGame().getCurrentTime().getHour() > 22) {
             App.getCurrentGame().getCurrentTime().setHour((x - (22 - App.getCurrentGame().getCurrentTime().getHour())) + 9);
+            setTWeather();
             if (App.getCurrentGame().getCurrentTime().getDay() == 28) {
                 App.getCurrentGame().getCurrentTime().setDay(1);
                 ChangeSeason();
@@ -37,6 +40,37 @@ public class DateAndWeatherController {
             App.getCurrentGame().getCurrentTime().setHour(App.getCurrentGame().getCurrentTime().getHour() + x);
         GameMenu.printResult("Cheat code activated: " + x + " hours passed");
     }
+
+    static void setTWeather() {
+        Random random = new Random();
+        int y = random.nextInt(8);
+        switch (App.getCurrentGame().getCurrentTime().getSeason()) {
+            case SPRING, SUMMER, FALL -> {
+                switch (y) {
+                    case 0, 1, 2, 3, 4:
+                        App.getCurrentGame().setTomorrowWeather(Weather.SUNNY);
+                        break;
+                    case 5, 6:
+                        App.getCurrentGame().setTomorrowWeather(Weather.RAIN);
+                        break;
+                    case 7:
+                        App.getCurrentGame().setTomorrowWeather(Weather.STORM);
+                        break;
+                }
+            }
+            case WINTER -> {
+                switch (y) {
+                    case 0, 1, 2, 3, 4:
+                        App.getCurrentGame().setTomorrowWeather(Weather.SUNNY);
+                        break;
+                    case 5, 6, 7:
+                        App.getCurrentGame().setTomorrowWeather(Weather.SNOW);
+                        break;
+                }
+            }
+        }
+    }
+
     public static void CheatAdvanceDate(String amount) {
         int x = Integer.parseInt(amount);
         if (x >= 28) {
@@ -66,10 +100,10 @@ public class DateAndWeatherController {
     }
     public static void CheatThor(String x, String y) {}
     public static void Weather() {
-        GameMenu.printResult(App.getCurrentGame().getCurrentWeather().name());
+        GameMenu.printResult(App.getCurrentGame().getCurrentWeather().getName());
     }
     public static void WeatherForecast() {
-        GameMenu.printResult(App.getCurrentGame().getTomorrowWeather().name());
+        GameMenu.printResult(App.getCurrentGame().getTomorrowWeather().getName());
     }
     public static void CheatWeatherSet(String weather) {
         for(Weather weather1 :Weather.values()){
