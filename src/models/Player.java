@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Player {
+    private int x;
+    private int y;
     private final String username;
     private Map map;
     private int energy;
@@ -17,7 +19,6 @@ public class Player {
     private final HashMap<Player, Integer> friendships = new HashMap<>();
     private final ArrayList<Skills> skills = new ArrayList<>();
     private int selectionNumber;
-
     private boolean isPassedOut = false;
 
     public Player(String username, int selectionNumber) {
@@ -95,5 +96,21 @@ public class Player {
 
     public void setSelectionNumber(int selectionNumber) {
         this.selectionNumber = selectionNumber;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
     }
 }

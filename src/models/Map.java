@@ -4,12 +4,23 @@ import models.Buildings.Buildings;
 import models.enums.TileTypes;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import views.GameMenu;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
 public class Map {
+    // Constants
+    public static final String RESET = "\u001B[0m";
+
+    public static final String LIGHT_YELLOW = "\u001B[93m"; // Light Yellow for Dirt
+    public static final String DARK_GREEN = "\u001B[32m";   // Dark Green for Greenhouse
+    public static final String BLUE = "\u001B[34m";         // Blue for Water and Hut
+    public static final String GRAY = "\u001B[90m";         // Gray for Quarry
+    public static final String GREEN = "\u001B[92m";        // Regular Green for Grass
+    public static final String RED = "\u001B[31m";          // Red for unknown
+
     private final int id;
     private final Tile[][]  tiles = new Tile[80][60];
     private final ArrayList<Buildings> buildings = new ArrayList<>();
@@ -101,34 +112,97 @@ public class Map {
         return null;
     }
     public void printMap() {
-        final String RESET = "\u001B[0m";
-
-        final String LIGHT_YELLOW = "\u001B[93m"; // Light Yellow for Dirt
-        final String DARK_GREEN = "\u001B[32m";   // Dark Green for Greenhouse
-        final String BLUE = "\u001B[34m";         // Blue for Water and Hut
-        final String GRAY = "\u001B[90m";         // Gray for Quarry
-        final String GREEN = "\u001B[32m";        // Regular Green for Grass
-        final String RED = "\u001B[31m";          // Red for unknown
-
         for (int i = 0; i < 60; i++) {
             for (int j = 0; j < 80; j++) {
                 if (tiles[j][i].getType().equals(TileTypes.DIRT)) {
-                    System.out.print(LIGHT_YELLOW + "D " + RESET);
+                    if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
+                        System.out.print("P ");
+                    } else
+                        System.out.print(LIGHT_YELLOW + "D " + RESET);
                 } else if (tiles[j][i].getType().equals(TileTypes.GRASS)) {
-                    System.out.print(GREEN + "G " + RESET);
+                    if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
+                        System.out.print("P ");
+                    } else
+                        System.out.print(GREEN + "G " + RESET);
                 } else if (tiles[j][i].getType().equals(TileTypes.WATER)) {
-                    System.out.print(BLUE + "W " + RESET);
+                    if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
+                        System.out.print("P ");
+                    } else
+                        System.out.print(BLUE + "W " + RESET);
                 } else if (tiles[j][i].getType().equals(TileTypes.HUT)) {
-                    System.out.print(BLUE + "H " + RESET);
+                    if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
+                        System.out.print("P ");
+                    } else
+                        System.out.print(BLUE + "H " + RESET);
                 } else if (tiles[j][i].getType().equals(TileTypes.QUARRY)) {
-                    System.out.print(GRAY + "Q " + RESET);
+                    if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
+                        System.out.print("P ");
+                    } else
+                        System.out.print(GRAY + "Q " + RESET);
                 } else if (tiles[j][i].getType().equals(TileTypes.GREENHOUSE)) {
-                    System.out.print(DARK_GREEN + "X " + RESET);
+                    if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
+                        System.out.print("P ");
+                    } else
+                        System.out.print(DARK_GREEN + "X " + RESET);
                 } else {
-                    System.out.print(RED + "X " + RESET);
+                    if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
+                        System.out.print("P ");
+                    } else
+                        System.out.print(RED + "X " + RESET);
                 }
             }
             System.out.println();
         }
+    }
+    public void printPartOfMap(int x, int y, int size) {
+        if (size >= (80 - x) || size > (60 - y)) {
+            GameMenu.printResult("Can not print this part of the Map!");
+        } else {
+            for (int i = x; i < x + size; i++) {
+                for (int j = y; j < y + size; j++) {
+                    if (tiles[j][i].getType().equals(TileTypes.DIRT)) {
+                        if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
+                            System.out.print("P ");
+                        } else
+                            System.out.print(LIGHT_YELLOW + "D " + RESET);
+                    } else if (tiles[j][i].getType().equals(TileTypes.GRASS)) {
+                        if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
+                            System.out.print("P ");
+                        } else
+                            System.out.print(GREEN + "G " + RESET);
+                    } else if (tiles[j][i].getType().equals(TileTypes.WATER)) {
+                        if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
+                            System.out.print("P ");
+                        } else
+                            System.out.print(BLUE + "W " + RESET);
+                    } else if (tiles[j][i].getType().equals(TileTypes.HUT)) {
+                        if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
+                            System.out.print("P ");
+                        } else
+                            System.out.print(BLUE + "H " + RESET);
+                    } else if (tiles[j][i].getType().equals(TileTypes.QUARRY)) {
+                        if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
+                            System.out.print("P ");
+                        } else
+                            System.out.print(GRAY + "Q " + RESET);
+                    } else if (tiles[j][i].getType().equals(TileTypes.GREENHOUSE)) {
+                        if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
+                            System.out.print("P ");
+                        } else
+                            System.out.print(DARK_GREEN + "X " + RESET);
+                    } else {
+                        if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
+                            System.out.print("P ");
+                        } else
+                            System.out.print(RED + "X " + RESET);
+                    }
+                }
+                System.out.println();
+            }
+        }
+    }
+
+    public Tile[][] getTiles() {
+        return tiles;
     }
 }
