@@ -1,8 +1,12 @@
 package models.Maps;
 
 import models.Items.Item;
+import models.Items.Products.Stone;
+import models.Items.Products.Tree;
+import models.Items.Products.TreeType;
 
 import java.util.Objects;
+import java.util.Random;
 
 public class Tile {
     private TileTypes type;
@@ -16,6 +20,7 @@ public class Tile {
         this.x = x;
         this.y = y;
         this.walkable = walkable;
+        Tile.putItemInTile(this);
     }
     public static Tile createTileFromType(int x, int y, String tileType) {
         switch (tileType.toLowerCase()) {
@@ -68,8 +73,8 @@ public class Tile {
     public boolean isWalkable() {
         return walkable;
     }
-    public void setWalkable(boolean walkable) {
-        this.walkable = walkable;
+    public void changeWalkable() {
+        this.walkable = !this.walkable;
     }
     @Override
     public boolean equals(Object obj) {
@@ -84,4 +89,22 @@ public class Tile {
         return Objects.hash(x, y);
     }
 
+    public static void putItemInTile(Tile tile) {
+        if (tile.walkable) {
+            Random random = new Random();
+            int randomItem = random.nextInt(10);
+
+            if (0 <= randomItem && randomItem <= 4) {
+                // Empty
+            }
+            else if (5 <= randomItem && randomItem <= 8) {
+                tile.setItem(new Tree(1, TreeType.test));
+                tile.changeWalkable();
+            }
+            else if (9 <= randomItem && randomItem <= 9) {
+                tile.setItem(new Stone(1));
+                tile.changeWalkable();
+            }
+        }
+    }
 }
