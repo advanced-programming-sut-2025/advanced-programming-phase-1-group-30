@@ -3,6 +3,8 @@ package models.Maps;
 import models.App;
 import models.Buildings.Buildings;
 
+import models.Items.Products.Stone;
+import models.Items.Products.Tree;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import views.GameMenu;
@@ -119,11 +121,21 @@ public class Map {
             for (int i = x; i < x + size; i++) {
                 for (int j = y; j < y + size; j++) {
                     if (tiles[j][i].getType().equals(TileTypes.DIRT)) {
+                        if (tiles[j][i].getItem().getClass().equals(Stone.class)) {
+                            System.out.println("S ");
+                        } else if (tiles[j][i].getItem().getClass().equals(Tree.class)) {
+                            System.out.println("T ");
+                        }
                         if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
                             System.out.print("P ");
                         } else
                             System.out.print(LIGHT_YELLOW + "D " + RESET);
                     } else if (tiles[j][i].getType().equals(TileTypes.GRASS)) {
+                        if (tiles[j][i].getItem().getClass().equals(Stone.class)) {
+                            System.out.println("S ");
+                        } else if (tiles[j][i].getItem().getClass().equals(Tree.class)) {
+                            System.out.println("T ");
+                        }
                         if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
                             System.out.print("P ");
                         } else

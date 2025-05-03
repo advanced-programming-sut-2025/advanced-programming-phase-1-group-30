@@ -26,6 +26,7 @@ public class Player {
     private int foraging = 0;
     private int fishing = 0;
     private int mining = 0;
+    private int maxEnergy;
 
     public Player(String username, int selectionNumber) {
         this.username = username;
@@ -35,6 +36,7 @@ public class Player {
         this.backPack = new BackPack();
         this.money = 0;
         this.selectionNumber = selectionNumber;
+        this.maxEnergy = 200;
     }
 
     public String getUsername() {
@@ -170,5 +172,13 @@ public class Player {
         if(this.mining > 450){
             this.mining = 450;
         }
+    }
+
+    public int getMaxEnergy() {
+        return maxEnergy;
+    }
+
+    public void setMaxEnergy(int maxEnergy) {
+        this.maxEnergy = maxEnergy;
     }
 }

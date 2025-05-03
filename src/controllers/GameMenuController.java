@@ -28,16 +28,24 @@ public class GameMenuController {
             Tile alt = PathFinder.findNearestReachable(map, start, target);
             if (alt != null) {
                 path = PathFinder.findPath(map, start, alt);
-                System.out.println("Destination blocked. Moving to nearest reachable tile.");
+                GameMenu.printResult("Destination blocked. Moving to nearest reachable tile.");
             } else {
-                System.out.println("No path found to destination or any nearby tile.");
+                GameMenu.printResult("No path found to destination or any nearby tile.");
                 return;
             }
         }
 
-        // You write this method to update player pos
+        if (path.isEmpty()) {
+            GameMenu.printResult("Are you NUTS??");
+            return;
+        }
         player.setX(path.getLast().getX());
         player.setY(path.getLast().getY());
+        player.setEnergy(player.getEnergy() - path.size() / 20);
+        if (player.getEnergy() <= 0) {
+            player.setPassedOut(true);
+            GameMenu.printResult("Player passed out!");
+        }
     }
 
     public static void printMap(String x, String y, String size) {
@@ -58,9 +66,17 @@ public class GameMenuController {
         GameMenu.printResult("==================");
     }
 
-    public static void energyShow() {}
-    public static void cheatEnergySet(String value) {}
-    public static void cheatUnlimitedEnergySet() {}
+    public static void energyShow() {
+        GameMenu.printResult("=== Player Energy: " + App.getCurrentGame().getCurrentPlayer().getEnergy() + " ===");
+    }
+    public static void cheatEnergySet(String value) {
+        App.getCurrentGame().getCurrentPlayer().setEnergy(Integer.parseInt(value));
+        GameMenu.printResult("=== Player energy set to: " + value + " ===");
+    }
+    public static void cheatUnlimitedEnergySet() {
+        App.getCurrentGame().getCurrentPlayer().setEnergy(9999);
+        GameMenu.printResult("=== Cheat code activated: UNLIMITED ENERGY! ===");
+    }
     public static void inventoryShow() {
         for (Item item : App.getCurrentGame().getCurrentPlayer().getBackPack().getItems()) {
             GameMenu.printResult(item.getName() + " : " + item.getCount());
