@@ -101,6 +101,22 @@ public class GameMenu implements AppMenu {
             GameMenuController.inventoryTrash(matcher.group("itemName"), matcher.group("number"));
             return;
         }
+        matcher = GameMenuCommands.Equip_Tool.regexMatcher(command);
+        if(matcher.matches()){
+            String name = matcher.group("name");
+            GameMenuController.ToolsEquip(name);
+            return;
+        }
+        matcher = GameMenuCommands.Current_Tool.regexMatcher(command);
+        if(matcher.matches()){
+            GameMenuController.ShowCurrentTool();
+            return;
+        }
+        matcher = GameMenuCommands.Available_Tools.regexMatcher(command);
+        if(matcher.matches()){
+            GameMenuController.ShowAvailableTools();
+            return;
+        }
         System.out.println("Invalid command.");
     }
 }
