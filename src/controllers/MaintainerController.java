@@ -1,6 +1,6 @@
 package controllers;
 
-import models.Map;
+import models.Maps.Map;
 
 public class MaintainerController {
     public static void loadMap(){

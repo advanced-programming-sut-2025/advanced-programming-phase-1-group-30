@@ -4,7 +4,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 
 import controllers.ProfileMenuController;
-import models.enums.Commands.ProfileMenuCommands;
+import models.Commands.ProfileMenuCommands;
 
 public class ProfileMenu implements AppMenu {
     @Override

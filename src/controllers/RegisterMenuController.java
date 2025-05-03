@@ -1,10 +1,10 @@
 package controllers;
 
 import models.App;
-import models.User;
-import models.enums.Commands.Menus;
-import models.enums.Commands.RegisterMenuCommands;
-import models.enums.RegisterQuestions;
+import models.Commands.Menus;
+import models.Commands.RegisterMenuCommands;
+import models.Users.RegisterQuestions;
+import models.Users.User;
 import views.RegisterMenu;
 
 import java.security.SecureRandom;

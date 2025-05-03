@@ -3,7 +3,7 @@ package views;
 import controllers.DateAndWeatherController;
 import controllers.GameMenuController;
 import controllers.NewGameController;
-import models.enums.Commands.GameMenuCommands;
+import models.Commands.GameMenuCommands;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;

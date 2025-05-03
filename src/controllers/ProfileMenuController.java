@@ -1,8 +1,8 @@
 package controllers;
 
 import models.App;
-import models.User;
-import models.enums.Commands.Menus;
+import models.Commands.Menus;
+import models.Users.User;
 import views.RegisterMenu;
 
 public class ProfileMenuController {

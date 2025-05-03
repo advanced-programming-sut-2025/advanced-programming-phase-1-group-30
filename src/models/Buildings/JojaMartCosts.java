@@ -1,6 +1,6 @@
 package models.Buildings;
 
-import models.enums.Season;
+import models.TimeAndDate.Season;
 
 public enum JojaMartCosts {
     // --- Permanent Stock ---

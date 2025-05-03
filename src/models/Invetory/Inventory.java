@@ -1,8 +1,8 @@
 package models.Invetory;
 
-import models.Item;
-
 import java.util.ArrayList;
+
+import models.Items.Item;
 
 public class Inventory {
     private ArrayList<Item> items = new ArrayList<>();

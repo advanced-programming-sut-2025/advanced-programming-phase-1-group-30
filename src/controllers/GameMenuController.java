@@ -1,11 +1,11 @@
 package controllers;
 
 import models.App;
-import models.Item;
-import models.Map;
-import models.PathFinder;
-import models.Player;
-import models.Tile;
+import models.Items.Item;
+import models.Maps.Map;
+import models.Maps.PathFinder;
+import models.Maps.Tile;
+import models.Players.Player;
 import views.GameMenu;
 
 import java.util.*;
