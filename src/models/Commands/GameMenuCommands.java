@@ -20,7 +20,10 @@ public enum GameMenuCommands {
     HELPREADINGMAP("^\\s*help\\s+reading\\s+map\\s*$"),
     WALK("^\\s*walk\\s+-l\\s+(?<x>\\d+)\\s+,\\s+(?<y>\\d+)\\s*$"),
     INVENTORY_SHOW("^\\s*inventory\\s+show\\s*$"),
-    INVENTORY_TRASH("^\\s*inventory\\s+trash\\s+-i\\s+(?<itemName>.*\\S)(\\s+-n\\s+(?<number>.*\\S))?\\s*$");
+    INVENTORY_TRASH("^\\s*inventory\\s+trash\\s+-i\\s+(?<itemName>.*\\S)(\\s+-n\\s+(?<number>.*\\S))?\\s*$"),
+    Equip_Tool("^\\s*tools\\s+equip\\s+(?<name>.*)\\s*$"),
+    Current_Tool("^\\s*tools\\s+show\\s+current\\s*"),
+    Available_Tools("^\\s*tools\\s+show\\s+available\\s*$");
 
     private final String commandRegex;
     GameMenuCommands(String commandRegex){

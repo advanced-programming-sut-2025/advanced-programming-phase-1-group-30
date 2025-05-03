@@ -2,6 +2,7 @@ package controllers;
 
 import models.App;
 import models.Items.Item;
+import models.Items.Tools.Tool;
 import models.Maps.Map;
 import models.Maps.PathFinder;
 import models.Maps.Tile;
@@ -90,9 +91,31 @@ public class GameMenuController {
             GameMenu.printResult(item.getName() + " successfully removed from your backpack");
         }
     }
-    public static void toolsEquip(String name) {}
-    public static void showCurrentTool() {}
-    public static void showAvailableTools() {}
+    public static void ToolsEquip(String name) {
+        for(Item items: App.getCurrentGame().getCurrentPlayer().getBackPack().getItems()){
+            if(items.getName().equals(name)){
+                App.getCurrentGame().getCurrentPlayer().setWield(items);
+                GameMenu.printResult("You equipped " + name + ". It's now ready to use.");
+                return;
+            }
+        }
+        GameMenu.printResult("Oops!" + name + "'s not in your inventory.");
+        return;
+    }
+    public static void ShowCurrentTool() {
+        if(App.getCurrentGame().getCurrentPlayer().getWield() instanceof Tool){
+            GameMenu.printResult(App.getCurrentGame().getCurrentPlayer().getWield().getName());
+        } else{
+            GameMenu.printResult("you're not wielding a tool.");
+        }
+    }
+    public static void ShowAvailableTools() {
+        for(Item items : App.getCurrentGame().getCurrentPlayer().getBackPack().getItems()){
+            if(items instanceof Tool){
+                GameMenu.printResult(items.getName());
+            }
+        }
+    }
     public static void upgradeTools(String name) {}
     public static void toolUse(String direction) {}
     public static void craftInfo(String name) {}

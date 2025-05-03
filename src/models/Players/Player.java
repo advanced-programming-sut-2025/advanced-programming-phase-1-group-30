@@ -2,6 +2,7 @@ package models.Players;
 
 import models.Invetory.BackPack;
 import models.Invetory.ShippingBin;
+import models.Items.Item;
 import models.Maps.Map;
 
 import java.util.ArrayList;
@@ -20,6 +21,11 @@ public class Player {
     private final ArrayList<Skills> skills = new ArrayList<>();
     private int selectionNumber;
     private boolean isPassedOut = false;
+    private Item wield = null;
+    private int farming = 0;
+    private int foraging = 0;
+    private int fishing = 0;
+    private int mining = 0;
 
     public Player(String username, int selectionNumber) {
         this.username = username;
@@ -112,5 +118,57 @@ public class Player {
 
     public void setX(int x) {
         this.x = x;
+    }
+
+    public Item getWield() {
+        return wield;
+    }
+
+    public void setWield(Item wield) {
+        this.wield = wield;
+    }
+
+    public int getFarming() {
+        return farming;
+    }
+
+    public void increaseFarming(int increase) {
+        this.farming += increase;
+        if(this.foraging > 450){
+            this.foraging = 450;
+        }
+    }
+
+    public int getForaging() {
+        return foraging;
+    }
+
+    public void increaseForaging(int increase) {
+        this.foraging += increase;
+        if(this.foraging > 450){
+            this.foraging = 450;
+        }
+    }
+
+    public int getFishing() {
+        return fishing;
+    }
+
+    public void increaseFishing(int increase) {
+        this.fishing += increase;
+        if(this.fishing > 450){
+            this.fishing = 450;
+        }
+    }
+
+    public int getMining() {
+        return mining;
+    }
+
+    public void increaseMining(int increase) {
+        this.mining += increase;
+        if(this.mining > 450){
+            this.mining = 450;
+        }
     }
 }
