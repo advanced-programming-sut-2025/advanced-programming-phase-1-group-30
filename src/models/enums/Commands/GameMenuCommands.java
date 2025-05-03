@@ -18,7 +18,9 @@ public enum GameMenuCommands {
     WEATHER_FORECAST("^\\s*weather\\s+forecast\\s*$"),
     PRINT_MAP("^\\s*print\\s+map\\s+-l\\s+(?<x>\\d+)\\s+,\\s+(?<y>\\d+)\\s+-s\\s+(?<size>\\d+)\\s*$"),
     HELPREADINGMAP("^\\s*help\\s+reading\\s+map\\s*$"),
-    WALK("^\\s*walk\\s+-l\\s+(?<x>\\d+)\\s+,\\s+(?<y>\\d+)\\s*$");
+    WALK("^\\s*walk\\s+-l\\s+(?<x>\\d+)\\s+,\\s+(?<y>\\d+)\\s*$"),
+    INVENTORY_SHOW("^\\s*inventory\\s+show\\s*$"),
+    INVENTORY_TRASH("^\\s*inventory\\s+trash\\s+-i\\s+(?<itemName>.*\\S)\\s+-n\\s+(?<number>.*\\S)\\s*$");
 
     private final String commandRegex;
     GameMenuCommands(String commandRegex){

@@ -6,7 +6,7 @@ public class FishingPole extends Tool {
     private FishingPoleType type;
 
     public FishingPole(int count, FishingPoleType type) {
-        super(count);
+        super(count, type.getName());
         this.type = type;
     }
 

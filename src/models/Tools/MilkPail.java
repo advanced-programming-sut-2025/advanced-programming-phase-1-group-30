@@ -8,7 +8,7 @@ public class MilkPail extends Tool {
     private int capacity = 0;
     
     public MilkPail(int count, int capacity) {
-        super(count);
+        super(count, "Milk Pail");
         this.capacity = capacity;
     }
     public int getCost() {

@@ -6,7 +6,7 @@ public class Crop extends Product{
     private final CropType type;
 
     public Crop(int count, CropType type) {
-        super(count);
+        super(count, type.getName());
         this.type = type;
     }
 

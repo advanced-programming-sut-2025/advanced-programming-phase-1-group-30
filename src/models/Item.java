@@ -1,9 +1,11 @@
 package models;
 
 public class Item {
+    private final String name;
     private int count;
 
-    public Item(int count) {
+    public Item(int count, String name) {
+        this.name = name;
         this.count = count;
     }
 
@@ -11,7 +13,11 @@ public class Item {
         return count;
     }
 
-    public void chnageCount(int amount) {
+    public void changeCount(int amount) {
         this.count += amount;
+    }
+
+    public String getName() {
+        return name;
     }
 }

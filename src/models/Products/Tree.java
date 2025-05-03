@@ -6,7 +6,7 @@ public class Tree extends Product{
     private final TreeType type;
 
     public Tree(int count, TreeType type) {
-        super(count);
+        super(count, type.getName());
         this.type = type;
     }
 

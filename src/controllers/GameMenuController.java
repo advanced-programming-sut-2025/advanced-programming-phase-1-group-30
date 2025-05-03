@@ -1,6 +1,7 @@
 package controllers;
 
 import models.App;
+import models.Item;
 import models.Map;
 import models.PathFinder;
 import models.Player;
@@ -59,7 +60,11 @@ public class GameMenuController {
     public static void energyShow() {}
     public static void cheatEnergySet(String value) {}
     public static void cheatUnlimitedEnergySet() {}
-    public static void inventoryShow() {}
+    public static void inventoryShow() {
+        for (Item item : App.getCurrentGame().getCurrentPlayer().getBackPack().getItems()) {
+            GameMenu.printResult(item.getName() + " : " + item.getCount());
+        }
+    }
     public static void inventoryTrash(String name, String number) {}
     public static void toolsEquip(String name) {}
     public static void showCurrentTool() {}

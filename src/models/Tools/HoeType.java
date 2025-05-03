@@ -1,16 +1,18 @@
 package models.Tools;
 
 public enum HoeType {
-    NORMAL_HOE(0),
-    COPPER_HOE(0),
-    IRON_HOE(0),
-    GOLD_HOE(0),
-    IRIDIUM_HOE(0);
+    TEST("test", 0);
 
+    private final String name;
     private final int energyUsed;
 
-    private HoeType(int energyUsed) {
+    private HoeType(String name, int energyUsed) {
+        this.name = name;
         this.energyUsed = energyUsed;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public int getEnergyUsed() {

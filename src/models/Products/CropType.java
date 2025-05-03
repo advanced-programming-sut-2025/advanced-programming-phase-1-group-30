@@ -5,7 +5,7 @@ import models.enums.Season;
 import java.util.ArrayList;
 
 public enum CropType {
-    test("", null, null, 0, true, 0, 0, true, 0, null, true);
+    test("test", null, null, 0, true, 0, 0, true, 0, null, true);
 
     private final String name;
     private final ForgingSeedType source;

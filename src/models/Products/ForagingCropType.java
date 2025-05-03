@@ -3,7 +3,7 @@ package models.Products;
 import models.enums.Season;
 
 public enum ForagingCropType {
-    test("", null, 0, 0);
+    test("test", null, 0, 0);
 
     private final String name;
     private final Season Season;

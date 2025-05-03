@@ -1,7 +1,7 @@
 package models.Products;
 
 public enum AnimalProductType {
-    test("", 0);
+    test("test", 0);
     
     private final String name;
     private final int price;

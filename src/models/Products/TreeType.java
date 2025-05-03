@@ -5,7 +5,7 @@ import models.enums.Season;
 import java.util.ArrayList;
 
 public enum TreeType {
-    test("", null, null, 0, null, 0, 0, true, 0, null);
+    test("test", null, null, 0, null, 0, 0, true, 0, null);
 
     private final String name;
 	private final ForgingSeedType source;

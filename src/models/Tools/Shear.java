@@ -7,7 +7,7 @@ public class Shear extends Tool {
     private final int energyUsed = 0;
     
     public Shear(int count) {
-        super(count);
+        super(count, "Shear");
     }
     public int getCost() {
         return cost;

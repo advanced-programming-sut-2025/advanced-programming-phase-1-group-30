@@ -6,7 +6,7 @@ public class Fruit extends Product{
     private final FruitType type;
 
     public Fruit(int count, FruitType type) {
-        super(count);
+        super(count, type.getName());
         this.type = type;
     }
 

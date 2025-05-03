@@ -6,7 +6,7 @@ public class Axe extends Tool {
     private AxeType type;
 
     public Axe(int count, AxeType type) {
-        super(count);
+        super(count, type.getName());
         this.type = type;
     }
 

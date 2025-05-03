@@ -1,18 +1,20 @@
 package models.Tools;
 
 public enum AxeType {
-    NORMAL_AXE(0),
-    COPPER_AXE(0),
-    IRON_AXE(0),
-    GOLD_AXE(0),
-    IRIDIUM_AXE(0);
+    TEST("test", 0);
 
+    private final String name;
     private final int energyUsed;
 
-    private AxeType(int energyUsed) {
+    private AxeType(String name, int energyUsed) {
+        this.name = name;
         this.energyUsed = energyUsed;
     }
 
+    public String getName() {
+        return name;
+    }
+    
     public int getEnergyUsed() {
         return energyUsed;
     }

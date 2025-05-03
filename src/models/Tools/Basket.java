@@ -6,7 +6,7 @@ public class Basket extends Tool {
     private BasketType type;
 
     public Basket(int count, BasketType type) {
-        super(count);
+        super(count, type.getName());
         this.type = type;
     }
 

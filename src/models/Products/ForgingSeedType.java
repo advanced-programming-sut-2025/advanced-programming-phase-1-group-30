@@ -3,7 +3,7 @@ package models.Products;
 import models.enums.Season;
 
 public enum ForgingSeedType {
-    test("", null);
+    test("test", null);
     
     private final String name;
     private final Season season;

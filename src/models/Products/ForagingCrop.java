@@ -6,7 +6,7 @@ public class ForagingCrop extends Product{
     private final ForagingCropType type;
 
     public ForagingCrop(int count, ForagingCropType type) {
-        super(count);
+        super(count, type.getName());
         this.type = type;
     }
 

@@ -6,7 +6,7 @@ public class ArtisanGood extends Item {
     private final ArtisanGoodType type;
 
     public ArtisanGood(int count, ArtisanGoodType type) {
-        super(count);
+        super(count, type.getName());
         this.type = type;
     }
 

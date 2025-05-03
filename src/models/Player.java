@@ -26,7 +26,7 @@ public class Player {
         this.map = null;
         this.energy = 100;
         this.shippingBin = null;
-        this.backPack = null;
+        this.backPack = new BackPack();
         this.money = 0;
         this.selectionNumber = selectionNumber;
     }
