@@ -1,6 +1,8 @@
 package models;
 
-import models.enums.Commands.Menus;
+import models.Commands.Menus;
+import models.Maps.Map;
+import models.Users.User;
 
 import java.util.ArrayList;
 

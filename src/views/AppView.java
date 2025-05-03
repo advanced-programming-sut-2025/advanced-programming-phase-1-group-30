@@ -3,7 +3,7 @@ package views;
 import java.util.Scanner;
 
 import models.App;
-import models.enums.Commands.Menus;
+import models.Commands.Menus;
 
 public class AppView {
     public static void run() {

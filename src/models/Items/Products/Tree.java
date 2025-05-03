@@ -1,0 +1,14 @@
+package models.Items.Products;
+
+public class Tree extends Product{
+    private final TreeType type;
+
+    public Tree(int count, TreeType type) {
+        super(count, type.getName());
+        this.type = type;
+    }
+
+    public TreeType getType() {
+        return type;
+    }
+}

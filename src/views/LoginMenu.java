@@ -4,7 +4,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 
 import controllers.LoginMenuController;
-import models.enums.Commands.LoginMenuCommands;
+import models.Commands.LoginMenuCommands;
 
 public class LoginMenu implements AppMenu {
     @Override

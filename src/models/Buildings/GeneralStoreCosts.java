@@ -1,6 +1,6 @@
 package models.Buildings;
 
-import models.enums.Season;
+import models.TimeAndDate.Season;
 
 public enum GeneralStoreCosts {
     RICE("A basic grain often served under vegetables.", 200, Integer.MAX_VALUE, Season.ALL),

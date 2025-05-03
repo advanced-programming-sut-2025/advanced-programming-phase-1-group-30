@@ -5,7 +5,7 @@ import java.util.regex.Matcher;
 
 import controllers.MaintainerController;
 import controllers.RegisterMenuController;
-import models.enums.Commands.RegisterMenuCommands;
+import models.Commands.RegisterMenuCommands;
 
 public class RegisterMenu implements AppMenu {
     public static void printResult(String result) {

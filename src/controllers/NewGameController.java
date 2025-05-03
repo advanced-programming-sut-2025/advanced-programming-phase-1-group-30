@@ -7,11 +7,11 @@ import java.util.regex.Matcher;
 
 import models.App;
 import models.Game;
-import models.Map;
-import models.Player;
-import models.User;
-import models.enums.Commands.GameMenuCommands;
-import models.enums.Weather;
+import models.Commands.GameMenuCommands;
+import models.Maps.Map;
+import models.Maps.Weather;
+import models.Players.Player;
+import models.Users.User;
 import views.GameMenu;
 
 public class NewGameController {

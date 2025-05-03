@@ -1,7 +1,7 @@
 package controllers;
 
 import models.App;
-import models.enums.Commands.Menus;
+import models.Commands.Menus;
 import views.RegisterMenu;
 
 public class MainMenuController {

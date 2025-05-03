@@ -1,8 +1,8 @@
 package controllers;
 
 import models.App;
-import models.enums.Weather;
-import models.enums.Season;
+import models.Maps.Weather;
+import models.TimeAndDate.Season;
 import views.GameMenu;
 
 import java.util.Random;

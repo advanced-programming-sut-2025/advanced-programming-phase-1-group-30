@@ -3,7 +3,7 @@ package views;
 import controllers.DateAndWeatherController;
 import controllers.GameMenuController;
 import controllers.NewGameController;
-import models.enums.Commands.GameMenuCommands;
+import models.Commands.GameMenuCommands;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -89,6 +89,16 @@ public class GameMenu implements AppMenu {
         matcher = GameMenuCommands.WALK.regexMatcher(command);
         if (matcher.matches()) {
             GameMenuController.walk(matcher.group("x"), matcher.group("y"));
+            return;
+        }
+        matcher = GameMenuCommands.INVENTORY_SHOW.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.inventoryShow();
+            return;
+        }
+        matcher = GameMenuCommands.INVENTORY_TRASH.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.inventoryTrash(matcher.group("itemName"), matcher.group("number"));
             return;
         }
         System.out.println("Invalid command.");

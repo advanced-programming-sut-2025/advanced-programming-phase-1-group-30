@@ -2,7 +2,11 @@ package models;
 
 import java.util.ArrayList;
 
-import models.enums.Weather;
+import models.Maps.GreatMap;
+import models.Maps.Weather;
+import models.Players.Player;
+import models.Players.Trade;
+import models.TimeAndDate.Time;
 
 public class Game {
     private GreatMap map;

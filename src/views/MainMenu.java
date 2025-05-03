@@ -2,8 +2,8 @@ package views;
 
 import controllers.MainMenuController;
 import controllers.ProfileMenuController;
-import models.enums.Commands.LoginMenuCommands;
-import models.enums.Commands.ProfileMenuCommands;
+import models.Commands.LoginMenuCommands;
+import models.Commands.ProfileMenuCommands;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;

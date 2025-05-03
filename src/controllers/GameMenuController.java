@@ -1,10 +1,11 @@
 package controllers;
 
 import models.App;
-import models.Map;
-import models.PathFinder;
-import models.Player;
-import models.Tile;
+import models.Items.Item;
+import models.Maps.Map;
+import models.Maps.PathFinder;
+import models.Maps.Tile;
+import models.Players.Player;
 import views.GameMenu;
 
 import java.util.*;
@@ -59,8 +60,36 @@ public class GameMenuController {
     public static void energyShow() {}
     public static void cheatEnergySet(String value) {}
     public static void cheatUnlimitedEnergySet() {}
-    public static void inventoryShow() {}
-    public static void inventoryTrash(String name, String number) {}
+    public static void inventoryShow() {
+        for (Item item : App.getCurrentGame().getCurrentPlayer().getBackPack().getItems()) {
+            GameMenu.printResult(item.getName() + " : " + item.getCount());
+        }
+    }
+    public static void inventoryTrash(String name, String number) {
+        Item item = Item.findItemByName(name);
+        if (item == null) {
+            GameMenu.printResult("No item with this name found in your backpack");
+            return;
+        }
+
+        if (number != null) {
+            int numberInt = Integer.parseInt(number);
+
+            if (item.getCount() <= numberInt) {
+                App.getCurrentGame().getCurrentPlayer().getBackPack().removeItem(item);
+                GameMenu.printResult(item.getName() + " successfully removed from your backpack");
+            }
+            else {
+                item.changeCount(-1 * numberInt);
+                GameMenu.printResult(numberInt + " numbers of " + item.getName() + " successfully removed from your backpack");
+            }
+            
+        }
+        else {
+            App.getCurrentGame().getCurrentPlayer().getBackPack().removeItem(item);
+            GameMenu.printResult(item.getName() + " successfully removed from your backpack");
+        }
+    }
     public static void toolsEquip(String name) {}
     public static void showCurrentTool() {}
     public static void showAvailableTools() {}
