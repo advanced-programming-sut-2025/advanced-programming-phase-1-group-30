@@ -1,6 +1,7 @@
 package controllers;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -91,15 +92,32 @@ public class NewGameController {
     public static void LoadGame() {}
     public static void ExitGame() {}
     public static void NextTurn() {
-        for (Player player : App.getCurrentGame().getPlayers()) {
-            if (player.getSelectionNumber() == App.getCurrentGame().getCurrentPlayer().getSelectionNumber() + 1) {
+        List<Player> players = App.getCurrentGame().getPlayers();
+        Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
+
+        for (int i = 0; i < players.size(); i++) {
+            Player player = players.get(i);
+
+            if (player.getSelectionNumber() == currentPlayer.getSelectionNumber() + 1) {
+                if (player.isPassedOut()) continue;
                 App.getCurrentGame().setCurrentPlayer(player);
-            } else {
-                App.getCurrentGame().setCurrentPlayer(App.getCurrentGame().getPlayers().get(0));
+                return;
+            }
+        }
+        for (Player player : players) {
+            if (!player.isPassedOut()) {
+                App.getCurrentGame().setCurrentPlayer(player);
+                return;
             }
         }
         int currentTime = App.getCurrentGame().getCurrentTime().getHour();
         if (currentTime == 21) {
+            for (Player player : App.getCurrentGame().getPlayers()) {
+                player.setEnergy(player.getMaxEnergy());
+                if (player.isPassedOut()) {
+                    player.setEnergy((player.getMaxEnergy() * 3) / 4);
+                }
+            }
             App.getCurrentGame().getCurrentTime().setHour(9);
             App.getCurrentGame().setCurrentWeather(App.getCurrentGame().getTomorrowWeather());
             DateAndWeatherController.setTWeather();
