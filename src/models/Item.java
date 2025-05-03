@@ -20,4 +20,12 @@ public class Item {
     public String getName() {
         return name;
     }
+
+    public static Item findItemByName(String name) {
+        for (Item item : App.getCurrentGame().getCurrentPlayer().getBackPack().getItems()) {
+            if (item.getName().matches(name)) return item;
+        }
+        
+        return null;
+    }
 }

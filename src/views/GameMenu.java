@@ -96,6 +96,11 @@ public class GameMenu implements AppMenu {
             GameMenuController.inventoryShow();
             return;
         }
+        matcher = GameMenuCommands.INVENTORY_TRASH.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.inventoryTrash(matcher.group("itemName"), matcher.group("number"));
+            return;
+        }
         System.out.println("Invalid command.");
     }
 }
