@@ -3,6 +3,8 @@ package models.Players;
 import models.Invetory.BackPack;
 import models.Invetory.ShippingBin;
 import models.Items.Item;
+import models.Items.Products.ForgingSeed;
+import models.Items.Products.ForgingSeedType;
 import models.Maps.Map;
 
 import java.util.ArrayList;
@@ -31,9 +33,10 @@ public class Player {
     public Player(String username, int selectionNumber) {
         this.username = username;
         this.map = null;
-        this.energy = 100;
+        this.energy = 200;
         this.shippingBin = null;
         this.backPack = new BackPack();
+        this.backPack.addItem(new ForgingSeed(1, ForgingSeedType.test));
         this.money = 0;
         this.selectionNumber = selectionNumber;
         this.maxEnergy = 200;

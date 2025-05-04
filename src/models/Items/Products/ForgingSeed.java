@@ -1,14 +1,14 @@
 package models.Items.Products;
 
 public class ForgingSeed extends Product {
-    private final ForagingCropType type;
+    private final ForgingSeedType type;
 
-    public ForgingSeed(int count, ForagingCropType type) {
+    public ForgingSeed(int count, ForgingSeedType type) {
         super(count, type.getName());
         this.type = type;
     }
 
-    public ForagingCropType getType() {
+    public ForgingSeedType getType() {
         return type;
     }
 }

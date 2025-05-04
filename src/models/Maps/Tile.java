@@ -14,28 +14,32 @@ public class Tile {
     private final int x;
     private final int y;
     private boolean walkable;
+    private boolean isHarvestable;
+    private boolean isPlanted;
 
-    public Tile(int x, int y, TileTypes type, boolean walkable) {
+    public Tile(int x, int y, TileTypes type, boolean walkable, boolean isHarvestable) {
         this.type = type;
         this.x = x;
         this.y = y;
         this.walkable = walkable;
         Tile.putItemInTile(this);
+        this.isHarvestable = isHarvestable;
+        this.isPlanted = false;
     }
     public static Tile createTileFromType(int x, int y, String tileType) {
         switch (tileType.toLowerCase()) {
             case "dirt":
-                return new Tile(x, y, TileTypes.DIRT, true);
+                return new Tile(x, y, TileTypes.DIRT, true, true);
             case "grass":
-                return new Tile(x, y, TileTypes.GRASS, true);
+                return new Tile(x, y, TileTypes.GRASS, true, true);
             case "river":
-                return new Tile(x, y, TileTypes.WATER, false);
+                return new Tile(x, y, TileTypes.WATER, false, false);
             case "hut":
-                return new Tile(x, y, TileTypes.HUT, false);
+                return new Tile(x, y, TileTypes.HUT, false, false);
             case "greenhouse":
-                return new Tile(x, y, TileTypes.GREENHOUSE, false);
+                return new Tile(x, y, TileTypes.GREENHOUSE, false, false);
             case "quarry":
-                return new Tile(x, y, TileTypes.QUARRY, false);
+                return new Tile(x, y, TileTypes.QUARRY, false, false);
             default:
                 throw new IllegalArgumentException("Unknown tile type: " + tileType);
         }
@@ -47,12 +51,8 @@ public class Tile {
     public void setType(TileTypes type) {
         this.type = type;
         switch (type) {
-            case WATER: this.walkable = false; break;
-            case BUILDING: this.walkable = false; break;
-            case GRASS: this.walkable = true; break;
-            case PLANTABLE: this.walkable = true; break;
-            case DIRT: this.walkable = true; break;
-            case QUARRY: this.walkable = true; break;
+            case WATER, BUILDING: this.walkable = false; break;
+            case GRASS, PLANTABLE, DIRT, QUARRY: this.walkable = true; break;
         }
     }
 
@@ -76,6 +76,11 @@ public class Tile {
     public void changeWalkable() {
         this.walkable = !this.walkable;
     }
+
+    public boolean isHarvestable() {
+        return isHarvestable;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -92,19 +97,27 @@ public class Tile {
     public static void putItemInTile(Tile tile) {
         if (tile.walkable) {
             Random random = new Random();
-            int randomItem = random.nextInt(35);
+            int randomItem = random.nextInt(55);
 
-            if (0 <= randomItem && randomItem <= 15) {
+            if (0 <= randomItem && randomItem <= 35) {
                 // Empty
             }
-            else if (16 <= randomItem && randomItem <= 29) {
-                tile.setItem(new Tree(1, TreeType.getRandomTreeType(randomItem - 16)));
+            else if (36 <= randomItem && randomItem <= 49) {
+                tile.setItem(new Tree(1, TreeType.getRandomTreeType(randomItem - 36)));
                 tile.changeWalkable();
             }
-            else if (30 <= randomItem && randomItem <= 34) {
-                tile.setItem(new Stone(randomItem - 29));
+            else if (50 <= randomItem && randomItem <= 54) {
+                tile.setItem(new Stone(randomItem - 49));
                 tile.changeWalkable();
             }
         }
+    }
+
+    public boolean isPlanted() {
+        return isPlanted;
+    }
+
+    public void setPlanted(boolean planted) {
+        isPlanted = planted;
     }
 }
