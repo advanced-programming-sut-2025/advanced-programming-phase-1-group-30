@@ -101,20 +101,47 @@ public class GameMenu implements AppMenu {
             GameMenuController.inventoryTrash(matcher.group("itemName"), matcher.group("number"));
             return;
         }
-        matcher = GameMenuCommands.Equip_Tool.regexMatcher(command);
+        matcher = GameMenuCommands.EQUIP_TOOL.regexMatcher(command);
         if(matcher.matches()){
             String name = matcher.group("name");
             GameMenuController.ToolsEquip(name);
             return;
         }
-        matcher = GameMenuCommands.Current_Tool.regexMatcher(command);
+        matcher = GameMenuCommands.CURRENT_TOOL.regexMatcher(command);
         if(matcher.matches()){
             GameMenuController.ShowCurrentTool();
             return;
         }
-        matcher = GameMenuCommands.Available_Tools.regexMatcher(command);
+        matcher = GameMenuCommands.AVAILABLE_TOOLS.regexMatcher(command);
         if(matcher.matches()){
             GameMenuController.ShowAvailableTools();
+            return;
+        }
+        matcher = GameMenuCommands.PLANT.regexMatcher(command);
+        if(matcher.matches()){
+            String seed = matcher.group("seed");
+            String direction = matcher.group("direction");
+            GameMenuController.plant(seed, direction);
+            return;
+        }
+        matcher = GameMenuCommands.SHOW_PLANT.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.showPlant(matcher.group("x"), matcher.group("y"));
+            return;
+        }
+        matcher = GameMenuCommands.ENERGY_SHOW.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.energyShow();
+            return;
+        }
+        matcher = GameMenuCommands.ENERGY_SET.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.cheatEnergySet(matcher.group("value"));
+            return;
+        }
+        matcher = GameMenuCommands.ENERGY_UNLIMITED.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.cheatUnlimitedEnergySet();
             return;
         }
         System.out.println("Invalid command.");

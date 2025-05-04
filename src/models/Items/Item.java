@@ -15,6 +15,10 @@ public class Item {
         return count;
     }
 
+    public void setCount(int count) {
+        this.count = count;
+    }
+
     public void changeCount(int amount) {
         this.count += amount;
     }
@@ -27,7 +31,6 @@ public class Item {
         for (Item item : App.getCurrentGame().getCurrentPlayer().getBackPack().getItems()) {
             if (item.getName().matches(name)) return item;
         }
-        
         return null;
     }
 }

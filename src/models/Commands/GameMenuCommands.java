@@ -18,12 +18,17 @@ public enum GameMenuCommands {
     WEATHER_FORECAST("^\\s*weather\\s+forecast\\s*$"),
     PRINT_MAP("^\\s*print\\s+map\\s+-l\\s+(?<x>\\d+)\\s+,\\s+(?<y>\\d+)\\s+-s\\s+(?<size>\\d+)\\s*$"),
     HELPREADINGMAP("^\\s*help\\s+reading\\s+map\\s*$"),
+    ENERGY_SHOW("^\\s*energy\\s+show\\s*$"),
+    ENERGY_SET("^\\s*energy\\s+set\\s+-v\\s+(?<value>.*\\S)\\s*$"),
+    ENERGY_UNLIMITED("^\\s*energy\\s+unlimited\\s*$"),
     WALK("^\\s*walk\\s+-l\\s+(?<x>\\d+)\\s+,\\s+(?<y>\\d+)\\s*$"),
     INVENTORY_SHOW("^\\s*inventory\\s+show\\s*$"),
     INVENTORY_TRASH("^\\s*inventory\\s+trash\\s+-i\\s+(?<itemName>.*\\S)(\\s+-n\\s+(?<number>.*\\S))?\\s*$"),
-    Equip_Tool("^\\s*tools\\s+equip\\s+(?<name>.*)\\s*$"),
-    Current_Tool("^\\s*tools\\s+show\\s+current\\s*"),
-    Available_Tools("^\\s*tools\\s+show\\s+available\\s*$");
+    EQUIP_TOOL("^\\s*tools\\s+equip\\s+(?<name>.*)\\s*$"),
+    CURRENT_TOOL("^\\s*tools\\s+show\\s+current\\s*"),
+    AVAILABLE_TOOLS("^\\s*tools\\s+show\\s+available\\s*$"),
+    PLANT("^\\s*plant\\s+-s\\s+(?<seed>.+\\S)\\s+-d\\s+(?<direction>.*\\S)\\s*"),
+    SHOW_PLANT("^\\s*showplant\\s+-l\\s+(?<x>\\d+)\\s+,\\s+(?<y>\\d+)\\s*$");
 
     private final String commandRegex;
     GameMenuCommands(String commandRegex){
