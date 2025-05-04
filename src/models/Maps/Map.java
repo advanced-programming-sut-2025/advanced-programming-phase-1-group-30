@@ -75,40 +75,19 @@ public class Map {
         for (int i = 0; i < 60; i++) {
             for (int j = 0; j < 80; j++) {
                 if (tiles[j][i].getType().equals(TileTypes.DIRT)) {
-                    if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
-                        System.out.print("P ");
-                    } else
-                        System.out.print(LIGHT_YELLOW + "D " + RESET);
+                    System.out.print(LIGHT_YELLOW + "D " + RESET);
                 } else if (tiles[j][i].getType().equals(TileTypes.GRASS)) {
-                    if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
-                        System.out.print("P ");
-                    } else
-                        System.out.print(GREEN + "G " + RESET);
+                    System.out.print(GREEN + "G " + RESET);
                 } else if (tiles[j][i].getType().equals(TileTypes.WATER)) {
-                    if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
-                        System.out.print("P ");
-                    } else
-                        System.out.print(BLUE + "W " + RESET);
+                    System.out.print(BLUE + "W " + RESET);
                 } else if (tiles[j][i].getType().equals(TileTypes.HUT)) {
-                    if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
-                        System.out.print("P ");
-                    } else
-                        System.out.print(BLUE + "H " + RESET);
+                    System.out.print(BLUE + "H " + RESET);
                 } else if (tiles[j][i].getType().equals(TileTypes.QUARRY)) {
-                    if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
-                        System.out.print("P ");
-                    } else
-                        System.out.print(GRAY + "Q " + RESET);
+                    System.out.print(GRAY + "Q " + RESET);
                 } else if (tiles[j][i].getType().equals(TileTypes.GREENHOUSE)) {
-                    if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
-                        System.out.print("P ");
-                    } else
-                        System.out.print(DARK_GREEN + "X " + RESET);
+                    System.out.print(DARK_GREEN + "X " + RESET);
                 } else {
-                    if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
-                        System.out.print("P ");
-                    } else
-                        System.out.print(RED + "X " + RESET);
+                    System.out.print(RED + "X " + RESET);
                 }
             }
             System.out.println();
@@ -121,25 +100,31 @@ public class Map {
             for (int i = x; i < x + size; i++) {
                 for (int j = y; j < y + size; j++) {
                     if (tiles[j][i].getType().equals(TileTypes.DIRT)) {
-                        if (tiles[j][i].getItem().getClass().equals(Stone.class)) {
-                            System.out.println("S ");
-                        } else if (tiles[j][i].getItem().getClass().equals(Tree.class)) {
-                            System.out.println("T ");
+                        if (tiles[j][i].getItem() != null) {
+                            if (tiles[j][i].getItem().getClass().equals(Stone.class)) {
+                                System.out.print("S ");
+                            } else if (tiles[j][i].getItem().getClass().equals(Tree.class)) {
+                                System.out.print("T ");
+                            }
+                        } else {
+                            if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
+                                System.out.print("P ");
+                            } else
+                                System.out.print(LIGHT_YELLOW + "D " + RESET);
                         }
-                        if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
-                            System.out.print("P ");
-                        } else
-                            System.out.print(LIGHT_YELLOW + "D " + RESET);
                     } else if (tiles[j][i].getType().equals(TileTypes.GRASS)) {
-                        if (tiles[j][i].getItem().getClass().equals(Stone.class)) {
-                            System.out.println("S ");
-                        } else if (tiles[j][i].getItem().getClass().equals(Tree.class)) {
-                            System.out.println("T ");
+                        if (tiles[j][i].getItem() != null) {
+                            if (tiles[j][i].getItem().getClass().equals(Stone.class)) {
+                                System.out.print("S ");
+                            } else if (tiles[j][i].getItem().getClass().equals(Tree.class)) {
+                                System.out.print("T ");
+                            }
+                        } else {
+                            if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
+                                System.out.print("P ");
+                            } else
+                                System.out.print(GREEN + "G " + RESET);
                         }
-                        if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
-                            System.out.print("P ");
-                        } else
-                            System.out.print(GREEN + "G " + RESET);
                     } else if (tiles[j][i].getType().equals(TileTypes.WATER)) {
                         if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
                             System.out.print("P ");

@@ -92,17 +92,17 @@ public class Tile {
     public static void putItemInTile(Tile tile) {
         if (tile.walkable) {
             Random random = new Random();
-            int randomItem = random.nextInt(25);
+            int randomItem = random.nextInt(35);
 
-            if (0 <= randomItem && randomItem <= 5) {
+            if (0 <= randomItem && randomItem <= 15) {
                 // Empty
             }
-            else if (6 <= randomItem && randomItem <= 19) {
-                tile.setItem(new Tree(1, TreeType.getRandomTreeType(randomItem - 6)));
+            else if (16 <= randomItem && randomItem <= 29) {
+                tile.setItem(new Tree(1, TreeType.getRandomTreeType(randomItem - 16)));
                 tile.changeWalkable();
             }
-            else if (20 <= randomItem && randomItem <= 24) {
-                tile.setItem(new Stone(randomItem - 19));
+            else if (30 <= randomItem && randomItem <= 34) {
+                tile.setItem(new Stone(randomItem - 29));
                 tile.changeWalkable();
             }
         }
