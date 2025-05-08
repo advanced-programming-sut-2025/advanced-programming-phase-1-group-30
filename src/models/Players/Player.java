@@ -1,6 +1,7 @@
 package models.Players;
 
 import models.Invetory.BackPack;
+import models.Invetory.BackPackType;
 import models.Invetory.ShippingBin;
 import models.Items.Item;
 import models.Items.Products.ForgingSeed;
@@ -35,7 +36,7 @@ public class Player {
         this.map = null;
         this.energy = 200;
         this.shippingBin = null;
-        this.backPack = new BackPack();
+        this.backPack = new BackPack(BackPackType.INITIAL_BACKPACK);
         this.backPack.addItem(new ForgingSeed(1, ForgingSeedType.test));
         this.money = 0;
         this.selectionNumber = selectionNumber;
