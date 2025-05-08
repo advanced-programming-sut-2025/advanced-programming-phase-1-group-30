@@ -3,6 +3,8 @@ package models.Players;
 import models.Invetory.BackPack;
 import models.Invetory.BackPackType;
 import models.Invetory.ShippingBin;
+import models.Invetory.TrashCan;
+import models.Invetory.TrashCanType;
 import models.Items.Item;
 import models.Items.Products.ForgingSeed;
 import models.Items.Products.ForgingSeedType;
@@ -19,6 +21,7 @@ public class Player {
     private int energy;
     private ShippingBin shippingBin;
     private BackPack backPack;
+    private TrashCan trashCan;
     private int money;
     private final HashMap<Player, Integer> friendships = new HashMap<>();
     private final ArrayList<Skills> skills = new ArrayList<>();
@@ -37,6 +40,7 @@ public class Player {
         this.energy = 200;
         this.shippingBin = null;
         this.backPack = new BackPack(BackPackType.INITIAL_BACKPACK);
+        this.trashCan = new TrashCan(TrashCanType.INITIAL_TRASHCAN);
         this.backPack.addItem(new ForgingSeed(1, ForgingSeedType.test));
         this.money = 0;
         this.selectionNumber = selectionNumber;
@@ -184,5 +188,13 @@ public class Player {
 
     public void setMaxEnergy(int maxEnergy) {
         this.maxEnergy = maxEnergy;
+    }
+
+    public TrashCan getTrashCan() {
+        return trashCan;
+    }
+
+    public void setTrashCan(TrashCan trashCan) {
+        this.trashCan = trashCan;
     }
 }
