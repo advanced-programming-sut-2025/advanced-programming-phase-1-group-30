@@ -27,6 +27,8 @@ public class Map {
     private final int id;
     private final Tile[][]  tiles = new Tile[80][60];
     private final ArrayList<Buildings> buildings = new ArrayList<>();
+    private boolean hasScareCrow = false;
+
     public static void loadMap(Map mapInstance) {
         try {
             InputStream inputStream = Map.class.getClassLoader().getResourceAsStream("map.json");
@@ -159,5 +161,12 @@ public class Map {
 
     public Tile[][] getTiles() {
         return tiles;
+    }
+
+    public boolean hasScareCrow() {
+        return hasScareCrow;
+    }
+    public void changeHasScareCrow() {
+        this.hasScareCrow = !this.hasScareCrow;
     }
 }
