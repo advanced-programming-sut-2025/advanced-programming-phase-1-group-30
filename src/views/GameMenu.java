@@ -144,6 +144,11 @@ public class GameMenu implements AppMenu {
             GameMenuController.cheatUnlimitedEnergySet();
             return;
         }
+        matcher = GameMenuCommands.CRAFT_INFO.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.craftInfo(matcher.group("craftName"));
+            return;
+        }
         System.out.println("Invalid command.");
     }
 }
