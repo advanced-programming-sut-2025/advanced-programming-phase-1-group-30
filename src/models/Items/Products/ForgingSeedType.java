@@ -60,13 +60,15 @@ public enum ForgingSeedType {
     MAHOGANY_SEEDS("Mahogany Seeds", Season.ALL),
     MUSHROOM_TREE_SEEDS("Mushroom Tree Seeds", Season.ALL),
     MYSTIC_TREE_SEEDS("Mystic Tree Seeds", Season.ALL);
-
+  
     private final String name;
     private final Season season;
+    private final CropType crop;
 
-    private ForgingSeedType(String name, Season season) {
+    private ForgingSeedType(String name, Season season, CropType crop) {
         this.name = name;
         this.season = season;
+        this.crop = crop;
     }
     
     public String getName() {
@@ -74,5 +76,8 @@ public enum ForgingSeedType {
     }
     public Season getSeason() {
         return season;
+    }
+    public CropType getCrop() {
+        return crop;
     }
 }
