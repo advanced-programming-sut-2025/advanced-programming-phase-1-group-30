@@ -28,7 +28,7 @@ public enum GameMenuCommands {
     CURRENT_TOOL("^\\s*tools\\s+show\\s+current\\s*"),
     AVAILABLE_TOOLS("^\\s*tools\\s+show\\s+available\\s*$"),
     SHOW_PLANT("^\\s*showplant\\s+-l\\s+(?<x>\\d+)\\s+,\\s+(?<y>\\d+)\\s*$"),
-    CRAFTINFO("^\\s*craftinfo\\s+-n\\s+(?<craftName>.*\\S)\\s*$"),
+    CRAFT_INFO("^\\s*craftinfo\\s+-n\\s+(?<craftName>.*\\S)\\s*$"),
     PLANT("^\\s*plant\\s+-s\\s+(?<seed>.*\\S)\\s+-d\\s+(?<direction>.*\\S)\\s*$"),
     SHOWPLANT("^\\s*showplant\\s+-l\\s+(?<location>.*\\S)\\s*$"),
     FERTILIZE("^\\s*fertilize\\s+-f\\s+(?<fertilizer>.*\\S)\\s+-d\\s+(?<direction>.*\\S)\\s*$"),

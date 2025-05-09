@@ -2,13 +2,18 @@ package controllers;
 
 import models.App;
 import models.Items.Item;
+import models.Items.Products.CropType;
+import models.Items.Products.ForagingCropType;
 import models.Items.Products.ForgingSeed;
 import models.Items.Tools.Tool;
 import models.Maps.Map;
 import models.Maps.PathFinder;
 import models.Maps.Tile;
 import models.Players.Player;
+import models.TimeAndDate.Season;
 import views.GameMenu;
+import views.RegisterMenu;
+
 import java.util.*;
 
 public class GameMenuController {
@@ -141,7 +146,36 @@ public class GameMenuController {
     }
     public static void upgradeTools(String name) {}
     public static void toolUse(String direction) {}
-    public static void craftInfo(String name) {}
+    public static void craftInfo(String name) {
+        boolean isCraftAvailable = false;
+        CropType craft = null;
+        for (CropType cropType : CropType.values()) {
+            if (cropType.getName().toLowerCase().equals(name)) {
+                craft = cropType;
+                isCraftAvailable = true;
+            }
+        }
+
+        if (!isCraftAvailable) {
+            GameMenu.printResult("No craft with given name were found!");
+            return;
+        }
+        
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Name: " + craft.getName() + "\n");
+        sb.append(MaintainerController.arrayListToString("Stages", craft.getStages()));
+        sb.append("Total Harvest Time: " + craft.getTotalHarvestTime() + "\n");
+        sb.append("One Time: " + craft.isOneTime() + "\n");
+        sb.append("Regrowth Time: " + craft.getName() + "\n");
+        sb.append("Base Sell Price: " + craft.getBaseSellPrice() + "\n");
+        sb.append("Is Edible: " + craft.isEdible() + "\n");
+        sb.append("Base Energy: " + craft.getEnergy() + "\n");
+        sb.append("Base Health: " + craft.getHealth() + "\n");
+        sb.append(MaintainerController.arrayListToString("Season", craft.getSeasons()));
+        sb.append("Can Become Giant: " + craft.isCanBecomeGiant());
+        RegisterMenu.printResult(sb.toString());
+    }
     public static void plant(String seed1, String direction) { // TODO shokhm zade shode barresi beshe
         ForgingSeed seed = (ForgingSeed) ForgingSeed.findItemByName(seed1);
         Player player = App.getCurrentGame().getCurrentPlayer();
