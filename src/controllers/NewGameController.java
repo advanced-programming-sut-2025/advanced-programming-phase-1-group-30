@@ -9,7 +9,10 @@ import java.util.regex.Matcher;
 import models.App;
 import models.Game;
 import models.Commands.GameMenuCommands;
+import models.Items.Products.ForgingSeed;
+import models.Items.Products.ForgingSeedType;
 import models.Maps.Map;
+import models.Maps.Tile;
 import models.Maps.Weather;
 import models.Players.Player;
 import models.Users.User;
@@ -116,6 +119,23 @@ public class NewGameController {
                 player.setEnergy(player.getMaxEnergy());
                 if (player.isPassedOut()) {
                     player.setEnergy((player.getMaxEnergy() * 3) / 4);
+                }
+            }
+            for (Player player : App.getCurrentGame().getPlayers()) {
+                Tile[][] tiles = player.getMap().getTiles();
+                for (int i = 0; i < tiles.length; i++) {
+                    for (int j = 0; j < tiles[i].length; j++) {
+                        if (tiles[i][j].isPlanted()) {
+                            ForgingSeed seed = (ForgingSeed)tiles[i][j].getItem();
+                            tiles[i][j].getCrop().setDaysPassed(tiles[i][j].getCrop().getDaysPassed() + 1);
+                            if (tiles[i][j].getCrop().getStages().get(tiles[i][j].getCrop().getCurrentStage()) == tiles[i][j].getCrop().getDaysPassed()) {
+                                if (tiles[i][j].getCrop().getStages().size() < tiles[i][j].getCrop().getCurrentStage()) {
+                                    tiles[i][j].setReadyToHarvest(true);
+                                } else
+                                    tiles[i][j].getCrop().setCurrentStage(tiles[i][j].getCrop().getCurrentStage() + 1);
+                            }
+                        }
+                    }
                 }
             }
             App.getCurrentGame().getCurrentTime().setHour(9);

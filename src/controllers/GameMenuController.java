@@ -1,6 +1,9 @@
 package controllers;
 
 import models.App;
+import models.Game;
+import models.Invetory.BackPack;
+import models.Invetory.Inventory;
 import models.Items.Item;
 import models.Items.Products.ForgingSeed;
 import models.Items.Tools.Tool;
@@ -183,11 +186,15 @@ public class GameMenuController {
         if (item.getCount() > 0) {
             if (targetTile.isHarvestable() && targetTile.getItem() == null) {
                 targetTile.setItem(seed);
+                seed.setFertilized(false);
                 item.setCount(item.getCount() - 1);
                 targetTile.setPlanted(true);
                 if (item.getCount() == 0) {
                     player.getBackPack().getItems().remove(item);
                 }
+                tiles[newX][newY].setReadyToHarvest(false);
+                tiles[newX][newY].setCrop(seed.getCrop());
+
                 GameMenu.printResult("Planted " + seed.getName() + " at (" + newX + ", " + newY + ")");
             } else {
                 GameMenu.printResult("Tile is not farmable!");
@@ -196,21 +203,73 @@ public class GameMenuController {
             GameMenu.printResult("No item with this name found in your backpack!");
             return;
         }
-
     }
 
 
     public static void showPlant(String x, String y) {
         Player player = App.getCurrentGame().getCurrentPlayer();
         Tile[][] tiles = App.getMaps().get(player.getSelectionNumber()  - 1).getTiles();
-        if (tiles[player.getX()][player.getY()].isPlanted()) {
+        int X = Integer.parseInt(x);
+        int Y = Integer.parseInt(y);
+        if (tiles[X][Y].isPlanted()) {
             Tile targetTile = tiles[player.getX()][player.getY()];
-            Item item = targetTile.getItem();
-            // TODO kood and How much time remainig and is watered or not
+            ForgingSeed seed = (ForgingSeed)targetTile.getItem();
+            int daysRemaining = 0;
+            for (int i = seed.getCrop().getCurrentStage(); i < seed.getCrop().getStages().size(); i++) {
+                daysRemaining += seed.getCrop().getStages().get(i);
+                daysRemaining -= seed.getCrop().getDaysPassed();
+            }
+            GameMenu.printResult("=== Seed: " + seed.getName() + " ===\n" +
+                    "=== Current Stage: " + seed.getCrop().getCurrentStage() + " ===\n" +
+                    "=== Days Remaining: " + daysRemaining + " ===\n" +
+                    "=== Is Fertilized: " + seed.isFertilized() + " ===\n" +
+                    "=== Watered Today: " + x + " ==="); // TODO
         }
     }
-    public static void fertilize(String fetilizer, String direction) {}
-    public static void howMuchWater() {}
+    public static void fertilize(String fetilizer, String direction) {
+        Item item = Item.findItemByName(fetilizer);
+        if (item == null) {
+            GameMenu.printResult("No item with this name found in your backpack!");
+        }
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Tile[][] tiles = App.getMaps().get(player.getSelectionNumber()  - 1).getTiles();
+        int x = player.getX();
+        int y = player.getY();
+        int dx = 0, dy = 0;
+
+        switch (direction) {
+            case "w": dy = -1; break;      // up
+            case "s": dy = 1; break;       // down
+            case "a": dx = -1; break;      // left
+            case "d": dx = 1; break;       // right
+            case "Q": dx = -1; dy = -1; break; // up-left
+            case "E": dx = 1; dy = -1; break;  // up-right
+            case "Z": dx = -1; dy = 1; break;  // down-left
+            case "C": dx = 1; dy = 1; break;   // down-right
+            default:
+                GameMenu.printResult("Invalid direction!");
+                return;
+        }
+
+        int newX = x + dx;
+        int newY = y + dy;
+        if (newX < 0 || newX >= tiles.length || newY < 0 || newY >= tiles[0].length) {
+            GameMenu.printResult("Out of bounds!");
+            return;
+        }
+        if (tiles[newX][newY].isPlanted()) {
+            tiles[newX][newY].setReadyToHarvest(true);
+            ForgingSeed seed = (ForgingSeed) tiles[newX][newY].getItem();
+            seed.setFertilized(true);
+            GameMenu.printResult("Plant is ready to harvest!");
+        } else {
+            GameMenu.printResult("There is no PLANT at (" + newX + ", " + newY + ")!!");
+        }
+
+    }
+    public static void howMuchWater() {
+
+    }
     public static void showCraftingRecipes() {}
     public static void crafting(String name) {}
     public static void flaceItem(String name, String direction) {}
