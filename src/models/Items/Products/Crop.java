@@ -1,16 +1,16 @@
 package models.Items.Products;
-
 import java.util.ArrayList;
+import models.Maps.Tile;
 
-public class Crop extends Product {
+public class Crop extends Product{
     private final CropType type;
     private ArrayList<Integer> stages = new ArrayList<>();
     private int currentStage = 0;
     private int daysPassed = 0;
 
 
-    public Crop(int count, CropType type) {
-        super(count, type.getName());
+    public Crop(int count, CropType type, Tile tile) {
+        super(count, type.getName(), tile);
         this.type = type;
         stages = type.getStages();
     }
