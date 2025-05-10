@@ -18,7 +18,8 @@ public enum ForagingMineralType {
     GOLD("gold ore","A precious ore that can be smelted into bars.", 25,3),
     IRIDIUM("iridium ore","An exotic ore with many curious properties. Can be smelted into bars.", 100,4),
     COAL("coal","A combustible rock that is useful for crafting and smelting.",15,0),
-    Stone("stone","A common material with many uses in crafting and building.",5,0);
+    STONE("stone","A common material with many uses in crafting and building.",5,0);
+
 
     private final String name;
     private final String description;

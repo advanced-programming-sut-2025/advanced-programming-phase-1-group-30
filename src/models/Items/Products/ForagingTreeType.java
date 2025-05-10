@@ -3,7 +3,11 @@ package models.Items.Products;
 import models.TimeAndDate.Season;
 
 public enum ForagingTreeType {
-    test("test", null);
+    ACORNS("Acorns", Season.ALL),
+    MAPLE_SEEDS("Maple Seeds", Season.ALL),
+    PINE_CONES("Pine Cones", Season.ALL),
+    MAHOGANY_SEEDS("Mahogany Seeds", Season.ALL),
+    MUSHROOM_TREE_SEEDS("Mushroom Tree Seeds", Season.ALL);
 
     private final String name;
     private final Season season;

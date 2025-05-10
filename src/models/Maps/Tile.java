@@ -1,6 +1,7 @@
 package models.Maps;
 
 import models.Items.Item;
+import models.Items.Products.Crop;
 import models.Items.Products.Stone;
 import models.Items.Products.Tree;
 import models.Items.Products.TreeType;
@@ -16,7 +17,8 @@ public class Tile {
     private boolean walkable;
     private boolean isHarvestable;
     private boolean isPlanted;
-    private boolean isReadyToHarvest;
+    private boolean readyToHarvest;
+    private Crop crop;
 
     public Tile(int x, int y, TileTypes type, boolean walkable, boolean isHarvestable) {
         this.type = type;
@@ -122,19 +124,19 @@ public class Tile {
         isPlanted = planted;
     }
 
-    public void setWalkable(boolean walkable) {
-        this.walkable = walkable;
-    }
-
-    public void setHarvestable(boolean harvestable) {
-        isHarvestable = harvestable;
-    }
-
     public boolean isReadyToHarvest() {
-        return isReadyToHarvest;
+        return readyToHarvest;
     }
 
     public void setReadyToHarvest(boolean readyToHarvest) {
-        isReadyToHarvest = readyToHarvest;
+        this.readyToHarvest = readyToHarvest;
+    }
+
+    public Crop getCrop() {
+        return crop;
+    }
+
+    public void setCrop(Crop crop) {
+        this.crop = crop;
     }
 }

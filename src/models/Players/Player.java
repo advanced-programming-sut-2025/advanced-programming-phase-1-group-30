@@ -1,7 +1,10 @@
 package models.Players;
 
 import models.Invetory.BackPack;
+import models.Invetory.BackPackType;
 import models.Invetory.ShippingBin;
+import models.Invetory.TrashCan;
+import models.Invetory.TrashCanType;
 import models.Items.Item;
 import models.Items.Products.ForgingSeed;
 import models.Items.Products.ForgingSeedType;
@@ -19,6 +22,7 @@ public class Player {
     private int energy;
     private ShippingBin shippingBin;
     private BackPack backPack;
+    private TrashCan trashCan;
     private int money;
     private final HashMap<Player, Integer> friendships = new HashMap<>();
     private final ArrayList<Skills> skills = new ArrayList<>();
@@ -30,6 +34,7 @@ public class Player {
     private int fishing = 0;
     private int mining = 0;
     private int maxEnergy;
+    private ArrayList<Item> products = new ArrayList<>();
 
     public Player(String username, int selectionNumber) {
         this.username = username;
@@ -42,6 +47,9 @@ public class Player {
         this.backPack.addItem(new Pickaxe(1, PickaxeType.NORMAL));
         this.backPack.addItem(new Basket(1, BasketType.NORMAL));
         this.backPack.addItem(new Scythe(1));
+        this.backPack = new BackPack(BackPackType.INITIAL_BACKPACK);
+        this.trashCan = new TrashCan(TrashCanType.INITIAL_TRASHCAN);
+        this.backPack.addItem(new ForgingSeed(1, ForgingSeedType.ACORNS, null)); //TODO tile & initial seed
         this.money = 0;
         this.selectionNumber = selectionNumber;
         this.maxEnergy = 200;
@@ -188,5 +196,25 @@ public class Player {
 
     public void setMaxEnergy(int maxEnergy) {
         this.maxEnergy = maxEnergy;
+    }
+
+    public TrashCan getTrashCan() {
+        return trashCan;
+    }
+
+    public void setTrashCan(TrashCan trashCan) {
+        this.trashCan = trashCan;
+    }
+
+    public ArrayList<Item> getProducts() {
+        return products;
+    }
+
+    public void addProduct(Item product) {
+        this.products.add(product);
+    }
+
+    public void removedProduct(Item product) {
+        this.products.remove(product);
     }
 }
