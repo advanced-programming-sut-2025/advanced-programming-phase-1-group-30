@@ -212,6 +212,10 @@ public class GameMenuController {
         }
 
         Tile targetTile = tiles[newX][newY];
+        if (!targetTile.isHarvestable()) {
+            GameMenu.printResult("Tile is not harvestable!");
+            return;
+        }
         Item item = Item.findItemByName(seed1);
         if (item == null) {
             GameMenu.printResult("No item with this name found in your backpack!");
