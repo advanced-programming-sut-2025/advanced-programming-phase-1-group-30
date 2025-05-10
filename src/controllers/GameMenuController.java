@@ -6,6 +6,9 @@ import models.Items.Products.ForagingMineral;
 import models.Invetory.BackPack;
 import models.Invetory.Inventory;
 import models.Items.Item;
+import models.Items.ArtisanGoods.ArtisanGood;
+import models.Items.Foods.Food;
+import models.Items.Foods.FoodType;
 import models.Items.Products.CropType;
 import models.Items.Products.ForagingCropType;
 import models.Items.Products.ForgingSeed;
@@ -483,6 +486,9 @@ public class GameMenuController {
         if (wantedItem == null)
             GameMenu.printResult("No Item Found!");
 
+        if (wantedItem.getClass() != Food.class)
+            GameMenu.printResult("Item is not eatable");
+
         App.getCurrentGame().getCurrentPlayer().getBackPack().removeItem(wantedItem);
         App.getCurrentGame().getCurrentPlayer().getRefrigerator().addItem(wantedItem);
     }
@@ -495,7 +501,20 @@ public class GameMenuController {
         App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(wantedItem);
         App.getCurrentGame().getCurrentPlayer().getRefrigerator().removeItem(wantedItem);
     }
-    public static void showCookingRecipe(){}
+    public static void showCookingRecipe(){
+        StringBuilder sb = new StringBuilder();
+
+        ArrayList<FoodType> recipes = App.getCurrentGame().getCurrentPlayer().getRecipes();
+        for (int i = 0; i < recipes.size(); i++) {
+            sb.append(recipes.get(i).getName());
+            if (i < recipes.size() - 1) {
+                sb.append("-");
+            }
+            else sb.append("\n");
+        }
+
+        GameMenu.printResult(sb.toString());
+    }
     public static void cooking(String name) {}
     public static void eat(String name) {}
     public static void build(String name, String x, String y){}

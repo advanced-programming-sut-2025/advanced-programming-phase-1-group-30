@@ -8,6 +8,7 @@ import models.Invetory.ShippingBin;
 import models.Invetory.TrashCan;
 import models.Invetory.TrashCanType;
 import models.Items.Item;
+import models.Items.Foods.FoodType;
 import models.Items.Products.ForgingSeed;
 import models.Items.Products.ForgingSeedType;
 import models.Items.Tools.*;
@@ -39,6 +40,7 @@ public class Player {
     private int maxEnergy;
     private ArrayList<Item> products = new ArrayList<>();
     private Building building;
+    private ArrayList<FoodType> recipes = new ArrayList<>();
 
     public Player(String username, int selectionNumber) {
         this.username = username;
@@ -59,6 +61,7 @@ public class Player {
         this.selectionNumber = selectionNumber;
         this.maxEnergy = 200;
         this.building = new Building(0, 0, 0, 0); //TODO home!!!
+        this.recipes = null;
     }
 
     public String getUsername() {
@@ -242,5 +245,13 @@ public class Player {
 
     public void setBuilding(Building building) {
         this.building = building;
+    }
+
+    public ArrayList<FoodType> getRecipes() {
+        return recipes;
+    }
+
+    public void addRecipe(FoodType recipe) {
+        this.recipes.add(recipe);
     }
 }
