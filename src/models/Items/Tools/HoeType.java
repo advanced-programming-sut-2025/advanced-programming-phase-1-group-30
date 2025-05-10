@@ -1,12 +1,16 @@
 package models.Items.Tools;
 
 public enum HoeType {
-    TEST("test", 0);
+    NORMAL("normal hoe", 5),
+    COPPER("copper hoe", 4),
+    IRON("iron hoe", 3),
+    GOLD("gold hoe", 2),
+    IRIDIUM("iridium hoe", 1);
 
     private final String name;
     private final int energyUsed;
 
-    private HoeType(String name, int energyUsed) {
+    HoeType(String name, int energyUsed) {
         this.name = name;
         this.energyUsed = energyUsed;
     }

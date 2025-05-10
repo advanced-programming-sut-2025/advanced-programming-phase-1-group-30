@@ -42,7 +42,7 @@ public class Tile {
             case "greenhouse":
                 return new Tile(x, y, TileTypes.GREENHOUSE, false, false);
             case "quarry":
-                return new Tile(x, y, TileTypes.QUARRY, false, false);
+                return new Tile(x, y, TileTypes.QUARRY, true, false);
             default:
                 throw new IllegalArgumentException("Unknown tile type: " + tileType);
         }
@@ -98,7 +98,7 @@ public class Tile {
     }
 
     public static void putItemInTile(Tile tile) {
-        if (tile.walkable) {
+        if (tile.getType().equals(TileTypes.DIRT)) {
             Random random = new Random();
             int randomItem = random.nextInt(55);
 

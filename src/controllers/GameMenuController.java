@@ -2,16 +2,20 @@ package controllers;
 
 import models.App;
 import models.Game;
+import models.Items.Products.ForagingMineral;
 import models.Invetory.BackPack;
 import models.Invetory.Inventory;
 import models.Items.Item;
 import models.Items.Products.CropType;
 import models.Items.Products.ForagingCropType;
 import models.Items.Products.ForgingSeed;
-import models.Items.Tools.Tool;
+import models.Items.Products.Tree;
+import models.Items.Products.TreeType;
+import models.Items.Tools.*;
 import models.Maps.Map;
 import models.Maps.PathFinder;
 import models.Maps.Tile;
+import models.Maps.TileTypes;
 import models.Players.Player;
 import models.TimeAndDate.Season;
 import views.GameMenu;
@@ -148,7 +152,172 @@ public class GameMenuController {
         }
     }
     public static void upgradeTools(String name) {}
-    public static void toolUse(String direction) {}
+    public static void toolUse(String direction) {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Item wield = player.getWield();
+        Tile[][] tiles = App.getMaps().get(player.getSelectionNumber()  - 1).getTiles();
+
+
+        int x = player.getX();
+        int y = player.getY();
+        int dx = 0, dy = 0;
+
+        switch (direction) {
+            case "w": dy = -1; break;
+            case "s": dy = 1; break;
+            case "a": dx = -1; break;
+            case "d": dx = 1; break;
+            case "Q": dx = -1; dy = -1; break;
+            case "E": dx = 1; dy = -1; break;
+            case "Z": dx = -1; dy = 1; break;
+            case "C": dx = 1; dy = 1; break;
+            default:
+                GameMenu.printResult("Invalid direction!");
+                return;
+        }
+
+        int newX = x + dx;
+        int newY = y + dy;
+
+        if (newX < 0 || newX >= tiles.length || newY < 0 || newY >= tiles[0].length) {
+            GameMenu.printResult("Out of bounds!");
+            return;
+        }
+
+        Tile targetTile = tiles[newX][newY];
+
+        if(wield instanceof Hoe){
+            int energyNeeded = ((Hoe) wield).getType().getEnergyUsed();
+            if(player.getFarming() == 450){
+                energyNeeded -= 1;
+            }
+            if(player.getEnergy() > energyNeeded){
+                if(targetTile.getType().equals(TileTypes.DIRT)){
+                    targetTile.setType(TileTypes.PLANTABLE);
+                }
+                player.setEnergy(player.getEnergy() - energyNeeded);
+                GameMenu.printResult("The ground is now soft and ready to plant.");
+            }else{
+                GameMenu.printResult("You don't have enough energy!");
+            }
+
+        }else if(wield instanceof Pickaxe){
+            int energyNeeded = ((Pickaxe) wield).getType().getEnergyUsed();
+            if(player.getMining() == 450){
+                energyNeeded -= 1;
+            }
+
+            if(player.getEnergy() > energyNeeded){
+                if(targetTile.getType().equals(TileTypes.PLANTABLE)){
+                    targetTile.setType(TileTypes.DIRT);
+                    GameMenu.printResult("Done!");
+                } else if(targetTile.getType().equals(TileTypes.QUARRY)){
+                    if(targetTile.getItem() instanceof ForagingMineral){
+                        player.getBackPack().addItem(targetTile.getItem());
+                        GameMenu.printResult(targetTile.getItem().getName() + " successfully added to your backpack");
+                        targetTile.setItem(null);
+                    }else{
+                        GameMenu.printResult("You swing your pickaxe... but there's nothing to mine here!");
+                        if(energyNeeded > 0){
+                            energyNeeded -= 1;
+                        }
+                    }
+                } else if(targetTile.isWalkable() && targetTile.getItem() != (null)){ // Change
+                    GameMenu.printResult("Poof! " + targetTile.getItem().getName() + " crumbled into nothing.");
+                    targetTile.setItem(null);
+                } else {
+                    GameMenu.printResult("You swing your pickaxe, but nothing happens.");
+                    if(energyNeeded > 0){
+                        energyNeeded -= 1;
+                    }
+                }
+                player.setEnergy(player.getEnergy() - energyNeeded);
+            }else{
+                GameMenu.printResult("You don't have enough energy!");
+            }
+        } else if(wield instanceof Axe){
+            int energyNeeded = ((Axe) wield).getType().getEnergyUsed();
+            if(player.getForaging() == 450){
+                energyNeeded -= 1;
+            }
+
+            if(player.getEnergy() > energyNeeded){
+                if(targetTile.getItem() instanceof Tree){
+                    Item wood = new Item(12 ,"wood");
+                    Item sap = new Item(2 ,"sap");
+                    player.getBackPack().addItem(wood);
+                    player.getBackPack().addItem(sap);
+                    targetTile.setItem(null);
+                    GameMenu.printResult("You chop down the tree and collect 12 wood and 2 sap.");
+                } else if(targetTile.getItem().equals(new Item(1,"branch"))){
+                    targetTile.setItem(null);
+                    GameMenu.printResult("You clear the branch from the ground.");
+                } else{
+                    GameMenu.printResult("You swing your axe, but nothing happens.");
+                    if(energyNeeded > 0){
+                        energyNeeded -= 1;
+                    }
+                }
+                player.setEnergy(player.getEnergy() - energyNeeded);
+            }else{
+                GameMenu.printResult("You don't have enough energy!");
+            }
+        }else if(wield instanceof Basket){
+            int energyNeeded = ((Basket) wield).getType().getEnergyUsed();
+            if(player.getFarming() == 450){
+                energyNeeded -= 1;
+            }
+
+            if(player.getEnergy() > energyNeeded){
+                if(targetTile.getType().equals(TileTypes.WATER)){
+                    ((Basket) wield).setRemainingWater(((Basket) wield).getType().getCapacity());
+                    GameMenu.printResult("Splash! Your bucket is full and ready to go.");
+                } else {
+                    ((Basket) wield).setRemainingWater(((Basket) wield).getRemainingWater() - 1);
+                    if(targetTile.getItem() instanceof ForgingSeed){
+                       //Ab dadan TODO
+                        GameMenu.printResult("You give the plants a refreshing splash!");
+                    } else {
+                        GameMenu.printResult("You spill some water on the ground.");
+                    }
+                }
+                player.setEnergy(player.getEnergy() - energyNeeded);
+            }else{
+                GameMenu.printResult("You don't have enough energy!");
+            }
+        } else if(wield instanceof FishingPole){
+            // daria
+        } else if(wield instanceof Scythe){
+            if(player.getEnergy() > 2){
+                if(targetTile.isReadyToHarvest()){
+                    GameMenu.printResult("You harvested " + targetTile.getItem() +" and added it to your backpack!");
+                    player.getBackPack().addItem(targetTile.getItem());
+                    targetTile.setReadyToHarvest(false);
+                    targetTile.setItem(null);
+                } else if(targetTile.getType().equals(TileTypes.GRASS)){
+                    targetTile.setType(TileTypes.DIRT);
+                    GameMenu.printResult("Tile type changed to Dirt!");
+                }
+                player.setEnergy(player.getEnergy() - 2);
+            }else{
+                GameMenu.printResult("You don't have enough energy!");
+            }
+        } else if(wield instanceof MilkPail){
+            if(player.getEnergy() > 4){
+                // shir bedoshe TODO
+                player.setEnergy(player.getEnergy() - 4);
+            }else{
+                GameMenu.printResult("You don't have enough energy!");
+            }
+        } else if(wield instanceof Shear){
+            if(player.getEnergy() > 4){
+                // pashm bezane TODO
+                player.setEnergy(player.getEnergy() - 4);
+            }else{
+                GameMenu.printResult("You don't have enough energy!");
+            }
+        }
+    }
     public static void craftInfo(String name) {
         boolean isCraftAvailable = false;
         CropType craft = null;

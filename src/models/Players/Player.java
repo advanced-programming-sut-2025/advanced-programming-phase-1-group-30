@@ -8,6 +8,7 @@ import models.Invetory.TrashCanType;
 import models.Items.Item;
 import models.Items.Products.ForgingSeed;
 import models.Items.Products.ForgingSeedType;
+import models.Items.Tools.*;
 import models.Maps.Map;
 
 import java.util.ArrayList;
@@ -40,6 +41,12 @@ public class Player {
         this.map = null;
         this.energy = 200;
         this.shippingBin = null;
+        this.backPack = new BackPack();
+        this.backPack.addItem(new Axe(1, AxeType.NORMAL));
+        this.backPack.addItem(new Hoe(1, HoeType.NORMAL));
+        this.backPack.addItem(new Pickaxe(1, PickaxeType.NORMAL));
+        this.backPack.addItem(new Basket(1, BasketType.NORMAL));
+        this.backPack.addItem(new Scythe(1));
         this.backPack = new BackPack(BackPackType.INITIAL_BACKPACK);
         this.trashCan = new TrashCan(TrashCanType.INITIAL_TRASHCAN);
         this.backPack.addItem(new ForgingSeed(1, ForgingSeedType.ACORNS, null)); //TODO tile & initial seed

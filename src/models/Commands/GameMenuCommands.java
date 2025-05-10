@@ -26,6 +26,7 @@ public enum GameMenuCommands {
     INVENTORY_TRASH("^\\s*inventory\\s+trash\\s+-i\\s+(?<itemName>.*\\S)(\\s+-n\\s+(?<number>.*\\S))?\\s*$"),
     EQUIP_TOOL("^\\s*tools\\s+equip\\s+(?<name>.*)\\s*$"),
     CURRENT_TOOL("^\\s*tools\\s+show\\s+current\\s*"),
+    Tool_Use("^\\s*tools\\s+use\\s+-d\\s+(?<direction>.*)\\s*$"),
     AVAILABLE_TOOLS("^\\s*tools\\s+show\\s+available\\s*$"),
     SHOW_PLANT("^\\s*showplant\\s+-l\\s+(?<x>\\d+)\\s+,\\s+(?<y>\\d+)\\s*$"),
     CRAFT_INFO("^\\s*craftinfo\\s+-n\\s+(?<craftName>.*\\S)\\s*$"),
