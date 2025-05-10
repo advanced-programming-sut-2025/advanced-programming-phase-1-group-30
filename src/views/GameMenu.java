@@ -155,6 +155,17 @@ public class GameMenu implements AppMenu {
             GameMenuController.craftInfo(matcher.group("craftName"));
             return;
         }
+        matcher = GameMenuCommands.COOKING_REFRIGERATOR.regexMatcher(command);
+        if (matcher.matches()) {
+            if (matcher.group("action").equals("put"))
+                GameMenuController.putRefrigerator(matcher.group("item"));
+            else if (matcher.group("action").equals("pick"))
+                GameMenuController.putRefrigerator(matcher.group("item"));
+            else
+                printResult("You should just put or pick!");
+            return;
+        }
+
         System.out.println("Invalid command.");
     }
 }

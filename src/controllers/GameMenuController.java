@@ -102,7 +102,7 @@ public class GameMenuController {
         }
     }
     public static void inventoryTrash(String name, String number) {
-        Item item = Item.findItemByName(name);
+        Item item = Item.findItemByName(name, App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
         if (item == null) {
             GameMenu.printResult("No item with this name found in your backpack");
             return;
@@ -349,7 +349,7 @@ public class GameMenuController {
         RegisterMenu.printResult(sb.toString());
     }
     public static void plant(String seed1, String direction) { // TODO shokhm zade shode barresi beshe
-        ForgingSeed seed = (ForgingSeed) ForgingSeed.findItemByName(seed1);
+        ForgingSeed seed = (ForgingSeed) ForgingSeed.findItemByName(seed1, App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
         Player player = App.getCurrentGame().getCurrentPlayer();
         Tile[][] tiles = App.getMaps().get(player.getSelectionNumber()  - 1).getTiles();
 
@@ -381,7 +381,7 @@ public class GameMenuController {
         }
 
         Tile targetTile = tiles[newX][newY];
-        Item item = Item.findItemByName(seed1);
+        Item item = Item.findItemByName(seed1, App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
         if (item == null) {
             GameMenu.printResult("No item with this name found in your backpack!");
             return;
@@ -430,7 +430,7 @@ public class GameMenuController {
         }
     }
     public static void fertilize(String fetilizer, String direction) {
-        Item item = Item.findItemByName(fetilizer);
+        Item item = Item.findItemByName(fetilizer, App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
         if (item == null) {
             GameMenu.printResult("No item with this name found in your backpack!");
         }
@@ -477,8 +477,24 @@ public class GameMenuController {
     public static void crafting(String name) {}
     public static void flaceItem(String name, String direction) {}
     public static void cheatAddItem(String name, String count) {}
-    public static void putRefrigerator(String item) {}
-    public static void pickRefrigerator(String item) {}
+    public static void putRefrigerator(String item) {
+        Item wantedItem = Item.findItemByName(item, App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
+
+        if (wantedItem == null)
+            GameMenu.printResult("No Item Found!");
+
+        App.getCurrentGame().getCurrentPlayer().getBackPack().removeItem(wantedItem);
+        App.getCurrentGame().getCurrentPlayer().getRefrigerator().addItem(wantedItem);
+    }
+    public static void pickRefrigerator(String item) {
+        Item wantedItem = Item.findItemByName(item, App.getCurrentGame().getCurrentPlayer().getRefrigerator().getItems());
+
+        if (wantedItem == null)
+            GameMenu.printResult("No Item Found!");
+
+        App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(wantedItem);
+        App.getCurrentGame().getCurrentPlayer().getRefrigerator().removeItem(wantedItem);
+    }
     public static void showCookingRecipe(){}
     public static void cooking(String name) {}
     public static void eat(String name) {}
