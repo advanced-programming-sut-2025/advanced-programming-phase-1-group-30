@@ -5,6 +5,7 @@ import models.Invetory.ShippingBin;
 import models.Items.Item;
 import models.Items.Products.ForgingSeed;
 import models.Items.Products.ForgingSeedType;
+import models.Items.Tools.*;
 import models.Maps.Map;
 
 import java.util.ArrayList;
@@ -36,7 +37,11 @@ public class Player {
         this.energy = 200;
         this.shippingBin = null;
         this.backPack = new BackPack();
-        this.backPack.addItem(new ForgingSeed(1, ForgingSeedType.test));
+        this.backPack.addItem(new Axe(1, AxeType.NORMAL));
+        this.backPack.addItem(new Hoe(1, HoeType.NORMAL));
+        this.backPack.addItem(new Pickaxe(1, PickaxeType.NORMAL));
+        this.backPack.addItem(new Basket(1, BasketType.NORMAL));
+        this.backPack.addItem(new Scythe(1));
         this.money = 0;
         this.selectionNumber = selectionNumber;
         this.maxEnergy = 200;

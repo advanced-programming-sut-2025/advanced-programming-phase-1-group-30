@@ -117,6 +117,12 @@ public class GameMenu implements AppMenu {
             GameMenuController.ShowAvailableTools();
             return;
         }
+        matcher = GameMenuCommands.Tool_Use.regexMatcher(command);
+        if(matcher.matches()){
+            String direction = matcher.group("direction");
+            GameMenuController.toolUse(direction);
+            return;
+        }
         matcher = GameMenuCommands.PLANT.regexMatcher(command);
         if(matcher.matches()){
             String seed = matcher.group("seed");

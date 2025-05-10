@@ -16,6 +16,7 @@ public class Tile {
     private boolean walkable;
     private boolean isHarvestable;
     private boolean isPlanted;
+    private boolean isReadyToHarvest;
 
     public Tile(int x, int y, TileTypes type, boolean walkable, boolean isHarvestable) {
         this.type = type;
@@ -39,7 +40,7 @@ public class Tile {
             case "greenhouse":
                 return new Tile(x, y, TileTypes.GREENHOUSE, false, false);
             case "quarry":
-                return new Tile(x, y, TileTypes.QUARRY, false, false);
+                return new Tile(x, y, TileTypes.QUARRY, true, false);
             default:
                 throw new IllegalArgumentException("Unknown tile type: " + tileType);
         }
@@ -95,7 +96,7 @@ public class Tile {
     }
 
     public static void putItemInTile(Tile tile) {
-        if (tile.walkable) {
+        if (tile.getType().equals(TileTypes.DIRT)) {
             Random random = new Random();
             int randomItem = random.nextInt(55);
 
@@ -119,5 +120,21 @@ public class Tile {
 
     public void setPlanted(boolean planted) {
         isPlanted = planted;
+    }
+
+    public void setWalkable(boolean walkable) {
+        this.walkable = walkable;
+    }
+
+    public void setHarvestable(boolean harvestable) {
+        isHarvestable = harvestable;
+    }
+
+    public boolean isReadyToHarvest() {
+        return isReadyToHarvest;
+    }
+
+    public void setReadyToHarvest(boolean readyToHarvest) {
+        isReadyToHarvest = readyToHarvest;
     }
 }

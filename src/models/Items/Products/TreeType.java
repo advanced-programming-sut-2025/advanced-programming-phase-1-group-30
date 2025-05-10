@@ -18,8 +18,9 @@ public enum TreeType {
     PINE_TREE("Pine Tree", null, null, 28, null, 5, 100, false, 0, null),
     MAHOGANY_TREE("Mahogany Tree", null, null, 28, null, 1, 2, true, -2, null),
     MUSHROOM_TREE("Mushroom Tree", null, null, 28, null, 1, 40, true, 38, null),
-    MYSTIC_TREE("Mystic Tree", null, null, 28, null, 7, 1000, true, 500, null);
-    
+    MYSTIC_TREE("Mystic Tree", null, null, 28, null, 7, 1000, true, 500, null),
+    STUMP("Stump", null, null, 0, null, 0, 0, true, 0, null),;
+
     private final String name;
 	private final ForgingSeedType source;
     private final ArrayList<Integer> stages;
