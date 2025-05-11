@@ -188,7 +188,12 @@ public class GameMenu implements AppMenu {
             GameMenuController.eat(matcher.group("foodName"));
             return;
         }
-
+        matcher = GameMenuCommands.FISHING.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.fishing(matcher.group("fishingPole"));
+            return;
+        }
+        
         System.out.println("Invalid command.");
     }
 }
