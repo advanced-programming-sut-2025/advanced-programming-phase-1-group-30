@@ -73,14 +73,14 @@ public class GameMenuController {
     }
 
     public static void helpReadingMap() {
-        GameMenu.printResult("=== Map Legend ===");
-        GameMenu.printResult(Map.GREEN + "G -> Grass" + Map.RESET);
-        GameMenu.printResult(Map.LIGHT_YELLOW + "D -> Dirt" + Map.RESET);
-        GameMenu.printResult(Map.BLUE + "R -> River (not walkable)" + Map.RESET);
-        GameMenu.printResult(Map.BLUE + "H -> Hut (not walkable)" + Map.RESET);
-        GameMenu.printResult(Map.GRAY + "Q -> Quarry (not walkable)" + Map.RESET);
-        GameMenu.printResult(Map.DARK_GREEN + "Q -> Greenhouse (not walkable)" + Map.RESET);
-        GameMenu.printResult("P -> Player (not walkable)");
+        GameMenu.printResult("=== Map guide ===");
+        GameMenu.printResult(Map.GREEN + "⬛ -> Grass" + Map.RESET);
+        GameMenu.printResult(Map.LIGHT_YELLOW + "⬛ -> Dirt" + Map.RESET);
+        GameMenu.printResult(Map.BLUE + "⬛ -> Water (not walkable)" + Map.RESET);
+        GameMenu.printResult(Map.BLUE + "⬛ -> Hut (not walkable)" + Map.RESET);
+        GameMenu.printResult(Map.GRAY + "⬛ -> Quarry (not walkable)" + Map.RESET);
+        GameMenu.printResult(Map.DARK_GREEN + "⬛ -> Greenhouse (not walkable)" + Map.RESET);
+        GameMenu.printResult(Map.RED + "\uD83D\uDE00 -> Player" + Map.RESET);
         GameMenu.printResult("==================");
     }
     public static void energyShow() {
@@ -205,11 +205,13 @@ public class GameMenuController {
                 energyNeeded -= 1;
             }
             if(player.getEnergy() > energyNeeded){
-                if(targetTile.getType().equals(TileTypes.DIRT)){
+                if(targetTile.getType().equals(TileTypes.DIRT) || targetTile.getType().equals(TileTypes.GRASS)){
                     targetTile.setType(TileTypes.PLANTABLE);
+                    GameMenu.printResult("The ground is now soft and ready to plant.");
+                } else {
+                    GameMenu.printResult("Not possible.");
                 }
                 player.setEnergy(player.getEnergy() - energyNeeded);
-                GameMenu.printResult("The ground is now soft and ready to plant.");
             }else{
                 GameMenu.printResult("You don't have enough energy!");
             }
@@ -323,7 +325,7 @@ public class GameMenuController {
                 } else {
                     ((Basket) wield).setRemainingWater(((Basket) wield).getRemainingWater() - 1);
                     if(targetTile.getItem() instanceof ForgingSeed){
-                       //Ab dadan TODO
+                       ((ForgingSeed) targetTile.getItem()).setWatered(true);
                         GameMenu.printResult("You give the plants a refreshing splash!");
                     } else {
                         GameMenu.printResult("You spill some water on the ground.");
@@ -439,10 +441,10 @@ public class GameMenuController {
             GameMenu.printResult("Out of bounds!");
             return;
         }
-        // Check for harvesability
+        // Check for plantable
         Tile targetTile = tiles[newX][newY];
         if (!targetTile.getType().equals(TileTypes.PLANTABLE)) {
-            GameMenu.printResult("Tile is not harvestable!");
+            GameMenu.printResult("Tile is not plantable!");
             return;
         }
         Item item = Item.findItemByName(seed1, App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
@@ -473,11 +475,11 @@ public class GameMenuController {
 
     public static void showPlant(String x, String y) {
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Tile[][] tiles = App.getMaps().get(player.getSelectionNumber()  - 1).getTiles();
+        Tile[][] tiles = App.getMaps().get(player.getSelectionNumber() - 1).getTiles();
         int X = Integer.parseInt(x);
         int Y = Integer.parseInt(y);
         if (tiles[X][Y].isPlanted()) {
-            Tile targetTile = tiles[player.getX()][player.getY()];
+            Tile targetTile = tiles[X][Y];
             ForgingSeed seed = (ForgingSeed)targetTile.getItem();
             int daysRemaining = 0;
             for (int i = seed.getCrop().getCurrentStage(); i < seed.getCrop().getStages().size(); i++) {
@@ -489,6 +491,8 @@ public class GameMenuController {
                     "=== Days Remaining: " + daysRemaining + " ===\n" +
                     "=== Is Fertilized: " + seed.isFertilized() + " ===\n" +
                     "=== Watered Today: " + x + " ==="); // TODO
+        } else {
+            GameMenu.printResult("No seed is planted here!");
         }
     }
 

@@ -80,11 +80,11 @@ public class Map {
         for (int i = 0; i < 60; i++) {
             for (int j = 0; j < 80; j++) {
                 if (tiles[j][i].getType().equals(TileTypes.DIRT)) {
-                    System.out.print(LIGHT_YELLOW + "D " + RESET);
+                    System.out.print(LIGHT_YELLOW + "\u2B1B " + RESET);
                 } else if (tiles[j][i].getType().equals(TileTypes.GRASS)) {
-                    System.out.print(GREEN + "G " + RESET);
+                    System.out.print(GREEN + "\u1F7E9" + RESET);
                 } else if (tiles[j][i].getType().equals(TileTypes.WATER)) {
-                    System.out.print(BLUE + "W " + RESET);
+                    System.out.print(BLUE + "\u1F7E6" + RESET);
                 } else if (tiles[j][i].getType().equals(TileTypes.HUT)) {
                     System.out.print(BLUE + "H " + RESET);
                 } else if (tiles[j][i].getType().equals(TileTypes.QUARRY)) {
@@ -107,54 +107,54 @@ public class Map {
                     if (tiles[j][i].getType().equals(TileTypes.DIRT)) {
                         if (tiles[j][i].getItem() != null) {
                             if (tiles[j][i].getItem().getClass().equals(Stone.class)) {
-                                System.out.print("S ");
+                                System.out.print("\uD83E\uDEA8");
                             } else if (tiles[j][i].getItem().getClass().equals(Tree.class)) {
-                                System.out.print("T ");
+                                System.out.print("\uD83C\uDF33");
                             }
                         } else {
                             if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
-                                System.out.print("P ");
+                                System.out.print(RED + "\uD83D\uDE00" + RESET);
                             } else
-                                System.out.print(LIGHT_YELLOW + "D " + RESET);
+                                System.out.print(LIGHT_YELLOW + "⬛ " + RESET);
                         }
                     } else if (tiles[j][i].getType().equals(TileTypes.GRASS)) {
                         if (tiles[j][i].getItem() != null) {
                             if (tiles[j][i].getItem().getClass().equals(Stone.class)) {
-                                System.out.print("S ");
+                                System.out.print("\uD83E\uDEA8");
                             } else if (tiles[j][i].getItem().getClass().equals(Tree.class)) {
-                                System.out.print("T ");
+                                System.out.print("\uD83C\uDF33");
                             }
                         } else {
                             if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
-                                System.out.print("P ");
+                                System.out.print(RED + "\uD83D\uDE00" + RESET);
                             } else
-                                System.out.print(GREEN + "G " + RESET);
+                                System.out.print(GREEN + "⬛ " + RESET);
                         }
                     } else if (tiles[j][i].getType().equals(TileTypes.WATER)) {
                         if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
-                            System.out.print("P ");
+                            System.out.print(RED + "\uD83D\uDE00" + RESET);
                         } else
-                            System.out.print(BLUE + "W " + RESET);
+                            System.out.print(BLUE + "⬛ " + RESET);
                     } else if (tiles[j][i].getType().equals(TileTypes.HUT)) {
                         if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
-                            System.out.print("P ");
+                            System.out.print(RED + "\uD83D\uDE00" + RESET);
                         } else
-                            System.out.print(BLUE + "H " + RESET);
+                            System.out.print(BLUE + "\uD83C\uDFE0" + RESET);
                     } else if (tiles[j][i].getType().equals(TileTypes.QUARRY)) {
                         if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
-                            System.out.print("P ");
+                            System.out.print(RED + "\uD83D\uDE00" + RESET);
                         } else
-                            System.out.print(GRAY + "Q " + RESET);
+                            System.out.print(GRAY + "⬛ " + RESET);
                     } else if (tiles[j][i].getType().equals(TileTypes.GREENHOUSE)) {
                         if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
-                            System.out.print("P ");
+                            System.out.print(RED + "\uD83D\uDE00" + RESET);
                         } else
-                            System.out.print(DARK_GREEN + "X " + RESET);
+                            System.out.print(DARK_GREEN + "⬛ " + RESET);
                     } else {
                         if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
-                            System.out.print("P ");
+                            System.out.print(RED + "\uD83D\uDE00" + RESET);
                         } else
-                            System.out.print(RED + "X " + RESET);
+                            System.out.print(RED + "⬛ " + RESET);
                     }
                 }
                 System.out.println();

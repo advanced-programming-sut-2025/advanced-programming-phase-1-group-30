@@ -24,15 +24,15 @@ public enum TreeType {
 	private final ForgingSeedType source;
     private final ArrayList<Integer> stages;
     private final int totalHarvestTime;
-    private final FruitType friut;
+    private final FruitType fruit;
 
     private TreeType(String name, ForgingSeedType source, ArrayList<Integer> stages, int totalHarvestTime,
-            FruitType friut) {
+            FruitType fruit) {
         this.name = name;
         this.source = source;
         this.stages = stages;
         this.totalHarvestTime = totalHarvestTime;
-        this.friut = friut;
+        this.fruit = fruit;
     }
 
     public String getName() {
@@ -51,8 +51,8 @@ public enum TreeType {
         return totalHarvestTime;
     }
 
-    public FruitType getFriut() {
-        return friut;
+    public FruitType getFruit() {
+        return fruit;
     }
 
     public static TreeType getRandomTreeType(int id) {
