@@ -3,7 +3,7 @@ package models.Buildings;
 import models.Animals.Animal;
 import java.util.ArrayList;
 
-public class Barn extends Buildings{
+public class Barn extends Building {
     private final int capacity;
     private int currentNumberOfAnimals;
     private final String type;

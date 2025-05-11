@@ -1,6 +1,6 @@
 package models.Buildings;
 
-public class JojaMart extends Buildings {
+public class JojaMart extends Building {
 
     public JojaMart(int height, int width, int startX, int startY) {
         super(height, width, startX, startY);

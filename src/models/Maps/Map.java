@@ -2,7 +2,7 @@ package models.Maps;
 
 import models.App;
 import models.Buildings.Barn;
-import models.Buildings.Buildings;
+import models.Buildings.Building;
 
 import models.Buildings.Coop;
 import models.Items.Products.Stone;
@@ -28,7 +28,7 @@ public class Map {
 
     private final int id;
     private final Tile[][]  tiles = new Tile[80][60];
-    private final ArrayList<Buildings> buildings = new ArrayList<>();
+    private final ArrayList<Building> buildings = new ArrayList<>();
     private boolean hasScareCrow = false;
     private final ArrayList<Barn> barns = new ArrayList<>();
     private final ArrayList<Coop> coops = new ArrayList<>();
@@ -66,7 +66,7 @@ public class Map {
         loadMap(this);
     }
 
-    public ArrayList<Buildings> getBuildings() {
+    public ArrayList<Building> getBuildings() {
         return buildings;
     }
 

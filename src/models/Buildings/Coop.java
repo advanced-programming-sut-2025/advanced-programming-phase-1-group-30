@@ -4,7 +4,7 @@ import models.Animals.Animal;
 
 import java.util.ArrayList;
 
-public class Coop extends Buildings{
+public class Coop extends Building {
     private final int capacity;
     private int currentNumberOfAnimals;
     private final String type;

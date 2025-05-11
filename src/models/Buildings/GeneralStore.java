@@ -1,6 +1,6 @@
 package models.Buildings;
 
-public class GeneralStore extends Buildings {
+public class GeneralStore extends Building {
     public GeneralStore(int height, int width, int startX, int startY) {
         super(height, width, startX, startY);
     }

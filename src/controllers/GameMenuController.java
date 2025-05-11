@@ -420,6 +420,12 @@ public class GameMenuController {
         String animal2 = animal1.toUpperCase().replace(" ", "_");
         RanchCosts animal3 = RanchCosts.valueOf(animal2);
         Player player = App.getCurrentGame().getCurrentPlayer();
+        for (Animal animal : player.getAnimals()) {
+            if (animal.getName().equals(name)) {
+                GameMenu.printResult("Choose a different name!");
+                return;
+            }
+        }
         if (player.getMoney() < animal3.getCost()) {
             GameMenu.printResult("You don't have enough money!");
             return;
@@ -434,6 +440,7 @@ public class GameMenuController {
                     if (coop.getCapacity() > coop.getCurrentNumberOfAnimals()) {
                         Animal animal = new Chicken(800, name, 0, false, false, coop.getStartX() + coop.getCurrentNumberOfAnimals(), coop.getStartY() + coop.getCurrentNumberOfAnimals());
                         coop.getAnimals().add(animal);
+                        animal.setCoop(coop);
                         coop.setCurrentNumberOfAnimals(coop.getCurrentNumberOfAnimals());
                         player.getAnimals().add(animal);
                         check = 1;
@@ -450,6 +457,7 @@ public class GameMenuController {
                     if (!coop.getType().equals("regular") && coop.getCapacity() > coop.getCurrentNumberOfAnimals()) {
                         Animal animal = new Duck(1200, name, 0, false, false, coop.getStartX() + coop.getCurrentNumberOfAnimals(), coop.getStartY() + coop.getCurrentNumberOfAnimals());
                         coop.getAnimals().add(animal);
+                        animal.setCoop(coop);
                         coop.setCurrentNumberOfAnimals(coop.getCurrentNumberOfAnimals());
                         player.getAnimals().add(animal);
                         check = 1;
@@ -466,6 +474,7 @@ public class GameMenuController {
                     if (!coop.getType().equals("regular") && !coop.getType().equals("big") && coop.getCapacity() > coop.getCurrentNumberOfAnimals()) {
                         Animal animal = new Rabbit(8000, name, 0, false, false, coop.getStartX() + coop.getCurrentNumberOfAnimals(), coop.getStartY() + coop.getCurrentNumberOfAnimals());
                         coop.getAnimals().add(animal);
+                        animal.setCoop(coop);
                         coop.setCurrentNumberOfAnimals(coop.getCurrentNumberOfAnimals());
                         player.getAnimals().add(animal);
                         check = 1;
@@ -498,6 +507,7 @@ public class GameMenuController {
                     if (barn.getCapacity() > barn.getCurrentNumberOfAnimals()) {
                         Animal animal = new Cow(1500, name, 0, false, false, barn.getStartX() + barn.getCurrentNumberOfAnimals(), barn.getStartY() + barn.getCurrentNumberOfAnimals());
                         barn.getAnimals().add(animal);
+                        animal.setBarn(barn);
                         player.getAnimals().add(animal);
                         barn.setCurrentNumberOfAnimals(barn.getCurrentNumberOfAnimals());
                         check = 1;
@@ -514,6 +524,7 @@ public class GameMenuController {
                     if (!barn.getType().equals("regular") && barn.getCapacity() > barn.getCurrentNumberOfAnimals()) {
                         Animal animal = new Goat(4000, name, 0, false, false, barn.getStartX() + barn.getCurrentNumberOfAnimals(), barn.getStartY() + barn.getCurrentNumberOfAnimals());
                         barn.getAnimals().add(animal);
+                        animal.setBarn(barn);
                         player.getAnimals().add(animal);
                         barn.setCurrentNumberOfAnimals(barn.getCurrentNumberOfAnimals());
                         check = 1;
@@ -528,8 +539,9 @@ public class GameMenuController {
                 int check = 0;
                 for (Barn barn : player.getMap().getBarns()) {
                     if (!barn.getType().equals("regular") && !barn.getType().equals("big") && barn.getCapacity() > barn.getCurrentNumberOfAnimals()) {
-                        Animal animal = new Cow(8000, name, 0, false, false, barn.getStartX() + barn.getCurrentNumberOfAnimals(), barn.getStartY() + barn.getCurrentNumberOfAnimals());
+                        Animal animal = new Sheep(8000, name, 0, false, false, barn.getStartX() + barn.getCurrentNumberOfAnimals(), barn.getStartY() + barn.getCurrentNumberOfAnimals());
                         barn.getAnimals().add(animal);
+                        animal.setBarn(barn);
                         player.getAnimals().add(animal);
                         barn.setCurrentNumberOfAnimals(barn.getCurrentNumberOfAnimals());
                         check = 1;
@@ -546,6 +558,7 @@ public class GameMenuController {
                     if (!barn.getType().equals("regular") && !barn.getType().equals("big") && barn.getCapacity() > barn.getCurrentNumberOfAnimals()) {
                         Animal animal = new Cow(16000, name, 0, false, false, barn.getStartX() + barn.getCurrentNumberOfAnimals(), barn.getStartY() + barn.getCurrentNumberOfAnimals());
                         barn.getAnimals().add(animal);
+                        animal.setBarn(barn);
                         player.getAnimals().add(animal);
                         barn.setCurrentNumberOfAnimals(barn.getCurrentNumberOfAnimals());
                         check = 1;
@@ -611,7 +624,23 @@ public class GameMenuController {
         }
     }
     public static void collectProduce(String name){}
-    public static void sellAnimal(String name){}
+    public static void sellAnimal(String name){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        for (Animal animal : player.getAnimals()) {
+            if (animal.getName().equals(name)) {
+                float cost = (float) (animal.getPrice() * ((double) animal.getFriendship() / 1000 + 0.3));
+                player.setMoney(player.getMoney() + (int)cost);
+                player.getAnimals().remove(animal);
+                if (animal.getBarn() != null) {
+                    animal.getBarn().getAnimals().remove(animal);
+                } else if (animal.getCoop() != null) {
+                    animal.getCoop().getAnimals().remove(animal);
+                }
+                GameMenu.printResult("Sold " + animal.getName() + " for: " + cost);
+                break;
+            }
+        }
+    }
     public static void fishing(String fishingPole){}
     public static void artisanUse(String artisanName, String itemName) {}
     public static void artisanGet(String name) {}

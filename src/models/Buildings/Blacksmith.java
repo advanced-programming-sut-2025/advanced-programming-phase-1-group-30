@@ -1,6 +1,6 @@
 package models.Buildings;
 
-public class Blacksmith extends Buildings {
+public class Blacksmith extends Building {
     public Blacksmith(int height, int width, int startX, int startY) {
         super(height, width, startX, startY);
     }
