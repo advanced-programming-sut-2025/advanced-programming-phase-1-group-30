@@ -1,20 +1,20 @@
 package models.Buildings;
 
 public class Buildings {
-    private int lenght;
+    private int height;
     private int width;
     private int startX;
     private int startY;
 
-    public Buildings(int lenght, int width, int startX, int startY) {
-        this.lenght = lenght;
+    public Buildings(int height, int width, int startX, int startY) {
+        this.height = height;
         this.width = width;
         this.startX = startX;
         this.startY = startY;
     }
 
-    public int getLenght() {
-        return lenght;
+    public int getHeight() {
+        return height;
     }
 
     public int getWidth() {

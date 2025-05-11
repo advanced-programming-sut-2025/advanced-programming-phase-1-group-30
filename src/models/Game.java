@@ -26,7 +26,7 @@ public class Game {
         this.trades = null;
     }
     
-    public GreatMap getMap() {
+    public GreatMap getGreatMap() {
         return map;
     }
     public void setMap(GreatMap map) {

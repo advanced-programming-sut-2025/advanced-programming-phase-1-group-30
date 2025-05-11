@@ -1,7 +1,7 @@
 package models.Buildings;
 
 public class Hut extends Buildings {
-    public Hut(int lenght, int width, int startX, int startY) {
-        super(lenght, width, startX, startY);
+    public Hut(int height, int width, int startX, int startY) {
+        super(height, width, startX, startY);
     }
 }

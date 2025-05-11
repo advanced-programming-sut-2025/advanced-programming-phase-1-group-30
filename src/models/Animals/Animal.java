@@ -6,6 +6,7 @@ public class Animal {
     private int friendship;
     private boolean fedToday;
     private boolean petToday;
+    private boolean productReady;
     private int x;
     private int y;
 
@@ -15,6 +16,7 @@ public class Animal {
         this.friendship = friendship;
         this.fedToday = fedToday;
         this.petToday = petToday;
+        this.productReady = false;
         this.x = x;
         this.y = y;
     }
@@ -60,5 +62,16 @@ public class Animal {
     }
     public void setY(int y) {
         this.y = y;
+    }
+
+    public boolean isProductReady() {
+        return productReady;
+    }
+
+    public void setProductReady(boolean productReady) {
+        this.productReady = productReady;
+    }
+
+    public void produceProduct() {
     }
 }

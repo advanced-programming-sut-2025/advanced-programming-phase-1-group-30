@@ -1,5 +1,6 @@
 package models.Players;
 
+import models.Animals.Animal;
 import models.Invetory.BackPack;
 import models.Invetory.BackPackType;
 import models.Invetory.ShippingBin;
@@ -33,7 +34,10 @@ public class Player {
     private int fishing = 0;
     private int mining = 0;
     private int maxEnergy;
-    private ArrayList<Item> products = new ArrayList<>();
+    private final ArrayList<Item> products = new ArrayList<>();
+    java.util.Map<Item, Integer> itemsBoughtToday = new HashMap<>();
+    private final ArrayList<Animal> playerAnimals = new ArrayList<>();
+
 
     public Player(String username, int selectionNumber) {
         this.username = username;
@@ -209,5 +213,12 @@ public class Player {
 
     public void removedProduct(Item product) {
         this.products.remove(product);
+    }
+
+    public java.util.Map<Item, Integer> getItemsBoughtToday() {
+        return itemsBoughtToday;
+    }
+    public ArrayList<Animal> getAnimals() {
+        return playerAnimals;
     }
 }

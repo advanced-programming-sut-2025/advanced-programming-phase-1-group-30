@@ -1,8 +1,10 @@
 package models.Maps;
 
 import models.App;
+import models.Buildings.Barn;
 import models.Buildings.Buildings;
 
+import models.Buildings.Coop;
 import models.Items.Products.Stone;
 import models.Items.Products.Tree;
 import org.json.JSONArray;
@@ -28,6 +30,8 @@ public class Map {
     private final Tile[][]  tiles = new Tile[80][60];
     private final ArrayList<Buildings> buildings = new ArrayList<>();
     private boolean hasScareCrow = false;
+    private final ArrayList<Barn> barns = new ArrayList<>();
+    private final ArrayList<Coop> coops = new ArrayList<>();
 
     public static void loadMap(Map mapInstance) {
         try {
@@ -168,5 +172,13 @@ public class Map {
     }
     public void changeHasScareCrow() {
         this.hasScareCrow = !this.hasScareCrow;
+    }
+
+    public ArrayList<Coop> getCoops() {
+        return coops;
+    }
+
+    public ArrayList<Barn> getBarns() {
+        return barns;
     }
 }
