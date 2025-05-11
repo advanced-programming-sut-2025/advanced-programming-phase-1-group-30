@@ -1070,20 +1070,43 @@ public class GameMenuController {
             }
         }
     }
-    public static void pet(String name){
+    public static void pet(String name) {
         Player player = App.getCurrentGame().getCurrentPlayer();
+        int playerX = player.getX();
+        int playerY = player.getY();
+
         for (Animal animal : player.getAnimals()) {
             if (animal.getName().equals(name)) {
+                int animalX = animal.getX();
+                int animalY = animal.getY();
+
+
+                boolean isAdjacent = Math.abs(playerX - animalX) <= 1 &&
+                        Math.abs(playerY - animalY) <= 1 &&
+                        !(playerX == animalX && playerY == animalY);
+
+                if (!isAdjacent) {
+                    GameMenu.printResult("You must stand next to the animal to pet it.");
+                    return;
+                }
+
+
                 animal.setFriendship(Math.min(animal.getFriendship() + 15, 1000));
+
                 if (animal instanceof Cow) {
                     GameMenu.printResult("mowwwww!");
                 } else if (animal instanceof Sheep) {
                     GameMenu.printResult("shazoooom!");
-                } else
+                } else {
                     GameMenu.printResult("Animal pet successfully!");
+                }
+                return;
             }
         }
+
+        GameMenu.printResult("No such animal found.");
     }
+
     public static void cheatSetFriendship(String name, String amount) {
         Player player = App.getCurrentGame().getCurrentPlayer();
         for (Animal animal : player.getAnimals()) {
@@ -1110,7 +1133,15 @@ public class GameMenuController {
         Player player = App.getCurrentGame().getCurrentPlayer();
         for (Animal animal : player.getAnimals()) {
             if (animal.getName().equals(name)) {
-                animal.setFedToday(true);
+                Item hay = Item.findItemByName("hay", player.getBackPack().getItems());
+                if (hay != null && hay.getCount() > 0) {
+                    hay.setCount(hay.getCount() - 1);
+                    animal.setFedToday(true);
+                    GameMenu.printResult("Animal fed successfully!");
+                } else {
+                    GameMenu.printResult("Not enough hay!");
+                }
+                return;
             }
         }
     }
@@ -1122,13 +1153,21 @@ public class GameMenuController {
             }
         }
     }
-    public static void collectProduce(String name){}
+    public static void collectProduce(String name){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        for (Animal animal : player.getAnimals()) {
+            if (animal.isProductReady()) {
+                animal.collectProduct();
+                return;
+            }
+        }
+    }
     public static void sellAnimal(String name){
         Player player = App.getCurrentGame().getCurrentPlayer();
         for (Animal animal : player.getAnimals()) {
             if (animal.getName().equals(name)) {
                 float cost = (float) (animal.getPrice() * ((double) animal.getFriendship() / 1000 + 0.3));
-                player.setMoney(player.getMoney() + (int)cost);
+                player.setMoney(player.getMoney() + (int) cost);
                 player.getAnimals().remove(animal);
                 if (animal.getBarn() != null) {
                     animal.getBarn().getAnimals().remove(animal);

@@ -82,6 +82,8 @@ public class Animal {
 
     public void produceProduct() {
     }
+    public void collectProduct() {
+    }
 
     public RanchCosts getType() {
         return type;
