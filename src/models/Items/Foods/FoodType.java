@@ -63,4 +63,12 @@ public enum FoodType {
     public int getSellPrice() {
         return sellPrice;
     }
+
+    public static FoodType getrecipeByName(String name) {
+        for (FoodType recipe : FoodType.values()) {
+            if (recipe.name.equals(name)) return recipe;
+        }
+
+        return null;
+    }
 }

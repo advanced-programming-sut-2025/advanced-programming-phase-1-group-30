@@ -84,6 +84,10 @@ public class Player {
         this.energy = energy;
     }
 
+    public void changeEnergy(int amount) {
+        this.energy += amount;
+    }
+
     public ShippingBin getShippingBin() {
         return shippingBin;
     }
