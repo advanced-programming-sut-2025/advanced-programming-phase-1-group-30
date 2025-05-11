@@ -2,7 +2,7 @@ package models.Items.Tools;
 
 import java.util.ArrayList;
 
-import models.Animals.Fish;
+import models.Animals.FishType;
 
 public enum FishingPoleType {
     TEST("test", 0,0, null);
@@ -10,9 +10,9 @@ public enum FishingPoleType {
     private final String name;
     private final int energyUsed;
     private final int cost;
-    private final ArrayList<Fish> stonesCanDestroy;
+    private final ArrayList<FishType> stonesCanDestroy;
 
-    private FishingPoleType(String name, int energyUsed, int cost, ArrayList<Fish> stonesCanDestroy) {
+    private FishingPoleType(String name, int energyUsed, int cost, ArrayList<FishType> stonesCanDestroy) {
         this.name = name;
         this.energyUsed = energyUsed;
         this.cost = cost;
@@ -31,7 +31,7 @@ public enum FishingPoleType {
         return cost;
     }
     
-    public ArrayList<Fish> getStonesCanDestroy() {
+    public ArrayList<FishType> getStonesCanDestroy() {
         return stonesCanDestroy;
     }
 }

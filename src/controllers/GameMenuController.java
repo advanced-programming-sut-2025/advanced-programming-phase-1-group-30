@@ -2,6 +2,8 @@ package controllers;
 
 import models.App;
 import models.Game;
+import models.Animals.Fish;
+import models.Animals.FishType;
 import models.Items.Products.ForagingMineral;
 import models.Invetory.BackPack;
 import models.Invetory.Inventory;
@@ -19,6 +21,7 @@ import models.Maps.Map;
 import models.Maps.PathFinder;
 import models.Maps.Tile;
 import models.Maps.TileTypes;
+import models.Maps.Weather;
 import models.Players.Player;
 import models.TimeAndDate.Season;
 import views.GameMenu;
@@ -627,7 +630,33 @@ public class GameMenuController {
     public static void produces(){}
     public static void collectProduce(String name){}
     public static void sellAnimal(String name){}
-    public static void fishing(String fishingPole){}
+    public static void fishing(String fishingPole){
+        ArrayList<FishType> fishTypes = new ArrayList<>();
+        for (FishType fishType : FishType.values()) {
+            if (fishType.getSeason().equals(App.getCurrentGame().getCurrentTime().getSeason()))
+                fishTypes.add(fishType);
+        }
+
+        Random random = new Random();
+        FishType fishType = fishTypes.get(random.nextInt(fishTypes.size()));
+
+        double R = random.nextDouble();
+        double M;
+        if (App.getCurrentGame().getCurrentWeather().equals(Weather.SUNNY)) M = 1.5;
+        else if (App.getCurrentGame().getCurrentWeather().equals(Weather.RAIN)) M = 1.2;
+        else if (App.getCurrentGame().getCurrentWeather().equals(Weather.STORM)) M = 0.5;
+        else M = 1.0;
+        int skill = App.getCurrentGame().getCurrentPlayer().getFishing();
+
+        int count = (int) Math.floor(R * M * (skill + 2)) + 1;
+        count = Math.min(count, 6);
+
+        //TODO fish quality
+        //TODO legndary fish
+
+        Item fish = new Fish(count, fishType);
+        App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(fish);
+    }
     public static void artisanUse(String artisanName, String itemName) {}
     public static void artisanGet(String name) {}
     public static void showAllProducts() {}
