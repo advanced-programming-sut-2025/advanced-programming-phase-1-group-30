@@ -28,6 +28,7 @@ public class LoginMenuController {
         App.setCurrentUser(user);    // TODO flag stay logged in ro ok kon!
         RegisterMenu.printResult("User logged in");
     }
+
     public static void ForgotPassword(String username, Scanner scanner) {  // TODO aval oon question taeed piade sazi shavad
         User user = getUserByUsername(username);
         if (user == null) {
@@ -56,6 +57,7 @@ public class LoginMenuController {
             RegisterMenu.printResult("Invalid input format. Please use: answer -a <your_answer>");
         }
     }
+
     public static void ChangeMenu(String menuName) {
         String nameMenu = App.getCurrentMenu().getName();
         Menus menu = ProfileMenuController.FindMenu(menuName);
@@ -70,12 +72,15 @@ public class LoginMenuController {
         RegisterMenu.printResult("Redirecting to " + menuName);
         App.setCurrentMenu(menu);
     }
+
     public static void ShowCurrentMenu() {
         RegisterMenu.printResult("Current menu: " + App.getCurrentMenu().getName());
     }
+
     public static void Exit() {
         App.setCurrentMenu(Menus.ExitMenu);
     }
+    
     private static User getUserByUsername(String username) {
         for (User user : App.getAppUsers()) {
             if (user.getUsername() != null && user.getUsername().equals(username)) {

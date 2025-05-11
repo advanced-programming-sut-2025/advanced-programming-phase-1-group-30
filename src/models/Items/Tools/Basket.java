@@ -2,6 +2,7 @@ package models.Items.Tools;
 
 public class Basket extends Tool {
     private BasketType type;
+    private int remainingWater;
 
     public Basket(int count, BasketType type) {
         super(count, type.getName());
@@ -14,5 +15,13 @@ public class Basket extends Tool {
 
     public void setType(BasketType type) {
         this.type = type;
+    }
+
+    public void setRemainingWater(int remainingWater) {
+        this.remainingWater = remainingWater;
+    }
+
+    public int getRemainingWater() {
+        return remainingWater;
     }
 }

@@ -1,14 +1,19 @@
 package models.Players;
 
 import models.Animals.Animal;
+import models.Buildings.Building;
 import models.Invetory.BackPack;
 import models.Invetory.BackPackType;
+import models.Invetory.Refrigerator;
 import models.Invetory.ShippingBin;
 import models.Invetory.TrashCan;
 import models.Invetory.TrashCanType;
+import models.Items.Products.CraftingRecipe;
 import models.Items.Item;
+import models.Items.Foods.FoodType;
 import models.Items.Products.ForgingSeed;
 import models.Items.Products.ForgingSeedType;
+import models.Items.Tools.*;
 import models.Maps.Map;
 
 import java.util.ArrayList;
@@ -23,6 +28,7 @@ public class Player {
     private ShippingBin shippingBin;
     private BackPack backPack;
     private TrashCan trashCan;
+    private Refrigerator refrigerator;
     private int money;
     private final HashMap<Player, Integer> friendships = new HashMap<>();
     private final ArrayList<Skills> skills = new ArrayList<>();
@@ -37,19 +43,30 @@ public class Player {
     private final ArrayList<Item> products = new ArrayList<>();
     java.util.Map<Item, Integer> itemsBoughtToday = new HashMap<>();
     private final ArrayList<Animal> playerAnimals = new ArrayList<>();
-
+    private ArrayList<CraftingRecipe> craftingRecipes = new ArrayList<>();
+    private Building building;
+    private ArrayList<FoodType> recipes = new ArrayList<>();
 
     public Player(String username, int selectionNumber) {
         this.username = username;
         this.map = null;
         this.energy = 200;
-        this.shippingBin = null;
+
+        this.shippingBin = new ShippingBin();
+        this.refrigerator = new Refrigerator();
         this.backPack = new BackPack(BackPackType.INITIAL_BACKPACK);
+        this.backPack.addItem(new Axe(1, AxeType.NORMAL));
+        this.backPack.addItem(new Hoe(1, HoeType.NORMAL));
+        this.backPack.addItem(new Pickaxe(1, PickaxeType.NORMAL));
+        this.backPack.addItem(new Basket(1, BasketType.NORMAL));
+        this.backPack.addItem(new Scythe(1));
         this.trashCan = new TrashCan(TrashCanType.INITIAL_TRASHCAN);
         this.backPack.addItem(new ForgingSeed(1, ForgingSeedType.ACORNS, null)); //TODO tile & initial seed
         this.money = 0;
         this.selectionNumber = selectionNumber;
         this.maxEnergy = 200;
+        this.building = new Building(0, 0, 0, 0); //TODO home!!!
+        this.recipes = null;
     }
 
     public String getUsername() {
@@ -72,6 +89,10 @@ public class Player {
         this.energy = energy;
     }
 
+    public void changeEnergy(int amount) {
+        this.energy += amount;
+    }
+
     public ShippingBin getShippingBin() {
         return shippingBin;
     }
@@ -86,6 +107,18 @@ public class Player {
 
     public void setBackPack(BackPack backPack) {
         this.backPack = backPack;
+    }
+
+    public Refrigerator getRefrigerator() {
+        return refrigerator;
+    }
+
+    public void addItemToRefrigerator(Item item) {
+        this.refrigerator.addItem(item);
+    }
+
+    public void removeItemToRefrigerator(Item item) {
+        this.refrigerator.removeItem(item);
     }
 
     public int getMoney() {
@@ -220,5 +253,23 @@ public class Player {
     }
     public ArrayList<Animal> getAnimals() {
         return playerAnimals;
+    }
+    public ArrayList<CraftingRecipe> getCraftingRecipes() {
+        return craftingRecipes;
+    }
+    public Building getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(Building building) {
+        this.building = building;
+    }
+
+    public ArrayList<FoodType> getRecipes() {
+        return recipes;
+    }
+
+    public void addRecipe(FoodType recipe) {
+        this.recipes.add(recipe);
     }
 }

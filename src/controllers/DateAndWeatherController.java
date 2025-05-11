@@ -12,16 +12,20 @@ public class DateAndWeatherController {
         GameMenu.printResult((App.getCurrentGame().getCurrentTime().getHour()) + ":"
                 + App.getCurrentGame().getCurrentTime().getMinute());
     }
+
     public static void Date() {
         GameMenu.printResult(App.getCurrentGame().getCurrentTime().getSeason().getName() + " " + App.getCurrentGame().getCurrentTime().getDay() + "th");
     }
+
     public static void DateTime() {
         GameMenu.printResult(App.getCurrentGame().getCurrentTime().getSeason().getName() + " " + App.getCurrentGame().getCurrentTime().getDay() + "th " +
                 App.getCurrentGame().getCurrentTime().getHour() + ":" + App.getCurrentGame().getCurrentTime().getMinute());
     }
+
     public static void DayOfTheWeek() {
         GameMenu.printResult(App.getCurrentGame().getCurrentTime().getDayOfWeek().getName());
     }
+
     public static void CheatAdvanceTime(String amount) {
         int x = Integer.parseInt(amount);
         if (x >= 13) {
@@ -77,6 +81,7 @@ public class DateAndWeatherController {
             GameMenu.printResult("You can't cheat more than 28 days");
             return;
         }
+
         if (x + App.getCurrentGame().getCurrentTime().getDay() > 28) {
             App.getCurrentGame().getCurrentTime().setDay(x - (28 - App.getCurrentGame().getCurrentTime().getDay()));
             ChangeSeason();
@@ -86,11 +91,14 @@ public class DateAndWeatherController {
     static void ChangeSeason() {
         if (App.getCurrentGame().getCurrentTime().getSeason().getNumber() == 4) {
             App.getCurrentGame().getCurrentTime().setSeason(Season.SPRING);
-        } else if (App.getCurrentGame().getCurrentTime().getSeason().getNumber() == 3) {
+        } 
+        else if (App.getCurrentGame().getCurrentTime().getSeason().getNumber() == 3) {
             App.getCurrentGame().getCurrentTime().setSeason(Season.WINTER);
-        } else if (App.getCurrentGame().getCurrentTime().getSeason().getNumber() == 2) {
+        } 
+        else if (App.getCurrentGame().getCurrentTime().getSeason().getNumber() == 2) {
             App.getCurrentGame().getCurrentTime().setSeason(Season.FALL);
-        } else if (App.getCurrentGame().getCurrentTime().getSeason().getNumber() == 1) {
+        } 
+        else if (App.getCurrentGame().getCurrentTime().getSeason().getNumber() == 1) {
             App.getCurrentGame().getCurrentTime().setSeason(Season.SUMMER);
         }
     }
@@ -98,13 +106,17 @@ public class DateAndWeatherController {
     public static void Season() {
         GameMenu.printResult(App.getCurrentGame().getCurrentTime().getSeason().getName());
     }
+
     public static void CheatThor(String x, String y) {}
+
     public static void Weather() {
         GameMenu.printResult(App.getCurrentGame().getCurrentWeather().getName());
     }
+    
     public static void WeatherForecast() {
         GameMenu.printResult(App.getCurrentGame().getTomorrowWeather().getName());
     }
+    
     public static void CheatWeatherSet(String weather) {
         for(Weather weather1 :Weather.values()){
             if(weather1.name.equals(weather)){

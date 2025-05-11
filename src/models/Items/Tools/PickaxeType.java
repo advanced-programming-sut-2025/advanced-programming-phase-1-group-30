@@ -5,16 +5,20 @@ import java.util.ArrayList;
 import models.Items.Products.Stone;
 
 public enum PickaxeType {
-    TEST("test", 0, null);
+    NORMAL("normal pickaxe",5,0),
+    COPPER("copper pickaxe", 4,1),
+    IRON("iron pickaxe", 3,2),
+    GOLD("gold pickaxe", 2,3),
+    IRIDIUM("iridium pickaxe", 1,4);
 
     private final String name;
     private final int energyUsed;
-    private final ArrayList<Stone> stonesCanDestroy;
+    private final int level;
 
-    private PickaxeType(String name, int energyUsed, ArrayList<Stone> stonesCanDestroy) {
+     PickaxeType(String name, int energyUsed, int level) {
         this.name = name;
         this.energyUsed = energyUsed;
-        this.stonesCanDestroy = stonesCanDestroy;
+        this.level = level;
     }
 
     public String getName() {
@@ -25,7 +29,7 @@ public enum PickaxeType {
         return energyUsed;
     }
 
-    public ArrayList<Stone> getStonesCanDestroy() {
-        return stonesCanDestroy;
+    public int getLevel() {
+         return level;
     }
 }

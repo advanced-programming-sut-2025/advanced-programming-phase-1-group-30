@@ -1,6 +1,7 @@
 package models.Buildings;
 
 public class Building {
+
     private int height;
     private int width;
     private int startX;
@@ -12,7 +13,7 @@ public class Building {
         this.startX = startX;
         this.startY = startY;
     }
-
+  
     public int getHeight() {
         return height;
     }

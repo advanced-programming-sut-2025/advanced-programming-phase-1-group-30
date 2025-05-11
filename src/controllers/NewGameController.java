@@ -94,6 +94,7 @@ public class NewGameController {
 
     public static void LoadGame() {}
     public static void ExitGame() {}
+    
     public static void NextTurn() {
         List<Player> players = App.getCurrentGame().getPlayers();
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
@@ -107,12 +108,14 @@ public class NewGameController {
                 return;
             }
         }
+
         for (Player player : players) {
             if (!player.isPassedOut()) {
                 App.getCurrentGame().setCurrentPlayer(player);
                 return;
             }
         }
+
         int currentTime = App.getCurrentGame().getCurrentTime().getHour();
         if (currentTime == 21) {
             for (Player player : App.getCurrentGame().getPlayers()) {
@@ -152,7 +155,8 @@ public class NewGameController {
                 DateAndWeatherController.ChangeSeason();
             } else
                 App.getCurrentGame().getCurrentTime().setDay(App.getCurrentGame().getCurrentTime().getDay() + 1);
-        } else
+        }
+        else
             App.getCurrentGame().getCurrentTime().setHour(currentTime + 1);
     }
 }

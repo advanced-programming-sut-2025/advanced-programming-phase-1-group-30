@@ -3,7 +3,6 @@ package models.Maps;
 import models.App;
 import models.Buildings.Barn;
 import models.Buildings.Building;
-
 import models.Buildings.Coop;
 import models.Items.Products.Stone;
 import models.Items.Products.Tree;

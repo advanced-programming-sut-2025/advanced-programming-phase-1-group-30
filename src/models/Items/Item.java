@@ -1,5 +1,7 @@
 package models.Items;
 
+import java.util.ArrayList;
+
 import models.App;
 
 public class Item {
@@ -27,8 +29,8 @@ public class Item {
         return name;
     }
 
-    public static Item findItemByName(String name) {
-        for (Item item : App.getCurrentGame().getCurrentPlayer().getBackPack().getItems()) {
+    public static Item findItemByName(String name, ArrayList<Item> items) {
+        for (Item item : items) {
             if (item.getName().matches(name)) return item;
         }
         return null;

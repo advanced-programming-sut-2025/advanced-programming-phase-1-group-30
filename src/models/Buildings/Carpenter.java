@@ -1,5 +1,6 @@
 package models.Buildings;
 
+
 public class Carpenter extends Building {
     public Carpenter(int height, int width, int startX, int startY) {
         super(height, width, startX, startY);
