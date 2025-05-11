@@ -1,8 +1,8 @@
 package models.Buildings;
 
 public class GeneralStore extends Building {
-    public GeneralStore(int lenght, int width, int startX, int startY) {
-        super(lenght, width, startX, startY);
+    public GeneralStore(int height, int width, int startX, int startY) {
+        super(height, width, startX, startY);
     }
     private final int startHour = 9;
     private final int endHour = 17;

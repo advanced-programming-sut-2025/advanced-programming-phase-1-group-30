@@ -4,10 +4,10 @@ import models.Maps.Tile;
 
 public class Crop extends Product{
     private final CropType type;
-    private ArrayList<Integer> stages = new ArrayList<>();
+    private ArrayList<Integer> stages;
     private int currentStage = 0;
     private int daysPassed = 0;
-
+    private boolean notNeedWaterAnymore = false;
 
     public Crop(int count, CropType type, Tile tile) {
         super(count, type.getName(), tile);
@@ -35,5 +35,13 @@ public class Crop extends Product{
 
     public void setDaysPassed(int daysPassed) {
         this.daysPassed = daysPassed;
+    }
+
+    public boolean isNotNeedWaterAnymore() {
+        return notNeedWaterAnymore;
+    }
+
+    public void setNotNeedWaterAnymore(boolean notNeedWaterAnymore) {
+        this.notNeedWaterAnymore = notNeedWaterAnymore;
     }
 }

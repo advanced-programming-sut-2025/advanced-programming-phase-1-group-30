@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
+import models.Animals.Animal;
 import models.App;
 import models.Game;
 import models.Commands.GameMenuCommands;
@@ -139,6 +140,12 @@ public class NewGameController {
                         }
                     }
                 }
+                for (Animal animal : player.getAnimals()) {
+                    if (animal.isFedToday()) {
+
+                    }
+                }
+
             }
             App.getCurrentGame().getCurrentTime().setHour(9);
             App.getCurrentGame().setCurrentWeather(App.getCurrentGame().getTomorrowWeather());

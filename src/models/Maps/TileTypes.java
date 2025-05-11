@@ -8,5 +8,7 @@ public enum TileTypes {
     HUT,
     GREENHOUSE,
     GRASS,
+    BARN,
+    COOP,
     QUARRY;
 }

@@ -1,8 +1,9 @@
 package models.Buildings;
 
-public class Carpenter extends Building{
-    public Carpenter(int lenght, int width, int startX, int startY) {
-        super(lenght, width, startX, startY);
+
+public class Carpenter extends Building {
+    public Carpenter(int height, int width, int startX, int startY) {
+        super(height, width, startX, startY);
     }
     private final int startHour = 9;
     private final int endHour = 20;
