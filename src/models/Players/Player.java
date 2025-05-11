@@ -1,11 +1,14 @@
 package models.Players;
 
+import models.Buildings.Building;
 import models.Invetory.BackPack;
 import models.Invetory.BackPackType;
+import models.Invetory.Refrigerator;
 import models.Invetory.ShippingBin;
 import models.Invetory.TrashCan;
 import models.Invetory.TrashCanType;
 import models.Items.Item;
+import models.Items.Foods.FoodType;
 import models.Items.Products.ForgingSeed;
 import models.Items.Products.ForgingSeedType;
 import models.Items.Tools.*;
@@ -23,6 +26,7 @@ public class Player {
     private ShippingBin shippingBin;
     private BackPack backPack;
     private TrashCan trashCan;
+    private Refrigerator refrigerator;
     private int money;
     private final HashMap<Player, Integer> friendships = new HashMap<>();
     private final ArrayList<Skills> skills = new ArrayList<>();
@@ -35,13 +39,16 @@ public class Player {
     private int mining = 0;
     private int maxEnergy;
     private ArrayList<Item> products = new ArrayList<>();
+    private Building building;
+    private ArrayList<FoodType> recipes = new ArrayList<>();
 
     public Player(String username, int selectionNumber) {
         this.username = username;
         this.map = null;
         this.energy = 200;
-        this.shippingBin = null;
-        this.backPack = new BackPack();
+        this.shippingBin = new ShippingBin();
+        this.refrigerator = new Refrigerator();
+        this.backPack = new BackPack(BackPackType.INITIAL_BACKPACK);
         this.backPack.addItem(new Axe(1, AxeType.NORMAL));
         this.backPack.addItem(new Hoe(1, HoeType.NORMAL));
         this.backPack.addItem(new Pickaxe(1, PickaxeType.NORMAL));
@@ -53,6 +60,8 @@ public class Player {
         this.money = 0;
         this.selectionNumber = selectionNumber;
         this.maxEnergy = 200;
+        this.building = new Building(0, 0, 0, 0); //TODO home!!!
+        this.recipes = null;
     }
 
     public String getUsername() {
@@ -75,6 +84,10 @@ public class Player {
         this.energy = energy;
     }
 
+    public void changeEnergy(int amount) {
+        this.energy += amount;
+    }
+
     public ShippingBin getShippingBin() {
         return shippingBin;
     }
@@ -89,6 +102,18 @@ public class Player {
 
     public void setBackPack(BackPack backPack) {
         this.backPack = backPack;
+    }
+
+    public Refrigerator getRefrigerator() {
+        return refrigerator;
+    }
+
+    public void addItemToRefrigerator(Item item) {
+        this.refrigerator.addItem(item);
+    }
+
+    public void removeItemToRefrigerator(Item item) {
+        this.refrigerator.removeItem(item);
     }
 
     public int getMoney() {
@@ -216,5 +241,21 @@ public class Player {
 
     public void removedProduct(Item product) {
         this.products.remove(product);
+    }
+
+    public Building getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(Building building) {
+        this.building = building;
+    }
+
+    public ArrayList<FoodType> getRecipes() {
+        return recipes;
+    }
+
+    public void addRecipe(FoodType recipe) {
+        this.recipes.add(recipe);
     }
 }

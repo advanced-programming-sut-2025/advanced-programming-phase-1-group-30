@@ -1,6 +1,6 @@
 package models.Buildings;
 
-public class FishShop extends Buildings {
+public class FishShop extends Building {
     public FishShop(int lenght, int width, int startX, int startY) {
         super(lenght, width, startX, startY);
     }
