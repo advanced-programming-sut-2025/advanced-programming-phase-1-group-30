@@ -22,7 +22,6 @@ public class RegisterMenuController {
         String email = matcher.group("email").trim();
         String gender = matcher.group("gender").trim();
 
-
         for(User users : App.getAppUsers()){
             if(users.getUsername().equals(username)){
                 RegisterMenu.printResult("Username is already in use!");

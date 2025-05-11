@@ -1,13 +1,27 @@
 package controllers;
 
 import models.App;
-import models.Items.Products.*;
+import models.Game;
+import models.Animals.Fish;
+import models.Animals.FishType;
+import models.Items.Products.ForagingMineral;
+import models.Invetory.BackPack;
+import models.Invetory.Inventory;
 import models.Items.Item;
+import models.Items.ArtisanGoods.ArtisanGood;
+import models.Items.Foods.Food;
+import models.Items.Foods.FoodType;
+import models.Items.Products.CropType;
+import models.Items.Products.ForagingCropType;
+import models.Items.Products.ForgingSeed;
+import models.Items.Products.Tree;
+import models.Items.Products.TreeType;
 import models.Items.Tools.*;
 import models.Maps.Map;
 import models.Maps.PathFinder;
 import models.Maps.Tile;
 import models.Maps.TileTypes;
+import models.Maps.Weather;
 import models.Players.Player;
 import views.GameMenu;
 import views.RegisterMenu;
@@ -16,6 +30,7 @@ import java.util.*;
 
 public class GameMenuController {
     public static void greenHouseBuild() {}
+
     public static void walk(String xStr, String yStr) {
         int x = Integer.parseInt(xStr);
         int y = Integer.parseInt(yStr);
@@ -45,7 +60,7 @@ public class GameMenuController {
         player.setX(path.getLast().getX());
         player.setY(path.getLast().getY());
         player.setEnergy(player.getEnergy() - (path.size() / 20));
-        System.out.println(path.size());
+        GameMenu.printResult(String.valueOf(path.size()));
         if (player.getEnergy() <= 0) {
             player.setPassedOut(true);
             GameMenu.printResult("Player passed out!");
@@ -58,6 +73,7 @@ public class GameMenuController {
         int Size = Integer.parseInt(size);
         App.getMaps().get(0).printPartOfMap(X, Y, Size);
     }
+
     public static void helpReadingMap() {
         GameMenu.printResult("=== Map Legend ===");
         GameMenu.printResult(Map.GREEN + "G -> Grass" + Map.RESET);
@@ -76,14 +92,17 @@ public class GameMenuController {
         } else
             GameMenu.printResult("=== Player Energy: " + App.getCurrentGame().getCurrentPlayer().getEnergy() + " ===");
     }
+
     public static void cheatEnergySet(String value) {
         App.getCurrentGame().getCurrentPlayer().setEnergy(Integer.parseInt(value));
         GameMenu.printResult("=== Player energy set to: " + value + " ===");
     }
+
     public static void cheatUnlimitedEnergySet() {
         App.getCurrentGame().getCurrentPlayer().setEnergy(9999);
         GameMenu.printResult("=== Cheat code activated: UNLIMITED ENERGY! ===");
     }
+
     public static void inventoryShow() {
         for (Item item : App.getCurrentGame().getCurrentPlayer().getBackPack().getItems()) {
             GameMenu.printResult(item.getName() + " : " + item.getCount());
@@ -92,8 +111,9 @@ public class GameMenuController {
             GameMenu.printResult("No Item is your backpack!");
         }
     }
+
     public static void inventoryTrash(String name, String number) {
-        Item item = Item.findItemByName(name);
+        Item item = Item.findItemByName(name, App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
         if (item == null) {
             GameMenu.printResult("No item with this name found in your backpack");
             return;
@@ -117,6 +137,7 @@ public class GameMenuController {
             GameMenu.printResult(item.getName() + " successfully removed from your backpack");
         }
     }
+
     public static void ToolsEquip(String name) {
         for(Item items: App.getCurrentGame().getCurrentPlayer().getBackPack().getItems()){
             if(items.getName().equals(name)){
@@ -128,6 +149,7 @@ public class GameMenuController {
         GameMenu.printResult("Oops!" + name + "'s not in your inventory.");
         return;
     }
+
     public static void ShowCurrentTool() {
         if(App.getCurrentGame().getCurrentPlayer().getWield() instanceof Tool){
             GameMenu.printResult(App.getCurrentGame().getCurrentPlayer().getWield().getName());
@@ -135,6 +157,7 @@ public class GameMenuController {
             GameMenu.printResult("you're not wielding a tool.");
         }
     }
+
     public static void ShowAvailableTools() {
         for(Item items : App.getCurrentGame().getCurrentPlayer().getBackPack().getItems()){
             if(items instanceof Tool){
@@ -357,6 +380,7 @@ public class GameMenuController {
             }
         }
     }
+
     public static void craftInfo(String name) {
         boolean isCraftAvailable = false;
         CropType craft = null;
@@ -387,8 +411,9 @@ public class GameMenuController {
         sb.append("Can Become Giant: " + craft.isCanBecomeGiant());
         RegisterMenu.printResult(sb.toString());
     }
+
     public static void plant(String seed1, String direction) { // TODO shokhm zade shode barresi beshe
-        ForgingSeed seed = (ForgingSeed) ForgingSeed.findItemByName(seed1);
+        ForgingSeed seed = (ForgingSeed) ForgingSeed.findItemByName(seed1, App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
         Player player = App.getCurrentGame().getCurrentPlayer();
         Tile[][] tiles = App.getMaps().get(player.getSelectionNumber()  - 1).getTiles();
 
@@ -420,7 +445,7 @@ public class GameMenuController {
         }
 
         Tile targetTile = tiles[newX][newY];
-        Item item = Item.findItemByName(seed1);
+        Item item = Item.findItemByName(seed1, App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
         if (item == null) {
             GameMenu.printResult("No item with this name found in your backpack!");
             return;
@@ -447,7 +472,6 @@ public class GameMenuController {
         }
     }
 
-
     public static void showPlant(String x, String y) {
         Player player = App.getCurrentGame().getCurrentPlayer();
         Tile[][] tiles = App.getMaps().get(player.getSelectionNumber()  - 1).getTiles();
@@ -468,8 +492,9 @@ public class GameMenuController {
                     "=== Watered Today: " + x + " ==="); // TODO
         }
     }
+
     public static void fertilize(String fetilizer, String direction) {
-        Item item = Item.findItemByName(fetilizer);
+        Item item = Item.findItemByName(fetilizer, App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
         if (item == null) {
             GameMenu.printResult("No item with this name found in your backpack!");
         }
@@ -650,11 +675,149 @@ public class GameMenuController {
         GameMenu.printResult(name + "doesn't exist!");
 
     }
-    public static void putRefrigerator(String item) {}
-    public static void pickRefrigerator(String item) {}
-    public static void showCookingRecipe(){}
-    public static void cooking(String name) {}
-    public static void eat(String name) {}
+    
+    public static void putRefrigerator(String item) {
+        Item wantedItem = Item.findItemByName(item, App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
+
+        if (wantedItem == null)
+            GameMenu.printResult("No Item Found!");
+
+        if (wantedItem.getClass() != Food.class)
+            GameMenu.printResult("Item is not eatable");
+
+        App.getCurrentGame().getCurrentPlayer().getBackPack().removeItem(wantedItem);
+        App.getCurrentGame().getCurrentPlayer().getRefrigerator().addItem(wantedItem);
+    }
+
+    public static void pickRefrigerator(String item) {
+        Item wantedItem = Item.findItemByName(item, App.getCurrentGame().getCurrentPlayer().getRefrigerator().getItems());
+
+        if (wantedItem == null)
+            GameMenu.printResult("No Item Found!");
+
+        App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(wantedItem);
+        App.getCurrentGame().getCurrentPlayer().getRefrigerator().removeItem(wantedItem);
+    }
+
+    public static void showCookingRecipe(boolean isAll) {
+        StringBuilder sb = new StringBuilder();
+
+        if (isAll) {
+            ArrayList<FoodType> recipes = App.getCurrentGame().getCurrentPlayer().getRecipes();
+            for (int i = 0; i < recipes.size(); i++) {
+                sb.append(recipes.get(i).getName());
+                if (i < recipes.size() - 1) {
+                    sb.append("-");
+                }
+                else sb.append("\n");
+            }
+        }
+
+        else {
+            FoodType[] recipes = FoodType.values();
+            for (int i = 0; i < recipes.length; i++) {
+                sb.append(recipes[i].getName());
+                if (i < recipes.length - 1) {
+                    sb.append("-");
+                }
+                else sb.append("\n");
+            }
+        }
+
+        GameMenu.printResult(sb.toString());
+    }
+
+    public static void addCookingRecipe(String name) {
+        FoodType recipe = null;
+        for (int i = 0; i < FoodType.values().length; i++) {
+            if (FoodType.values()[i].getName().equals(name)) recipe = FoodType.values()[i];
+        }
+
+        if (recipe == null) GameMenu.printResult("No recipe with given name were found!");
+
+        App.getCurrentGame().getCurrentPlayer().addRecipe(recipe);
+        GameMenu.printResult("Recipe added successfully!");
+    }
+
+    public static void cooking(String name) {
+        FoodType recipe = FoodType.getrecipeByName(name);
+        if (recipe == null)
+            GameMenu.printResult("No recipe with given name were found!");
+
+        boolean recipeLeared = false;
+        for (FoodType foodType : App.getCurrentGame().getCurrentPlayer().getRecipes()) {
+            if (foodType.equals(recipe)) recipeLeared = true;
+        }
+        if (!recipeLeared) {
+            GameMenu.printResult("You didn't learn this recipe!");
+            return;
+        }
+
+        for (Item ingredient : recipe.getIngredients()) {
+            Item refrigratorItem = Item.findItemByName(ingredient.getName(), App.getCurrentGame().getCurrentPlayer().getRefrigerator().getItems());
+            Item backpackItem = Item.findItemByName(ingredient.getName(), App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
+
+            if (backpackItem == null) {
+                if (refrigratorItem == null)
+                    GameMenu.printResult("You don't have any " + ingredient.getName());
+                else {
+                    if (refrigratorItem.getCount() < ingredient.getCount())
+                        GameMenu.printResult("You don't have enough " + ingredient.getName());
+                    else
+                        GameMenu.printResult("You have enough " + ingredient.getName() + " in your refrigrator. Please move it to your backpack");
+                }
+
+                return;
+            }
+            else {
+                if (backpackItem.getCount() < ingredient.getCount()) {
+                    if (refrigratorItem == null)
+                        GameMenu.printResult("You don't have enough " + ingredient.getName());
+                    else {
+                        if (refrigratorItem.getCount() < ingredient.getCount())
+                            GameMenu.printResult("You don't have enough " + ingredient.getName());
+                        else
+                            GameMenu.printResult("You have enough " + ingredient.getName() + " in your refrigrator. Please move it to your backpack");
+                    }
+
+                    return;
+                }
+            }
+        }
+
+        for (Item ingredient : recipe.getIngredients()) {
+            Item backpackItem = Item.findItemByName(ingredient.getName(), App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
+
+            if (ingredient.getCount() == backpackItem.getCount())
+                App.getCurrentGame().getCurrentPlayer().getBackPack().removeItem(backpackItem);
+            else
+                backpackItem.changeCount(-1 * ingredient.getCount());
+        }
+
+        //TODO backpack is full!!!
+        App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(new Food(1, recipe));
+        App.getCurrentGame().getCurrentPlayer().changeEnergy(3);
+    }
+
+    public static void eat(String name) {
+        Food food = null;
+        for (Item foodItem : App.getCurrentGame().getCurrentPlayer().getBackPack().getItems()) {
+            if (foodItem.getClass() == Food.class && foodItem.getName().equals(name))
+                food = (Food) foodItem;
+        }
+
+        if (food == null) {
+            GameMenu.printResult("No food with given name were found!");
+            return;
+        }
+            
+        food.changeCount(-1);
+        if (food.getCount() == 0)
+            App.getCurrentGame().getCurrentPlayer().getBackPack().removeItem(food);
+        
+        App.getCurrentGame().getCurrentPlayer().changeEnergy(food.getType().getEnergy());
+        GameMenu.printResult("Food eaten successfully");
+    }
     public static void build(String name, String x, String y){}
     public static void buyAnimal(String animal, String name) {}
     public static void pet(String name){}
@@ -665,7 +828,35 @@ public class GameMenuController {
     public static void produces(){}
     public static void collectProduce(String name){}
     public static void sellAnimal(String name){}
-    public static void fishing(String fishingPole){}
+
+    public static void fishing(String fishingPole){
+        ArrayList<FishType> fishTypes = new ArrayList<>();
+        for (FishType fishType : FishType.values()) {
+            if (fishType.getSeason().equals(App.getCurrentGame().getCurrentTime().getSeason()))
+                fishTypes.add(fishType);
+        }
+
+        Random random = new Random();
+        FishType fishType = fishTypes.get(random.nextInt(fishTypes.size()));
+
+        double R = random.nextDouble();
+        double M;
+        if (App.getCurrentGame().getCurrentWeather().equals(Weather.SUNNY)) M = 1.5;
+        else if (App.getCurrentGame().getCurrentWeather().equals(Weather.RAIN)) M = 1.2;
+        else if (App.getCurrentGame().getCurrentWeather().equals(Weather.STORM)) M = 0.5;
+        else M = 1.0;
+        int skill = App.getCurrentGame().getCurrentPlayer().getFishing();
+
+        int count = (int) Math.floor(R * M * (skill + 2)) + 1;
+        count = Math.min(count, 6);
+
+        //TODO fish quality
+        //TODO legndary fish
+
+        Item fish = new Fish(count, fishType);
+        App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(fish);
+    }
+    
     public static void artisanUse(String artisanName, String itemName) {}
     public static void artisanGet(String name) {}
     public static void showAllProducts() {}
