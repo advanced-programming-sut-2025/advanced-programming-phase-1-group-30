@@ -10,7 +10,7 @@ public class ForgingSeed extends Product {
     public ForgingSeed(int count, ForgingSeedType type, Tile tile) {
         super(count, type.getName(), tile);
         this.type = type;
-        this.crop = new Crop(1, type.getCrop());
+        this.crop = new Crop(1, type.getCrop(), tile);
     }
 
     public ForgingSeedType getType() {
