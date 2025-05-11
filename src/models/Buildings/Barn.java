@@ -1,7 +1,6 @@
 package models.Buildings;
 
 import models.Animals.Animal;
-
 import java.util.ArrayList;
 
 public class Barn extends Buildings{
@@ -9,7 +8,6 @@ public class Barn extends Buildings{
     private int currentNumberOfAnimals;
     private final String type;
     private ArrayList<Animal> animals;
-
 
     public Barn(int length, int width, int startX, int startY, int capacity, String type) {
         super(length, width, startX, startY);
