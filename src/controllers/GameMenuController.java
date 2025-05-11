@@ -31,6 +31,7 @@ import java.util.*;
 
 public class GameMenuController {
     public static void greenHouseBuild() {}
+
     public static void walk(String xStr, String yStr) {
         int x = Integer.parseInt(xStr);
         int y = Integer.parseInt(yStr);
@@ -60,7 +61,7 @@ public class GameMenuController {
         player.setX(path.getLast().getX());
         player.setY(path.getLast().getY());
         player.setEnergy(player.getEnergy() - (path.size() / 20));
-        System.out.println(path.size());
+        GameMenu.printResult(String.valueOf(path.size()));
         if (player.getEnergy() <= 0) {
             player.setPassedOut(true);
             GameMenu.printResult("Player passed out!");
@@ -73,6 +74,7 @@ public class GameMenuController {
         int Size = Integer.parseInt(size);
         App.getMaps().get(0).printPartOfMap(X, Y, Size);
     }
+
     public static void helpReadingMap() {
         GameMenu.printResult("=== Map Legend ===");
         GameMenu.printResult(Map.GREEN + "G -> Grass" + Map.RESET);
@@ -91,14 +93,17 @@ public class GameMenuController {
         } else
             GameMenu.printResult("=== Player Energy: " + App.getCurrentGame().getCurrentPlayer().getEnergy() + " ===");
     }
+
     public static void cheatEnergySet(String value) {
         App.getCurrentGame().getCurrentPlayer().setEnergy(Integer.parseInt(value));
         GameMenu.printResult("=== Player energy set to: " + value + " ===");
     }
+
     public static void cheatUnlimitedEnergySet() {
         App.getCurrentGame().getCurrentPlayer().setEnergy(9999);
         GameMenu.printResult("=== Cheat code activated: UNLIMITED ENERGY! ===");
     }
+
     public static void inventoryShow() {
         for (Item item : App.getCurrentGame().getCurrentPlayer().getBackPack().getItems()) {
             GameMenu.printResult(item.getName() + " : " + item.getCount());
@@ -107,6 +112,7 @@ public class GameMenuController {
             GameMenu.printResult("No Item is your backpack!");
         }
     }
+
     public static void inventoryTrash(String name, String number) {
         Item item = Item.findItemByName(name, App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
         if (item == null) {
@@ -132,6 +138,7 @@ public class GameMenuController {
             GameMenu.printResult(item.getName() + " successfully removed from your backpack");
         }
     }
+
     public static void ToolsEquip(String name) {
         for(Item items: App.getCurrentGame().getCurrentPlayer().getBackPack().getItems()){
             if(items.getName().equals(name)){
@@ -143,6 +150,7 @@ public class GameMenuController {
         GameMenu.printResult("Oops!" + name + "'s not in your inventory.");
         return;
     }
+
     public static void ShowCurrentTool() {
         if(App.getCurrentGame().getCurrentPlayer().getWield() instanceof Tool){
             GameMenu.printResult(App.getCurrentGame().getCurrentPlayer().getWield().getName());
@@ -150,6 +158,7 @@ public class GameMenuController {
             GameMenu.printResult("you're not wielding a tool.");
         }
     }
+
     public static void ShowAvailableTools() {
         for(Item items : App.getCurrentGame().getCurrentPlayer().getBackPack().getItems()){
             if(items instanceof Tool){
@@ -157,7 +166,9 @@ public class GameMenuController {
             }
         }
     }
+
     public static void upgradeTools(String name) {}
+
     public static void toolUse(String direction) {
         Player player = App.getCurrentGame().getCurrentPlayer();
         Item wield = player.getWield();
@@ -324,6 +335,7 @@ public class GameMenuController {
             }
         }
     }
+
     public static void craftInfo(String name) {
         boolean isCraftAvailable = false;
         CropType craft = null;
@@ -354,6 +366,7 @@ public class GameMenuController {
         sb.append("Can Become Giant: " + craft.isCanBecomeGiant());
         RegisterMenu.printResult(sb.toString());
     }
+
     public static void plant(String seed1, String direction) { // TODO shokhm zade shode barresi beshe
         ForgingSeed seed = (ForgingSeed) ForgingSeed.findItemByName(seed1, App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -414,7 +427,6 @@ public class GameMenuController {
         }
     }
 
-
     public static void showPlant(String x, String y) {
         Player player = App.getCurrentGame().getCurrentPlayer();
         Tile[][] tiles = App.getMaps().get(player.getSelectionNumber()  - 1).getTiles();
@@ -435,6 +447,7 @@ public class GameMenuController {
                     "=== Watered Today: " + x + " ==="); // TODO
         }
     }
+
     public static void fertilize(String fetilizer, String direction) {
         Item item = Item.findItemByName(fetilizer, App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
         if (item == null) {
@@ -476,13 +489,13 @@ public class GameMenuController {
         }
 
     }
-    public static void howMuchWater() {
 
-    }
+    public static void howMuchWater() {}
     public static void showCraftingRecipes() {}
     public static void crafting(String name) {}
     public static void flaceItem(String name, String direction) {}
     public static void cheatAddItem(String name, String count) {}
+    
     public static void putRefrigerator(String item) {
         Item wantedItem = Item.findItemByName(item, App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
 
@@ -495,6 +508,7 @@ public class GameMenuController {
         App.getCurrentGame().getCurrentPlayer().getBackPack().removeItem(wantedItem);
         App.getCurrentGame().getCurrentPlayer().getRefrigerator().addItem(wantedItem);
     }
+
     public static void pickRefrigerator(String item) {
         Item wantedItem = Item.findItemByName(item, App.getCurrentGame().getCurrentPlayer().getRefrigerator().getItems());
 
@@ -504,6 +518,7 @@ public class GameMenuController {
         App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(wantedItem);
         App.getCurrentGame().getCurrentPlayer().getRefrigerator().removeItem(wantedItem);
     }
+
     public static void showCookingRecipe(boolean isAll) {
         StringBuilder sb = new StringBuilder();
 
@@ -531,6 +546,7 @@ public class GameMenuController {
 
         GameMenu.printResult(sb.toString());
     }
+
     public static void addCookingRecipe(String name) {
         FoodType recipe = null;
         for (int i = 0; i < FoodType.values().length; i++) {
@@ -542,6 +558,7 @@ public class GameMenuController {
         App.getCurrentGame().getCurrentPlayer().addRecipe(recipe);
         GameMenu.printResult("Recipe added successfully!");
     }
+
     public static void cooking(String name) {
         FoodType recipe = FoodType.getrecipeByName(name);
         if (recipe == null)
@@ -601,6 +618,7 @@ public class GameMenuController {
         App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(new Food(1, recipe));
         App.getCurrentGame().getCurrentPlayer().changeEnergy(3);
     }
+
     public static void eat(String name) {
         Food food = null;
         for (Item foodItem : App.getCurrentGame().getCurrentPlayer().getBackPack().getItems()) {
@@ -620,6 +638,7 @@ public class GameMenuController {
         App.getCurrentGame().getCurrentPlayer().changeEnergy(food.getType().getEnergy());
         GameMenu.printResult("Food eaten successfully");
     }
+
     public static void build(String name, String x, String y){}
     public static void buyAnimal(String animal, String name) {}
     public static void pet(String name){}
@@ -630,6 +649,7 @@ public class GameMenuController {
     public static void produces(){}
     public static void collectProduce(String name){}
     public static void sellAnimal(String name){}
+
     public static void fishing(String fishingPole){
         ArrayList<FishType> fishTypes = new ArrayList<>();
         for (FishType fishType : FishType.values()) {
@@ -657,6 +677,7 @@ public class GameMenuController {
         Item fish = new Fish(count, fishType);
         App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(fish);
     }
+    
     public static void artisanUse(String artisanName, String itemName) {}
     public static void artisanGet(String name) {}
     public static void showAllProducts() {}

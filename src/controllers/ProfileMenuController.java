@@ -17,6 +17,7 @@ public class ProfileMenuController {
         App.getCurrentUser().setUsername(username);
         RegisterMenu.printResult("Changed username to " + username);
     }
+
     public static void ChangeNickname(String nickname) {
         if (App.getCurrentUser().getNickname().equals(nickname)) {
             RegisterMenu.printResult("Pick a different nickname");
@@ -25,6 +26,7 @@ public class ProfileMenuController {
         App.getCurrentUser().setNickname(nickname);
         RegisterMenu.printResult("Changed nickname to " + nickname);
     }
+
     public static void ChangeEmail(String email) {
         for (User user : App.getAppUsers()) {
             if (user.getEmail().equals(email)) {
@@ -35,6 +37,7 @@ public class ProfileMenuController {
         App.getCurrentUser().setEmail(email);
         RegisterMenu.printResult("Email Changed");
     }
+
     public static void ChangePassword(String password, String oldPassword) {
         if (!App.getCurrentUser().getPassword().equals(oldPassword)) {
             RegisterMenu.printResult("Your old password is incorrect");
@@ -47,6 +50,7 @@ public class ProfileMenuController {
         App.getCurrentUser().setPassword(password);
         RegisterMenu.printResult("Password changed successfully");
     }
+
     public static void ChangeMenu(String menuName) {
         String nameMenu = App.getCurrentMenu().getName();
         // Menus menu = FindMenu(menuName);
@@ -81,6 +85,7 @@ public class ProfileMenuController {
         sb.append("Number of games played: " + App.getCurrentUser().getNumOfGames());
         RegisterMenu.printResult(sb.toString());
     }
+    
     public static void Exit() {
         App.setCurrentMenu(Menus.ExitMenu);
     }
