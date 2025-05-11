@@ -25,7 +25,6 @@ import models.Maps.Weather;
 import models.Players.Player;
 import views.GameMenu;
 import views.RegisterMenu;
-
 import java.util.*;
 
 public class GameMenuController {
