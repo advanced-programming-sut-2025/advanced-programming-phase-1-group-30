@@ -142,10 +142,9 @@ public class NewGameController {
                 }
                 for (Animal animal : player.getAnimals()) {
                     if (animal.isFedToday()) {
-
+                        animal.produceProduct();
                     }
                 }
-
             }
             App.getCurrentGame().getCurrentTime().setHour(9);
             App.getCurrentGame().setCurrentWeather(App.getCurrentGame().getTomorrowWeather());

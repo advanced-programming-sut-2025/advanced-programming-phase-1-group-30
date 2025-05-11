@@ -215,6 +215,53 @@ public class GameMenu implements AppMenu {
             GameMenuController.fishing(matcher.group("fishingPole"));
             return;
         }
+        matcher = GameMenuCommands.BUILD.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.build(matcher.group("buildingName"), matcher.group("x"), matcher.group("y"));
+            return;
+        }
+        matcher = GameMenuCommands.BUY_ANIMAL.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.buyAnimal(matcher.group("animal"), matcher.group("name"));
+            return;
+        }
+        matcher = GameMenuCommands.PET.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.fishing(matcher.group("name"));
+            return;
+        }
+        matcher = GameMenuCommands.CHEAT_SET_FRIENDSHIP.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.cheatSetFriendship(matcher.group("animalName"), matcher.group("amount"));
+            return;
+        }
+        matcher = GameMenuCommands.SHEPHERD_ANIMALS.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.shepherdAnimals(matcher.group("animalName"), matcher.group("x"), matcher.group("y"));
+            return;
+        }
+        matcher = GameMenuCommands.FEED_HAY.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.feedHay(matcher.group("animalName"));
+            return;
+        }
+        matcher = GameMenuCommands.PRODUCES.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.produces();
+            return;
+        }
+        matcher = GameMenuCommands.COLLECT_PRODUCE.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.collectProduce(matcher.group("name"));
+            return;
+        }
+        matcher = GameMenuCommands.SELL_ANIMAL.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.sellAnimal(matcher.group("name"));
+            return;
+        }
+
+
         
         System.out.println("Invalid command.");
     }

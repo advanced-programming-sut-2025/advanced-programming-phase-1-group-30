@@ -1,9 +1,70 @@
 package models.Animals;
 
+import models.App;
 import models.Buildings.RanchCosts;
+import models.Items.Item;
+import models.Items.Tools.Shear;
+import models.Players.Player;
+import views.GameMenu;
+
+import java.util.Random;
 
 public class Dinosaur extends Animal {
+    Item dinosaurEgg;
+    int daysPassed = 0;
     public Dinosaur(int price, String name, int friendship, boolean fedToday, boolean petToday, int x, int y) {
         super(price, name, friendship, fedToday, petToday, x, y, RanchCosts.DINOSAUR);
+    }
+    @Override
+    public void produceProduct() {
+        daysPassed++;
+        if (daysPassed == 8) {
+            Random random = new Random();
+            double rand2 = random.nextDouble(1);
+            double x = (random.nextFloat(1) + 0.5);
+            double chance = (getFriendship() + (x * 150)) / 1500;
+            double quality = (double) getFriendship() / 1000 * (0.5 + 0.5 * rand2);
+            qualityAssign(quality);
+            this.setProductReady(true);
+            daysPassed = 0;
+        }
+    }
+    private void qualityAssign(double quality) {
+        this.dinosaurEgg = new Item(1, "dinosaur egg");
+        if (quality >= 0 && quality < 0.5) {
+            this.dinosaurEgg.setQuality("regular");
+            this.dinosaurEgg.setCof(1);
+        } else if (quality >= 0.5 && quality < 0.7) {
+            this.dinosaurEgg.setQuality("silver");
+            this.dinosaurEgg.setCof(1.25);
+        } else if (quality >= 0.7 && quality < 0.9) {
+            this.dinosaurEgg.setQuality("gold");
+            this.dinosaurEgg.setCof(1.5);
+        } else if (quality >= 0.9) {
+            this.dinosaurEgg.setQuality("iridium");
+            this.dinosaurEgg.setCof(2);
+        }
+    }
+    @Override
+    public void collectProduct() {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+
+        if (!isProductReady()) {
+            GameMenu.printResult("Product is not ready!");
+        } else {
+            Item newItem = this.dinosaurEgg;
+
+            if (Item.findItemByName(dinosaurEgg.getName(), player.getBackPack().getItems()) != null) {
+                newItem.setCount(newItem.getCount() + 1);
+            } else {
+                if(player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()){
+                    GameMenu.printResult("You don't have enough space in your backpack!");
+                } else{
+                    player.getBackPack().addItem(newItem);
+                    GameMenu.printResult("Dinosaur egg collected!");
+                    this.dinosaurEgg = null;
+                }
+            }
+        }
     }
 }

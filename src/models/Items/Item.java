@@ -7,7 +7,8 @@ import models.App;
 public class Item {
     private final String name;
     private int count;
-
+    private String quality;
+    private double cof;
     public Item(int count, String name) {
         this.name = name;
         this.count = count;
@@ -27,6 +28,17 @@ public class Item {
 
     public String getName() {
         return name;
+    }
+    public String getQuality() {
+        return quality;
+    }
+
+    public void setQuality(String quality) {
+        this.quality = quality;
+    }
+
+    public void setCof(double cof) {
+        this.cof = cof;
     }
 
     public static Item findItemByName(String name, ArrayList<Item> items) {
