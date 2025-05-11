@@ -9,18 +9,13 @@ import models.Buildings.RanchCosts;
 import models.Game;
 import models.Animals.Fish;
 import models.Animals.FishType;
-import models.Items.Products.ForagingMineral;
+import models.Items.Products.*;
 import models.Invetory.BackPack;
 import models.Invetory.Inventory;
 import models.Items.Item;
 import models.Items.ArtisanGoods.ArtisanGood;
 import models.Items.Foods.Food;
 import models.Items.Foods.FoodType;
-import models.Items.Products.CropType;
-import models.Items.Products.ForagingCropType;
-import models.Items.Products.ForgingSeed;
-import models.Items.Products.Tree;
-import models.Items.Products.TreeType;
 import models.Items.Tools.*;
 import models.Maps.Map;
 import models.Maps.PathFinder;
@@ -30,7 +25,6 @@ import models.Maps.Weather;
 import models.Players.Player;
 import views.GameMenu;
 import views.RegisterMenu;
-
 import java.util.*;
 
 public class GameMenuController {
@@ -232,7 +226,7 @@ public class GameMenuController {
                     GameMenu.printResult("Done!");
                 } else if(targetTile.getType().equals(TileTypes.QUARRY)){
                     if(targetTile.getItem() instanceof ForagingMineral){
-                        Item newItem = Item.findItemByName(targetTile.getItem().getName());
+                        Item newItem = Item.findItemByName(targetTile.getItem().getName(), player.getBackPack().getItems());
                         if(newItem != null){
                             newItem.setCount(newItem.getCount() + 1);
                         }else{
@@ -275,8 +269,8 @@ public class GameMenuController {
                     Item wood = new Item(12 ,"wood");
                     Item sap = new Item(2 ,"sap");
 
-                    Item newWood = Item.findItemByName(wood.getName());
-                    Item newSap = Item.findItemByName(sap.getName());
+                    Item newWood = Item.findItemByName(wood.getName(), player.getBackPack().getItems());
+                    Item newSap = Item.findItemByName(sap.getName(), player.getBackPack().getItems());
 
                     if(newWood != null){
                         newWood.setCount(newWood.getCount() + 1);
@@ -345,7 +339,7 @@ public class GameMenuController {
             if(player.getEnergy() > 2){
                 if(targetTile.isReadyToHarvest()){
                     GameMenu.printResult("You harvested " + targetTile.getCrop() +" and added it to your backpack!");
-                    Item newItem = Item.findItemByName(targetTile.getCrop().getName());
+                    Item newItem = Item.findItemByName(targetTile.getCrop().getName(), player.getBackPack().getItems());
 
                     if(newItem != null){
                         newItem.setCount(newItem.getCount() + 1);
@@ -574,7 +568,7 @@ public class GameMenuController {
             if(recipe.name.equals(name)){
                 if(player.getCraftingRecipes().contains(recipe)){
                     for(Item items : recipe.ingredients){
-                        Item ingredient = Item.findItemByName(items.getName());
+                        Item ingredient = Item.findItemByName(items.getName(), player.getBackPack().getItems());
                         if(ingredient == null){
                             GameMenu.printResult("You don't have necessary ingredients!");
                             return;
@@ -587,7 +581,7 @@ public class GameMenuController {
                     }
                     CraftingItems crafted = new CraftingItems(1, recipe);
 
-                    Item newItem = Item.findItemByName(crafted.getName());
+                    Item newItem = Item.findItemByName(crafted.getName(), player.getBackPack().getItems());
 
                     if((newItem == null) && player.getBackPack().getType().getCapacity() == player.getBackPack().getItems().size()){
                         GameMenu.printResult("You don't have enough space in your backpack!");
@@ -595,7 +589,7 @@ public class GameMenuController {
                     }
 
                     for(Item ingredient : recipe.ingredients){
-                        Item item = Item.findItemByName(ingredient.getName());
+                        Item item = Item.findItemByName(ingredient.getName(), player.getBackPack().getItems());
 
                         if(item.getCount() == ingredient.getCount()){
                             player.getBackPack().getItems().remove(item);
@@ -650,7 +644,7 @@ public class GameMenuController {
         }
 
         Tile targetTile = tiles[newX][newY];
-        Item item =  Item.findItemByName(name);
+        Item item =  Item.findItemByName(name, player.getBackPack().getItems());
         if(item == null){
             GameMenu.printResult("Item not found!");
             return;
@@ -670,7 +664,7 @@ public class GameMenuController {
         for(CraftingRecipe recipe : CraftingRecipe.values()){
             if(recipe.name.equals(name)){
                 Item newItem = new CraftingItems(Integer.parseInt(count), recipe);
-                Item itemBackpack = Item.findItemByName(newItem.getName());
+                Item itemBackpack = Item.findItemByName(newItem.getName(), player.getBackPack().getItems());
                 if(itemBackpack == null){
                     if(player.getBackPack().getType().getCapacity() > player.getBackPack().getItems().size()){
                         player.getBackPack().getItems().add(newItem);
@@ -830,15 +824,8 @@ public class GameMenuController {
         App.getCurrentGame().getCurrentPlayer().changeEnergy(food.getType().getEnergy());
         GameMenu.printResult("Food eaten successfully");
     }
-    public static void showCraftingRecipes() {}
-    public static void crafting(String name) {}
-    public static void placeItem(String name, String direction) {}
-    public static void cheatAddItem(String name, String count) {}
-    public static void putRefrigerator(String item) {}
-    public static void pickRefrigerator(String item) {}
     public static void showCookingRecipe(){}
-    public static void cooking(String name) {}
-    public static void eat(String name) {}
+
     public static void build(String name, String X, String Y){
         // TODO check the carpenter's shop for this shit
         int x = Integer.parseInt(X);
@@ -858,8 +845,8 @@ public class GameMenuController {
                     }
                 }
             }
-            Item item1 = Item.findItemByName("wood");
-            Item item2 = Item.findItemByName("stone");
+            Item item1 = Item.findItemByName("wood", player.getBackPack().getItems());
+            Item item2 = Item.findItemByName("stone", player.getBackPack().getItems());
             if (item1 == null || item2 == null) {
                 GameMenu.printResult("You don't have enough resources!");
                 return;
@@ -1153,18 +1140,6 @@ public class GameMenuController {
             }
         }
     }
-    public static void fishing(String fishingPole){}
-    public static void build(String name, String x, String y){}
-    public static void buyAnimal(String animal, String name) {}
-    public static void pet(String name){}
-    public static void cheatSetFriendship(String name, String amount) {}
-    public static void animals() {}
-    public static void shepherdAnimals(String name, String x, String y){}
-    public static void feedHay(String name){}
-    public static void produces(){}
-    public static void collectProduce(String name){}
-    public static void sellAnimal(String name){}
-
     public static void fishing(String fishingPole){
         ArrayList<FishType> fishTypes = new ArrayList<>();
         for (FishType fishType : FishType.values()) {
