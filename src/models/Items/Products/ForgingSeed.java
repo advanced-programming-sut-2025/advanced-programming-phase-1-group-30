@@ -6,6 +6,7 @@ public class ForgingSeed extends Product {
     private final ForgingSeedType type;
     private Crop crop;
     private boolean isFertilized;
+    private boolean isWatered;
 
     public ForgingSeed(int count, ForgingSeedType type, Tile tile) {
         super(count, type.getName(), tile);
@@ -28,5 +29,11 @@ public class ForgingSeed extends Product {
     }
     public void setFertilized(boolean fertilized) {
         isFertilized = fertilized;
+    }
+    public boolean isWatered() {
+        return isWatered;
+    }
+    public void setWatered(boolean watered) {
+        isWatered = watered;
     }
 }
