@@ -18,7 +18,7 @@ public enum TreeType {
     MAHOGANY_TREE("Mahogany Tree", ForgingSeedType.MAHOGANY_SEEDS, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.SAP),
     MUSHROOM_TREE("Mushroom Tree", ForgingSeedType.MUSHROOM_TREE_SEEDS, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.COMMON_MUSHROOM),
     MYSTIC_TREE("Mystic Tree", ForgingSeedType.MYSTIC_TREE_SEEDS, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.MYSTIC_SYRUP),
-    STUMP("Stump", null, null, 0, null, 0, 0, true, 0, null);
+    STUMP("Stump", null, null, 0, null);
 
     private final String name;
 	private final ForgingSeedType source;

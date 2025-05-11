@@ -1,23 +1,14 @@
 package controllers;
 
 import models.App;
-import models.Game;
-import models.Items.Products.ForagingMineral;
-import models.Invetory.BackPack;
-import models.Invetory.Inventory;
+import models.Items.Products.*;
 import models.Items.Item;
-import models.Items.Products.CropType;
-import models.Items.Products.ForagingCropType;
-import models.Items.Products.ForgingSeed;
-import models.Items.Products.Tree;
-import models.Items.Products.TreeType;
 import models.Items.Tools.*;
 import models.Maps.Map;
 import models.Maps.PathFinder;
 import models.Maps.Tile;
 import models.Maps.TileTypes;
 import models.Players.Player;
-import models.TimeAndDate.Season;
 import views.GameMenu;
 import views.RegisterMenu;
 
@@ -151,7 +142,9 @@ public class GameMenuController {
             }
         }
     }
-    public static void upgradeTools(String name) {}
+    public static void upgradeTools(String name) {
+        // TODO
+    }
     public static void toolUse(String direction) {
         Player player = App.getCurrentGame().getCurrentPlayer();
         Item wield = player.getWield();
@@ -213,7 +206,17 @@ public class GameMenuController {
                     GameMenu.printResult("Done!");
                 } else if(targetTile.getType().equals(TileTypes.QUARRY)){
                     if(targetTile.getItem() instanceof ForagingMineral){
-                        player.getBackPack().addItem(targetTile.getItem());
+                        Item newItem = Item.findItemByName(targetTile.getItem().getName());
+                        if(newItem != null){
+                            newItem.setCount(newItem.getCount() + 1);
+                        }else{
+                            if(player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()){
+                                GameMenu.printResult("You don't have enough space in your backpack!");
+                                return;
+                            } else{
+                                player.getBackPack().addItem(targetTile.getItem());
+                            }
+                        }
                         GameMenu.printResult(targetTile.getItem().getName() + " successfully added to your backpack");
                         targetTile.setItem(null);
                     }else{
@@ -222,7 +225,7 @@ public class GameMenuController {
                             energyNeeded -= 1;
                         }
                     }
-                } else if(targetTile.isWalkable() && targetTile.getItem() != (null)){ // Change
+                } else if(targetTile.isWalkable() && targetTile.getItem() != (null)){ // Change TODO
                     GameMenu.printResult("Poof! " + targetTile.getItem().getName() + " crumbled into nothing.");
                     targetTile.setItem(null);
                 } else {
@@ -245,8 +248,33 @@ public class GameMenuController {
                 if(targetTile.getItem() instanceof Tree){
                     Item wood = new Item(12 ,"wood");
                     Item sap = new Item(2 ,"sap");
-                    player.getBackPack().addItem(wood);
-                    player.getBackPack().addItem(sap);
+
+                    Item newWood = Item.findItemByName(wood.getName());
+                    Item newSap = Item.findItemByName(sap.getName());
+
+                    if(newWood != null){
+                        newWood.setCount(newWood.getCount() + 1);
+                    }else{
+                        if(player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()){
+                            GameMenu.printResult("You don't have enough space in your backpack!");
+                            return;
+                        } else{
+
+                            if(newSap != null){
+                            newSap.setCount(newSap.getCount() + 1);
+                            }else{
+                                if(player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()){
+                                    GameMenu.printResult("You don't have enough space in your backpack!");
+                                    return;
+                                } else{
+                                    player.getBackPack().addItem(sap);
+                                }
+                            }
+
+                            player.getBackPack().addItem(wood);
+                        }
+                    }
+
                     targetTile.setItem(null);
                     GameMenu.printResult("You chop down the tree and collect 12 wood and 2 sap.");
                 } else if(targetTile.getItem().equals(new Item(1,"branch"))){
@@ -286,14 +314,25 @@ public class GameMenuController {
                 GameMenu.printResult("You don't have enough energy!");
             }
         } else if(wield instanceof FishingPole){
-            // daria
+            // darya
         } else if(wield instanceof Scythe){
             if(player.getEnergy() > 2){
                 if(targetTile.isReadyToHarvest()){
-                    GameMenu.printResult("You harvested " + targetTile.getItem() +" and added it to your backpack!");
-                    player.getBackPack().addItem(targetTile.getItem());
+                    GameMenu.printResult("You harvested " + targetTile.getCrop() +" and added it to your backpack!");
+                    Item newItem = Item.findItemByName(targetTile.getCrop().getName());
+
+                    if(newItem != null){
+                        newItem.setCount(newItem.getCount() + 1);
+                    } else {
+                        if(player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()){
+                            GameMenu.printResult("You don't have enough space in your backpack!");
+                            return;
+                        } else{
+                            player.getBackPack().addItem(targetTile.getCrop());
+                        }
+                    }
                     targetTile.setReadyToHarvest(false);
-                    targetTile.setItem(null);
+                    targetTile.setCrop(null);
                 } else if(targetTile.getType().equals(TileTypes.GRASS)){
                     targetTile.setType(TileTypes.DIRT);
                     GameMenu.printResult("Tile type changed to Dirt!");
@@ -471,12 +510,146 @@ public class GameMenuController {
 
     }
     public static void howMuchWater() {
+        for(Item items : App.getCurrentGame().getCurrentPlayer().getBackPack().getItems()) {
+            if(items instanceof Basket) {
+                GameMenu.printResult(items.getName() + " Remaining water: " + ((Basket) items).getRemainingWater() + "/" + ((Basket) items).getType().getCapacity());
+            }
+        }
+    }
+    public static void showCraftingRecipes() {
+        for(CraftingRecipe recipe :App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()){
+            GameMenu.printResult(recipe.name + ": " + recipe.description);
+            StringBuilder ingredients = new StringBuilder();
+            ingredients.append("ingredients :");
+            for (Item items : recipe.ingredients){
+                ingredients.append(items.getCount());
+                ingredients.append(" ");
+                ingredients.append(items.getName());
+                ingredients.append(" ");
+            }
+            GameMenu.printResult(ingredients.toString());
+        }
+    }
+    public static void crafting(String name) {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+
+        for(CraftingRecipe recipe : CraftingRecipe.values()){
+            if(recipe.name.equals(name)){
+                if(player.getCraftingRecipes().contains(recipe)){
+                    for(Item items : recipe.ingredients){
+                        Item ingredient = Item.findItemByName(items.getName());
+                        if(ingredient == null){
+                            GameMenu.printResult("You don't have necessary ingredients!");
+                            return;
+                        }else{
+                            if(ingredient.getCount() < items.getCount()){
+                                GameMenu.printResult("You don't have enough ingredients!");
+                                return;
+                            }
+                        }
+                    }
+                    CraftingItems crafted = new CraftingItems(1, recipe);
+
+                    Item newItem = Item.findItemByName(crafted.getName());
+
+                    if((newItem == null) && player.getBackPack().getType().getCapacity() == player.getBackPack().getItems().size()){
+                        GameMenu.printResult("You don't have enough space in your backpack!");
+                        return;
+                    }
+
+                    for(Item ingredient : recipe.ingredients){
+                        Item item = Item.findItemByName(ingredient.getName());
+
+                        if(item.getCount() == ingredient.getCount()){
+                            player.getBackPack().getItems().remove(item);
+                        }else{
+                            item.setCount(item.getCount() - ingredient.getCount());
+                        }
+                    }
+
+                    if(newItem != null){
+                        newItem.setCount(newItem.getCount() + 1);
+                    } else {
+                        player.getBackPack().getItems().add(crafted);
+                    }
+                    GameMenu.printResult("You have successfully crafted " + recipe.name + "!");
+                } else{
+                    GameMenu.printResult("Sorry! you don't have the recipe for " + recipe.name);
+                }
+                return;
+            }
+        }
+        GameMenu.printResult(name + " cannot be crafted!");
+    }
+    public static void placeItem(String name, String direction) {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Tile[][] tiles = App.getMaps().get(player.getSelectionNumber()  - 1).getTiles();
+
+
+        int x = player.getX();
+        int y = player.getY();
+        int dx = 0, dy = 0;
+
+        switch (direction) {
+            case "w": dy = -1; break;
+            case "s": dy = 1; break;
+            case "a": dx = -1; break;
+            case "d": dx = 1; break;
+            case "Q": dx = -1; dy = -1; break;
+            case "E": dx = 1; dy = -1; break;
+            case "Z": dx = -1; dy = 1; break;
+            case "C": dx = 1; dy = 1; break;
+            default:
+                GameMenu.printResult("Invalid direction!");
+                return;
+        }
+
+        int newX = x + dx;
+        int newY = y + dy;
+
+        if (newX < 0 || newX >= tiles.length || newY < 0 || newY >= tiles[0].length) {
+            GameMenu.printResult("Out of bounds!");
+            return;
+        }
+
+        Tile targetTile = tiles[newX][newY];
+        Item item =  Item.findItemByName(name);
+        if(item == null){
+            GameMenu.printResult("Item not found!");
+            return;
+        }
+
+
+        if((targetTile.getType().equals(TileTypes.GRASS) || targetTile.getType().equals(TileTypes.DIRT))
+                && targetTile.getItem() == null){
+            targetTile.setItem(item);
+            GameMenu.printResult("You have successfully placed " + item.getName() + " on x: " + newX + " y: " + newY + "!");
+        } else{
+            GameMenu.printResult("You can't place this item here!");
+        }
+    }
+    public static void cheatAddItem(String name, String count) {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        for(CraftingRecipe recipe : CraftingRecipe.values()){
+            if(recipe.name.equals(name)){
+                Item newItem = new CraftingItems(Integer.parseInt(count), recipe);
+                Item itemBackpack = Item.findItemByName(newItem.getName());
+                if(itemBackpack == null){
+                    if(player.getBackPack().getType().getCapacity() > player.getBackPack().getItems().size()){
+                        player.getBackPack().getItems().add(newItem);
+                    } else {
+                        GameMenu.printResult("You don't have enough space in your backpack!");
+                    }
+                } else {
+                    itemBackpack.setCount(itemBackpack.getCount() + Integer.parseInt(count));
+                }
+                GameMenu.printResult(count + " " + name + "added to your backpack!");
+                return;
+            }
+        }
+        GameMenu.printResult(name + "doesn't exist!");
 
     }
-    public static void showCraftingRecipes() {}
-    public static void crafting(String name) {}
-    public static void flaceItem(String name, String direction) {}
-    public static void cheatAddItem(String name, String count) {}
     public static void putRefrigerator(String item) {}
     public static void pickRefrigerator(String item) {}
     public static void showCookingRecipe(){}

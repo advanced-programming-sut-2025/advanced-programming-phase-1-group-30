@@ -155,6 +155,27 @@ public class GameMenu implements AppMenu {
             GameMenuController.craftInfo(matcher.group("craftName"));
             return;
         }
+        matcher = GameMenuCommands.HOWMUCH_WATER.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.howMuchWater();
+            return;
+        }
+        matcher = GameMenuCommands.CRAFTING_SHOW_RECIPES.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.showCraftingRecipes();
+            return;
+        }
+        matcher = GameMenuCommands.CRAFTING_CRAFT.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.crafting(matcher.group("itemName"));
+            return;
+        }
+        matcher = GameMenuCommands.PLACE_ITEM.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.placeItem(matcher.group("itemName"), matcher.group("direction"));
+            return;
+        }
+
         System.out.println("Invalid command.");
     }
 }

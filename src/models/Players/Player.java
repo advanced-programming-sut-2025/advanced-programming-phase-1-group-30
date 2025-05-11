@@ -5,6 +5,7 @@ import models.Invetory.BackPackType;
 import models.Invetory.ShippingBin;
 import models.Invetory.TrashCan;
 import models.Invetory.TrashCanType;
+import models.Items.Products.CraftingRecipe;
 import models.Items.Item;
 import models.Items.Products.ForgingSeed;
 import models.Items.Products.ForgingSeedType;
@@ -35,13 +36,13 @@ public class Player {
     private int mining = 0;
     private int maxEnergy;
     private ArrayList<Item> products = new ArrayList<>();
+    private ArrayList<CraftingRecipe> craftingRecipes = new ArrayList<>();
 
     public Player(String username, int selectionNumber) {
         this.username = username;
         this.map = null;
         this.energy = 200;
         this.shippingBin = null;
-        this.backPack = new BackPack();
         this.backPack.addItem(new Axe(1, AxeType.NORMAL));
         this.backPack.addItem(new Hoe(1, HoeType.NORMAL));
         this.backPack.addItem(new Pickaxe(1, PickaxeType.NORMAL));
@@ -216,5 +217,9 @@ public class Player {
 
     public void removedProduct(Item product) {
         this.products.remove(product);
+    }
+
+    public ArrayList<CraftingRecipe> getCraftingRecipes() {
+        return craftingRecipes;
     }
 }
