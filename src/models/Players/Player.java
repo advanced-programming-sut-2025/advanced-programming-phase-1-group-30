@@ -7,6 +7,7 @@ import models.Invetory.Refrigerator;
 import models.Invetory.ShippingBin;
 import models.Invetory.TrashCan;
 import models.Invetory.TrashCanType;
+import models.Items.Products.CraftingRecipe;
 import models.Items.Item;
 import models.Items.Foods.FoodType;
 import models.Items.Products.ForgingSeed;
@@ -39,6 +40,8 @@ public class Player {
     private int mining = 0;
     private int maxEnergy;
     private ArrayList<Item> products = new ArrayList<>();
+    private ArrayList<CraftingRecipe> craftingRecipes = new ArrayList<>();
+
     private Building building;
     private ArrayList<FoodType> recipes = new ArrayList<>();
 
@@ -46,6 +49,7 @@ public class Player {
         this.username = username;
         this.map = null;
         this.energy = 200;
+
         this.shippingBin = new ShippingBin();
         this.refrigerator = new Refrigerator();
         this.backPack = new BackPack(BackPackType.INITIAL_BACKPACK);
@@ -54,7 +58,6 @@ public class Player {
         this.backPack.addItem(new Pickaxe(1, PickaxeType.NORMAL));
         this.backPack.addItem(new Basket(1, BasketType.NORMAL));
         this.backPack.addItem(new Scythe(1));
-        this.backPack = new BackPack(BackPackType.INITIAL_BACKPACK);
         this.trashCan = new TrashCan(TrashCanType.INITIAL_TRASHCAN);
         this.backPack.addItem(new ForgingSeed(1, ForgingSeedType.ACORNS, null)); //TODO tile & initial seed
         this.money = 0;
@@ -242,6 +245,9 @@ public class Player {
     public void removedProduct(Item product) {
         this.products.remove(product);
     }
+
+    public ArrayList<CraftingRecipe> getCraftingRecipes() {
+        return craftingRecipes;
 
     public Building getBuilding() {
         return building;
