@@ -10,6 +10,7 @@ public enum GameMenuCommands {
     EXIT_GAME("^\\s*exit\\s+game\\s*$"),
     NEXT_TURN("^\\s*next\\s+turn\\s*$"),
     TIME("^\\s*time\\s*$"),
+    CHEAT_TIME("^\\s*cheat\\s+advanced\\s+time\\s+(?<X>\\d+)\\s*h\\s*$"),
     DATE("^\\s*date\\s*$"),
     DATETIME("^\\s*datetime\\s*$"),
     DAY_OF_THE_WEEK("^\\s*day\\s+of\\s+the\\s+week\\s*$"),

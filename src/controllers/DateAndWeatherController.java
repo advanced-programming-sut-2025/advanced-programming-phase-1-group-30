@@ -26,7 +26,7 @@ public class DateAndWeatherController {
         GameMenu.printResult(App.getCurrentGame().getCurrentTime().getDayOfWeek().getName());
     }
 
-    public static void CheatAdvanceTime(String amount) {
+    public static void cheatAdvanceTime(String amount) {
         int x = Integer.parseInt(amount);
         if (x >= 13) {
             GameMenu.printResult("You can't cheat more than 13 hours");
