@@ -1385,7 +1385,7 @@ public class GameMenuController {
         if (item.getCount() == amount)player.getBackPack().removeItem(item);
         else item.changeCount(-1  * amount);
 
-        player.setMoney(player.getMoney() + (int) player.getShippingBin().getType().calculateNewPrice(item.getCount() * amount));
+        player.setMoney(player.getMoney() + (int) player.getShippingBin().getType().calculateNewPrice(item.getPrice() * amount));
         //TODO money will be got next day
         GameMenu.printResult("Item sold successfully!");
     }
