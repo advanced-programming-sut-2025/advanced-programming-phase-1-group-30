@@ -340,10 +340,11 @@ public class GameMenuController {
                 } else {
                     ((Basket) wield).setRemainingWater(((Basket) wield).getRemainingWater() - 1);
                     if(targetTile.getItem() instanceof ForgingSeed){
-                       ((ForgingSeed) targetTile.getItem()).setWatered(true);
-                        GameMenu.printResult("You give the plants a refreshing splash!");
+                        ((ForgingSeed) targetTile.getItem()).setWatered(true);
+
+                        GameMenu.printResult("You gave the plant a refreshing splash!");
                     } else {
-                        GameMenu.printResult("You spill some water on the ground.");
+                        GameMenu.printResult("You spilled some water on the ground.");
                     }
                 }
                 player.setEnergy(player.getEnergy() - energyNeeded);
@@ -497,15 +498,18 @@ public class GameMenuController {
             Tile targetTile = tiles[X][Y];
             ForgingSeed seed = (ForgingSeed)targetTile.getItem();
             int daysRemaining = 0;
-            for (int i = seed.getCrop().getCurrentStage(); i < seed.getCrop().getStages().size(); i++) {
-                daysRemaining += seed.getCrop().getStages().get(i);
-                daysRemaining -= seed.getCrop().getDaysPassed();
+            for (int i = targetTile.getCrop().getCurrentStage(); i < targetTile.getCrop().getStages().size(); i++) {
+                daysRemaining += targetTile.getCrop().getStages().get(i);
             }
-            GameMenu.printResult("=== Seed: " + seed.getName() + " ===\n" +
-                    "=== Current Stage: " + seed.getCrop().getCurrentStage() + " ===\n" +
+            daysRemaining -= targetTile.getCrop().getDaysPassed();
+            GameMenu.printResult("=== Seed: " + targetTile.getCrop().getName() + " ===\n" +
+                    "=== Current Stage: " + targetTile.getCrop().getCurrentStage() + " ===\n" +
                     "=== Days Remaining: " + daysRemaining + " ===\n" +
                     "=== Is Fertilized: " + seed.isFertilized() + " ===\n" +
                     "=== Watered Today: " + x + " ==="); // TODO
+            if (targetTile.isReadyToHarvest()) {
+                GameMenu.printResult("=== Ready to Harvest! ===");
+            }
         } else {
             GameMenu.printResult("No seed is planted here!");
         }

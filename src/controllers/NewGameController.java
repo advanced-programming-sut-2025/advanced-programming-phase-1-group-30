@@ -105,14 +105,14 @@ public class NewGameController {
             if (player.getSelectionNumber() == currentPlayer.getSelectionNumber() + 1) {
                 if (player.isPassedOut()) continue;
                 App.getCurrentGame().setCurrentPlayer(player);
-                return;
+                break;
             }
         }
 
         for (Player player : players) {
             if (!player.isPassedOut()) {
                 App.getCurrentGame().setCurrentPlayer(player);
-                return;
+                break;
             }
         }
 

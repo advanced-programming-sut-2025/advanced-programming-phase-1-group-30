@@ -46,6 +46,11 @@ public class GameMenu implements AppMenu {
             DateAndWeatherController.Time();
             return;
         }
+        matcher = GameMenuCommands.CHEAT_TIME.regexMatcher(command);
+        if (matcher.matches()) {
+            DateAndWeatherController.cheatAdvanceTime(matcher.group("X"));
+            return;
+        }
         matcher = GameMenuCommands.DATE.regexMatcher(command);
         if (matcher.matches()) {
             DateAndWeatherController.Date();
