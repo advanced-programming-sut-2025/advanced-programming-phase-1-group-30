@@ -76,7 +76,7 @@ public enum GameMenuCommands {
     START_TRADE("^\\s*start\\s+trade\\s*$"),
     TRADE("^\\s*trade\\s+-u\\s+(?<username>.*\\S)\\s+-t\\s+(?<type>.*\\S)\\s+-i\\s+(?<item>.*\\S)\\s+-a\\s+(?<amount>.*\\S)(\\s+-p\\s+(?<price>.*\\S))?(\\s*-ti\\s+(?<targetItem>.*\\S)\\s+-ta\\s+(?<targetAmount>.*\\S))?\\s*$"),
     TRADE_LIST("^\\s*trade\\s+list\\s*$"),
-    TRADE_RESPONSE("^\\s*trade\\s+response\\s+(-accept|-reject)\\s+-i\\s+(?<id>.*\\S)\\s*$"),
+    TRADE_RESPONSE("^\\s*trade\\s+response\\s+(?<answer>(-accept|-reject))\\s+-i\\s+(?<id>.*\\S)\\s*$"),
     TRADE_HISTORY("^\\s*trade\\s+history\\s*$"),
     MEET_NPC("^\\s*meet\\s+NPC\\s+(?<npcName>.*\\S)\\s*$"),
     GIFT_NPC("^\\s*gift\\s+NPC\\s+(?<npcName>.*\\S)\\s+-i\\s+(?<item>.*\\S)\\s*$"),

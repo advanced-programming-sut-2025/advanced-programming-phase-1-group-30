@@ -5,20 +5,26 @@ import models.Items.Item;
 public class Trade {
     private Player getter;
     private Player giver;
-    private Item offeredItem;
+    private String offeredItem;
     private boolean getsMoney;
     private int money;
-    private Item requestedItem;
+    private String requestedItem;
     private String type;
     private String moneyOrItem;
+    private int offerAmount;
+    private int requestAmount;
+    private int id;
 
-    public Trade(Player giver, Player getter, Item tradedItem, boolean getsMoney, int money, Item gottenItem) {
+    public Trade(Player giver, Player getter, String offeredItem, int offerAmount, boolean getsMoney, int money, String requestedItem, int requestAmount, int id) {
         this.giver = giver;
         this.getter = getter;
-        this.offeredItem = tradedItem;
+        this.offeredItem = offeredItem;
         this.getsMoney = getsMoney;
         this.money = money;
-        this.requestedItem = gottenItem;
+        this.requestedItem = requestedItem;
+        this.offerAmount = offerAmount;
+        this.requestAmount = requestAmount;
+        this.id = id;
     }
     
     public Player getGiver() {
@@ -34,10 +40,10 @@ public class Trade {
     public void setGetter(Player getter) {
         this.getter = getter;
     }
-    public Item getOfferedItem() {
+    public String getOfferedItem() {
         return offeredItem;
     }
-    public void setOfferedItem(Item tradedItem) {
+    public void setOfferedItem(String tradedItem) {
         this.offeredItem = tradedItem;
     }
     public boolean isGetsMoney() {
@@ -52,10 +58,10 @@ public class Trade {
     public void setMoney(int money) {
         this.money = money;
     }
-    public Item getRequestedItem() {
+    public String getRequestedItem() {
         return requestedItem;
     }
-    public void setRequestedItem(Item gottenItem) {
+    public void setRequestedItem(String gottenItem) {
         this.requestedItem = gottenItem;
     }
 
@@ -73,5 +79,17 @@ public class Trade {
 
     public void setMoneyOrItem(String moneyOrItem) {
         this.moneyOrItem = moneyOrItem;
+    }
+
+    public int getOfferAmount() {
+        return offerAmount;
+    }
+
+    public int getRequestAmount() {
+        return requestAmount;
+    }
+
+    public int getId() {
+        return id;
     }
 }

@@ -1580,38 +1580,370 @@ public class GameMenuController {
         GameMenu.printResult("=== Trading Menu ===");
         GameMenu.printResult("These players are ready to trade.");
         ArrayList<Player> players = App.getCurrentGame().getPlayers();
-        for (Trade trade : App.getCurrentGame().getTrades()) {
-            int check = 0;
-            int check2 = 0;
-            if (trade.getType().equals("offer")) {
-                check = 1;
-                if (trade.getMoneyOrItem().equals("money")) {
-                    check2 = 1;
-                }
-            } else {
-                if (trade.getMoneyOrItem().equals("money")) {
-                    check2 = 1;
-                }
-            }
-            if (check == 0 && check2 == 0) {
-                GameMenu.printResult(trade.getGetter().getUsername() + " wants " + trade.getRequestedItem().getName() + " in exchange for " + trade.getOfferedItem());
-            } else if (check == 1 && check2 == 0) {
-                GameMenu.printResult(trade.getGetter().getUsername() + " offers " + trade.getOfferedItem().getName() + " in exchange for " + trade.getRequestedItem());
-            } else if (check == 1 && check2 == 1) {
-                GameMenu.printResult(trade.getGetter().getUsername() + " offers " + trade.getOfferedItem().getName() + " in exchange for " + trade.getMoney());
-            } else if (check == 0 && check2 == 1) {
-                GameMenu.printResult(trade.getGetter().getUsername() + " wants " + trade.getRequestedItem().getName() + " in exchange for " + trade.getMoneyOrItem());
+//        for (Trade trade : App.getCurrentGame().getTrades()) {
+//            int check = 0;
+//            int check2 = 0;
+//            if (trade.getType().equals("offer")) {
+//                check = 1;
+//                if (trade.getMoneyOrItem().equals("money")) {
+//                    check2 = 1;
+//                }
+//            } else {
+//                if (trade.getMoneyOrItem().equals("money")) {
+//                    check2 = 1;
+//                }
+//            }
+//            if (check == 0 && check2 == 0) {
+//                GameMenu.printResult(trade.getGetter().getUsername() + " wants " + trade.getRequestedItem().getName() + " in exchange for " + trade.getOfferedItem());
+//            } else if (check == 1 && check2 == 0) {
+//                GameMenu.printResult(trade.getGiver().getUsername() + " offers " + trade.getOfferedItem().getName() + " in exchange for " + trade.getRequestedItem());
+//            } else if (check == 1 && check2 == 1) {
+//                GameMenu.printResult(trade.getGiver().getUsername() + " offers " + trade.getOfferedItem().getName() + " in exchange for " + trade.getMoney());
+//            } else if (check == 0 && check2 == 1) {
+//                GameMenu.printResult(trade.getGetter().getUsername() + " wants " + trade.getRequestedItem().getName() + " in exchange for " + trade.getMoneyOrItem());
+//            }
+//        }
+        for (Player player : players) {
+            if (!player.equals(App.getCurrentGame().getCurrentPlayer())) {
+                GameMenu.printResult(player.getUsername());
             }
         }
     }
-    public static void trade(String username, String type, String item, String amount, String price){}
-    public static void tradeProducts(String username, String type, String item, String amount, String targetItem, String targetAmount){}
-    public static void tradeList(){}
-    public static void tradeResponse(String id){}
-    public static void tradeHistory(){}
+
+    /**
+     * Create an item↔money trade:
+     *  - “offer”: you give items and ask for money in return
+     *  - “request”: you offer money and ask for items in return
+     */
+    public static void trade(String username,
+                             String type,    // "offer" or "request"
+                             String item,    // item name (offered or requested)
+                             String amount,  // item count
+                             String price)   // money amount
+    {
+        Player me    = App.getCurrentGame().getCurrentPlayer();
+        Player other = Optional.ofNullable(User.findUserByUsername(username))
+                .map(User::getPlayer)
+                .orElse(null);
+        if (other == null) {
+            GameMenu.printResult("There is no one with this username!");
+            return;
+        }
+
+        int itemCount  = Integer.parseInt(amount);
+        int moneyCount = Integer.parseInt(price);
+        int nextId     = App.getCurrentGame().getTrades().size() + 1;
+
+        switch (type) {
+            case "offer":
+                // I → other: items for money
+                if (!hasEnoughItem(me,   item, itemCount)) {
+                    GameMenu.printResult("You don’t have enough " + item + " to offer!");
+                    return;
+                }
+                App.getCurrentGame().getTrades().add(new Trade(
+                        me,           // giver
+                        other,        // getter
+                        item,         // offeredItem
+                        itemCount,    // offerAmount
+                        true,         // getsMoney (yes, this trade involves money)
+                        moneyCount,   // money (what the getter must pay)
+                        null,         // requestedItem
+                        0,            // requestAmount
+                        nextId
+                ));
+                break;
+
+            case "request":
+                // I ← other: money for items
+                if (me.getMoney() < moneyCount) {
+                    GameMenu.printResult("You don’t have enough money to request that!");
+                    return;
+                }
+                App.getCurrentGame().getTrades().add(new Trade(
+                        other,        // giver (they must have the items)
+                        me,           // getter
+                        null,         // offeredItem
+                        0,            // offerAmount
+                        true,         // getsMoney
+                        moneyCount,   // money (what I will pay)
+                        item,         // requestedItem
+                        itemCount,    // requestAmount
+                        nextId
+                ));
+                break;
+
+            default:
+                GameMenu.printResult("Invalid trade type: " + type);
+                return;
+        }
+
+        GameMenu.printResult("Trade #" + nextId + " created.");
+    }
+
+    /**
+     * Create an item↔item trade:
+     *  - “offer”: you give item A and ask for item B
+     *  - “request”: you ask for item A and offer item B
+     */
+    public static void tradeProducts(String username,
+                                     String type,
+                                     String item,
+                                     String amount,
+                                     String targetItem,
+                                     String targetAmount)
+    {
+        Player me    = App.getCurrentGame().getCurrentPlayer();
+        Player other = Optional.ofNullable(User.findUserByUsername(username))
+                .map(User::getPlayer)
+                .orElse(null);
+        if (other == null) {
+            GameMenu.printResult("There is no one with this username!");
+            return;
+        }
+
+        int offerCount   = Integer.parseInt(amount);
+        int requestCount = Integer.parseInt(targetAmount);
+        int nextId       = App.getCurrentGame().getTrades().size() + 1;
+
+        switch (type) {
+            case "offer":
+                // I → other: item for targetItem
+                if (!hasEnoughItem(me, item, offerCount)) {
+                    GameMenu.printResult("You don’t have enough " + item + " to offer!");
+                    return;
+                }
+                App.getCurrentGame().getTrades().add(new Trade(
+                        me,              // giver
+                        other,           // getter
+                        item,            // offeredItem
+                        offerCount,      // offerAmount
+                        false,           // getsMoney (no money involved)
+                        0,               // money
+                        targetItem,      // requestedItem
+                        requestCount,    // requestAmount
+                        nextId
+                ));
+                break;
+
+            case "request":
+                // I ← other: targetItem for item
+                if (!hasEnoughItem(other, item, offerCount)) {
+                    GameMenu.printResult(
+                            other.getUsername() + " doesn’t have enough " + item + "!"
+                    );
+                    return;
+                }
+                App.getCurrentGame().getTrades().add(new Trade(
+                        other,           // giver
+                        me,              // getter
+                        item,            // offeredItem (from other)
+                        offerCount,      // offerAmount
+                        false,           // getsMoney
+                        0,               // money
+                        targetItem,      // requestedItem (I will send)
+                        requestCount,    // requestAmount
+                        nextId
+                ));
+                break;
+
+            default:
+                GameMenu.printResult("Invalid trade type: " + type);
+        }
+    }
+
+    // Helper to check item availability
+    private static boolean hasEnoughItem(Player p, String name, int count) {
+        Item it = Item.findItemByName(name, p.getBackPack().getItems());
+        return it != null && it.getCount() >= count;
+    }
+
+    public static void tradeList(){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        int i = 0;
+        for (Trade trade : App.getCurrentGame().getTrades()) {
+            if (trade.getType().equals("offer") && trade.getMoneyOrItem().equals("item")) {
+                if (trade.getGetter().equals(player)) {
+                    GameMenu.printResult(i++ + ". " + trade.getGiver().getUsername() + " offered you " + trade.getOfferAmount() + " " + trade.getOfferedItem() + " with id of: " + trade.getId());
+                }
+            } else if (trade.getType().equals("request") && trade.getMoneyOrItem().equals("item")) {
+                if (trade.getGiver().equals(player)) {
+                    GameMenu.printResult(i++ + ". " + trade.getGetter().getUsername() + " requests " + trade.getRequestAmount() + " " + trade.getRequestedItem() + " from you" + " with id of: " + trade.getId());
+                }
+            } else if (trade.getType().equals("offer") && trade.getMoneyOrItem().equals("money")) {
+                if (trade.getGiver().equals(player)) {
+                    GameMenu.printResult(i++ + ". " + trade.getGiver().getUsername() + " offered you " + trade.getOfferedItem() + " for " + trade.getMoney() + " with id of: " + trade.getId());
+                }
+            } else if (trade.getType().equals("request") && trade.getMoneyOrItem().equals("money")) {
+                if (trade.getGiver().equals(player)) {
+                    GameMenu.printResult(i++ + ". " + trade.getGetter().getUsername() + " requests " + trade.getRequestedItem() + " for " + trade.getMoney() + " from you" + " with id of: " + trade.getId());
+                }
+            }
+        }
+        if (i == 0) {
+            GameMenu.printResult("There is no trade for you!");
+        }
+    }
+    public static void tradeResponse(String id, String answer) {
+        Player me = App.getCurrentGame().getCurrentPlayer();
+        int tradeId = Integer.parseInt(id);
+
+        switch (answer) {
+            case "-accept":
+                for (Iterator<Trade> it = App.getCurrentGame().getTrades().iterator(); it.hasNext(); ) {
+                    Trade t = it.next();
+                    if (t.getId() != tradeId) continue;
+                    if (!t.getGiver().equals(me) && !t.getGetter().equals(me)) continue;
+
+                    Player giver  = t.getGiver();
+                    Player getter = t.getGetter();
+
+                    // 1) ITEM ↔ ITEM
+                    if (!t.isGetsMoney()
+                            && t.getOfferedItem()   != null
+                            && t.getRequestedItem()!= null)
+                    {
+                        transferItem(giver, getter,
+                                t.getOfferedItem(),  t.getOfferAmount());
+                        transferItem(getter, giver,
+                                t.getRequestedItem(), t.getRequestAmount());
+
+                        // 2) ITEM (giver) ↔ MONEY (getter)
+                    } else if ( t.isGetsMoney()
+                            && t.getOfferedItem() != null
+                            && t.getMoney()       > 0)
+                    {
+                        // giver sends items → getter
+                        transferItem(giver, getter,
+                                t.getOfferedItem(), t.getOfferAmount());
+                        // getter pays money → giver
+                        transferMoney(getter, giver,
+                                t.getMoney());
+
+                        // 3) MONEY (giver) ↔ ITEM (getter)
+                    } else if ( t.isGetsMoney()
+                            && t.getRequestedItem() != null
+                            && t.getMoney()          > 0)
+                    {
+                        // giver pays money → getter
+                        transferMoney(giver, getter,
+                                t.getMoney());
+                        // getter sends item → giver
+                        transferItem(getter, giver,
+                                t.getRequestedItem(),
+                                t.getRequestAmount());
+
+                    } else {
+                        throw new IllegalStateException(
+                                "Trade #" + tradeId + " has invalid configuration"
+                        );
+                    }
+
+                    it.remove();
+                    GameMenu.printResult("Trade #" + tradeId + " completed.");
+                    break;
+                }
+                break;
+
+            case "-reject":
+                for (Iterator<Trade> it = App.getCurrentGame().getTrades().iterator(); it.hasNext(); ) {
+                    Trade t = it.next();
+                    if (t.getId() == tradeId
+                            && (t.getGiver().equals(me) || t.getGetter().equals(me)))
+                    {
+                        it.remove();
+                        GameMenu.printResult("Trade #" + tradeId + " rejected.");
+                        break;
+                    }
+                }
+                break;
+
+            default:
+                GameMenu.printResult("Unknown response: " + answer);
+        }
+    }
+
+    private static void transferItem(Player from, Player to, String itemName, int count) {
+        // Remove from source
+        Item src = Item.findItemByName(itemName, from.getBackPack().getItems());
+        if (src == null || src.getCount() < count) {
+            throw new IllegalStateException(from.getUsername() + " lacks " + count + "x " + itemName);
+        }
+        src.setCount(src.getCount() - count);
+
+        // Add to destination
+        Item dst = Item.findItemByName(itemName, to.getBackPack().getItems());
+        if (dst == null) {
+            // assume constructor: Item(count, name, price)
+            to.getBackPack().getItems().add(new Item(count, itemName, src.getPrice()));
+        } else {
+            dst.setCount(dst.getCount() + count);
+        }
+    }
+    public static void tradeHistory() {
+        Player me = App.getCurrentGame().getCurrentPlayer();
+        List<Trade> trades = App.getCurrentGame().getTrades();
+
+        if (trades.isEmpty()) {
+            GameMenu.printResult("No pending trades right now.");
+            return;
+        }
+
+        for (Trade t : trades) {
+            boolean iAmGiver  = t.getGiver().equals(me);
+            boolean iAmGetter = t.getGetter().equals(me);
+            if (!iAmGiver && !iAmGetter) {
+                continue;  // skip unrelated
+            }
+
+            String role      = iAmGiver  ? "You offered" : "You requested";
+            Player counter   = iAmGiver  ? t.getGetter() : t.getGiver();
+            StringBuilder s  = new StringBuilder();
+            s.append("Trade #").append(t.getId()).append(": ").append(role).append(" ");
+
+            // 1) ITEM ↔ MONEY
+            if (t.isGetsMoney() && t.getOfferedItem() != null) {
+                // giver gives item, getter gives money
+                s.append(t.getOfferAmount())
+                        .append("× ").append(t.getOfferedItem())
+                        .append(" ↔ $").append(t.getMoney());
+
+                // 2) MONEY ↔ ITEM
+            } else if (t.isGetsMoney() && t.getRequestedItem() != null) {
+                // giver gives money, getter gives item
+                s.append("$").append(t.getMoney())
+                        .append(" ↔ ")
+                        .append(t.getRequestAmount())
+                        .append("× ").append(t.getRequestedItem());
+
+                // 3) ITEM ↔ ITEM
+            } else if (!t.isGetsMoney()
+                    && t.getOfferedItem()   != null
+                    && t.getRequestedItem() != null) {
+                s.append(t.getOfferAmount())
+                        .append("× ").append(t.getOfferedItem())
+                        .append(" ↔ ")
+                        .append(t.getRequestAmount())
+                        .append("× ").append(t.getRequestedItem());
+
+                // fallback (shouldn’t happen)
+            } else {
+                s.append("[Invalid trade data]");
+            }
+
+            s.append(" with ").append(counter.getUsername())
+                    .append(" [Pending]");
+            GameMenu.printResult(s.toString());
+        }
+    }
+
     public static void meetNPC(String name) {}
     public static void giftNPC(String name, String item) {}
     public static void friendshipNPCList() {}
     public static void questList() {}
     public static void questFinish(String index) {}
+    private static void transferMoney(Player from, Player to, int amount) {
+        from.adjustMoney(-amount);
+        to.adjustMoney(+amount);
+    }
 }
