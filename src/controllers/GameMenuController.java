@@ -20,6 +20,7 @@ import models.Buildings.Saloon;
 import models.Buildings.SaloonCosts;
 import models.Game;
 import models.Items.Products.*;
+import models.Items.Products.ShopProducts.ShopProduct;
 import models.Invetory.BackPack;
 import models.Invetory.Inventory;
 import models.Items.Item;
@@ -1247,9 +1248,69 @@ public class GameMenuController {
     }
 
     public static void showAvailableProducts() {}
-    public static void purchase(String name, String amount){}
-    public static void cheatAddMoney(String amount){}
-    public static void sell(String name, String amount){}
+
+    public static void purchase(String name, int amount){
+        ShopProduct item = (ShopProduct) Item.findItemByName(name, App.getCurrentGame().getCurrentPlayer().getBuilding().getItems());
+
+        if (item == null) {
+            GameMenu.printResult("No item with given name found!");
+            return;
+        }
+
+        if (item.getCount() < amount) {
+            GameMenu.printResult("Not enough number of this Item. Only have + " + item.getCount());
+            return;
+        }
+
+        if (item.getSoldToday() + amount > item.getSellLimit()) {
+            GameMenu.printResult("Daily Limit Reached");
+            return;
+        }
+        // TODO reset daily limit in next day
+
+        if (item.getCost() * amount > App.getCurrentGame().getCurrentPlayer().getMoney()) {
+            GameMenu.printResult("You don't have enough money!");
+            return;
+        }
+        
+        if (amount == item.getCount()) App.getCurrentGame().getCurrentPlayer().getBuilding().removeItem(item);
+        else item.changeCount(-1  * amount);
+
+        App.getCurrentGame().getCurrentPlayer().setMoney(App.getCurrentGame().getCurrentPlayer().getMoney() - item.getCost() * amount);
+        App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(item);
+        item.sold(amount);
+        GameMenu.printResult("Item purchased successfully");
+    }
+
+    public static void cheatAddMoney(int amount){
+        App.getCurrentGame().getCurrentPlayer().setMoney(App.getCurrentGame().getCurrentPlayer().getMoney() + amount);
+        GameMenu.printResult("Cheart confirm successfully. Your money: " + App.getCurrentGame().getCurrentPlayer().getMoney());
+    }
+
+    public static void sell(String name, int amount){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Item item = Item.findItemByName(name, player.getBackPack().getItems());
+
+        if (item == null) {
+            GameMenu.printResult("No item with given name found!");
+            return;
+        }
+
+        if (item.getCount() < amount) {
+            GameMenu.printResult("Not enough number of this Item. Only have + " + item.getCount());
+            return;
+        }
+
+        //TODO be near shippingbin
+
+        if (item.getCount() == amount)player.getBackPack().removeItem(item);
+        else item.changeCount(-1  * amount);
+
+        player.setMoney(player.getMoney() + (int) player.getShippingBin().getType().calculateNewPrice(item.getCount() * amount));
+        //TODO money will be got next day
+        GameMenu.printResult("Item sold successfully!");
+    }
+
     public static void friendship(){}
     public static void talk(String username, String message){}
     public static void talkHistory(String username){}

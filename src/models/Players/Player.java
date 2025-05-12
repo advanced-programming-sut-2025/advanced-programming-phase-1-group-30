@@ -6,6 +6,7 @@ import models.Invetory.BackPack;
 import models.Invetory.BackPackType;
 import models.Invetory.Refrigerator;
 import models.Invetory.ShippingBin;
+import models.Invetory.ShippingBinType;
 import models.Invetory.TrashCan;
 import models.Invetory.TrashCanType;
 import models.Items.Products.CraftingRecipe;
@@ -52,7 +53,7 @@ public class Player {
         this.map = null;
         this.energy = 200;
 
-        this.shippingBin = new ShippingBin();
+        this.shippingBin = new ShippingBin(ShippingBinType.REGULAR);
         this.refrigerator = new Refrigerator();
         this.backPack = new BackPack(BackPackType.INITIAL_BACKPACK);
         this.backPack.addItem(new Axe(1, AxeType.NORMAL));
@@ -113,12 +114,8 @@ public class Player {
         return refrigerator;
     }
 
-    public void addItemToRefrigerator(Item item) {
-        this.refrigerator.addItem(item);
-    }
-
-    public void removeItemToRefrigerator(Item item) {
-        this.refrigerator.removeItem(item);
+    public void setRefrigerator(Refrigerator refrigerator) {
+        this.refrigerator = refrigerator;
     }
 
     public int getMoney() {
