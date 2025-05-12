@@ -3,6 +3,7 @@ package models.Animals;
 import models.App;
 import models.Buildings.RanchCosts;
 import models.Items.Item;
+import models.Items.Products.AnimalProductType;
 import models.Items.Tools.Shear;
 import models.Players.Player;
 import views.GameMenu;
@@ -30,7 +31,7 @@ public class Dinosaur extends Animal {
         }
     }
     private void qualityAssign(double quality) {
-        this.dinosaurEgg = new Item(1, "dinosaur egg");
+        this.dinosaurEgg = new Item(1, "dinosaur egg", AnimalProductType.DINASOUR_EGG.getPrice());
         if (quality >= 0 && quality < 0.5) {
             this.dinosaurEgg.setQuality("regular");
             this.dinosaurEgg.setCof(1);

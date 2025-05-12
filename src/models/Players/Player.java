@@ -294,6 +294,7 @@ public class Player {
 
     public HashMap<NPC, Integer> getActivatedQuestNPC() {
         return activatedQuestNPC;
+    }
       
     public ArrayList<Gift> getGifts() {
         return gifts;

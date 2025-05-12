@@ -3,6 +3,7 @@ package models.Animals;
 import models.App;
 import models.Buildings.RanchCosts;
 import models.Items.Item;
+import models.Items.Products.AnimalProductType;
 import models.Players.Player;
 import views.GameMenu;
 
@@ -29,7 +30,7 @@ public class Rabbit extends Animal {
                 qualityAssign(quality);
             } else {
                 if (rand < chance) {
-                    this.rabbitFoot = new Item(1, "rabbit foot");
+                    this.rabbitFoot = new Item(1, "rabbit foot", AnimalProductType.RABBIT_LEG.getPrice());
                     if (quality >= 0 && quality < 0.5) {
                         this.rabbitFoot.setQuality("regular");
                         this.rabbitFoot.setCof(1);
@@ -53,7 +54,7 @@ public class Rabbit extends Animal {
     }
 
     private void qualityAssign(double quality) {
-        this.rabbitWool = new Item(1, "rabbit wool");
+        this.rabbitWool = new Item(1, "rabbit wool", AnimalProductType.RABBIT_WOOL.getPrice());
         if (quality >= 0 && quality < 0.5) {
             this.rabbitWool.setQuality("regular");
             this.rabbitWool.setCof(1);

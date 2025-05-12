@@ -9,9 +9,13 @@ public class Item {
     private int count;
     private String quality;
     private double cof;
-    public Item(int count, String name) {
+    private double price;
+
+    public Item(int count, String name, double price) {
         this.name = name;
         this.count = count;
+        this.cof = 1;
+        this.price = price;
     }
 
     public int getCount() {
@@ -39,6 +43,18 @@ public class Item {
 
     public void setCof(double cof) {
         this.cof = cof;
+    }
+
+    public double getCof() {
+        return cof;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public static Item findItemByName(String name, ArrayList<Item> items) {

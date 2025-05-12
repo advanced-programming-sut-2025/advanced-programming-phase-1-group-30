@@ -293,8 +293,8 @@ public class GameMenuController {
             if(player.getEnergy() > energyNeeded){
                 if(targetTile.getItem() != null) {
                     if (targetTile.getItem() instanceof Tree) {
-                        Item wood = new Item(12, "wood");
-                        Item sap = new Item(2, "sap");
+                        Item wood = new Item(12, "wood", 10);
+                        Item sap = new Item(2, "sap", 10);
 
                         Item newWood = Item.findItemByName(wood.getName(), player.getBackPack().getItems());
                         Item newSap = Item.findItemByName(sap.getName(), player.getBackPack().getItems());
@@ -326,7 +326,7 @@ public class GameMenuController {
 
                         targetTile.setItem(null);
                         GameMenu.printResult("You chop down the tree and collect 12 wood and 2 sap.");
-                    } else if (targetTile.getItem().equals(new Item(1, "branch"))) {
+                    } else if (targetTile.getItem().equals(new Item(1, "Wood", 10))) {
                         targetTile.setItem(null);
                         GameMenu.printResult("You clear the branch from the ground.");
                     } else {
@@ -1457,7 +1457,7 @@ public class GameMenuController {
                 GameMenu.printResult("Gift sent to " + username + " successfully!");
                 break;
             } else {
-                otherPlayer.getBackPack().addItem(new Item(amount, item));
+                otherPlayer.getBackPack().addItem(new Item(amount, item, item1.getPrice()));
                 GameMenu.printResult("Gift sent to " + username + " successfully!");
                 break;
             }
@@ -1466,7 +1466,7 @@ public class GameMenuController {
         if (gift.getCount() == 0) {
             player.getBackPack().removeItem(gift);
         }
-        otherPlayer.getGifts().add(new Gift(amount, item, player));
+        otherPlayer.getGifts().add(new Gift(amount, item, player, (int) gift.getPrice()));
     }
     public static void giftList(){
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -1540,7 +1540,7 @@ public class GameMenuController {
         }
         Item otherBouquet = Item.findItemByName("bouquet", otherPlayer.getBackPack().getItems());
         if (otherBouquet == null) {
-            otherPlayer.getBackPack().addItem(new Item(1, "bouquet"));
+            otherPlayer.getBackPack().addItem(new Item(1, "bouquet", GeneralStoreCosts.BOUQUET.getPrice()));
         } else {
             otherBouquet.setCount(otherBouquet.getCount() + 1);
         }
