@@ -2,7 +2,7 @@ package models.Items.Products;
 
 import models.TimeAndDate.Season;
 
-public enum FruitType {
+public enum xFruitType {
     APRICOT("Apricot", 1, 59, true, 38, Season.SPRING),
     CHERRY("Cherry", 1, 80, true, 38, Season.SPRING),
     BANANA("Banana", 1, 150, true, 75, Season.SUMMER),

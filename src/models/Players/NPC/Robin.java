@@ -1,6 +1,11 @@
 package models.Players.NPC;
 
 import models.App;
+import models.Items.IndustrialProducts.IndustrialProduct;
+import models.Items.IndustrialProducts.IndustrialProductType;
+import models.Items.Item;
+import models.Items.Products.ForagingMineral;
+import models.Items.Products.ForagingMineralType;
 import models.Maps.Weather;
 import models.Players.Player;
 import views.GameMenu;
@@ -13,17 +18,118 @@ public class Robin extends NPC {
 
     @Override
     public void quest1() {
+        if(isQuest1()){
+            GameMenu.printResult("This quest is completed.");
+            return;
+        }
 
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Item request = Item.findItemByName("wood",player.getBackPack().getItems());
+        int rate = 1;
+        if(player.getFriendshipsNPC().get(App.getCurrentGame().getNPCs().get(4)) == 2){
+            rate = 2;
+        }
+        if(request == null) {
+            GameMenu.printResult("You don't have wood!");
+        } else {
+            if(request.getCount() < 80){
+                GameMenu.printResult("You need at least 80 wood!");
+                return;
+            } else if(request.getCount() == 80){
+                player.getBackPack().getItems().remove(request);
+            } else {
+                request.setCount(request.getCount() - 80);
+            }
+            int count = 1000 * rate;
+            player.setMoney(player.getMoney() + count);
+
+            GameMenu.printResult("Congratulations! You have successfully completed the quest!");
+            this.setQuest1(true);
+            for(Player player1 :App.getCurrentGame().getPlayers()){
+                Integer a = 1;
+                player1.getActivatedQuestNPC().get(App.getCurrentGame().getNPCs().get(4)).remove(a);
+            }
+        }
     }
 
     @Override
     public void quest2() {
+        if(isQuest2()){
+            GameMenu.printResult("This quest is completed.");
+            return;
+        }
 
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Item request = Item.findItemByName("iron bar",player.getBackPack().getItems());
+        int rate = 1;
+        if(player.getFriendshipsNPC().get(App.getCurrentGame().getNPCs().get(4)) == 2){
+            rate = 2;
+        }
+        if(request == null) {
+            GameMenu.printResult("You don't have iron bar!");
+        } else {
+            if(request.getCount() < 10){
+                GameMenu.printResult("You need at least 10 iron bar!");
+                return;
+            } else if(request.getCount() == 10){
+                player.getBackPack().getItems().remove(request);
+            } else {
+                request.setCount(request.getCount() - 10);
+            }
+
+            int count = 3 * rate;
+            Item reward = new IndustrialProduct(count, IndustrialProductType.BEE_HOUSE);
+            Item newItem = Item.findItemByName("bee house",player.getBackPack().getItems());
+            if(newItem == null) {
+                player.getBackPack().getItems().add(reward);
+            } else {
+                newItem.setCount(newItem.getCount() + count);
+            }
+
+
+            GameMenu.printResult("Congratulations! You have successfully completed the quest!");
+            this.setQuest2(true);
+            for(Player player1 :App.getCurrentGame().getPlayers()){
+                Integer a = 2;
+                player1.getActivatedQuestNPC().get(App.getCurrentGame().getNPCs().get(4)).remove(a);
+            }
+        }
     }
 
     @Override
     public void quest3() {
+        if(isQuest3()){
+            GameMenu.printResult("This quest is completed.");
+            return;
+        }
 
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Item request = Item.findItemByName("wood",player.getBackPack().getItems());
+        int rate = 1;
+        if(player.getFriendshipsNPC().get(App.getCurrentGame().getNPCs().get(4)) == 2){
+            rate = 2;
+        }
+        if(request == null) {
+            GameMenu.printResult("You don't have wood!");
+        } else {
+            if(request.getCount() < 1000){
+                GameMenu.printResult("You need at least 1000 wood!");
+                return;
+            } else if(request.getCount() == 1000){
+                player.getBackPack().getItems().remove(request);
+            } else {
+                request.setCount(request.getCount() - 1000);
+            }
+            int count = 25000 * rate;
+            player.setMoney(player.getMoney() + count);
+
+            GameMenu.printResult("Congratulations! You have successfully completed the quest!");
+            this.setQuest3(true);
+            for(Player player1 :App.getCurrentGame().getPlayers()){
+                Integer a = 3;
+                player1.getActivatedQuestNPC().get(App.getCurrentGame().getNPCs().get(4)).remove(a);
+            }
+        }
     }
 
     @Override
