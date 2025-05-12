@@ -14,7 +14,7 @@ public class User {
     private String gender;
     private int registerQuestionNumber;
     private String Answer;
-    private boolean isInGame;
+    private boolean isInGame = false;
 
     public User(String username, String password, String nickname, String email, int registerQuestionNumber, String answer, String gender) {
         this.username = username;

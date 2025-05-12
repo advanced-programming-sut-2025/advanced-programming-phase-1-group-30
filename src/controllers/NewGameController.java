@@ -9,13 +9,17 @@ import models.Animals.Animal;
 import models.App;
 import models.Game;
 import models.Commands.GameMenuCommands;
+import models.Items.Gift;
+import models.Items.Item;
 import models.Items.Products.ForgingSeed;
 import models.Items.Products.ForgingSeedType;
 import models.Maps.Map;
 import models.Maps.Tile;
 import models.Maps.Weather;
+import models.Players.Friendship;
 import models.Players.Player;
 import models.Users.User;
+import views.AppView;
 import views.GameMenu;
 
 public class NewGameController {
@@ -63,16 +67,21 @@ public class NewGameController {
             players.add(player3);
         }
         App.getMaps().add(new Map(1));
+        App.getMaps().add(new Map(2));
+        App.getMaps().add(new Map(3));
+        App.getMaps().add(new Map(4));
         GameMenu.printResult("Please select your maps...");
 
         for (Player player : players) {
             boolean mapIsSelected = false;
             while (!mapIsSelected) {
-                GameMenu.printResult("Choosing map for " + player.getUsername());
+                GameMenu.printResult("Choosing map and gender for " + player.getUsername());
                 String command = scanner.nextLine();
                 Matcher matcher = GameMenuCommands.GAME_MAP.regexMatcher(command);
                 if (matcher.matches()) {
                     int mapNumber = Integer.parseInt(matcher.group("mapNumber"));
+                    String gender = matcher.group("gender");
+                    player.setGender(gender);
                     Map map = Map.getMapById(mapNumber);
                     if (map == null) GameMenu.printResult("Please choose between available maps");
                     player.setMap(map);
@@ -82,6 +91,13 @@ public class NewGameController {
                 }
                 else {
                     GameMenu.printResult("Invalid command");
+                }
+            }
+        }
+        for (Player player : players) {
+            for (Player p : players) {
+                if (!player.equals(p)) {
+                    player.getFriendships().put(p, new Friendship());
                 }
             }
         }
@@ -95,17 +111,62 @@ public class NewGameController {
     public static void LoadGame() {}
     public static void ExitGame() {}
     
-    public static void NextTurn() {
+    public static void NextTurn(Scanner scanner) {
         List<Player> players = App.getCurrentGame().getPlayers();
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-
-        for (int i = 0; i < players.size(); i++) {
-            Player player = players.get(i);
-
+        for (Player player : players) {
             if (player.getSelectionNumber() == currentPlayer.getSelectionNumber() + 1) {
                 if (player.isPassedOut()) continue;
                 App.getCurrentGame().setCurrentPlayer(player);
                 break;
+            }
+        }
+        currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        if (currentPlayer.getAskedMarriage() != null) {
+            GameMenu.printResult(currentPlayer.getAskedMarriage().getUsername() + " asked you to be soulmates for the rest of your lives!");
+            String command = scanner.nextLine();
+            Matcher matcher = GameMenuCommands.RESPOND.regexMatcher(command);
+            if (matcher.matches()) {
+                String answer = matcher.group("answer");
+                if (answer.equals("-accept")) {
+                    Item weddingRing = Item.findItemByName("wedding ring", currentPlayer.getAskedMarriage().getBackPack().getItems());
+                    if (weddingRing.getCount() == 1) {
+                        currentPlayer.getAskedMarriage().getBackPack().getItems().remove(weddingRing);
+                    } else {
+                        weddingRing.setCount(weddingRing.getCount() - 1);
+                        currentPlayer.getBackPack().addItem(new Item(1, "wedding ring"));
+                    }
+                    currentPlayer.getFriendships().get(currentPlayer.getAskedMarriage()).addXp(0, false, true);
+                    currentPlayer.getAskedMarriage().getFriendships().get(currentPlayer).addXp(0, false, true);
+                    GameMenu.printResult("Jingo jinge saz miad o az baloy Shiraz miad!");
+                } else if (answer.equals("-reject")) {
+                    currentPlayer.getAskedMarriage().getFriendships().get(currentPlayer).setLevel(0);
+                    currentPlayer.getAskedMarriage().getFriendships().get(currentPlayer).setXp(0);
+                    currentPlayer.getFriendships().get(currentPlayer.getAskedMarriage()).setLevel(0);
+                    currentPlayer.getFriendships().get(currentPlayer.getAskedMarriage()).setXp(0);
+                    currentPlayer.setAskedMarriage(null);
+                    GameMenu.printResult("Rejected. That was sad :(");
+                }
+            }
+        }
+        for (Gift gift : currentPlayer.getGifts()) {
+            if (gift.isRated()) {
+                continue;
+            }
+            int check = 0;
+            if (!gift.isRated()) {
+                check = 1;
+            }
+            if (check == 0) {
+                GameMenu.printResult("You have a gift that you should rate:");
+            }
+            GameMenu.printResult("Rate this gift from 1 to 5: " + gift.getCount() + " " + gift.getName() + " from " + gift.getSentPlayer().getUsername());
+            String command = scanner.nextLine();
+            Matcher matcher = GameMenuCommands.GIFT_RATE.regexMatcher(command);
+            if (matcher.matches()) {
+                int rate = Integer.parseInt(matcher.group("rate"));
+                int xp = (rate - 3) * 30 + 15;
+                currentPlayer.getFriendships().get(gift.getSentPlayer()).addXp(xp, false, false);
             }
         }
 
@@ -118,13 +179,12 @@ public class NewGameController {
 
         int currentTime = App.getCurrentGame().getCurrentTime().getHour();
         if (currentTime == 21) {
+
             for (Player player : App.getCurrentGame().getPlayers()) {
                 player.setEnergy(player.getMaxEnergy());
                 if (player.isPassedOut()) {
                     player.setEnergy((player.getMaxEnergy() * 3) / 4);
                 }
-            }
-            for (Player player : App.getCurrentGame().getPlayers()) {
                 Tile[][] tiles = player.getMap().getTiles();
                 for (int i = 0; i < tiles.length; i++) {
                     for (int j = 0; j < tiles[i].length; j++) {
@@ -134,8 +194,11 @@ public class NewGameController {
                             if (tiles[i][j].getCrop().getStages().get(tiles[i][j].getCrop().getCurrentStage()) == tiles[i][j].getCrop().getDaysPassed()) {
                                 if (tiles[i][j].getCrop().getStages().size() < tiles[i][j].getCrop().getCurrentStage()) {
                                     tiles[i][j].setReadyToHarvest(true);
-                                } else
+                                    tiles[i][j].getCrop().setDaysPassed(0);
+                                } else {
                                     tiles[i][j].getCrop().setCurrentStage(tiles[i][j].getCrop().getCurrentStage() + 1);
+                                    tiles[i][j].getCrop().setDaysPassed(0);
+                                }
                             }
                         }
                     }
@@ -143,6 +206,11 @@ public class NewGameController {
                 for (Animal animal : player.getAnimals()) {
                     if (animal.isFedToday()) {
                         animal.produceProduct();
+                    }
+                }
+                for (java.util.Map.Entry<Player, Friendship> entry : player.getFriendships().entrySet()) {
+                    if (entry.getValue().isTalkedToday()) {
+                        entry.getValue().setTalkedToday(false);
                     }
                 }
             }
