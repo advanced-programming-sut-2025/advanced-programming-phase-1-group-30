@@ -4,7 +4,6 @@ import models.App;
 import models.Buildings.RanchCosts;
 import models.Items.Item;
 import models.Items.Products.AnimalProductType;
-import models.Items.Tools.Shear;
 import models.Players.Player;
 import views.GameMenu;
 
@@ -22,8 +21,6 @@ public class Dinosaur extends Animal {
         if (daysPassed == 8) {
             Random random = new Random();
             double rand2 = random.nextDouble(1);
-            double x = (random.nextFloat(1) + 0.5);
-            double chance = (getFriendship() + (x * 150)) / 1500;
             double quality = (double) getFriendship() / 1000 * (0.5 + 0.5 * rand2);
             qualityAssign(quality);
             this.setProductReady(true);

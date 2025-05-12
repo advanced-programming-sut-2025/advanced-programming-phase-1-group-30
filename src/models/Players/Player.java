@@ -13,7 +13,7 @@ import models.Invetory.TrashCanType;
 import models.Items.Gift;
 import models.Items.Item;
 import models.Items.Foods.FoodType;
-import models.Items.IndustrialProducts.CraftingRecipe;
+import models.Items.IndustrialProducts.IndustrialProductType;
 import models.Items.Products.ForgingSeed;
 import models.Items.Products.ForgingSeedType;
 import models.Items.Tools.*;
@@ -48,7 +48,7 @@ public class Player {
     private final ArrayList<Item> products = new ArrayList<>();
     java.util.Map<Item, Integer> itemsBoughtToday = new HashMap<>();
     private final ArrayList<Animal> playerAnimals = new ArrayList<>();
-    private ArrayList<CraftingRecipe> craftingRecipes = new ArrayList<>();
+    private ArrayList<IndustrialProductType> craftingRecipes = new ArrayList<>();
     private Building building;
     private ArrayList<FoodType> recipes = new ArrayList<>();
     private HashMap<NPC,Integer> friendshipsNPC = new HashMap<>();
@@ -263,7 +263,7 @@ public class Player {
     public ArrayList<Animal> getAnimals() {
         return playerAnimals;
     }
-    public ArrayList<CraftingRecipe> getCraftingRecipes() {
+    public ArrayList<IndustrialProductType> getCraftingRecipes() {
         return craftingRecipes;
     }
     public Building getBuilding() {
