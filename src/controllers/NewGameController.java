@@ -15,6 +15,7 @@ import models.Maps.Map;
 import models.Maps.Tile;
 import models.Maps.Weather;
 import models.Players.Friendship;
+import models.Players.NPC.NPC;
 import models.Players.Player;
 import models.Users.User;
 import views.GameMenu;
@@ -211,6 +212,12 @@ public class NewGameController {
                     }
                 }
             }
+            for(Player players1 : App.getCurrentGame().getPlayers()){
+                for(NPC npc : App.getCurrentGame().getNPCs()){
+                    players1.getNPCMeetToday().put(npc,false);
+                }
+            }
+
             App.getCurrentGame().getCurrentTime().setHour(9);
             App.getCurrentGame().setCurrentWeather(App.getCurrentGame().getTomorrowWeather());
             DateAndWeatherController.setTWeather();
