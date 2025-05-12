@@ -330,4 +330,12 @@ public class Player {
     public void setGender(String gender) {
         this.gender = gender;
     }
+    public void adjustMoney(int delta) {
+        if (money + delta < 0) {
+            throw new IllegalStateException(
+                    getUsername() + " does not have enough money (needed " + (-delta) + ")."
+            );
+        }
+        money += delta;
+    }
 }
