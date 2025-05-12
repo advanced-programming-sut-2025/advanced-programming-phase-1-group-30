@@ -38,12 +38,17 @@ public class GameMenu implements AppMenu {
         }
         matcher = GameMenuCommands.NEXT_TURN.regexMatcher(command);
         if (matcher.matches()) {
-            NewGameController.NextTurn();
+            NewGameController.NextTurn(scanner);
             return;
         }
         matcher = GameMenuCommands.TIME.regexMatcher(command);
         if (matcher.matches()) {
             DateAndWeatherController.Time();
+            return;
+        }
+        matcher = GameMenuCommands.CHEAT_TIME.regexMatcher(command);
+        if (matcher.matches()) {
+            DateAndWeatherController.cheatAdvanceTime(matcher.group("X"));
             return;
         }
         matcher = GameMenuCommands.DATE.regexMatcher(command);
@@ -244,9 +249,15 @@ public class GameMenu implements AppMenu {
             GameMenuController.shepherdAnimals(matcher.group("animalName"), matcher.group("x"), matcher.group("y"));
             return;
         }
+
         matcher = GameMenuCommands.FEED_HAY.regexMatcher(command);
         if (matcher.matches()) {
             GameMenuController.feedHay(matcher.group("animalName"));
+            return;
+        }
+        matcher = GameMenuCommands.FRIENDSHIPS.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.friendships();
             return;
         }
         matcher = GameMenuCommands.PRODUCES.regexMatcher(command);
@@ -271,9 +282,37 @@ public class GameMenu implements AppMenu {
         }
         matcher = GameMenuCommands.SHOW_ALL_AVAILABLE_PRODUCTS.regexMatcher(command);
         if (matcher.matches()) {
-            GameMenuController.showAllProducts(); //TODO must print availables
+            GameMenuController.showAllProducts(); //TODO only availabls
             return;
         }
+        matcher = GameMenuCommands.PURCHASE.regexMatcher(command);
+        if (matcher.matches()) {
+            // TODO -n is null
+            GameMenuController.purchase(matcher.group("productName"), Integer.parseInt(matcher.group("count")));
+            return;
+        }
+        matcher = GameMenuCommands.CHEAT_ADD_DOLLARS.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.cheatAddMoney(Integer.parseInt(matcher.group("count")));
+            return;
+        }
+        matcher = GameMenuCommands.SELL.regexMatcher(command);
+        if (matcher.matches()) {
+            // TODO -n is null
+            GameMenuController.sell(matcher.group("productName"), Integer.parseInt(matcher.group("count")));
+            return;
+        }
+        matcher = GameMenuCommands.ARTISAN_USE.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.artisanUse(matcher.group("artisanName"), matcher.group("itemName"));
+            return;
+        }
+        matcher = GameMenuCommands.ARTISAN_GET.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.artisanGet(matcher.group("artisanName"));
+            return;
+        }
+
         matcher = GameMenuCommands.MEET_NPC.regexMatcher(command);
         if (matcher.matches()) {
             GameMenuController.meetNPC(matcher.group("npcName"));
@@ -300,6 +339,7 @@ public class GameMenu implements AppMenu {
             return;
         }
         
+
         System.out.println("Invalid command.");
     }
 }

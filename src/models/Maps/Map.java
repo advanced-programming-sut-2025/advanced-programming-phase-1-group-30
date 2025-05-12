@@ -1,11 +1,14 @@
 package models.Maps;
 
+import models.Animals.*;
 import models.App;
 import models.Buildings.Barn;
 import models.Buildings.Building;
 import models.Buildings.Coop;
+import models.Buildings.GreenHouse;
 import models.Items.Products.Stone;
 import models.Items.Products.Tree;
+import models.Players.Player;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import views.GameMenu;
@@ -24,6 +27,20 @@ public class Map {
     public static final String GRAY = "\u001B[90m";         // Gray for Quarry
     public static final String GREEN = "\u001B[92m";        // Regular Green for Grass
     public static final String RED = "\u001B[31m";          // Red for unknown
+    public static final String BLACK = "\u001B[30m";
+    public static final String DARK_RED = "\u001B[31m";
+    public static final String DARK_YELLOW = "\u001B[33m";
+    public static final String DARK_BLUE = "\u001B[34m";
+    public static final String DARK_PURPLE = "\u001B[35m";
+    public static final String DARK_CYAN = "\u001B[36m";
+    public static final String LIGHT_GRAY = "\u001B[37m";
+    public static final String BRIGHT_RED = "\u001B[91m";
+    public static final String BRIGHT_GREEN = "\u001B[92m";
+    public static final String BRIGHT_YELLOW = "\u001B[93m";
+    public static final String BRIGHT_BLUE = "\u001B[94m";
+    public static final String BRIGHT_PURPLE = "\u001B[95m";
+    public static final String BRIGHT_CYAN = "\u001B[96m";
+    public static final String WHITE = "\u001B[97m";
 
     private final int id;
     private final Tile[][]  tiles = new Tile[80][60];
@@ -31,6 +48,7 @@ public class Map {
     private boolean hasScareCrow = false;
     private final ArrayList<Barn> barns = new ArrayList<>();
     private final ArrayList<Coop> coops = new ArrayList<>();
+    private GreenHouse greenHouse = null;
 
     public static void loadMap(Map mapInstance) {
         try {
@@ -99,6 +117,7 @@ public class Map {
         }
     }
     public void printPartOfMap(int x, int y, int size) {
+        Player player = App.getCurrentGame().getCurrentPlayer();
         if (size >= (80 - x) || size > (60 - y)) {
             GameMenu.printResult("Can not print this part of the Map!");
         } else {
@@ -112,7 +131,7 @@ public class Map {
                                 System.out.print("\uD83C\uDF33");
                             }
                         } else {
-                            if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
+                            if (player.getX() == j && player.getY() == i) {
                                 System.out.print(RED + "\uD83D\uDE00" + RESET);
                             } else
                                 System.out.print(LIGHT_YELLOW + "⬛ " + RESET);
@@ -125,33 +144,71 @@ public class Map {
                                 System.out.print("\uD83C\uDF33");
                             }
                         } else {
-                            if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
+                            if (player.getX() == j && player.getY() == i) {
                                 System.out.print(RED + "\uD83D\uDE00" + RESET);
                             } else
                                 System.out.print(GREEN + "⬛ " + RESET);
                         }
                     } else if (tiles[j][i].getType().equals(TileTypes.WATER)) {
-                        if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
+                        if (player.getX() == j && player.getY() == i) {
                             System.out.print(RED + "\uD83D\uDE00" + RESET);
                         } else
                             System.out.print(BLUE + "⬛ " + RESET);
                     } else if (tiles[j][i].getType().equals(TileTypes.HUT)) {
-                        if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
+                        if (player.getX() == j && player.getY() == i) {
                             System.out.print(RED + "\uD83D\uDE00" + RESET);
                         } else
                             System.out.print(BLUE + "\uD83C\uDFE0" + RESET);
                     } else if (tiles[j][i].getType().equals(TileTypes.QUARRY)) {
-                        if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
+                        if (player.getX() == j && player.getY() == i) {
                             System.out.print(RED + "\uD83D\uDE00" + RESET);
                         } else
                             System.out.print(GRAY + "⬛ " + RESET);
                     } else if (tiles[j][i].getType().equals(TileTypes.GREENHOUSE)) {
-                        if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
+                        if (player.getX() == j && player.getY() == i) {
                             System.out.print(RED + "\uD83D\uDE00" + RESET);
                         } else
                             System.out.print(DARK_GREEN + "⬛ " + RESET);
+                    } else if (tiles[j][i].getType().equals(TileTypes.BARN)) {
+                        if (player.getX() == j && player.getY() == i) {
+                            System.out.print(RED + "\uD83D\uDE00" + RESET);
+                            for (Animal animal : player.getAnimals()) {
+                                if (animal.getX() == j && animal.getY() == i) {
+                                    if (animal instanceof Sheep) {
+                                        System.out.print("\uD83D\uDC11 ");
+                                    } else if (animal instanceof Cow) {
+                                        System.out.print("\uD83D\uDC04 ");
+                                    } else {
+                                        System.out.println("A ");
+                                    }
+                                }
+                            }
+                        } else
+                            System.out.print(BRIGHT_BLUE + "⬛ " + RESET);
+                    } else if (tiles[j][i].getType().equals(TileTypes.COOP)) {
+                        if (player.getX() == j && player.getY() == i) {
+                            System.out.print(RED + "\uD83D\uDE00" + RESET);
+                        } else {
+                            int v = 0;
+                            for (Animal animal : player.getAnimals()) {
+                                if (animal.getX() == j && animal.getY() == i) {
+                                    if (animal instanceof Chicken) {
+                                        System.out.print("\uD83D\uDC14");
+                                    } else if (animal instanceof Duck) {
+                                        System.out.print("\uD83D\uDC04 ");
+                                    } else {
+                                        System.out.println("A ");
+                                    }
+                                    v = 1;
+                                }
+                            }
+
+                            if (v == 0) {
+                                System.out.print(LIGHT_GRAY + "⬛ " + RESET);
+                            }
+                        }
                     } else {
-                        if (App.getCurrentGame().getCurrentPlayer().getX() == j && App.getCurrentGame().getCurrentPlayer().getY() == i) {
+                        if (player.getX() == j && player.getY() == i) {
                             System.out.print(RED + "\uD83D\uDE00" + RESET);
                         } else
                             System.out.print(RED + "⬛ " + RESET);
@@ -179,5 +236,12 @@ public class Map {
 
     public ArrayList<Barn> getBarns() {
         return barns;
+    }
+
+    public GreenHouse getGreenHouse() {
+        return greenHouse;
+    }
+    public void createGreenHouse() {
+        this.greenHouse = new GreenHouse();
     }
 }

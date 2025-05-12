@@ -2,43 +2,51 @@ package controllers;
 
 import models.Animals.*;
 import models.App;
-import models.Buildings.Barn;
-import models.Buildings.Blacksmith;
-import models.Buildings.BlacksmithCosts;
-import models.Buildings.Carpenter;
-import models.Buildings.CarpenterCosts;
-import models.Buildings.Coop;
-import models.Buildings.FishShop;
-import models.Buildings.FishShopCosts;
-import models.Buildings.GeneralStore;
-import models.Buildings.GeneralStoreCosts;
-import models.Buildings.JojaMart;
-import models.Buildings.JojaMartCosts;
-import models.Buildings.Ranch;
-import models.Buildings.RanchCosts;
-import models.Buildings.Saloon;
-import models.Buildings.SaloonCosts;
+import models.Buildings.*;
 import models.Game;
+import models.Items.Gift;
 import models.Items.Products.*;
+import models.Items.Products.ShopProducts.ShopProduct;
 import models.Invetory.BackPack;
 import models.Invetory.Inventory;
 import models.Items.Item;
 import models.Items.ArtisanGoods.ArtisanGood;
 import models.Items.Foods.Food;
 import models.Items.Foods.FoodType;
+import models.Items.IndustrialProducts.CraftingRecipe;
+import models.Items.IndustrialProducts.IndustrialProduct;
 import models.Items.Tools.*;
 import models.Maps.Map;
 import models.Maps.PathFinder;
 import models.Maps.Tile;
 import models.Maps.TileTypes;
 import models.Maps.Weather;
+import models.Players.Friendship;
 import models.Players.Player;
+import models.Users.User;
 import views.GameMenu;
 import views.RegisterMenu;
 import java.util.*;
 
 public class GameMenuController {
-    public static void greenHouseBuild() {}
+    public static void greenHouseBuild() {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Item wood = Item.findItemByName("wood", player.getBackPack().getItems());
+        if (wood == null) {
+            GameMenu.printResult("Not enough wood!");
+        }
+        if (wood.getCount() < 500) {
+            GameMenu.printResult("Not enough wood!");
+            return;
+        }
+        if (player.getMoney() < 1000) {
+            GameMenu.printResult("Not enough money!");
+            return;
+        }
+        player.setMoney(player.getMoney() - 1000);
+        wood.setCount(wood.getCount() - 500);
+        player.getMap().createGreenHouse();
+    }
 
     public static void walk(String xStr, String yStr) {
         int x = Integer.parseInt(xStr);
@@ -69,7 +77,6 @@ public class GameMenuController {
         player.setX(path.getLast().getX());
         player.setY(path.getLast().getY());
         player.setEnergy(player.getEnergy() - (path.size() / 20));
-        GameMenu.printResult(String.valueOf(path.size()));
         if (player.getEnergy() <= 0) {
             player.setPassedOut(true);
             GameMenu.printResult("Player passed out!");
@@ -350,6 +357,7 @@ public class GameMenuController {
                     GameMenu.printResult("Splash! Your bucket is full and ready to go.");
                 } else {
                     ((Basket) wield).setRemainingWater(((Basket) wield).getRemainingWater() - 1);
+
                     if(targetTile.getItem() != null) {
                         if (targetTile.getItem() instanceof ForgingSeed) {
                             ((ForgingSeed) targetTile.getItem()).setWatered(true);
@@ -357,8 +365,9 @@ public class GameMenuController {
                         } else {
                             GameMenu.printResult("You spill some water on the ground.");
                         }
+
                     } else {
-                        GameMenu.printResult("You spill some water on the ground.");
+                        GameMenu.printResult("You spilled some water on the ground.");
                     }
                 }
                 player.setEnergy(player.getEnergy() - energyNeeded);
@@ -512,15 +521,18 @@ public class GameMenuController {
             Tile targetTile = tiles[X][Y];
             ForgingSeed seed = (ForgingSeed)targetTile.getItem();
             int daysRemaining = 0;
-            for (int i = seed.getCrop().getCurrentStage(); i < seed.getCrop().getStages().size(); i++) {
-                daysRemaining += seed.getCrop().getStages().get(i);
-                daysRemaining -= seed.getCrop().getDaysPassed();
+            for (int i = targetTile.getCrop().getCurrentStage(); i < targetTile.getCrop().getStages().size(); i++) {
+                daysRemaining += targetTile.getCrop().getStages().get(i);
             }
-            GameMenu.printResult("=== Seed: " + seed.getName() + " ===\n" +
-                    "=== Current Stage: " + seed.getCrop().getCurrentStage() + " ===\n" +
+            daysRemaining -= targetTile.getCrop().getDaysPassed();
+            GameMenu.printResult("=== Seed: " + targetTile.getCrop().getName() + " ===\n" +
+                    "=== Current Stage: " + targetTile.getCrop().getCurrentStage() + " ===\n" +
                     "=== Days Remaining: " + daysRemaining + " ===\n" +
                     "=== Is Fertilized: " + seed.isFertilized() + " ===\n" +
                     "=== Watered Today: " + x + " ==="); // TODO
+            if (targetTile.isReadyToHarvest()) {
+                GameMenu.printResult("=== Ready to Harvest! ===");
+            }
         } else {
             GameMenu.printResult("No seed is planted here!");
         }
@@ -1241,8 +1253,57 @@ public class GameMenuController {
         App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(fish);
     }
    
-    public static void artisanUse(String artisanName, String itemName) {}
-    public static void artisanGet(String name) {}
+    public static void artisanUse(String artisanName, String itemName) {
+        CraftingRecipe recipe = null;
+        for (CraftingRecipe craftingRecipe : App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()) {
+            if (craftingRecipe.getName().equals(artisanName)) recipe = craftingRecipe;
+        }
+
+        if (recipe == null) {
+            GameMenu.printResult("No recipe with given name were found!");
+            return;
+        }
+
+        for (Item ingredient : recipe.getIngredients()) {
+            Item backpackItem = Item.findItemByName(ingredient.getName(), App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
+
+            if (backpackItem == null) {
+                GameMenu.printResult("You don't have any " + ingredient.getName());
+                return;
+            }
+            else {
+                if (backpackItem.getCount() < ingredient.getCount()) {
+                    GameMenu.printResult("You don't have enough " + ingredient.getName());
+                    return;
+                }
+            }
+        }
+
+        for (Item ingredient : recipe.getIngredients()) {
+            Item backpackItem = Item.findItemByName(ingredient.getName(), App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
+
+            if (ingredient.getCount() == backpackItem.getCount())
+                App.getCurrentGame().getCurrentPlayer().getBackPack().removeItem(backpackItem);
+            else
+                backpackItem.changeCount(-1 * ingredient.getCount());
+        }
+
+        //TODO backpack is full!!!
+        App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(new IndustrialProduct(1, recipe));
+    }
+
+    public static void artisanGet(String name) {
+        //TODO need prossesing time??!
+
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Item item = Item.findItemByName(name, player.getBackPack().getItems());
+
+        if (item == null) {
+            GameMenu.printResult("No item with given name found!");
+            return;
+        }
+        GameMenu.printResult("You got (*1)" + name);
+    }
 
     public static void showAllProducts() {
         if (App.getCurrentGame().getCurrentPlayer().getBuilding() instanceof Blacksmith) {
@@ -1265,20 +1326,255 @@ public class GameMenuController {
     }
 
     public static void showAvailableProducts() {}
-    public static void purchase(String name, String amount){}
-    public static void cheatAddMoney(String amount){}
-    public static void sell(String name, String amount){}
-    public static void friendship(){}
-    public static void talk(String username, String message){}
-    public static void talkHistory(String username){}
-    public static void gift(String Username, String item, String amount){}
-    public static void giftList(){}
-    public static void giftRate(String giftNumber, String rate){}
-    public static void giftHistory(String username){}
-    public static void hug(String username){}
-    public static void flower(String username){}
-    public static void askMarriage(String username, String ring){}
-    public static void respond(String username){}
+
+    public static void purchase(String name, int amount){
+        ShopProduct item = (ShopProduct) Item.findItemByName(name, App.getCurrentGame().getCurrentPlayer().getBuilding().getItems());
+
+        if (item == null) {
+            GameMenu.printResult("No item with given name found!");
+            return;
+        }
+
+        if (item.getCount() < amount) {
+            GameMenu.printResult("Not enough number of this Item. Only have + " + item.getCount());
+            return;
+        }
+
+        if (item.getSoldToday() + amount > item.getSellLimit()) {
+            GameMenu.printResult("Daily Limit Reached");
+            return;
+        }
+        // TODO reset daily limit in next day
+
+        if (item.getCost() * amount > App.getCurrentGame().getCurrentPlayer().getMoney()) {
+            GameMenu.printResult("You don't have enough money!");
+            return;
+        }
+        
+        if (amount == item.getCount()) App.getCurrentGame().getCurrentPlayer().getBuilding().removeItem(item);
+        else item.changeCount(-1  * amount);
+
+        App.getCurrentGame().getCurrentPlayer().setMoney(App.getCurrentGame().getCurrentPlayer().getMoney() - item.getCost() * amount);
+        App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(item);
+        item.sold(amount);
+        GameMenu.printResult("Item purchased successfully");
+    }
+
+    public static void cheatAddMoney(int amount){
+        App.getCurrentGame().getCurrentPlayer().setMoney(App.getCurrentGame().getCurrentPlayer().getMoney() + amount);
+        GameMenu.printResult("Cheart confirm successfully. Your money: " + App.getCurrentGame().getCurrentPlayer().getMoney());
+    }
+
+    public static void sell(String name, int amount){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Item item = Item.findItemByName(name, player.getBackPack().getItems());
+
+        if (item == null) {
+            GameMenu.printResult("No item with given name found!");
+            return;
+        }
+
+        if (item.getCount() < amount) {
+            GameMenu.printResult("Not enough number of this Item. Only have + " + item.getCount());
+            return;
+        }
+
+        //TODO be near shippingbin
+
+        if (item.getCount() == amount)player.getBackPack().removeItem(item);
+        else item.changeCount(-1  * amount);
+
+        player.setMoney(player.getMoney() + (int) player.getShippingBin().getType().calculateNewPrice(item.getCount() * amount));
+        //TODO money will be got next day
+        GameMenu.printResult("Item sold successfully!");
+    }
+
+    public static void friendships(){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        GameMenu.printResult("=== Friendships ===");
+        for (java.util.Map.Entry<Player, Friendship> entry : player.getFriendships().entrySet()) {
+            GameMenu.printResult(entry.getKey().getUsername() + ": " + entry.getValue().getLevel());
+        }
+    }
+    public static void talk(String username, String message){
+        String newMessage = message + " +++ sent at: " + App.getCurrentGame().getCurrentTime().getDay() + " " + App.getCurrentGame().getCurrentTime().getHour();
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if (User.findUserByUsername(username) == null) {
+            GameMenu.printResult("There is no one with this username!");
+            return;
+        }
+        Player otherPlayer = User.findUserByUsername(username).getPlayer();
+        player.getFriendships().get(otherPlayer).getTalkHistory().add(newMessage);
+        if (!Player.areAdjacent(player, otherPlayer)) {
+            GameMenu.printResult("Player is not available to talk!");
+            return;
+        }
+        otherPlayer.getFriendships().get(player).getTalkHistory().add(newMessage);
+        if (!player.getFriendships().get(otherPlayer).isTalkedToday()) {
+            player.getFriendships().get(otherPlayer).addXp(20, false, false);
+            otherPlayer.getFriendships().get(player).addXp(20, false, false);
+            player.getFriendships().get(otherPlayer).setTalkedToday(true);
+            otherPlayer.getFriendships().get(player).setTalkedToday(true);
+        }
+        GameMenu.printResult("Message sent successfully!");
+    }
+    public static void talkHistory(String username){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if (User.findUserByUsername(username) == null) {
+            GameMenu.printResult("There is no one with this username!");
+            return;
+        }
+        Player otherPlayer = User.findUserByUsername(username).getPlayer();
+        ArrayList<String> talkHistory = player.getFriendships().get(otherPlayer).getTalkHistory();
+        for (String message : talkHistory) {
+            GameMenu.printResult(message);
+        }
+    }
+    public static void gift(String username, String item, String amountx){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if (User.findUserByUsername(username) == null) {
+            GameMenu.printResult("There is no one with this username!");
+            return;
+        }
+        Player otherPlayer = User.findUserByUsername(username).getPlayer();
+        if (!Player.areAdjacent(player, otherPlayer)) {
+            GameMenu.printResult("Player is not available to talk!");
+            return;
+        }
+        if (player.getFriendships().get(otherPlayer).getLevel() < 1) {
+            GameMenu.printResult("Hanooz zoode!");
+            return;
+        }
+        Item gift = Item.findItemByName(item, player.getBackPack().getItems());
+        int amount = Integer.parseInt(amountx);
+        if (gift == null || gift.getCount() < amount) {
+            GameMenu.printResult("Not enough number of this Item");
+            return;
+        }
+        for (Item item1 : otherPlayer.getBackPack().getItems()) {
+            if (item1.getName().equals(gift.getName())) {
+                Item.findItemByName(item, otherPlayer.getBackPack().getItems()).changeCount(amount);
+                GameMenu.printResult("Gift sent to " + username + " successfully!");
+                break;
+            } else {
+                otherPlayer.getBackPack().addItem(new Item(amount, item));
+                GameMenu.printResult("Gift sent to " + username + " successfully!");
+                break;
+            }
+        }
+        gift.changeCount(-amount);
+        if (gift.getCount() == 0) {
+            player.getBackPack().removeItem(gift);
+        }
+        otherPlayer.getGifts().add(new Gift(amount, item, player));
+    }
+    public static void giftList(){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        for (Gift gift : player.getGifts()) {
+            GameMenu.printResult(gift.getSentPlayer().getUsername() + " sent you " + gift.getCount() + " " + gift.getName());
+        }
+    }
+    public static void giftHistory(String username){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if (User.findUserByUsername(username) == null) {
+            GameMenu.printResult("There is no one with this username!");
+            return;
+        }
+        Player otherPlayer = User.findUserByUsername(username).getPlayer();
+        GameMenu.printResult("Gifts " + username + " sent to you: ");
+        for (Gift gift : player.getGifts()) {
+            if (gift.getSentPlayer().equals(otherPlayer)) {
+                GameMenu.printResult(gift.getSentPlayer().getUsername() + " sent you " + gift.getCount() + " " + gift.getName());
+            }
+        }
+        GameMenu.printResult("Gifts you sent to " + username + ": ");
+        for (Gift gift : otherPlayer.getGifts()) {
+            if (gift.getSentPlayer().equals(player)) {
+                GameMenu.printResult("You sent " + gift.getSentPlayer().getUsername() + " " + gift.getCount() + " " + gift.getName());
+            }
+        }
+    }
+    public static void hug(String username){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if (User.findUserByUsername(username) == null) {
+            GameMenu.printResult("There is no one with this username!");
+            return;
+        }
+        Player otherPlayer = User.findUserByUsername(username).getPlayer();
+        if (player.getFriendships().get(otherPlayer).getLevel() < 2) {
+            GameMenu.printResult("Hanooz zoode!");
+            return;
+        }
+        if (!Player.areAdjacent(player, otherPlayer)) {
+            GameMenu.printResult("Player is not available to hug!");
+            return;
+        }
+        player.getFriendships().get(otherPlayer).addXp(60, false, false);
+        otherPlayer.getFriendships().get(player).addXp(60, false, false);
+        GameMenu.printResult("Nice job! You hugged each other.");
+    }
+    public static void flower(String username){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if (User.findUserByUsername(username) == null) {
+            GameMenu.printResult("There is no one with this username!");
+            return;
+        }
+        Player otherPlayer = User.findUserByUsername(username).getPlayer();
+        if (!Player.areAdjacent(player, otherPlayer)) {
+            GameMenu.printResult("Player is not available!");
+            return;
+        }
+        if (player.getFriendships().get(otherPlayer).getLevel() < 2 || (player.getFriendships().get(otherPlayer).getLevel() == 2 &&
+                player.getFriendships().get(player).getXp() < 300)) {
+            GameMenu.printResult("Hanooz zoode!");
+            return;
+        }
+        Item bouquet = Item.findItemByName("bouquet", player.getBackPack().getItems());
+        if (bouquet == null) {
+            GameMenu.printResult("There is no bouquet in your inventory!");
+            return;
+        }
+        bouquet.setCount(bouquet.getCount() - 1);
+        if (bouquet.getCount() == 0) {
+            player.getBackPack().removeItem(bouquet);
+        }
+        Item otherBouquet = Item.findItemByName("bouquet", otherPlayer.getBackPack().getItems());
+        if (otherBouquet == null) {
+            otherPlayer.getBackPack().addItem(new Item(1, "bouquet"));
+        } else {
+            otherBouquet.setCount(otherBouquet.getCount() + 1);
+        }
+        GameMenu.printResult("Awwwwww =^-^=");
+        player.getFriendships().get(otherPlayer).addXp(0, true, false);
+        otherPlayer.getFriendships().get(player).addXp(0, true, false);
+    }
+    public static void askMarriage(String username, String ring){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if (User.findUserByUsername(username) == null) {
+            GameMenu.printResult("There is no one with this username!");
+            return;
+        }
+        Player otherPlayer = User.findUserByUsername(username).getPlayer();
+        if (!Player.areAdjacent(player, otherPlayer)) {
+            GameMenu.printResult("Player is not available!");
+            return;
+        }
+        if (player.getGender().equals(otherPlayer.getGender())) {
+            GameMenu.printResult("that's gay tbh");
+        }
+        if (player.getFriendships().get(otherPlayer).getLevel() < 4 || (player.getFriendships().get(otherPlayer).getLevel() == 3 &&
+                player.getFriendships().get(player).getXp() < 400)) {
+            GameMenu.printResult("Hanooz zoode!");
+            return;
+        }
+        Item weddingRing = Item.findItemByName("wedding ring", player.getBackPack().getItems());
+        if (weddingRing == null) {
+            GameMenu.printResult("There is no wedding ring in your inventory!");
+            return;
+        }
+        otherPlayer.setAskedMarriage(player);
+        GameMenu.printResult("Marriage has been asked!");
+    }
     public static void startTrade() {}
     public static void trade(String username, String type, String item, String amount, String price){}
     public static void tradeProducts(String username, String type, String item, String amount, String targetItem, String targetAmount){}

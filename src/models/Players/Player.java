@@ -7,11 +7,13 @@ import models.Invetory.BackPack;
 import models.Invetory.BackPackType;
 import models.Invetory.Refrigerator;
 import models.Invetory.ShippingBin;
+import models.Invetory.ShippingBinType;
 import models.Invetory.TrashCan;
 import models.Invetory.TrashCanType;
-import models.Items.Products.CraftingRecipe;
+import models.Items.Gift;
 import models.Items.Item;
 import models.Items.Foods.FoodType;
+import models.Items.IndustrialProducts.CraftingRecipe;
 import models.Items.Products.ForgingSeed;
 import models.Items.Products.ForgingSeedType;
 import models.Items.Tools.*;
@@ -33,7 +35,7 @@ public class Player {
     private TrashCan trashCan;
     private Refrigerator refrigerator;
     private int money;
-    private final HashMap<Player, Integer> friendships = new HashMap<>();
+    private final HashMap<Player, Friendship> friendships = new HashMap<>();
     private final ArrayList<Skills> skills = new ArrayList<>();
     private int selectionNumber;
     private boolean isPassedOut = false;
@@ -51,12 +53,15 @@ public class Player {
     private ArrayList<FoodType> recipes = new ArrayList<>();
     private HashMap<NPC,Integer> friendshipsNPC = new HashMap<>();
     private HashMap<NPC,Integer> activatedQuestNPC = new HashMap<>();
+    private ArrayList<Gift> gifts = new ArrayList<>();
+    private Player askedMarriage = null;
+    private String gender;
 
     public Player(String username, int selectionNumber) {
         this.username = username;
         this.map = null;
         this.energy = 200;
-        this.shippingBin = new ShippingBin();
+        this.shippingBin = new ShippingBin(ShippingBinType.REGULAR);
         this.refrigerator = new Refrigerator();
         this.backPack = new BackPack(BackPackType.INITIAL_BACKPACK);
         this.backPack.addItem(new Axe(1, AxeType.NORMAL));
@@ -121,12 +126,8 @@ public class Player {
         return refrigerator;
     }
 
-    public void addItemToRefrigerator(Item item) {
-        this.refrigerator.addItem(item);
-    }
-
-    public void removeItemToRefrigerator(Item item) {
-        this.refrigerator.removeItem(item);
+    public void setRefrigerator(Refrigerator refrigerator) {
+        this.refrigerator = refrigerator;
     }
 
     public int getMoney() {
@@ -137,7 +138,7 @@ public class Player {
         this.money = money;
     }
 
-    public HashMap<Player, Integer> getFriendships() {
+    public HashMap<Player, Friendship> getFriendships() {
         return friendships;
     }
     public boolean isPassedOut() {
@@ -281,6 +282,7 @@ public class Player {
         this.recipes.add(recipe);
     }
 
+
     public HashMap<NPC, Integer> getFriendshipsNPC() {
         for(int i = 0; i < 5 ; i++){
             if(this.friendshipsNPC.get(App.getCurrentGame().getNPCs().get(i)) > 799){
@@ -292,5 +294,30 @@ public class Player {
 
     public HashMap<NPC, Integer> getActivatedQuestNPC() {
         return activatedQuestNPC;
+      
+    public ArrayList<Gift> getGifts() {
+        return gifts;
+    }
+
+    public Player getAskedMarriage() {
+        return askedMarriage;
+    }
+
+    public void setAskedMarriage(Player askedMarriage) {
+        this.askedMarriage = askedMarriage;
+    }
+
+    public static boolean areAdjacent(Player player, Player otherPlayer) {
+        int dx = Math.abs(player.getX() - otherPlayer.getX());
+        int dy = Math.abs(player.getY() - otherPlayer.getY());
+        return (dx <= 1 && dy <= 1) && !(dx == 0 && dy == 0);
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 }
