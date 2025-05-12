@@ -211,6 +211,7 @@ public class NewGameController {
                 for (java.util.Map.Entry<Player, Friendship> entry : player.getFriendships().entrySet()) {
                     if (entry.getValue().isTalkedToday()) {
                         entry.getValue().setTalkedToday(false);
+                        entry.getValue().setSentGiftToday(false);
                     }
                 }
             }
