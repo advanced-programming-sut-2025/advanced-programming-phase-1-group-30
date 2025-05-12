@@ -1,6 +1,7 @@
 package models.Items.Products;
 
 import models.Items.Item;
+import models.Items.IndustrialProducts.CraftingRecipe;
 
 public class CraftingItems extends Item {
     private CraftingRecipe type;

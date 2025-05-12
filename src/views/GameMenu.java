@@ -287,6 +287,17 @@ public class GameMenu implements AppMenu {
             GameMenuController.sell(matcher.group("productName"), Integer.parseInt(matcher.group("count")));
             return;
         }
+        matcher = GameMenuCommands.ARTISAN_USE.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.artisanUse(matcher.group("artisanName"), matcher.group("itemName"));
+            return;
+        }
+        matcher = GameMenuCommands.ARTISAN_GET.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.artisanGet(matcher.group("artisanName"));
+            return;
+        }
+
 
         System.out.println("Invalid command.");
     }
