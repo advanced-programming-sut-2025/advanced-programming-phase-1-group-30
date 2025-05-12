@@ -3,20 +3,22 @@ package models.Players;
 import models.Items.Item;
 
 public class Trade {
-    private Player giver;
     private Player getter;
-    private Item tradedItem;
+    private Player giver;
+    private Item offeredItem;
     private boolean getsMoney;
     private int money;
-    private Item gottenItem;
+    private Item requestedItem;
+    private String type;
+    private String moneyOrItem;
 
     public Trade(Player giver, Player getter, Item tradedItem, boolean getsMoney, int money, Item gottenItem) {
         this.giver = giver;
         this.getter = getter;
-        this.tradedItem = tradedItem;
+        this.offeredItem = tradedItem;
         this.getsMoney = getsMoney;
         this.money = money;
-        this.gottenItem = gottenItem;
+        this.requestedItem = gottenItem;
     }
     
     public Player getGiver() {
@@ -32,11 +34,11 @@ public class Trade {
     public void setGetter(Player getter) {
         this.getter = getter;
     }
-    public Item getTradedItem() {
-        return tradedItem;
+    public Item getOfferedItem() {
+        return offeredItem;
     }
-    public void setTradedItem(Item tradedItem) {
-        this.tradedItem = tradedItem;
+    public void setOfferedItem(Item tradedItem) {
+        this.offeredItem = tradedItem;
     }
     public boolean isGetsMoney() {
         return getsMoney;
@@ -50,10 +52,26 @@ public class Trade {
     public void setMoney(int money) {
         this.money = money;
     }
-    public Item getGottenItem() {
-        return gottenItem;
+    public Item getRequestedItem() {
+        return requestedItem;
     }
-    public void setGottenItem(Item gottenItem) {
-        this.gottenItem = gottenItem;
+    public void setRequestedItem(Item gottenItem) {
+        this.requestedItem = gottenItem;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getMoneyOrItem() {
+        return moneyOrItem;
+    }
+
+    public void setMoneyOrItem(String moneyOrItem) {
+        this.moneyOrItem = moneyOrItem;
     }
 }

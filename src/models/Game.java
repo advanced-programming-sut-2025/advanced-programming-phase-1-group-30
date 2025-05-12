@@ -14,7 +14,7 @@ public class Game {
     private Time currentTime;
     private Weather currentWeather;
     private Weather tomorrowWeather;
-    private ArrayList<Player> players = new ArrayList<>();
+    private ArrayList<Player> players;
     private ArrayList<Trade> trades = new ArrayList<>();
 
     public Game(ArrayList<Player> players) {
@@ -23,7 +23,6 @@ public class Game {
         this.currentTime = new Time();
         this.currentWeather = Weather.SUNNY;
         this.players = players;
-        this.trades = null;
     }
     
     public GreatMap getGreatMap() {

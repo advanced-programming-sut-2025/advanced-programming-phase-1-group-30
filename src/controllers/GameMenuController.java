@@ -23,6 +23,7 @@ import models.Maps.TileTypes;
 import models.Maps.Weather;
 import models.Players.Friendship;
 import models.Players.Player;
+import models.Players.Trade;
 import models.Users.User;
 import views.GameMenu;
 import views.RegisterMenu;
@@ -1556,7 +1557,34 @@ public class GameMenuController {
         otherPlayer.setAskedMarriage(player);
         GameMenu.printResult("Marriage has been asked!");
     }
-    public static void startTrade() {}
+    public static void startTrade() {
+        GameMenu.printResult("=== Trading Menu ===");
+        GameMenu.printResult("These players are ready to trade.");
+        ArrayList<Player> players = App.getCurrentGame().getPlayers();
+        for (Trade trade : App.getCurrentGame().getTrades()) {
+            int check = 0;
+            int check2 = 0;
+            if (trade.getType().equals("offer")) {
+                check = 1;
+                if (trade.getMoneyOrItem().equals("money")) {
+                    check2 = 1;
+                }
+            } else {
+                if (trade.getMoneyOrItem().equals("money")) {
+                    check2 = 1;
+                }
+            }
+            if (check == 0 && check2 == 0) {
+                GameMenu.printResult(trade.getGetter().getUsername() + " wants " + trade.getRequestedItem().getName() + " in exchange for " + trade.getOfferedItem());
+            } else if (check == 1 && check2 == 0) {
+                GameMenu.printResult(trade.getGetter().getUsername() + " offers " + trade.getOfferedItem().getName() + " in exchange for " + trade.getRequestedItem());
+            } else if (check == 1 && check2 == 1) {
+                GameMenu.printResult(trade.getGetter().getUsername() + " offers " + trade.getOfferedItem().getName() + " in exchange for " + trade.getMoney());
+            } else if (check == 0 && check2 == 1) {
+                GameMenu.printResult(trade.getGetter().getUsername() + " wants " + trade.getRequestedItem().getName() + " in exchange for " + trade.getMoneyOrItem());
+            }
+        }
+    }
     public static void trade(String username, String type, String item, String amount, String price){}
     public static void tradeProducts(String username, String type, String item, String amount, String targetItem, String targetAmount){}
     public static void tradeList(){}
@@ -1567,5 +1595,4 @@ public class GameMenuController {
     public static void friendshipNPCList() {}
     public static void questList() {}
     public static void questFinish(String index) {}
-    public static void passOut() {}
 }
