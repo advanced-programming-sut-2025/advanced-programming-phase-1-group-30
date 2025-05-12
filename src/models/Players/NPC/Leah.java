@@ -5,10 +5,10 @@ import models.Maps.Weather;
 import models.Players.Player;
 import views.GameMenu;
 
-public class Robin extends NPC {
+public class Leah extends NPC {
 
-    public Robin() {
-        super(NPCDetail.ROBIN);
+    public Leah() {
+        super(NPCDetail.LEAH);
     }
 
     @Override
@@ -29,53 +29,53 @@ public class Robin extends NPC {
     @Override
     public void talk() {
         Player player = App.getCurrentGame().getCurrentPlayer();
-        NPC npc = App.getCurrentGame().getNPCs().get(4);
+        NPC npc = App.getCurrentGame().getNPCs().get(3);
         int friendship = player.getFriendshipsNPC().get(npc) / 200;
         Weather weather = App.getCurrentGame().getCurrentWeather();
 
         if (friendship == 0) {
             switch (weather) {
                 case SUNNY:
-                    GameMenu.printResult("Perfect day for construction.");
+                    GameMenu.printResult("Sunlight’s great for painting... but it gets hot.");
                     break;
                 case RAIN:
-                    GameMenu.printResult("Rain slows down my projects. Bummer.");
+                    GameMenu.printResult("Rainy days are for tea and thinking.");
                     break;
                 case SNOW:
-                    GameMenu.printResult("Snow means I have to work indoors all day.");
+                    GameMenu.printResult("Snow gives everything a kind of purity, don’t you think?");
                     break;
                 case STORM:
-                    GameMenu.printResult("Can’t work in this storm. Tools keep shorting out.");
+                    GameMenu.printResult("Storms are wild... nature’s way of reminding us who’s in charge.");
                     break;
             }
         } else if (friendship == 1) {
             switch (weather) {
                 case SUNNY:
-                    GameMenu.printResult("Sunny days put me in a good mood to build!");
+                    GameMenu.printResult("This light is perfect for a landscape sketch.");
                     break;
                 case RAIN:
-                    GameMenu.printResult("I guess I can catch up on blueprints today.");
+                    GameMenu.printResult("I like the sound of rain on the cabin roof.");
                     break;
                 case SNOW:
-                    GameMenu.printResult("Winter’s a good time to get creative with interiors.");
+                    GameMenu.printResult("Snow always inspires me to sculpt something new.");
                     break;
                 case STORM:
-                    GameMenu.printResult("This storm’s wild. Be careful out there.");
+                    GameMenu.printResult("Lightning... chaotic, but beautiful.");
                     break;
             }
         } else if (friendship >= 2) {
             switch (weather) {
                 case SUNNY:
-                    GameMenu.printResult("You bring the sunshine with you, even on sunny days.");
+                    GameMenu.printResult("I saved a sunny spot by the river for us.");
                     break;
                 case RAIN:
-                    GameMenu.printResult("Come help me in the workshop while the rain falls.");
+                    GameMenu.printResult("Want to stay in and paint with me while it rains?");
                     break;
                 case SNOW:
-                    GameMenu.printResult("Let’s drink cocoa and talk project ideas!");
+                    GameMenu.printResult("Let’s make art in the snow—our own little world.");
                     break;
                 case STORM:
-                    GameMenu.printResult("Let’s just ride this storm out together, alright?");
+                    GameMenu.printResult("Storms make me want to hold onto someone special. Lucky me.");
                     break;
             }
         }

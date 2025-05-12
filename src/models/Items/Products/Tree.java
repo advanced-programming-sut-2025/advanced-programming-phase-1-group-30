@@ -1,13 +1,11 @@
 package models.Items.Products;
 
-import models.Maps.Tile;
-
 public class Tree extends Product{
     private final TreeType type;
     private boolean isHitByThunder;
 
-    public Tree(int count, TreeType type, Tile tile) {
-        super(count, type.getName(), tile);
+    public Tree(int count, TreeType type) {
+        super(count, type.getName(), 0);
         this.type = type;
         this.isHitByThunder = false;
     }

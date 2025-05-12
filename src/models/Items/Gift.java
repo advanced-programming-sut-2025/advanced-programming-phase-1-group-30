@@ -5,8 +5,8 @@ import models.Players.Player;
 public class Gift extends Item {
     private boolean isRated = false;
     private Player sentPlayer;
-    public Gift(int count, String name, Player sentPlayer) {
-        super(count, name);
+    public Gift(int count, String name, Player sentPlayer, int price) {
+        super(count, name, price);
         this.sentPlayer = sentPlayer;
     }
     public boolean isRated() {

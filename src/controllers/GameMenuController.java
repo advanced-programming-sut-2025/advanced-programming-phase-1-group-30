@@ -245,23 +245,30 @@ public class GameMenuController {
                     targetTile.setType(TileTypes.DIRT);
                     GameMenu.printResult("Done!");
                 } else if(targetTile.getType().equals(TileTypes.QUARRY)){
-                    if(targetTile.getItem() instanceof ForagingMineral){
-                        Item newItem = Item.findItemByName(targetTile.getItem().getName(), player.getBackPack().getItems());
-                        if(newItem != null){
-                            newItem.setCount(newItem.getCount() + 1);
-                        }else{
-                            if(player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()){
-                                GameMenu.printResult("You don't have enough space in your backpack!");
-                                return;
-                            } else{
-                                player.getBackPack().addItem(targetTile.getItem());
+                    if(targetTile.getItem() != null) {
+                        if (targetTile.getItem() instanceof ForagingMineral) {
+                            Item newItem = Item.findItemByName(targetTile.getItem().getName(), player.getBackPack().getItems());
+                            if (newItem != null) {
+                                newItem.setCount(newItem.getCount() + 1);
+                            } else {
+                                if (player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()) {
+                                    GameMenu.printResult("You don't have enough space in your backpack!");
+                                    return;
+                                } else {
+                                    player.getBackPack().addItem(targetTile.getItem());
+                                }
+                            }
+                            GameMenu.printResult(targetTile.getItem().getName() + " successfully added to your backpack");
+                            targetTile.setItem(null);
+                        } else {
+                            GameMenu.printResult("You swing your pickaxe... but there's nothing to mine here!");
+                            if (energyNeeded > 0) {
+                                energyNeeded -= 1;
                             }
                         }
-                        GameMenu.printResult(targetTile.getItem().getName() + " successfully added to your backpack");
-                        targetTile.setItem(null);
-                    }else{
+                    } else{
                         GameMenu.printResult("You swing your pickaxe... but there's nothing to mine here!");
-                        if(energyNeeded > 0){
+                        if (energyNeeded > 0) {
                             energyNeeded -= 1;
                         }
                     }
@@ -285,46 +292,53 @@ public class GameMenuController {
             }
 
             if(player.getEnergy() > energyNeeded){
-                if(targetTile.getItem() instanceof Tree){
-                    Item wood = new Item(12 ,"wood");
-                    Item sap = new Item(2 ,"sap");
+                if(targetTile.getItem() != null) {
+                    if (targetTile.getItem() instanceof Tree) {
+                        Item wood = new Item(12, "wood", 10);
+                        Item sap = new Item(2, "sap", 10);
 
-                    Item newWood = Item.findItemByName(wood.getName(), player.getBackPack().getItems());
-                    Item newSap = Item.findItemByName(sap.getName(), player.getBackPack().getItems());
+                        Item newWood = Item.findItemByName(wood.getName(), player.getBackPack().getItems());
+                        Item newSap = Item.findItemByName(sap.getName(), player.getBackPack().getItems());
 
-                    if(newWood == null && newSap == null){
-                        if(player.getBackPack().getItems().size() + 1 == player.getBackPack().getType().getCapacity()){
-                            GameMenu.printResult("You don't have enough space in your backpack!");
-                            return;
+                        if (newWood == null && newSap == null) {
+                            if (player.getBackPack().getItems().size() + 1 == player.getBackPack().getType().getCapacity()) {
+                                GameMenu.printResult("You don't have enough space in your backpack!");
+                                return;
+                            } else {
+                                player.getBackPack().addItem(sap);
+                                player.getBackPack().addItem(wood);
+                            }
+                        } else if (newWood == null || newSap == null) {
+                            if (player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()) {
+                                GameMenu.printResult("You don't have enough space in your backpack!");
+                                return;
+                            }
+                            if (newWood == null) {
+                                player.getBackPack().addItem(wood);
+                                newSap.setCount(newSap.getCount() + 1);
+                            } else {
+                                player.getBackPack().addItem(sap);
+                                newWood.setCount(newWood.getCount() + 1);
+                            }
                         } else {
-                            player.getBackPack().addItem(sap);
-                            player.getBackPack().addItem(wood);
-                        }
-                    } else if(newWood == null || newSap == null){
-                        if(player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()){
-                            GameMenu.printResult("You don't have enough space in your backpack!");
-                            return;
-                        }
-                        if(newWood == null){
-                            player.getBackPack().addItem(wood);
-                            newSap.setCount(newSap.getCount() + 1);
-                        } else {
-                            player.getBackPack().addItem(sap);
                             newWood.setCount(newWood.getCount() + 1);
+                            newSap.setCount(newSap.getCount() + 1);
                         }
-                    } else {
-                        newWood.setCount(newWood.getCount() + 1);
-                        newSap.setCount(newSap.getCount() + 1);
-                    }
 
-                    targetTile.setItem(null);
-                    GameMenu.printResult("You chop down the tree and collect 12 wood and 2 sap.");
-                } else if(targetTile.getItem().equals(new Item(1,"branch"))){
-                    targetTile.setItem(null);
-                    GameMenu.printResult("You clear the branch from the ground.");
-                } else{
+                        targetTile.setItem(null);
+                        GameMenu.printResult("You chop down the tree and collect 12 wood and 2 sap.");
+                    } else if (targetTile.getItem().equals(new Item(1, "Wood", 10))) {
+                        targetTile.setItem(null);
+                        GameMenu.printResult("You clear the branch from the ground.");
+                    } else {
+                        GameMenu.printResult("You swing your axe, but nothing happens.");
+                        if (energyNeeded > 0) {
+                            energyNeeded -= 1;
+                        }
+                    }
+                } else {
                     GameMenu.printResult("You swing your axe, but nothing happens.");
-                    if(energyNeeded > 0){
+                    if (energyNeeded > 0) {
                         energyNeeded -= 1;
                     }
                 }
@@ -344,10 +358,15 @@ public class GameMenuController {
                     GameMenu.printResult("Splash! Your bucket is full and ready to go.");
                 } else {
                     ((Basket) wield).setRemainingWater(((Basket) wield).getRemainingWater() - 1);
-                    if(targetTile.getItem() instanceof ForgingSeed){
-                        ((ForgingSeed) targetTile.getItem()).setWatered(true);
 
-                        GameMenu.printResult("You gave the plant a refreshing splash!");
+                    if(targetTile.getItem() != null) {
+                        if (targetTile.getItem() instanceof ForgingSeed) {
+                            ((ForgingSeed) targetTile.getItem()).setWatered(true);
+                            GameMenu.printResult("You give the plants a refreshing splash!");
+                        } else {
+                            GameMenu.printResult("You spill some water on the ground.");
+                        }
+
                     } else {
                         GameMenu.printResult("You spilled some water on the ground.");
                     }
@@ -1439,7 +1458,7 @@ public class GameMenuController {
                 GameMenu.printResult("Gift sent to " + username + " successfully!");
                 break;
             } else {
-                otherPlayer.getBackPack().addItem(new Item(amount, item));
+                otherPlayer.getBackPack().addItem(new Item(amount, item, item1.getPrice()));
                 GameMenu.printResult("Gift sent to " + username + " successfully!");
                 break;
             }
@@ -1448,7 +1467,7 @@ public class GameMenuController {
         if (gift.getCount() == 0) {
             player.getBackPack().removeItem(gift);
         }
-        otherPlayer.getGifts().add(new Gift(amount, item, player));
+        otherPlayer.getGifts().add(new Gift(amount, item, player, (int) gift.getPrice()));
     }
     public static void giftList(){
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -1522,7 +1541,7 @@ public class GameMenuController {
         }
         Item otherBouquet = Item.findItemByName("bouquet", otherPlayer.getBackPack().getItems());
         if (otherBouquet == null) {
-            otherPlayer.getBackPack().addItem(new Item(1, "bouquet"));
+            otherPlayer.getBackPack().addItem(new Item(1, "bouquet", GeneralStoreCosts.BOUQUET.getPrice()));
         } else {
             otherBouquet.setCount(otherBouquet.getCount() + 1);
         }
