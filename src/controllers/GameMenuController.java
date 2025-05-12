@@ -284,27 +284,29 @@ public class GameMenuController {
                     Item newWood = Item.findItemByName(wood.getName(), player.getBackPack().getItems());
                     Item newSap = Item.findItemByName(sap.getName(), player.getBackPack().getItems());
 
-                    if(newWood != null){
-                        newWood.setCount(newWood.getCount() + 1);
-                    }else{
+                    if(newWood == null && newSap == null){
+                        if(player.getBackPack().getItems().size() + 1 == player.getBackPack().getType().getCapacity()){
+                            GameMenu.printResult("You don't have enough space in your backpack!");
+                            return;
+                        } else {
+                            player.getBackPack().addItem(sap);
+                            player.getBackPack().addItem(wood);
+                        }
+                    } else if(newWood == null || newSap == null){
                         if(player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()){
                             GameMenu.printResult("You don't have enough space in your backpack!");
                             return;
-                        } else{
-
-                            if(newSap != null){
-                            newSap.setCount(newSap.getCount() + 1);
-                            }else{
-                                if(player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()){
-                                    GameMenu.printResult("You don't have enough space in your backpack!");
-                                    return;
-                                } else{
-                                    player.getBackPack().addItem(sap);
-                                }
-                            }
-
-                            player.getBackPack().addItem(wood);
                         }
+                        if(newWood == null){
+                            player.getBackPack().addItem(wood);
+                            newSap.setCount(newSap.getCount() + 1);
+                        } else {
+                            player.getBackPack().addItem(sap);
+                            newWood.setCount(newWood.getCount() + 1);
+                        }
+                    } else {
+                        newWood.setCount(newWood.getCount() + 1);
+                        newSap.setCount(newSap.getCount() + 1);
                     }
 
                     targetTile.setItem(null);
