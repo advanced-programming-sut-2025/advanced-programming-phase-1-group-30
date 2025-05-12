@@ -267,10 +267,27 @@ public class GameMenu implements AppMenu {
         }
         matcher = GameMenuCommands.SHOW_ALL_AVAILABLE_PRODUCTS.regexMatcher(command);
         if (matcher.matches()) {
-            GameMenuController.showAllProducts(); //TODO must print availables
+            GameMenuController.showAllProducts(); //TODO only availabls
             return;
         }
-        
+        matcher = GameMenuCommands.PURCHASE.regexMatcher(command);
+        if (matcher.matches()) {
+            // TODO -n is null
+            GameMenuController.purchase(matcher.group("productName"), Integer.parseInt(matcher.group("count")));
+            return;
+        }
+        matcher = GameMenuCommands.CHEAT_ADD_DOLLARS.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.cheatAddMoney(Integer.parseInt(matcher.group("count")));
+            return;
+        }
+        matcher = GameMenuCommands.SELL.regexMatcher(command);
+        if (matcher.matches()) {
+            // TODO -n is null
+            GameMenuController.sell(matcher.group("productName"), Integer.parseInt(matcher.group("count")));
+            return;
+        }
+
         System.out.println("Invalid command.");
     }
 }
