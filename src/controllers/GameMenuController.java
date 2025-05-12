@@ -3,17 +3,13 @@ package controllers;
 import models.Animals.*;
 import models.App;
 import models.Buildings.*;
-import models.Game;
 import models.Items.Gift;
 import models.Items.Products.*;
 import models.Items.Products.ShopProducts.ShopProduct;
-import models.Invetory.BackPack;
-import models.Invetory.Inventory;
 import models.Items.Item;
-import models.Items.ArtisanGoods.ArtisanGood;
 import models.Items.Foods.Food;
 import models.Items.Foods.FoodType;
-import models.Items.IndustrialProducts.CraftingRecipe;
+import models.Items.IndustrialProducts.IndustrialProductType;
 import models.Items.IndustrialProducts.IndustrialProduct;
 import models.Items.Tools.*;
 import models.Maps.Map;
@@ -22,6 +18,8 @@ import models.Maps.Tile;
 import models.Maps.TileTypes;
 import models.Maps.Weather;
 import models.Players.Friendship;
+import models.Players.NPC.NPC;
+import models.Players.NPC.NPCDetail;
 import models.Players.Player;
 import models.Players.Trade;
 import models.Users.User;
@@ -595,7 +593,7 @@ public class GameMenuController {
         }
     }
     public static void showCraftingRecipes() {
-        for(CraftingRecipe recipe :App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()){
+        for(IndustrialProductType recipe :App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()){
             GameMenu.printResult(recipe.name + ": " + recipe.description);
             StringBuilder ingredients = new StringBuilder();
             ingredients.append("ingredients :");
@@ -611,7 +609,7 @@ public class GameMenuController {
     public static void crafting(String name) {
         Player player = App.getCurrentGame().getCurrentPlayer();
 
-        for(CraftingRecipe recipe : CraftingRecipe.values()){
+        for(IndustrialProductType recipe : IndustrialProductType.values()){
             if(recipe.name.equals(name)){
                 if(player.getCraftingRecipes().contains(recipe)){
                     for(Item items : recipe.ingredients){
@@ -626,7 +624,7 @@ public class GameMenuController {
                             }
                         }
                     }
-                    CraftingItems crafted = new CraftingItems(1, recipe);
+                    IndustrialProduct crafted = new IndustrialProduct(1, recipe);
 
                     Item newItem = Item.findItemByName(crafted.getName(), player.getBackPack().getItems());
 
@@ -708,9 +706,9 @@ public class GameMenuController {
     }
     public static void cheatAddItem(String name, String count) {
         Player player = App.getCurrentGame().getCurrentPlayer();
-        for(CraftingRecipe recipe : CraftingRecipe.values()){
+        for(IndustrialProductType recipe : IndustrialProductType.values()){
             if(recipe.name.equals(name)){
-                Item newItem = new CraftingItems(Integer.parseInt(count), recipe);
+                Item newItem = new IndustrialProduct(Integer.parseInt(count), recipe);
                 Item itemBackpack = Item.findItemByName(newItem.getName(), player.getBackPack().getItems());
                 if(itemBackpack == null){
                     if(player.getBackPack().getType().getCapacity() > player.getBackPack().getItems().size()){
@@ -794,6 +792,7 @@ public class GameMenuController {
 
     public static void cooking(String name) {
         FoodType recipe = FoodType.getrecipeByName(name);
+        Player player = App.getCurrentGame().getCurrentPlayer();
         if (recipe == null)
             GameMenu.printResult("No recipe with given name were found!");
 
@@ -803,6 +802,10 @@ public class GameMenuController {
         }
         if (!recipeLeared) {
             GameMenu.printResult("You didn't learn this recipe!");
+            return;
+        }
+        if (player.getBackPack().getItems().size() >= player.getBackPack().getType().getCapacity()) {
+            GameMenu.printResult("Your Backpack is full!!");
             return;
         }
 
@@ -847,7 +850,6 @@ public class GameMenuController {
                 backpackItem.changeCount(-1 * ingredient.getCount());
         }
 
-        //TODO backpack is full!!!
         App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(new Food(1, recipe));
         App.getCurrentGame().getCurrentPlayer().changeEnergy(3);
     }
@@ -1255,13 +1257,19 @@ public class GameMenuController {
     }
    
     public static void artisanUse(String artisanName, String itemName) {
-        CraftingRecipe recipe = null;
-        for (CraftingRecipe craftingRecipe : App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()) {
+        IndustrialProductType recipe = null;
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        for (IndustrialProductType craftingRecipe : App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()) {
             if (craftingRecipe.getName().equals(artisanName)) recipe = craftingRecipe;
         }
 
         if (recipe == null) {
             GameMenu.printResult("No recipe with given name were found!");
+            return;
+        }
+
+        if (player.getBackPack().getItems().size() >= player.getBackPack().getType().getCapacity()) {
+            GameMenu.printResult("Your Backpack is full!!");
             return;
         }
 
@@ -1289,7 +1297,6 @@ public class GameMenuController {
                 backpackItem.changeCount(-1 * ingredient.getCount());
         }
 
-        //TODO backpack is full!!!
         App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(new IndustrialProduct(1, recipe));
     }
 
@@ -1385,7 +1392,7 @@ public class GameMenuController {
         if (item.getCount() == amount)player.getBackPack().removeItem(item);
         else item.changeCount(-1  * amount);
 
-        player.setMoney(player.getMoney() + (int) player.getShippingBin().getType().calculateNewPrice(item.getCount() * amount));
+        player.setMoney(player.getMoney() + (int) player.getShippingBin().getType().calculateNewPrice(item.getPrice() * amount));
         //TODO money will be got next day
         GameMenu.printResult("Item sold successfully!");
     }
@@ -1936,14 +1943,185 @@ public class GameMenuController {
             GameMenu.printResult(s.toString());
         }
     }
-
-    public static void meetNPC(String name) {}
-    public static void giftNPC(String name, String item) {}
-    public static void friendshipNPCList() {}
-    public static void questList() {}
-    public static void questFinish(String index) {}
     private static void transferMoney(Player from, Player to, int amount) {
         from.adjustMoney(-amount);
         to.adjustMoney(+amount);
+    public static void trade(String username, String type, String item, String amount, String price){}
+    public static void tradeProducts(String username, String type, String item, String amount, String targetItem, String targetAmount){}
+    public static void tradeList(){}
+    public static void tradeResponse(String id){}
+    public static void tradeHistory(){}
+
+    public static void meetNPC(String name) {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        for(NPC npc : App.getCurrentGame().getNPCs()){
+            if(npc.getName().equals(name)){
+                if(npc.getTile().getX() - 1 <= player.getX() && player.getX() <= npc.getTile().getX() + 1 &&
+                        npc.getTile().getX() - 1 <= player.getY() && player.getX() <= npc.getTile().getY() + 1){
+                    npc.talk();
+                    if(!player.getNPCMeetToday().get(npc)){
+                        player.getNPCMeetToday().put(npc, true);
+                        player.getFriendshipsNPC().put(npc,player.getFriendshipsNPC().get(npc) + 20);
+                    }
+                } else {
+                    GameMenu.printResult("You are too far!");
+                }
+                return;
+            }
+        }
+        GameMenu.printResult("Wrong name!");
+    }
+    public static void giftNPC(String name, String item) {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        for(NPC npc : App.getCurrentGame().getNPCs()){
+            if(npc.getName().equals(name)){
+                if(npc.getTile().getX() - 1 <= player.getX() && player.getX() <= npc.getTile().getX() + 1 &&
+                        npc.getTile().getX() - 1 <= player.getY() && player.getX() <= npc.getTile().getY() + 1){
+                    Item gift = Item.findItemByName(item, player.getBackPack().getItems());
+                    if(gift == null){
+                        GameMenu.printResult("You don't have this gift!");
+                    } else {
+                        if(gift.getCount() == 1){
+                            player.getBackPack().removeItem(gift);
+                        } else {
+                            gift.setCount(gift.getCount() - 1);
+                        }
+                        int liked = 1;
+                        for(String favorite : npc.getDetail().favoriteGiftsName){
+                            if (favorite.equals(gift.getName())) {
+                                liked = 4;
+                                break;
+                            }
+                        }
+                        player.getFriendshipsNPC().put(npc,player.getFriendshipsNPC().get(npc) + 50 * liked);
+                        GameMenu.printResult("Gift has been removed!");
+                    }
+                } else {
+                    GameMenu.printResult("You are too far!");
+                }
+                return;
+            }
+        }
+        GameMenu.printResult("Wrong name!");
+    }
+    public static void friendshipNPCList() {
+        for(NPC npc : App.getCurrentGame().getNPCs()){
+            GameMenu.printResult("Friendship level with " + npc.getName() + " : " + App.getCurrentGame().getCurrentPlayer().getFriendshipsNPC().get(npc));
+        }
+    }
+    public static void questList() {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        for(NPC npc : App.getCurrentGame().getNPCs()){
+            GameMenu.printResult(npc.getName() + " quests :");
+            StringBuilder message = new StringBuilder();
+            for(Integer active : player.getActivatedQuestNPC().get(npc)){
+                if(npc.getName().equals("Sebastian")){
+                    if (active == 1) {
+                        message.append("Request :");
+                        message.append("50 iron ore");
+                        message.append("\n");
+                        message.append("Reward :");
+                        message.append("2 diamond");
+                    } else if (active == 2) {
+                        message.append("Request :");
+                        message.append("pumpkin pie");
+                        message.append("\n");
+                        message.append("Reward :");
+                        message.append("5000 coin");
+                    } else if (active == 3) {
+                        message.append("Request :");
+                        message.append("150 stones");
+                        message.append("\n");
+                        message.append("Reward :");
+                        message.append("50 quartz");
+                    }
+                } else if(npc.getName().equals("Abigail")){
+                    if (active == 1) {
+                        message.append("Request :");
+                        message.append("1 gold bar");
+                        message.append("\n");
+                        message.append("Reward :");
+                        message.append("1 friendship level");
+                    } else if (active == 2) {
+                        message.append("Request :");
+                        message.append("1 pumpkin");
+                        message.append("\n");
+                        message.append("Reward :");
+                        message.append("500 coin");
+                    } else if (active == 3) {
+                        message.append("Request :");
+                        message.append("50 wheat");
+                        message.append("\n");
+                        message.append("Reward :");
+                        message.append("1 Iridium Sprinkler");
+                    }
+                } else if (npc.getName().equals("Harvey")){
+                    if (active == 1) {
+                        message.append("Request :");
+                        message.append("12 of any plant");
+                        message.append("\n");
+                        message.append("Reward :");
+                        message.append("750 coin");
+                    } else if (active == 2) {
+                        message.append("Request :");
+                        message.append("1 salmon");
+                        message.append("\n");
+                        message.append("Reward :");
+                        message.append("1 friendship level");
+                    } else if (active == 3) {
+                        message.append("Request :");
+                        message.append("1 bottle of wine");
+                        message.append("\n");
+                        message.append("Reward :");
+                        message.append("5 salad");
+                    }
+                } else if (npc.getName().equals("Leah")){
+                    if (active == 1) {
+                        message.append("Request :");
+                        message.append("10 wood");
+                        message.append("\n");
+                        message.append("Reward :");
+                        message.append("500 coin");
+                    } else if (active == 2) {
+                        message.append("Request :");
+                        message.append("1 salmon");
+                        message.append("\n");
+                        message.append("Reward :");
+                        message.append("1 cooking recipe (dinner salmon)");
+                    } else if (active == 3) {
+                        message.append("Request :");
+                        message.append("200 wood");
+                        message.append("\n");
+                        message.append("Reward :");
+                        message.append("3 deluxe scarecrows");
+                    }
+                } else if (npc.getName().equals("Robin")){
+                    if (active == 1) {
+                        message.append("Request :");
+                        message.append("80 wood");
+                        message.append("\n");
+                        message.append("Reward :");
+                        message.append("1000 coin");
+                    } else if (active == 2) {
+                        message.append("Request :");
+                        message.append("10 iron bar");
+                        message.append("\n");
+                        message.append("Reward :");
+                        message.append("3 beehives");
+                    } else if (active == 3) {
+                        message.append("Request :");
+                        message.append("1000 wood");
+                        message.append("\n");
+                        message.append("Reward :");
+                        message.append("25000 coin");
+                    }
+                }
+
+                GameMenu.printResult(message.toString());
+            }
+        }
+    }
+    public static void questFinish(String index) {
+
     }
 }

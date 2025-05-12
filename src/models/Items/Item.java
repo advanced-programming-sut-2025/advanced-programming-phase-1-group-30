@@ -2,8 +2,6 @@ package models.Items;
 
 import java.util.ArrayList;
 
-import models.App;
-
 public class Item {
     private final String name;
     private int count;

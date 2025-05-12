@@ -11,15 +11,13 @@ import models.Game;
 import models.Commands.GameMenuCommands;
 import models.Items.Gift;
 import models.Items.Item;
-import models.Items.Products.ForgingSeed;
-import models.Items.Products.ForgingSeedType;
 import models.Maps.Map;
 import models.Maps.Tile;
 import models.Maps.Weather;
 import models.Players.Friendship;
+import models.Players.NPC.NPC;
 import models.Players.Player;
 import models.Users.User;
-import views.AppView;
 import views.GameMenu;
 
 public class NewGameController {
@@ -189,7 +187,6 @@ public class NewGameController {
                 for (int i = 0; i < tiles.length; i++) {
                     for (int j = 0; j < tiles[i].length; j++) {
                         if (tiles[i][j].isPlanted()) {
-                            ForgingSeed seed = (ForgingSeed)tiles[i][j].getItem();
                             tiles[i][j].getCrop().setDaysPassed(tiles[i][j].getCrop().getDaysPassed() + 1);
                             if (tiles[i][j].getCrop().getStages().get(tiles[i][j].getCrop().getCurrentStage()) == tiles[i][j].getCrop().getDaysPassed()) {
                                 if (tiles[i][j].getCrop().getStages().size() < tiles[i][j].getCrop().getCurrentStage()) {
@@ -215,6 +212,12 @@ public class NewGameController {
                     }
                 }
             }
+            for(Player players1 : App.getCurrentGame().getPlayers()){
+                for(NPC npc : App.getCurrentGame().getNPCs()){
+                    players1.getNPCMeetToday().put(npc,false);
+                }
+            }
+
             App.getCurrentGame().getCurrentTime().setHour(9);
             App.getCurrentGame().setCurrentWeather(App.getCurrentGame().getTomorrowWeather());
             DateAndWeatherController.setTWeather();

@@ -1,7 +1,5 @@
 package models.Items.Products;
 
-import models.Maps.Tile;
-
 public class ForagingCrop extends Product{
     private final ForagingCropType type;
 

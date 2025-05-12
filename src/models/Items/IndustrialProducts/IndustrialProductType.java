@@ -5,7 +5,7 @@ import models.Items.Item;
 import java.util.ArrayList;
 import java.util.List;
 
-public enum CraftingRecipe {
+public enum IndustrialProductType {
     CHERRY_BOMB("cherry bomb", "Destroys everything within a 3-tile radius",
             new ArrayList<>(List.of(new Item(4, "copper ore", 0), new Item(1, "coal", 0))), 50),
 
@@ -94,7 +94,7 @@ public enum CraftingRecipe {
         return sellPrice;
 }
 
-    CraftingRecipe(String name, String description, ArrayList<Item> ingredients, int sellPrice) {
+    IndustrialProductType(String name, String description, ArrayList<Item> ingredients, int sellPrice) {
         this.name = name;
         this.description = description;
         this.ingredients = ingredients;
