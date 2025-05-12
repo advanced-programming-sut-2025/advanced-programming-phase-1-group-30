@@ -18,6 +18,8 @@ import models.Items.Products.ForgingSeed;
 import models.Items.Products.ForgingSeedType;
 import models.Items.Tools.*;
 import models.Maps.Map;
+import models.Players.NPC.NPC;
+import models.Players.NPC.NPCDetail;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,6 +51,8 @@ public class Player {
     private ArrayList<CraftingRecipe> craftingRecipes = new ArrayList<>();
     private Building building;
     private ArrayList<FoodType> recipes = new ArrayList<>();
+    private HashMap<NPC,Integer> friendshipsNPC = new HashMap<>();
+    private HashMap<NPC,Integer> activatedQuestNPC = new HashMap<>();
     private ArrayList<Gift> gifts = new ArrayList<>();
     private Player askedMarriage = null;
     private String gender;
@@ -57,7 +61,6 @@ public class Player {
         this.username = username;
         this.map = null;
         this.energy = 200;
-
         this.shippingBin = new ShippingBin(ShippingBinType.REGULAR);
         this.refrigerator = new Refrigerator();
         this.backPack = new BackPack(BackPackType.INITIAL_BACKPACK);
@@ -67,12 +70,16 @@ public class Player {
         this.backPack.addItem(new Basket(1, BasketType.NORMAL));
         this.backPack.addItem(new Scythe(1));
         this.trashCan = new TrashCan(TrashCanType.INITIAL_TRASHCAN);
-        this.backPack.addItem(new ForgingSeed(1, ForgingSeedType.BLUEBERRY_SEEDS, null)); //TODO tile & initial seed
+        this.backPack.addItem(new ForgingSeed(1, ForgingSeedType.BLUEBERRY_SEEDS)); //TODO tile & initial seed
         this.money = 0;
         this.selectionNumber = selectionNumber;
         this.maxEnergy = 200;
         this.building = new Building(0, 0, 0, 0); //TODO home!!!
         this.recipes = null;
+        for(int i = 0; i < 5; i++){
+            this.friendshipsNPC.put(App.getCurrentGame().getNPCs().get(i), 0);
+            this.activatedQuestNPC.put(App.getCurrentGame().getNPCs().get(i), 0);
+        }
     }
 
     public String getUsername() {
@@ -275,6 +282,19 @@ public class Player {
         this.recipes.add(recipe);
     }
 
+
+    public HashMap<NPC, Integer> getFriendshipsNPC() {
+        for(int i = 0; i < 5 ; i++){
+            if(this.friendshipsNPC.get(App.getCurrentGame().getNPCs().get(i)) > 799){
+                this.friendshipsNPC.put(App.getCurrentGame().getNPCs().get(i), 799);
+            }
+        }
+        return friendshipsNPC;
+    }
+
+    public HashMap<NPC, Integer> getActivatedQuestNPC() {
+        return activatedQuestNPC;
+      
     public ArrayList<Gift> getGifts() {
         return gifts;
     }

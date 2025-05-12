@@ -9,8 +9,8 @@ public class Crop extends Product{
     private int daysPassed = 0;
     private boolean notNeedWaterAnymore = false;
 
-    public Crop(int count, CropType type, Tile tile) {
-        super(count, type.getName(), tile);
+    public Crop(int count, CropType type) {
+        super(count, type.getName());
         this.type = type;
         stages = type.getStages();
     }

@@ -106,11 +106,11 @@ public class Tile {
                 // Emptygit
             }
             else if (36 <= randomItem && randomItem <= 49) {
-                tile.setItem(new Tree(1, TreeType.getRandomTreeType(randomItem - 36), tile));
+                tile.setItem(new Tree(1, TreeType.getRandomTreeType(randomItem - 36)));
                 tile.changeWalkable();
             }
             else if (50 <= randomItem && randomItem <= 54) {
-                tile.setItem(new Stone(randomItem - 49, tile));
+                tile.setItem(new Stone(randomItem - 49));
                 tile.changeWalkable();
             }
         }

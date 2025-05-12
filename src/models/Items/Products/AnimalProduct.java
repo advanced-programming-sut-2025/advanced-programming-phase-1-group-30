@@ -5,8 +5,8 @@ import models.Maps.Tile;
 public class AnimalProduct extends Product{
     private final AnimalProductType type;
 
-    public AnimalProduct(int count, AnimalProductType type, Tile tile) {
-        super(count, type.getName(), tile);
+    public AnimalProduct(int count, AnimalProductType type) {
+        super(count, type.getName());
         this.type = type;
     }
 
