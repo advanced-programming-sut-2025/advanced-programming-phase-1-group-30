@@ -3,12 +3,22 @@ package controllers;
 import models.Animals.*;
 import models.App;
 import models.Buildings.Barn;
+import models.Buildings.Blacksmith;
+import models.Buildings.BlacksmithCosts;
+import models.Buildings.Carpenter;
 import models.Buildings.CarpenterCosts;
 import models.Buildings.Coop;
+import models.Buildings.FishShop;
+import models.Buildings.FishShopCosts;
+import models.Buildings.GeneralStore;
+import models.Buildings.GeneralStoreCosts;
+import models.Buildings.JojaMart;
+import models.Buildings.JojaMartCosts;
+import models.Buildings.Ranch;
 import models.Buildings.RanchCosts;
+import models.Buildings.Saloon;
+import models.Buildings.SaloonCosts;
 import models.Game;
-import models.Animals.Fish;
-import models.Animals.FishType;
 import models.Items.Products.*;
 import models.Invetory.BackPack;
 import models.Invetory.Inventory;
@@ -1213,7 +1223,27 @@ public class GameMenuController {
    
     public static void artisanUse(String artisanName, String itemName) {}
     public static void artisanGet(String name) {}
-    public static void showAllProducts() {}
+
+    public static void showAllProducts() {
+        if (App.getCurrentGame().getCurrentPlayer().getBuilding() instanceof Blacksmith) {
+            GameMenu.printResult(MaintainerController.printingShopProducts("Blacksmith", BlacksmithCosts.values()));
+        } else if (App.getCurrentGame().getCurrentPlayer().getBuilding() instanceof Carpenter) {
+            GameMenu.printResult(MaintainerController.printingShopProducts("Carpenter", CarpenterCosts.values()));
+        } else if (App.getCurrentGame().getCurrentPlayer().getBuilding() instanceof FishShop) {
+            GameMenu.printResult(MaintainerController.printingShopProducts("FishShop", FishShopCosts.values()));
+        } else if (App.getCurrentGame().getCurrentPlayer().getBuilding() instanceof GeneralStore) {
+            GameMenu.printResult(MaintainerController.printingShopProducts("GeneralStore", GeneralStoreCosts.values()));
+        } else if (App.getCurrentGame().getCurrentPlayer().getBuilding() instanceof JojaMart) {
+            GameMenu.printResult(MaintainerController.printingShopProducts("JojaMart", JojaMartCosts.values()));
+        } else if (App.getCurrentGame().getCurrentPlayer().getBuilding() instanceof Ranch) {
+            GameMenu.printResult(MaintainerController.printingShopProducts("Ranch", RanchCosts.values()));
+        } else if (App.getCurrentGame().getCurrentPlayer().getBuilding() instanceof Saloon) {
+            GameMenu.printResult(MaintainerController.printingShopProducts("Saloon", SaloonCosts.values()));
+        } else {
+            GameMenu.printResult("You are not int a store!");
+        }
+    }
+
     public static void showAvailableProducts() {}
     public static void purchase(String name, String amount){}
     public static void cheatAddMoney(String amount){}

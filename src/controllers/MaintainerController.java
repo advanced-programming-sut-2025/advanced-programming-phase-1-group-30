@@ -48,4 +48,21 @@ public class MaintainerController {
             }
         }
     }
+
+    public static <T> String printingShopProducts(String name, T[] list) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(name + " Products: ");
+        
+        for (int i = 0; i < list.length; i++) {
+            sb.append(list[i]);
+            if (i < list.length - 1) {
+                sb.append("-");
+            } else {
+                sb.append("\n");
+            }
+        }
+
+        return sb.toString();
+    }
 }

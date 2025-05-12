@@ -260,8 +260,16 @@ public class GameMenu implements AppMenu {
             GameMenuController.sellAnimal(matcher.group("name"));
             return;
         }
-
-
+        matcher = GameMenuCommands.SHOW_ALL_PRODUCTS.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.showAllProducts();
+            return;
+        }
+        matcher = GameMenuCommands.SHOW_ALL_AVAILABLE_PRODUCTS.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.showAllProducts(); //TODO must print availables
+            return;
+        }
         
         System.out.println("Invalid command.");
     }
