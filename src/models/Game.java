@@ -4,9 +4,12 @@ import java.util.ArrayList;
 
 import models.Maps.GreatMap;
 import models.Maps.Weather;
+import models.Players.NPC.*;
+import models.Players.NPC.Sebastian;
 import models.Players.Player;
 import models.Players.Trade;
 import models.TimeAndDate.Time;
+
 
 public class Game {
     private GreatMap map;
@@ -16,6 +19,7 @@ public class Game {
     private Weather tomorrowWeather;
     private ArrayList<Player> players = new ArrayList<>();
     private ArrayList<Trade> trades = new ArrayList<>();
+    private ArrayList<NPC> NPCs = new ArrayList<>();
 
     public Game(ArrayList<Player> players) {
         this.map = null;
@@ -24,6 +28,11 @@ public class Game {
         this.currentWeather = Weather.SUNNY;
         this.players = players;
         this.trades = null;
+        this.NPCs.add(new Sebastian());
+        this.NPCs.add(new Abigail());
+        this.NPCs.add(new Harvey());
+        this.NPCs.add(new Leah());
+        this.NPCs.add(new Robin());
     }
     
     public GreatMap getGreatMap() {
@@ -67,5 +76,9 @@ public class Game {
     }
     public void setTomorrowWeather(Weather tomorrowWeather) {
         this.tomorrowWeather = tomorrowWeather;
+    }
+
+    public ArrayList<NPC> getNPCs() {
+        return NPCs;
     }
 }

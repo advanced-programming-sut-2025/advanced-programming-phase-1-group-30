@@ -176,7 +176,11 @@ public class GameMenu implements AppMenu {
             GameMenuController.placeItem(matcher.group("itemName"), matcher.group("direction"));
             return;
         }
-
+        matcher = GameMenuCommands.CHEAT_ADD_ITEM.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.cheatAddItem(matcher.group("itemName"), matcher.group("count"));
+            return;
+        }
         matcher = GameMenuCommands.COOKING_REFRIGERATOR.regexMatcher(command);
         if (matcher.matches()) {
             if (matcher.group("action").equals("put"))
@@ -268,6 +272,31 @@ public class GameMenu implements AppMenu {
         matcher = GameMenuCommands.SHOW_ALL_AVAILABLE_PRODUCTS.regexMatcher(command);
         if (matcher.matches()) {
             GameMenuController.showAllProducts(); //TODO must print availables
+            return;
+        }
+        matcher = GameMenuCommands.MEET_NPC.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.meetNPC(matcher.group("npcName"));
+            return;
+        }
+        matcher = GameMenuCommands.GIFT_NPC.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.giftNPC(matcher.group("npcName"), matcher.group("item"));
+            return;
+        }
+        matcher = GameMenuCommands.FRIENDSHIP_NPC_LIST.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.friendshipNPCList();
+            return;
+        }
+        matcher = GameMenuCommands.QUESTS_LIST.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.questList();
+            return;
+        }
+        matcher = GameMenuCommands.QUESTS_FINISH.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.questFinish(matcher.group("index"));
             return;
         }
         

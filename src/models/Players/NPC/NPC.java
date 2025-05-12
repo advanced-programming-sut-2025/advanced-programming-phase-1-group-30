@@ -1,20 +1,35 @@
 package models.Players.NPC;
 
-import models.Buildings.BuildingsInfo;
+import models.App;
+import models.Items.Item;
 import models.Maps.Tile;
+import models.Maps.Weather;
+import models.Players.Player;
+import views.GameMenu;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public abstract class NPC {
-    protected String name;
-    protected Tile tile;
-    protected int friendshipLevel = 0;
-    protected int friendshipPoint = 0;
-    protected ArrayList<Quest> quests= new ArrayList<>();
-    protected Job job;
-    protected ArrayList<Objects> favoriteGifts = new ArrayList<>();
-    protected ArrayList<String> dialogues = new ArrayList<>();
-    protected ArrayList<Tile> neighborTiles = new ArrayList<>();
-    protected BuildingsInfo store;
+    private String name;
+    private Tile tile;
+    private NPCDetail detail;
+    private ArrayList<Item> favoriteGifts = new ArrayList<>();
+    private boolean quest1 = false;
+    private boolean quest2 = false;
+    private boolean quest3 = false;
+    private int quest3Activation;
+
+    public NPC(NPCDetail detail) {
+        this.name = detail.name;
+        this.tile = detail.tile;
+        this.detail = detail;
+        this.favoriteGifts.addAll(detail.favoriteGifts);
+    }
+
+    public abstract void quest1();
+    public abstract void quest2();
+    public abstract void quest3();
+    public abstract void talk();
 }
+
+

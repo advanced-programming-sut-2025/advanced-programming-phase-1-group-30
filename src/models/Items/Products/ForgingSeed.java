@@ -8,10 +8,10 @@ public class ForgingSeed extends Product {
     private boolean isFertilized;
     private boolean isWatered;
 
-    public ForgingSeed(int count, ForgingSeedType type, Tile tile) {
-        super(count, type.getName(), tile);
+    public ForgingSeed(int count, ForgingSeedType type) {
+        super(count, type.getName());
         this.type = type;
-        this.crop = new Crop(1, type.getCrop(), tile);
+        this.crop = new Crop(1, type.getCrop());
     }
 
     public ForgingSeedType getType() {
