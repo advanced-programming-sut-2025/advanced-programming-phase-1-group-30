@@ -1,12 +1,10 @@
 package models.Items.Products;
 
-import models.Maps.Tile;
-
 public class Fruit extends Product{
     private final FruitType type;
 
     public Fruit(int count, FruitType type) {
-        super(count, type.getName());
+        super(count, type.getName(), type.getBaseSellPrice());
         this.type = type;
     }
 

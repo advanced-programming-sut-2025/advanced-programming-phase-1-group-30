@@ -3,6 +3,7 @@ package models.Animals;
 import models.App;
 import models.Buildings.RanchCosts;
 import models.Items.Item;
+import models.Items.Products.AnimalProductType;
 import models.Items.Tools.MilkPail;
 import models.Players.Player;
 import views.GameMenu;
@@ -30,7 +31,7 @@ public class Goat extends Animal {
                 qualityAssign(quality);
             } else {
                 if (rand < chance) {
-                    this.bigGoatMilk = new Item(1, "big goat milk");
+                    this.bigGoatMilk = new Item(1, "big goat milk", AnimalProductType.GOAT_BIG_MILK.getPrice());
                     if (quality >= 0 && quality < 0.5) {
                         this.bigGoatMilk.setQuality("regular");
                         this.bigGoatMilk.setCof(1);
@@ -54,7 +55,7 @@ public class Goat extends Animal {
     }
 
     private void qualityAssign(double quality) {
-        this.goatMilk = new Item(1, "goat milk");
+        this.goatMilk = new Item(1, "goat milk", AnimalProductType.GOAT_MILK.getPrice());
         if (quality >= 0 && quality < 0.5) {
             this.goatMilk.setQuality("regular");
             this.goatMilk.setCof(1);

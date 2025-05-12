@@ -3,6 +3,7 @@ package models.Animals;
 import models.App;
 import models.Buildings.RanchCosts;
 import models.Items.Item;
+import models.Items.Products.AnimalProductType;
 import models.Items.Tools.MilkPail;
 import models.Items.Tools.Shear;
 import models.Players.Player;
@@ -31,7 +32,7 @@ public class Sheep extends Animal {
         }
     }
     private void qualityAssign(double quality) {
-        this.wool = new Item(1, "wool");
+        this.wool = new Item(1, "wool", AnimalProductType.WOOL.getPrice());
         if (quality >= 0 && quality < 0.5) {
             this.wool.setQuality("regular");
             this.wool.setCof(1);

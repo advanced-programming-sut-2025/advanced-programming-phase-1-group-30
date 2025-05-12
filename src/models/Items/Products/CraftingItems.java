@@ -7,7 +7,7 @@ public class CraftingItems extends Item {
     private CraftingRecipe type;
 
     public CraftingItems(int count, CraftingRecipe type) {
-        super(count, type.name());
+        super(count, type.name(), type.getSellPrice());
         this.type = type;
     }
 

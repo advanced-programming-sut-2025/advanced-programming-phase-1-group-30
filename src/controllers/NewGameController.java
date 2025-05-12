@@ -134,7 +134,7 @@ public class NewGameController {
                         currentPlayer.getAskedMarriage().getBackPack().getItems().remove(weddingRing);
                     } else {
                         weddingRing.setCount(weddingRing.getCount() - 1);
-                        currentPlayer.getBackPack().addItem(new Item(1, "wedding ring"));
+                        currentPlayer.getBackPack().addItem(new Item(1, "wedding ring", weddingRing.getPrice()));
                     }
                     currentPlayer.getFriendships().get(currentPlayer.getAskedMarriage()).addXp(0, false, true);
                     currentPlayer.getAskedMarriage().getFriendships().get(currentPlayer).addXp(0, false, true);
