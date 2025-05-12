@@ -1,11 +1,7 @@
 package models.Players.NPC;
 
-import models.App;
 import models.Items.Item;
 import models.Maps.Tile;
-import models.Maps.Weather;
-import models.Players.Player;
-import views.GameMenu;
 
 import java.util.ArrayList;
 
@@ -13,23 +9,62 @@ public abstract class NPC {
     private String name;
     private Tile tile;
     private NPCDetail detail;
-    private ArrayList<Item> favoriteGifts = new ArrayList<>();
+    private ArrayList<String> favoriteGifts = new ArrayList<>();
     private boolean quest1 = false;
     private boolean quest2 = false;
     private boolean quest3 = false;
-    private int quest3Activation;
 
     public NPC(NPCDetail detail) {
         this.name = detail.name;
         this.tile = detail.tile;
         this.detail = detail;
-        this.favoriteGifts.addAll(detail.favoriteGifts);
+        this.favoriteGifts.addAll(detail.favoriteGiftsName);
     }
 
     public abstract void quest1();
     public abstract void quest2();
     public abstract void quest3();
     public abstract void talk();
+
+    public String getName() {
+        return name;
+    }
+
+    public Tile getTile() {
+        return tile;
+    }
+
+    public NPCDetail getDetail() {
+        return detail;
+    }
+
+    public ArrayList<String> getFavoriteGifts() {
+        return favoriteGifts;
+    }
+
+    public boolean isQuest1() {
+        return quest1;
+    }
+
+    public boolean isQuest2() {
+        return quest2;
+    }
+
+    public boolean isQuest3() {
+        return quest3;
+    }
+
+    public void setQuest1(boolean quest1) {
+        this.quest1 = quest1;
+    }
+
+    public void setQuest2(boolean quest2) {
+        this.quest2 = quest2;
+    }
+
+    public void setQuest3(boolean quest3) {
+        this.quest3 = quest3;
+    }
 }
 
 

@@ -23,6 +23,7 @@ import models.Players.NPC.NPCDetail;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Player {
     private int x;
@@ -52,7 +53,8 @@ public class Player {
     private Building building;
     private ArrayList<FoodType> recipes = new ArrayList<>();
     private HashMap<NPC,Integer> friendshipsNPC = new HashMap<>();
-    private HashMap<NPC,Integer> activatedQuestNPC = new HashMap<>();
+    private HashMap<NPC,ArrayList<Integer>> activatedQuestNPC = new HashMap<>();
+    private HashMap<NPC,Boolean> NPCMeetToday  = new HashMap<>();
     private ArrayList<Gift> gifts = new ArrayList<>();
     private Player askedMarriage = null;
     private String gender;
@@ -78,7 +80,8 @@ public class Player {
         this.recipes = null;
         for(int i = 0; i < 5; i++){
             this.friendshipsNPC.put(App.getCurrentGame().getNPCs().get(i), 0);
-            this.activatedQuestNPC.put(App.getCurrentGame().getNPCs().get(i), 0);
+            this.activatedQuestNPC.put(App.getCurrentGame().getNPCs().get(i), new ArrayList<>(List.of(1)));
+            this.NPCMeetToday.put(App.getCurrentGame().getNPCs().get(i), false);
         }
     }
 
@@ -292,9 +295,15 @@ public class Player {
         return friendshipsNPC;
     }
 
-    public HashMap<NPC, Integer> getActivatedQuestNPC() {
+
+    public HashMap<NPC, ArrayList<Integer>> getActivatedQuestNPC() {
         return activatedQuestNPC;
-      
+    }
+
+    public HashMap<NPC, Boolean> getNPCMeetToday() {
+        return NPCMeetToday;
+    }
+
     public ArrayList<Gift> getGifts() {
         return gifts;
     }
