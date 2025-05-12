@@ -3,17 +3,13 @@ package controllers;
 import models.Animals.*;
 import models.App;
 import models.Buildings.*;
-import models.Game;
 import models.Items.Gift;
 import models.Items.Products.*;
 import models.Items.Products.ShopProducts.ShopProduct;
-import models.Invetory.BackPack;
-import models.Invetory.Inventory;
 import models.Items.Item;
-import models.Items.ArtisanGoods.ArtisanGood;
 import models.Items.Foods.Food;
 import models.Items.Foods.FoodType;
-import models.Items.IndustrialProducts.CraftingRecipe;
+import models.Items.IndustrialProducts.IndustrialProductType;
 import models.Items.IndustrialProducts.IndustrialProduct;
 import models.Items.Tools.*;
 import models.Maps.Map;
@@ -25,6 +21,7 @@ import models.Players.Friendship;
 import models.Players.NPC.NPC;
 import models.Players.NPC.NPCDetail;
 import models.Players.Player;
+import models.Players.Trade;
 import models.Users.User;
 import views.GameMenu;
 import views.RegisterMenu;
@@ -295,8 +292,8 @@ public class GameMenuController {
             if(player.getEnergy() > energyNeeded){
                 if(targetTile.getItem() != null) {
                     if (targetTile.getItem() instanceof Tree) {
-                        Item wood = new Item(12, "wood");
-                        Item sap = new Item(2, "sap");
+                        Item wood = new Item(12, "wood", 10);
+                        Item sap = new Item(2, "sap", 10);
 
                         Item newWood = Item.findItemByName(wood.getName(), player.getBackPack().getItems());
                         Item newSap = Item.findItemByName(sap.getName(), player.getBackPack().getItems());
@@ -328,7 +325,7 @@ public class GameMenuController {
 
                         targetTile.setItem(null);
                         GameMenu.printResult("You chop down the tree and collect 12 wood and 2 sap.");
-                    } else if (targetTile.getItem().equals(new Item(1, "branch"))) {
+                    } else if (targetTile.getItem().equals(new Item(1, "Wood", 10))) {
                         targetTile.setItem(null);
                         GameMenu.printResult("You clear the branch from the ground.");
                     } else {
@@ -596,7 +593,7 @@ public class GameMenuController {
         }
     }
     public static void showCraftingRecipes() {
-        for(CraftingRecipe recipe :App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()){
+        for(IndustrialProductType recipe :App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()){
             GameMenu.printResult(recipe.name + ": " + recipe.description);
             StringBuilder ingredients = new StringBuilder();
             ingredients.append("ingredients :");
@@ -612,7 +609,7 @@ public class GameMenuController {
     public static void crafting(String name) {
         Player player = App.getCurrentGame().getCurrentPlayer();
 
-        for(CraftingRecipe recipe : CraftingRecipe.values()){
+        for(IndustrialProductType recipe : IndustrialProductType.values()){
             if(recipe.name.equals(name)){
                 if(player.getCraftingRecipes().contains(recipe)){
                     for(Item items : recipe.ingredients){
@@ -627,7 +624,7 @@ public class GameMenuController {
                             }
                         }
                     }
-                    CraftingItems crafted = new CraftingItems(1, recipe);
+                    IndustrialProduct crafted = new IndustrialProduct(1, recipe);
 
                     Item newItem = Item.findItemByName(crafted.getName(), player.getBackPack().getItems());
 
@@ -709,9 +706,9 @@ public class GameMenuController {
     }
     public static void cheatAddItem(String name, String count) {
         Player player = App.getCurrentGame().getCurrentPlayer();
-        for(CraftingRecipe recipe : CraftingRecipe.values()){
+        for(IndustrialProductType recipe : IndustrialProductType.values()){
             if(recipe.name.equals(name)){
-                Item newItem = new CraftingItems(Integer.parseInt(count), recipe);
+                Item newItem = new IndustrialProduct(Integer.parseInt(count), recipe);
                 Item itemBackpack = Item.findItemByName(newItem.getName(), player.getBackPack().getItems());
                 if(itemBackpack == null){
                     if(player.getBackPack().getType().getCapacity() > player.getBackPack().getItems().size()){
@@ -795,6 +792,7 @@ public class GameMenuController {
 
     public static void cooking(String name) {
         FoodType recipe = FoodType.getrecipeByName(name);
+        Player player = App.getCurrentGame().getCurrentPlayer();
         if (recipe == null)
             GameMenu.printResult("No recipe with given name were found!");
 
@@ -804,6 +802,10 @@ public class GameMenuController {
         }
         if (!recipeLeared) {
             GameMenu.printResult("You didn't learn this recipe!");
+            return;
+        }
+        if (player.getBackPack().getItems().size() >= player.getBackPack().getType().getCapacity()) {
+            GameMenu.printResult("Your Backpack is full!!");
             return;
         }
 
@@ -848,7 +850,6 @@ public class GameMenuController {
                 backpackItem.changeCount(-1 * ingredient.getCount());
         }
 
-        //TODO backpack is full!!!
         App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(new Food(1, recipe));
         App.getCurrentGame().getCurrentPlayer().changeEnergy(3);
     }
@@ -1256,13 +1257,19 @@ public class GameMenuController {
     }
    
     public static void artisanUse(String artisanName, String itemName) {
-        CraftingRecipe recipe = null;
-        for (CraftingRecipe craftingRecipe : App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()) {
+        IndustrialProductType recipe = null;
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        for (IndustrialProductType craftingRecipe : App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()) {
             if (craftingRecipe.getName().equals(artisanName)) recipe = craftingRecipe;
         }
 
         if (recipe == null) {
             GameMenu.printResult("No recipe with given name were found!");
+            return;
+        }
+
+        if (player.getBackPack().getItems().size() >= player.getBackPack().getType().getCapacity()) {
+            GameMenu.printResult("Your Backpack is full!!");
             return;
         }
 
@@ -1290,7 +1297,6 @@ public class GameMenuController {
                 backpackItem.changeCount(-1 * ingredient.getCount());
         }
 
-        //TODO backpack is full!!!
         App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(new IndustrialProduct(1, recipe));
     }
 
@@ -1386,7 +1392,7 @@ public class GameMenuController {
         if (item.getCount() == amount)player.getBackPack().removeItem(item);
         else item.changeCount(-1  * amount);
 
-        player.setMoney(player.getMoney() + (int) player.getShippingBin().getType().calculateNewPrice(item.getCount() * amount));
+        player.setMoney(player.getMoney() + (int) player.getShippingBin().getType().calculateNewPrice(item.getPrice() * amount));
         //TODO money will be got next day
         GameMenu.printResult("Item sold successfully!");
     }
@@ -1459,7 +1465,7 @@ public class GameMenuController {
                 GameMenu.printResult("Gift sent to " + username + " successfully!");
                 break;
             } else {
-                otherPlayer.getBackPack().addItem(new Item(amount, item));
+                otherPlayer.getBackPack().addItem(new Item(amount, item, item1.getPrice()));
                 GameMenu.printResult("Gift sent to " + username + " successfully!");
                 break;
             }
@@ -1468,7 +1474,7 @@ public class GameMenuController {
         if (gift.getCount() == 0) {
             player.getBackPack().removeItem(gift);
         }
-        otherPlayer.getGifts().add(new Gift(amount, item, player));
+        otherPlayer.getGifts().add(new Gift(amount, item, player, (int) gift.getPrice()));
     }
     public static void giftList(){
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -1542,7 +1548,7 @@ public class GameMenuController {
         }
         Item otherBouquet = Item.findItemByName("bouquet", otherPlayer.getBackPack().getItems());
         if (otherBouquet == null) {
-            otherPlayer.getBackPack().addItem(new Item(1, "bouquet"));
+            otherPlayer.getBackPack().addItem(new Item(1, "bouquet", GeneralStoreCosts.BOUQUET.getPrice()));
         } else {
             otherBouquet.setCount(otherBouquet.getCount() + 1);
         }
@@ -1577,12 +1583,40 @@ public class GameMenuController {
         otherPlayer.setAskedMarriage(player);
         GameMenu.printResult("Marriage has been asked!");
     }
-    public static void startTrade() {}
+    public static void startTrade() {
+        GameMenu.printResult("=== Trading Menu ===");
+        GameMenu.printResult("These players are ready to trade.");
+        ArrayList<Player> players = App.getCurrentGame().getPlayers();
+        for (Trade trade : App.getCurrentGame().getTrades()) {
+            int check = 0;
+            int check2 = 0;
+            if (trade.getType().equals("offer")) {
+                check = 1;
+                if (trade.getMoneyOrItem().equals("money")) {
+                    check2 = 1;
+                }
+            } else {
+                if (trade.getMoneyOrItem().equals("money")) {
+                    check2 = 1;
+                }
+            }
+            if (check == 0 && check2 == 0) {
+                GameMenu.printResult(trade.getGetter().getUsername() + " wants " + trade.getRequestedItem().getName() + " in exchange for " + trade.getOfferedItem());
+            } else if (check == 1 && check2 == 0) {
+                GameMenu.printResult(trade.getGetter().getUsername() + " offers " + trade.getOfferedItem().getName() + " in exchange for " + trade.getRequestedItem());
+            } else if (check == 1 && check2 == 1) {
+                GameMenu.printResult(trade.getGetter().getUsername() + " offers " + trade.getOfferedItem().getName() + " in exchange for " + trade.getMoney());
+            } else if (check == 0 && check2 == 1) {
+                GameMenu.printResult(trade.getGetter().getUsername() + " wants " + trade.getRequestedItem().getName() + " in exchange for " + trade.getMoneyOrItem());
+            }
+        }
+    }
     public static void trade(String username, String type, String item, String amount, String price){}
     public static void tradeProducts(String username, String type, String item, String amount, String targetItem, String targetAmount){}
     public static void tradeList(){}
     public static void tradeResponse(String id){}
     public static void tradeHistory(){}
+
     public static void meetNPC(String name) {
         Player player = App.getCurrentGame().getCurrentPlayer();
         for(NPC npc : App.getCurrentGame().getNPCs()){
@@ -1755,5 +1789,4 @@ public class GameMenuController {
     public static void questFinish(String index) {
         
     }
-    public static void passOut() {}
 }

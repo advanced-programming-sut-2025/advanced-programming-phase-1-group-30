@@ -17,7 +17,7 @@ public class Game {
     private Time currentTime;
     private Weather currentWeather;
     private Weather tomorrowWeather;
-    private ArrayList<Player> players = new ArrayList<>();
+    private ArrayList<Player> players;
     private ArrayList<Trade> trades = new ArrayList<>();
     private ArrayList<NPC> NPCs = new ArrayList<>();
 

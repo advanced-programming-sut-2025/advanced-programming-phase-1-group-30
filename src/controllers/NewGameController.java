@@ -11,8 +11,6 @@ import models.Game;
 import models.Commands.GameMenuCommands;
 import models.Items.Gift;
 import models.Items.Item;
-import models.Items.Products.ForgingSeed;
-import models.Items.Products.ForgingSeedType;
 import models.Maps.Map;
 import models.Maps.Tile;
 import models.Maps.Weather;
@@ -20,7 +18,6 @@ import models.Players.Friendship;
 import models.Players.NPC.NPC;
 import models.Players.Player;
 import models.Users.User;
-import views.AppView;
 import views.GameMenu;
 
 public class NewGameController {
@@ -135,7 +132,7 @@ public class NewGameController {
                         currentPlayer.getAskedMarriage().getBackPack().getItems().remove(weddingRing);
                     } else {
                         weddingRing.setCount(weddingRing.getCount() - 1);
-                        currentPlayer.getBackPack().addItem(new Item(1, "wedding ring"));
+                        currentPlayer.getBackPack().addItem(new Item(1, "wedding ring", weddingRing.getPrice()));
                     }
                     currentPlayer.getFriendships().get(currentPlayer.getAskedMarriage()).addXp(0, false, true);
                     currentPlayer.getAskedMarriage().getFriendships().get(currentPlayer).addXp(0, false, true);
@@ -190,7 +187,6 @@ public class NewGameController {
                 for (int i = 0; i < tiles.length; i++) {
                     for (int j = 0; j < tiles[i].length; j++) {
                         if (tiles[i][j].isPlanted()) {
-                            ForgingSeed seed = (ForgingSeed)tiles[i][j].getItem();
                             tiles[i][j].getCrop().setDaysPassed(tiles[i][j].getCrop().getDaysPassed() + 1);
                             if (tiles[i][j].getCrop().getStages().get(tiles[i][j].getCrop().getCurrentStage()) == tiles[i][j].getCrop().getDaysPassed()) {
                                 if (tiles[i][j].getCrop().getStages().size() < tiles[i][j].getCrop().getCurrentStage()) {
@@ -212,6 +208,7 @@ public class NewGameController {
                 for (java.util.Map.Entry<Player, Friendship> entry : player.getFriendships().entrySet()) {
                     if (entry.getValue().isTalkedToday()) {
                         entry.getValue().setTalkedToday(false);
+                        entry.getValue().setSentGiftToday(false);
                     }
                 }
             }

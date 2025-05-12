@@ -3,6 +3,7 @@ package models.Animals;
 import models.App;
 import models.Buildings.RanchCosts;
 import models.Items.Item;
+import models.Items.Products.AnimalProductType;
 import models.Players.Player;
 import views.GameMenu;
 import java.util.Random;
@@ -26,7 +27,7 @@ public class Chicken extends Animal {
             qualityAssign(quality);
         } else {
             if (rand < chance) {
-                this.bigEgg = new Item(1, "big egg");
+                this.bigEgg = new Item(1, "big egg", AnimalProductType.BIG_EGG.getPrice());
                 if (quality >= 0 && quality < 0.5) {
                     this.bigEgg.setQuality("regular");
                     this.bigEgg.setCof(1);
@@ -48,7 +49,7 @@ public class Chicken extends Animal {
     }
 
     private void qualityAssign(double quality) {
-        this.egg = new Item(1, "egg");
+        this.egg = new Item(1, "egg", AnimalProductType.EGG.getPrice());
         if (quality >= 0 && quality < 0.5) {
             this.egg.setQuality("regular");
             this.egg.setCof(1);

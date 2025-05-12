@@ -3,7 +3,7 @@ package models.Animals;
 import models.App;
 import models.Buildings.RanchCosts;
 import models.Items.Item;
-import models.Items.Tools.MilkPail;
+import models.Items.Products.AnimalProductType;
 import models.Items.Tools.Shear;
 import models.Players.Player;
 import views.GameMenu;
@@ -22,8 +22,6 @@ public class Sheep extends Animal {
         if (daysPassed == 3) {
             Random random = new Random();
             double rand2 = random.nextDouble(1);
-            double x = (random.nextFloat(1) + 0.5);
-            double chance = (getFriendship() + (x * 150)) / 1500;
             double quality = (double) getFriendship() / 1000 * (0.5 + 0.5 * rand2);
             qualityAssign(quality);
             this.setProductReady(true);
@@ -31,7 +29,7 @@ public class Sheep extends Animal {
         }
     }
     private void qualityAssign(double quality) {
-        this.wool = new Item(1, "wool");
+        this.wool = new Item(1, "wool", AnimalProductType.WOOL.getPrice());
         if (quality >= 0 && quality < 0.5) {
             this.wool.setQuality("regular");
             this.wool.setCof(1);

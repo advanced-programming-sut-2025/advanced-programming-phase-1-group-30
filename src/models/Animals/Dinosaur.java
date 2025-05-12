@@ -3,7 +3,7 @@ package models.Animals;
 import models.App;
 import models.Buildings.RanchCosts;
 import models.Items.Item;
-import models.Items.Tools.Shear;
+import models.Items.Products.AnimalProductType;
 import models.Players.Player;
 import views.GameMenu;
 
@@ -21,8 +21,6 @@ public class Dinosaur extends Animal {
         if (daysPassed == 8) {
             Random random = new Random();
             double rand2 = random.nextDouble(1);
-            double x = (random.nextFloat(1) + 0.5);
-            double chance = (getFriendship() + (x * 150)) / 1500;
             double quality = (double) getFriendship() / 1000 * (0.5 + 0.5 * rand2);
             qualityAssign(quality);
             this.setProductReady(true);
@@ -30,7 +28,7 @@ public class Dinosaur extends Animal {
         }
     }
     private void qualityAssign(double quality) {
-        this.dinosaurEgg = new Item(1, "dinosaur egg");
+        this.dinosaurEgg = new Item(1, "dinosaur egg", AnimalProductType.DINASOUR_EGG.getPrice());
         if (quality >= 0 && quality < 0.5) {
             this.dinosaurEgg.setQuality("regular");
             this.dinosaurEgg.setCof(1);

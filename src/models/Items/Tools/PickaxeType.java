@@ -1,9 +1,5 @@
 package models.Items.Tools;
 
-import java.util.ArrayList;
-
-import models.Items.Products.Stone;
-
 public enum PickaxeType {
     NORMAL("normal pickaxe",5,0),
     COPPER("copper pickaxe", 4,1),
