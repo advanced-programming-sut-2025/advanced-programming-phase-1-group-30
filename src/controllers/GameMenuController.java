@@ -1946,12 +1946,7 @@ public class GameMenuController {
     private static void transferMoney(Player from, Player to, int amount) {
         from.adjustMoney(-amount);
         to.adjustMoney(+amount);
-    public static void trade(String username, String type, String item, String amount, String price){}
-    public static void tradeProducts(String username, String type, String item, String amount, String targetItem, String targetAmount){}
-    public static void tradeList(){}
-    public static void tradeResponse(String id){}
-    public static void tradeHistory(){}
-
+    }
     public static void meetNPC(String name) {
         Player player = App.getCurrentGame().getCurrentPlayer();
         for(NPC npc : App.getCurrentGame().getNPCs()){
@@ -2122,6 +2117,5 @@ public class GameMenuController {
         }
     }
     public static void questFinish(String index) {
-
     }
 }
