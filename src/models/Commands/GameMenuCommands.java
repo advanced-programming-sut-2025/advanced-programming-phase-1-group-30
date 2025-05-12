@@ -4,8 +4,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public enum GameMenuCommands {
-    GAME_NEW("^\\s*game\\s+new\\s*(-u\\s+(?<username1>.*\\S))?(\\s+(?<username2>.*\\S))?(\\s+(?<username3>.*\\S))?\\s*$"),
-    GAME_MAP("^\\s*game\\s+map\\s+(?<mapNumber>\\d+)\\s*$"),
+    GAME_NEW("^\\s*game\\s+new\\s*(-u\\s+(?<username1>\\S+))?(\\s+(?<username2>\\S+))?(\\s+(?<username3>\\S+))?\\s*$"),
+    GAME_MAP("^\\s*game\\s+map\\s+(?<mapNumber>\\d+)\\s+-g(?<gender>.+)\\s*$"),
     LOAD_GAME("^\\s*load\\s+game\\s*$"),
     EXIT_GAME("^\\s*exit\\s+game\\s*$"),
     NEXT_TURN("^\\s*next\\s+turn\\s*$"),
@@ -72,7 +72,7 @@ public enum GameMenuCommands {
     HUG("^\\s*hug\\s+-u\\s+(?<username>.*\\S)\\s*$"),
     FLOWER("^\\s*flower\\s+-u\\s+(?<username>.*\\S)\\s*$"),
     ASK_MARRIAGE("^\\s*ask\\s+marriage\\s+-u\\s+(?<username>.*\\S)\\s+-r\\s+(?<ring>.*\\S)\\s*$"),
-    RESPOND("^\\s*respond\\s+(-accept|-reject)\\s+-u\\s+(?<username>.*\\S)\\s*$"),
+    RESPOND("^\\s*respond\\s+(?<answer>(-accept|-reject))\\s+-u\\s+(?<username>.*\\S)\\s*$"),
     START_TRADE("^\\s*start\\s+trade\\s*$"),
     TRADE("^\\s*trade\\s+-u\\s+(?<username>.*\\S)\\s+-t\\s+(?<type>.*\\S)\\s+-i\\s+(?<item>.*\\S)\\s+-a\\s+(?<amount>.*\\S)(\\s+-p\\s+(?<price>.*\\S))?(\\s+-ti\\s+(?<targetItem>.*\\S)\\s+-ta\\s+(?<targetAmount>.*\\S))?\\s*$"),
     TRADE_LIST("^\\s*trade\\s+list\\s*$"),

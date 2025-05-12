@@ -1,6 +1,7 @@
 package models.Players;
 
 import models.Animals.Animal;
+import models.App;
 import models.Buildings.Building;
 import models.Invetory.BackPack;
 import models.Invetory.BackPackType;
@@ -9,6 +10,7 @@ import models.Invetory.ShippingBin;
 import models.Invetory.ShippingBinType;
 import models.Invetory.TrashCan;
 import models.Invetory.TrashCanType;
+import models.Items.Gift;
 import models.Items.Item;
 import models.Items.Foods.FoodType;
 import models.Items.IndustrialProducts.CraftingRecipe;
@@ -31,7 +33,7 @@ public class Player {
     private TrashCan trashCan;
     private Refrigerator refrigerator;
     private int money;
-    private final HashMap<Player, Integer> friendships = new HashMap<>();
+    private final HashMap<Player, Friendship> friendships = new HashMap<>();
     private final ArrayList<Skills> skills = new ArrayList<>();
     private int selectionNumber;
     private boolean isPassedOut = false;
@@ -47,6 +49,9 @@ public class Player {
     private ArrayList<CraftingRecipe> craftingRecipes = new ArrayList<>();
     private Building building;
     private ArrayList<FoodType> recipes = new ArrayList<>();
+    private ArrayList<Gift> gifts = new ArrayList<>();
+    private Player askedMarriage = null;
+    private String gender;
 
     public Player(String username, int selectionNumber) {
         this.username = username;
@@ -126,7 +131,7 @@ public class Player {
         this.money = money;
     }
 
-    public HashMap<Player, Integer> getFriendships() {
+    public HashMap<Player, Friendship> getFriendships() {
         return friendships;
     }
     public boolean isPassedOut() {
@@ -268,5 +273,31 @@ public class Player {
 
     public void addRecipe(FoodType recipe) {
         this.recipes.add(recipe);
+    }
+
+    public ArrayList<Gift> getGifts() {
+        return gifts;
+    }
+
+    public Player getAskedMarriage() {
+        return askedMarriage;
+    }
+
+    public void setAskedMarriage(Player askedMarriage) {
+        this.askedMarriage = askedMarriage;
+    }
+
+    public static boolean areAdjacent(Player player, Player otherPlayer) {
+        int dx = Math.abs(player.getX() - otherPlayer.getX());
+        int dy = Math.abs(player.getY() - otherPlayer.getY());
+        return (dx <= 1 && dy <= 1) && !(dx == 0 && dy == 0);
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 }

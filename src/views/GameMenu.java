@@ -38,7 +38,7 @@ public class GameMenu implements AppMenu {
         }
         matcher = GameMenuCommands.NEXT_TURN.regexMatcher(command);
         if (matcher.matches()) {
-            NewGameController.NextTurn();
+            NewGameController.NextTurn(scanner);
             return;
         }
         matcher = GameMenuCommands.TIME.regexMatcher(command);
@@ -245,9 +245,15 @@ public class GameMenu implements AppMenu {
             GameMenuController.shepherdAnimals(matcher.group("animalName"), matcher.group("x"), matcher.group("y"));
             return;
         }
+
         matcher = GameMenuCommands.FEED_HAY.regexMatcher(command);
         if (matcher.matches()) {
             GameMenuController.feedHay(matcher.group("animalName"));
+            return;
+        }
+        matcher = GameMenuCommands.FRIENDSHIPS.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.friendships();
             return;
         }
         matcher = GameMenuCommands.PRODUCES.regexMatcher(command);
