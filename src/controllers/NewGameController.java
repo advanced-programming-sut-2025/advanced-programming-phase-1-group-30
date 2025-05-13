@@ -11,6 +11,7 @@ import models.Game;
 import models.Commands.GameMenuCommands;
 import models.Items.Gift;
 import models.Items.Item;
+import models.Items.Products.GiantCrop;
 import models.Maps.Map;
 import models.Maps.Tile;
 import models.Maps.Weather;
@@ -135,11 +136,13 @@ public class NewGameController {
         List<Player> players = App.getCurrentGame().getPlayers();
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         for (Player player : players) {
-
             if (player.getSelectionNumber() == currentPlayer.getSelectionNumber() + 1) {
                 if (player.isPassedOut()) continue;
                 App.getCurrentGame().setCurrentPlayer(player);
                 break;
+            }
+            else {
+                App.getCurrentGame().setCurrentPlayer(players.get(0));
             }
         }
         currentPlayer = App.getCurrentGame().getCurrentPlayer();
@@ -200,24 +203,65 @@ public class NewGameController {
 
         int currentTime = App.getCurrentGame().getCurrentTime().getHour();
         if (currentTime == 21) {
-
             for (Player player : App.getCurrentGame().getPlayers()) {
                 player.setEnergy(player.getMaxEnergy());
                 if (player.isPassedOut()) {
                     player.setEnergy((player.getMaxEnergy() * 3) / 4);
                 }
+
                 Tile[][] tiles = player.getMap().getTiles();
+                int v = -1;
+                int u = -1;
                 for (int i = 0; i < tiles.length; i++) {
                     for (int j = 0; j < tiles[i].length; j++) {
                         if (tiles[i][j].isPlanted()) {
-                            tiles[i][j].getCrop().setDaysPassed(tiles[i][j].getCrop().getDaysPassed() + 1);
-                            if (tiles[i][j].getCrop().getStages().get(tiles[i][j].getCrop().getCurrentStage()) == tiles[i][j].getCrop().getDaysPassed()) {
-                                if (tiles[i][j].getCrop().getStages().size() < tiles[i][j].getCrop().getCurrentStage()) {
-                                    tiles[i][j].setReadyToHarvest(true);
-                                    tiles[i][j].getCrop().setDaysPassed(0);
+                            if (!(tiles[i][j].getCrop() instanceof GiantCrop)) {
+
+                                if (!tiles[i][j].isReadyToHarvest()) {
+                                    tiles[i][j].getCrop().setDaysPassed(tiles[i][j].getCrop().getDaysPassed() + 1);
+                                }
+                                if (tiles[i][j].isReadyToHarvest()) {
+
                                 } else {
-                                    tiles[i][j].getCrop().setCurrentStage(tiles[i][j].getCrop().getCurrentStage() + 1);
-                                    tiles[i][j].getCrop().setDaysPassed(0);
+                                    if (tiles[i][j].getCrop().getCurrentStage() <= 4) {
+                                        if (tiles[i][j].getCrop().getStages().get(tiles[i][j].getCrop().getCurrentStage()) == tiles[i][j].getCrop().getDaysPassed()) {
+                                            if (tiles[i][j].getCrop().getCurrentStage() == 4) {
+                                                tiles[i][j].setReadyToHarvest(true);
+                                            } else {
+                                                tiles[i][j].getCrop().setCurrentStage(tiles[i][j].getCrop().getCurrentStage() + 1);
+                                                tiles[i][j].getCrop().setDaysPassed(0);
+                                            }
+                                        }
+                                    }
+                                }
+                            } else {
+                                if (!tiles[i][j].isGiantCropCheck()) {
+                                    Tile[] tiles1 = ((GiantCrop) tiles[i][j].getCrop()).getTiles();
+                                    for (Tile tile : tiles1) {
+                                        tile.setGiantCropCheck(true);
+                                    }
+                                    v = i;
+                                    u = j;
+                                    if (!tiles[i][j].isReadyToHarvest()) {
+                                        tiles[i][j].getCrop().setDaysPassed(tiles[i][j].getCrop().getDaysPassed() + 1);
+                                    }
+                                    if (tiles[i][j].isReadyToHarvest()) {
+
+                                    } else {
+                                        if (tiles[i][j].getCrop().getCurrentStage() <= 4) {
+                                            if (tiles[i][j].getCrop().getStages().get(tiles[i][j].getCrop().getCurrentStage()) == tiles[i][j].getCrop().getDaysPassed()) {
+                                                if (tiles[i][j].getCrop().getCurrentStage() == 4) {
+                                                    tiles[i][j].setReadyToHarvest(true);
+                                                    for (Tile tile : tiles1) {
+                                                        tile.setReadyToHarvest(true);
+                                                    }
+                                                } else {
+                                                    tiles[i][j].getCrop().setCurrentStage(tiles[i][j].getCrop().getCurrentStage() + 1);
+                                                    tiles[i][j].getCrop().setDaysPassed(0);
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -253,6 +297,9 @@ public class NewGameController {
 
             App.getCurrentGame().getCurrentTime().setHour(9);
             App.getCurrentGame().setCurrentWeather(App.getCurrentGame().getTomorrowWeather());
+            if (App.getCurrentGame().getCurrentWeather().equals(Weather.STORM)) {
+
+            }
             DateAndWeatherController.setTWeather();
             if (App.getCurrentGame().getCurrentTime().getDay() == 28) {
                 App.getCurrentGame().getCurrentTime().setDay(1);

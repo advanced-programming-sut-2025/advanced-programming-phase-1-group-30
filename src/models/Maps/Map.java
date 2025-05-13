@@ -50,9 +50,16 @@ public class Map {
     private final ArrayList<Coop> coops = new ArrayList<>();
     private GreenHouse greenHouse = null;
 
-    public static void loadMap(Map mapInstance) {
+    public static void loadMap(Map mapInstance, int id) {
         try {
-            InputStream inputStream = Map.class.getClassLoader().getResourceAsStream("map.json");
+            InputStream inputStream;
+            if (id == 2) {
+                inputStream = Map.class.getClassLoader().getResourceAsStream("map.json");
+            } else if (id == 3) {
+                inputStream = Map.class.getClassLoader().getResourceAsStream("map(1).json");
+            } else {
+                inputStream = Map.class.getClassLoader().getResourceAsStream("map(2).json");
+            }
             if (inputStream == null) {
                 throw new FileNotFoundException("map.json not found in resources!");
             }
@@ -78,10 +85,11 @@ public class Map {
             e.printStackTrace();
         }
     }
+
     public Map(int id) {
         this.id = id;
-//        this.barns.add(new Barn(4,7, 20, 20, 4, "regular"));
-        loadMap(this);
+        loadMap(this, id);
+
     }
 
     public ArrayList<Building> getBuildings() {

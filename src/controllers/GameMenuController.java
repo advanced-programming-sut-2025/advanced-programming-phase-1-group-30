@@ -51,7 +51,7 @@ public class GameMenuController {
         int x = Integer.parseInt(xStr);
         int y = Integer.parseInt(yStr);
 
-        Tile[][] map = App.getMaps().get(App.getCurrentGame().getCurrentPlayer().getSelectionNumber() - 1).getTiles();
+        Tile[][] map = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
         Player player = App.getCurrentGame().getCurrentPlayer();
         Tile start = map[player.getX()][player.getY()];
         Tile target = map[x][y];
@@ -87,7 +87,7 @@ public class GameMenuController {
         int X = Integer.parseInt(x);
         int Y = Integer.parseInt(y);
         int Size = Integer.parseInt(size);
-        App.getMaps().get(0).printPartOfMap(X, Y, Size);
+        App.getCurrentGame().getCurrentPlayer().getMap().printPartOfMap(X, Y, Size);
     }
 
     public static void helpReadingMap() {
@@ -186,7 +186,7 @@ public class GameMenuController {
     public static void toolUse(String direction) {
         Player player = App.getCurrentGame().getCurrentPlayer();
         Item wield = player.getWield();
-        Tile[][] tiles = App.getMaps().get(player.getSelectionNumber()  - 1).getTiles();
+        Tile[][] tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
 
 
         int x = player.getX();
@@ -384,7 +384,7 @@ public class GameMenuController {
                     Item newItem = Item.findItemByName(targetTile.getCrop().getName(), player.getBackPack().getItems());
 
                     if(newItem != null){
-                        newItem.setCount(newItem.getCount() + 1);
+                        newItem.setCount(newItem.getCount() + targetTile.getCrop().getCount());
                     } else {
                         if(player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()){
                             GameMenu.printResult("You don't have enough space in your backpack!");
@@ -393,8 +393,20 @@ public class GameMenuController {
                             player.getBackPack().addItem(targetTile.getCrop());
                         }
                     }
-                    targetTile.setReadyToHarvest(false);
-                    targetTile.setCrop(null);
+                    if (targetTile.getCrop() instanceof GiantCrop) {
+                        Tile[] tiles1 = ((GiantCrop) targetTile.getCrop()).getTiles();
+                        for (Tile tile : tiles1) {
+                            tile.setReadyToHarvest(false);
+                            tile.setCrop(null);
+                            tile.setItem(null);
+                            tile.setGiantCrop(false);
+                        }
+                    } else {
+                        targetTile.setReadyToHarvest(false);
+                        targetTile.setCrop(null);
+                        targetTile.setItem(null);
+                        targetTile.setGiantCrop(false);
+                    }
                 } else if(targetTile.getType().equals(TileTypes.GRASS)){
                     targetTile.setType(TileTypes.DIRT);
                     GameMenu.printResult("Tile type changed to Dirt!");
@@ -429,7 +441,6 @@ public class GameMenuController {
                 isCraftAvailable = true;
             }
         }
-
         if (!isCraftAvailable) {
             GameMenu.printResult("No craft with given name were found!");
             return;
@@ -450,10 +461,10 @@ public class GameMenuController {
         sb.append("Can Become Giant: " + craft.isCanBecomeGiant());
         RegisterMenu.printResult(sb.toString());
     }
-    public static void plant(String seed1, String direction) { // TODO shokhm zade shode barresi beshe
+    public static void plant(String seed1, String direction) {
         ForgingSeed seed = (ForgingSeed) ForgingSeed.findItemByName(seed1, App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Tile[][] tiles = App.getMaps().get(player.getSelectionNumber()  - 1).getTiles();
+        Tile[][] tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
 
         int x = player.getX();
         int y = player.getY();
@@ -481,7 +492,7 @@ public class GameMenuController {
             GameMenu.printResult("Out of bounds!");
             return;
         }
-        // Check for plantable
+        // Check for plantable tile
         Tile targetTile = tiles[newX][newY];
         if (!targetTile.getType().equals(TileTypes.PLANTABLE)) {
             GameMenu.printResult("Tile is not plantable!");
@@ -505,6 +516,53 @@ public class GameMenuController {
                 tiles[newX][newY].setCrop(seed.getCrop());
 
                 GameMenu.printResult("Planted " + seed.getName() + " at (" + newX + ", " + newY + ")");
+                CropType plantedCrop = seed.getCrop().getType();
+
+// Check 4 possible 2x2 squares the tile could be part of
+                int[][] squareOffsets = {
+                        {0, 0},       // current tile is top-left of square
+                        {-1, 0},      // current tile is top-right
+                        {0, -1},      // current tile is bottom-left
+                        {-1, -1}      // current tile is bottom-right
+                };
+                if (seed.getCrop().getType().isCanBecomeGiant()) {
+                    for (int[] offset : squareOffsets) {
+                        int baseX = newX + offset[0];
+                        int baseY = newY + offset[1];
+
+                        // Bounds check
+                        if (baseX < 0 || baseY < 0 || baseX + 1 >= tiles.length || baseY + 1 >= tiles[0].length)
+                            continue;
+
+                        Tile t1 = tiles[baseX][baseY];
+                        Tile t2 = tiles[baseX + 1][baseY];
+                        Tile t3 = tiles[baseX][baseY + 1];
+                        Tile t4 = tiles[baseX + 1][baseY + 1];
+
+                        if (t1.isPlanted() && t2.isPlanted() && t3.isPlanted() && t4.isPlanted() &&
+                                t1.getCrop() != null && t2.getCrop() != null && t3.getCrop() != null && t4.getCrop() != null &&
+                                t1.getCrop().getType().equals(plantedCrop) &&
+                                t2.getCrop().getType().equals(plantedCrop) &&
+                                t3.getCrop().getType().equals(plantedCrop) &&
+                                t4.getCrop().getType().equals(plantedCrop)) {
+                            Tile[] tiles1 = {t1, t2, t3, t4};
+                            GiantCrop giantCrop = new GiantCrop(10, t1.getCrop().getType(), tiles1);
+                            for (Tile tile : tiles1) {
+                                if (giantCrop.getCurrentStage() < tile.getCrop().getCurrentStage()) {
+                                    giantCrop.setCurrentStage(tile.getCrop().getCurrentStage());
+                                    if (giantCrop.getDaysPassed() < tile.getCrop().getDaysPassed()) {
+                                        giantCrop.setDaysPassed(tile.getCrop().getDaysPassed());
+                                    }
+                                }
+                                tile.setGiantCrops(tiles1);
+                                tile.setGiantCrop(true);
+                                tile.setCrop(giantCrop);
+                            }
+
+                            break; // Stop after finding one
+                        }
+                    }
+                }
             } else {
                 GameMenu.printResult("Tile is not farmable!");
             }
@@ -515,7 +573,7 @@ public class GameMenuController {
 
     public static void showPlant(String x, String y) {
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Tile[][] tiles = App.getMaps().get(player.getSelectionNumber() - 1).getTiles();
+        Tile[][] tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
         int X = Integer.parseInt(x);
         int Y = Integer.parseInt(y);
         if (tiles[X][Y].isPlanted()) {
@@ -526,6 +584,10 @@ public class GameMenuController {
                 daysRemaining += targetTile.getCrop().getStages().get(i);
             }
             daysRemaining -= targetTile.getCrop().getDaysPassed();
+            if (targetTile.isGiantCrop()) {
+                GameMenu.printResult("=== GiantCrop!! ===");
+
+            }
             GameMenu.printResult("=== Seed: " + targetTile.getCrop().getName() + " ===\n" +
                     "=== Current Stage: " + targetTile.getCrop().getCurrentStage() + " ===\n" +
                     "=== Days Remaining: " + daysRemaining + " ===\n" +
@@ -545,7 +607,7 @@ public class GameMenuController {
             GameMenu.printResult("No item with this name found in your backpack!");
         }
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Tile[][] tiles = App.getMaps().get(player.getSelectionNumber()  - 1).getTiles();
+        Tile[][] tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
         int x = player.getX();
         int y = player.getY();
         int dx = 0, dy = 0;
@@ -661,7 +723,7 @@ public class GameMenuController {
     }
     public static void placeItem(String name, String direction) {
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Tile[][] tiles = App.getMaps().get(player.getSelectionNumber()  - 1).getTiles();
+        Tile[][] tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
 
 
         int x = player.getX();
@@ -883,7 +945,7 @@ public class GameMenuController {
         int y = Integer.parseInt(Y);
         int barnORcoop = -1; // 1 for barn and 0 for coop
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Tile[][] tiles = App.getMaps().get(player.getSelectionNumber()  - 1).getTiles();
+        Tile[][] tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
         String normalized = name.trim().toUpperCase().replace(" ", "_");
 
         try {
