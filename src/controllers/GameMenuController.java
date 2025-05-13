@@ -216,6 +216,10 @@ public class GameMenuController {
         }
 
         Tile targetTile = tiles[newX][newY];
+        int rate = 1;
+        if(App.getCurrentGame().getCurrentWeather().equals(Weather.SUNNY)){
+            rate = 2;
+        }
 
         if(wield instanceof Hoe){
             int energyNeeded = ((Hoe) wield).getType().getEnergyUsed();
@@ -226,10 +230,11 @@ public class GameMenuController {
                 if(targetTile.getType().equals(TileTypes.DIRT) || targetTile.getType().equals(TileTypes.GRASS)){
                     targetTile.setType(TileTypes.PLANTABLE);
                     GameMenu.printResult("The ground is now soft and ready to plant.");
+                    player.increaseFarming(5);
                 } else {
                     GameMenu.printResult("Not possible.");
                 }
-                player.setEnergy(player.getEnergy() - energyNeeded);
+                player.setEnergy(player.getEnergy() - rate * energyNeeded);
             }else{
                 GameMenu.printResult("You don't have enough energy!");
             }
@@ -245,11 +250,15 @@ public class GameMenuController {
                     targetTile.setType(TileTypes.DIRT);
                     GameMenu.printResult("Done!");
                 } else if(targetTile.getType().equals(TileTypes.QUARRY)){
+                    int cof = 1;
+                    if(player.getMining() >= 250){
+                        cof = 2;
+                    }
                     if(targetTile.getItem() != null) {
                         if (targetTile.getItem() instanceof ForagingMineral) {
                             Item newItem = Item.findItemByName(targetTile.getItem().getName(), player.getBackPack().getItems());
                             if (newItem != null) {
-                                newItem.setCount(newItem.getCount() + 1);
+                                newItem.setCount(newItem.getCount() + 2 * cof);
                             } else {
                                 if (player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()) {
                                     GameMenu.printResult("You don't have enough space in your backpack!");
@@ -259,6 +268,7 @@ public class GameMenuController {
                                 }
                             }
                             GameMenu.printResult(targetTile.getItem().getName() + " successfully added to your backpack");
+                            player.increaseMining(10);
                             targetTile.setItem(null);
                         } else {
                             GameMenu.printResult("You swing your pickaxe... but there's nothing to mine here!");
@@ -281,7 +291,7 @@ public class GameMenuController {
                         energyNeeded -= 1;
                     }
                 }
-                player.setEnergy(player.getEnergy() - energyNeeded);
+                player.setEnergy(player.getEnergy() - rate * energyNeeded);
             }else{
                 GameMenu.printResult("You don't have enough energy!");
             }
@@ -327,6 +337,7 @@ public class GameMenuController {
 
                         targetTile.setItem(null);
                         GameMenu.printResult("You chop down the tree and collect 12 wood and 2 sap.");
+                        player.increaseForaging(10);
                     } else if (targetTile.getItem().equals(new Item(1, "Wood", 10))) {
                         targetTile.setItem(null);
                         GameMenu.printResult("You clear the branch from the ground.");
@@ -342,7 +353,7 @@ public class GameMenuController {
                         energyNeeded -= 1;
                     }
                 }
-                player.setEnergy(player.getEnergy() - energyNeeded);
+                player.setEnergy(player.getEnergy() - rate * energyNeeded);
             }else{
                 GameMenu.printResult("You don't have enough energy!");
             }
@@ -363,6 +374,7 @@ public class GameMenuController {
                         if (targetTile.getItem() instanceof ForgingSeed) {
                             ((ForgingSeed) targetTile.getItem()).setWatered(true);
                             GameMenu.printResult("You give the plants a refreshing splash!");
+                            player.increaseFarming(5);
                         } else {
                             GameMenu.printResult("You spill some water on the ground.");
                         }
@@ -371,12 +383,13 @@ public class GameMenuController {
                         GameMenu.printResult("You spilled some water on the ground.");
                     }
                 }
-                player.setEnergy(player.getEnergy() - energyNeeded);
+                player.setEnergy(player.getEnergy() - rate * energyNeeded);
             }else{
                 GameMenu.printResult("You don't have enough energy!");
             }
         } else if(wield instanceof FishingPole){
-            // darya
+            // darya TODO
+            //skill fishing
         } else if(wield instanceof Scythe){
             if(player.getEnergy() > 2){
                 if(targetTile.isReadyToHarvest()){
@@ -391,6 +404,7 @@ public class GameMenuController {
                             return;
                         } else{
                             player.getBackPack().addItem(targetTile.getCrop());
+                            player.increaseFarming(5);
                         }
                     }
                     if (targetTile.getCrop() instanceof GiantCrop) {
@@ -411,21 +425,21 @@ public class GameMenuController {
                     targetTile.setType(TileTypes.DIRT);
                     GameMenu.printResult("Tile type changed to Dirt!");
                 }
-                player.setEnergy(player.getEnergy() - 2);
+                player.setEnergy(player.getEnergy() - 2 * rate);
             }else{
                 GameMenu.printResult("You don't have enough energy!");
             }
         } else if(wield instanceof MilkPail){
             if(player.getEnergy() > 4){
                 // shir bedoshe TODO
-                player.setEnergy(player.getEnergy() - 4);
+                player.setEnergy(player.getEnergy() - 4 * rate);
             }else{
                 GameMenu.printResult("You don't have enough energy!");
             }
         } else if(wield instanceof Shear){
             if(player.getEnergy() > 4){
                 // pashm bezane TODO
-                player.setEnergy(player.getEnergy() - 4);
+                player.setEnergy(player.getEnergy() - 4 * rate);
             }else{
                 GameMenu.printResult("You don't have enough energy!");
             }
