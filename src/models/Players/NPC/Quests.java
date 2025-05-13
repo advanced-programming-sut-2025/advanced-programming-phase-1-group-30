@@ -1,7 +1,7 @@
 package models.Players.NPC;
 
 public enum Quests {
-    SEBASTIAN(a),
+    SEBASTIAN(),
     ABIGAIL(),
     HARVEY(),
     LEAH(),
