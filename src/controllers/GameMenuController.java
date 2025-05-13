@@ -357,11 +357,14 @@ public class GameMenuController {
                     ((Basket) wield).setRemainingWater(((Basket) wield).getType().getCapacity());
                     GameMenu.printResult("Splash! Your bucket is full and ready to go.");
                 } else {
+                    if (((Basket) wield).getRemainingWater() <= 0) {
+                        System.out.println("Basket is empty!");
+                        return;
+                    }
                     ((Basket) wield).setRemainingWater(((Basket) wield).getRemainingWater() - 1);
-
                     if(targetTile.getItem() != null) {
                         if (targetTile.getItem() instanceof ForgingSeed) {
-                            ((ForgingSeed) targetTile.getItem()).setWatered(true);
+                            targetTile.getCrop().setWateredToday(true);
                             GameMenu.printResult("You give the plants a refreshing splash!");
                         } else {
                             GameMenu.printResult("You spill some water on the ground.");
@@ -382,7 +385,7 @@ public class GameMenuController {
                 if(targetTile.isReadyToHarvest()){
                     GameMenu.printResult("You harvested " + targetTile.getCrop() +" and added it to your backpack!");
                     Item newItem = Item.findItemByName(targetTile.getCrop().getName(), player.getBackPack().getItems());
-
+                    targetTile.setPlanted(false);
                     if(newItem != null){
                         newItem.setCount(newItem.getCount() + targetTile.getCrop().getCount());
                     } else {
@@ -400,6 +403,7 @@ public class GameMenuController {
                             tile.setCrop(null);
                             tile.setItem(null);
                             tile.setGiantCrop(false);
+                            tile.setPlanted(false);
                         }
                     } else {
                         targetTile.setReadyToHarvest(false);
@@ -410,6 +414,8 @@ public class GameMenuController {
                 } else if(targetTile.getType().equals(TileTypes.GRASS)){
                     targetTile.setType(TileTypes.DIRT);
                     GameMenu.printResult("Tile type changed to Dirt!");
+                } else {
+                    GameMenu.printResult("Nothing here to harvest!");
                 }
                 player.setEnergy(player.getEnergy() - 2);
             }else{
@@ -592,7 +598,7 @@ public class GameMenuController {
                     "=== Current Stage: " + targetTile.getCrop().getCurrentStage() + " ===\n" +
                     "=== Days Remaining: " + daysRemaining + " ===\n" +
                     "=== Is Fertilized: " + seed.isFertilized() + " ===\n" +
-                    "=== Watered Today: " + x + " ==="); // TODO
+                    "=== Watered Today: " + targetTile.getCrop().isWateredToday() + " ==="); // TODO
             if (targetTile.isReadyToHarvest()) {
                 GameMenu.printResult("=== Ready to Harvest! ===");
             }
@@ -950,8 +956,8 @@ public class GameMenuController {
 
         try {
             CarpenterCosts item = CarpenterCosts.valueOf(normalized);
-            for (int i = x; i < item.getWidth(); i++) {
-                for (int j = y; j < item.getLength(); j++) {
+            for (int i = x; i < item.getWidth() + x; i++) {
+                for (int j = y - item.getLength(); j < y; j++) {
                     if (tiles[i][j].getItem() != null) {
                         GameMenu.printResult("Not enough space!");
                         return;
@@ -1009,8 +1015,8 @@ public class GameMenuController {
             item1.setCount(item1.getCount() - item.getWood());
             item2.setCount(item2.getCount() - item.getStone());
             player.setMoney(player.getMoney() - item.getCost());
-            for (int i = x; i < item.getWidth(); i++) {
-                for (int j = y; j < item.getLength(); j++) {
+            for (int i = x; i < x + item.getWidth(); i++) {
+                for (int j = y - item.getLength(); j < y; j++) {
                     if (barnORcoop == 1) {
                         tiles[i][j].setType(TileTypes.BARN);
                     } else if (barnORcoop == 0) {
@@ -1050,10 +1056,11 @@ public class GameMenuController {
                 int check = 0;
                 for (Coop coop : player.getMap().getCoops()) {
                     if (coop.getCapacity() > coop.getCurrentNumberOfAnimals()) {
-                        Animal animal = new Chicken(800, name, 0, false, false, coop.getStartX() + coop.getCurrentNumberOfAnimals(), coop.getStartY() + coop.getCurrentNumberOfAnimals());
+                        Animal animal = new Chicken(800, name, 0, false, false, coop.getStartX() + coop.getCurrentNumberOfAnimals(), coop.getStartY() - coop.getCurrentNumberOfAnimals() - 1);
                         coop.getAnimals().add(animal);
                         animal.setCoop(coop);
-                        coop.setCurrentNumberOfAnimals(coop.getCurrentNumberOfAnimals());
+                        coop.setCurrentNumberOfAnimals(coop.getAnimals().size());
+                        System.out.println(coop.getCurrentNumberOfAnimals());
                         player.getAnimals().add(animal);
                         check = 1;
                         break;
@@ -1070,7 +1077,7 @@ public class GameMenuController {
                         Animal animal = new Duck(1200, name, 0, false, false, coop.getStartX() + coop.getCurrentNumberOfAnimals(), coop.getStartY() + coop.getCurrentNumberOfAnimals());
                         coop.getAnimals().add(animal);
                         animal.setCoop(coop);
-                        coop.setCurrentNumberOfAnimals(coop.getCurrentNumberOfAnimals());
+                        coop.setCurrentNumberOfAnimals(coop.getAnimals().size());
                         player.getAnimals().add(animal);
                         check = 1;
                         break;
@@ -1087,7 +1094,7 @@ public class GameMenuController {
                         Animal animal = new Rabbit(8000, name, 0, false, false, coop.getStartX() + coop.getCurrentNumberOfAnimals(), coop.getStartY() + coop.getCurrentNumberOfAnimals());
                         coop.getAnimals().add(animal);
                         animal.setCoop(coop);
-                        coop.setCurrentNumberOfAnimals(coop.getCurrentNumberOfAnimals());
+                        coop.setCurrentNumberOfAnimals(coop.getAnimals().size());
                         player.getAnimals().add(animal);
                         check = 1;
                         break;
@@ -1103,7 +1110,7 @@ public class GameMenuController {
                     if (!coop.getType().equals("regular") && !coop.getType().equals("deluxe") && coop.getCapacity() > coop.getCurrentNumberOfAnimals()) {
                         Animal animal = new Dinosaur(800, name, 0, false, false, coop.getStartX() + coop.getCurrentNumberOfAnimals(), coop.getStartY() + coop.getCurrentNumberOfAnimals());
                         coop.getAnimals().add(animal);
-                        coop.setCurrentNumberOfAnimals(coop.getCurrentNumberOfAnimals());
+                        coop.setCurrentNumberOfAnimals(coop.getAnimals().size());
                         player.getAnimals().add(animal);
                         check = 1;
                         break;
@@ -1121,7 +1128,7 @@ public class GameMenuController {
                         barn.getAnimals().add(animal);
                         animal.setBarn(barn);
                         player.getAnimals().add(animal);
-                        barn.setCurrentNumberOfAnimals(barn.getCurrentNumberOfAnimals());
+                        barn.setCurrentNumberOfAnimals(barn.getAnimals().size());
                         check = 1;
                         break;
                     }
@@ -1138,7 +1145,7 @@ public class GameMenuController {
                         barn.getAnimals().add(animal);
                         animal.setBarn(barn);
                         player.getAnimals().add(animal);
-                        barn.setCurrentNumberOfAnimals(barn.getCurrentNumberOfAnimals());
+                        barn.setCurrentNumberOfAnimals(barn.getAnimals().size());
                         check = 1;
                         break;
                     }
@@ -1155,7 +1162,7 @@ public class GameMenuController {
                         barn.getAnimals().add(animal);
                         animal.setBarn(barn);
                         player.getAnimals().add(animal);
-                        barn.setCurrentNumberOfAnimals(barn.getCurrentNumberOfAnimals());
+                        barn.setCurrentNumberOfAnimals(barn.getAnimals().size());
                         check = 1;
                         break;
                     }
@@ -1172,7 +1179,7 @@ public class GameMenuController {
                         barn.getAnimals().add(animal);
                         animal.setBarn(barn);
                         player.getAnimals().add(animal);
-                        barn.setCurrentNumberOfAnimals(barn.getCurrentNumberOfAnimals());
+                        barn.setCurrentNumberOfAnimals(barn.getAnimals().size());
                         check = 1;
                         break;
                     }

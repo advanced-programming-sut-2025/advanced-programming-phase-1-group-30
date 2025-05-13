@@ -7,6 +7,8 @@ public class Crop extends Product{
     private int currentStage = 0;
     private int daysPassed = 0;
     private boolean notNeedWaterAnymore = false;
+    private boolean wateredToday = false;
+    private int daysNotWatered = 0;
 
     public Crop(int count, CropType type) {
         super(count, type.getName(), type.getBaseSellPrice());
@@ -42,5 +44,20 @@ public class Crop extends Product{
 
     public void setNotNeedWaterAnymore(boolean notNeedWaterAnymore) {
         this.notNeedWaterAnymore = notNeedWaterAnymore;
+    }
+
+    public boolean isWateredToday() {
+        return wateredToday;
+    }
+    public void setWateredToday(boolean wateredToday) {
+        this.wateredToday = wateredToday;
+    }
+
+    public int getDaysNotWatered() {
+        return daysNotWatered;
+    }
+
+    public void setDaysNotWatered(int daysNotWatered) {
+        this.daysNotWatered = daysNotWatered;
     }
 }

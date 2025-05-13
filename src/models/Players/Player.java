@@ -1,8 +1,10 @@
 package models.Players;
 
 import models.Animals.Animal;
+import models.Animals.Chicken;
 import models.App;
 import models.Buildings.Building;
+import models.Buildings.CarpenterCosts;
 import models.Invetory.BackPack;
 import models.Invetory.BackPackType;
 import models.Invetory.Refrigerator;
@@ -16,6 +18,7 @@ import models.Items.Foods.FoodType;
 import models.Items.IndustrialProducts.IndustrialProductType;
 import models.Items.Products.ForgingSeed;
 import models.Items.Products.ForgingSeedType;
+import models.Items.Products.ShopProducts.CarpenterProducts;
 import models.Items.Tools.*;
 import models.Maps.Map;
 import models.Players.NPC.NPC;
@@ -73,7 +76,9 @@ public class Player {
         this.backPack.addItem(new Scythe(1));
         this.trashCan = new TrashCan(TrashCanType.INITIAL_TRASHCAN);
         this.backPack.addItem(new ForgingSeed(4, ForgingSeedType.CAULIFLOWER_SEEDS)); //TODO tile & initial seed
-        this.money = 0;
+        this.backPack.addItem(new Item(1000, "wood", 10));
+        this.backPack.addItem(new Item(1000, "stone", 20));
+        this.money = 20000;
         this.selectionNumber = selectionNumber;
         this.maxEnergy = 200;
         this.building = new Building(0, 0, 0, 0); //TODO home!!!
