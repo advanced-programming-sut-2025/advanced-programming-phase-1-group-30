@@ -13,12 +13,14 @@ public abstract class NPC {
     private boolean quest1 = false;
     private boolean quest2 = false;
     private boolean quest3 = false;
+    private int tillQuest3;
 
     public NPC(NPCDetail detail) {
         this.name = detail.name;
         this.tile = detail.tile;
         this.detail = detail;
         this.favoriteGifts.addAll(detail.favoriteGiftsName);
+        this.tillQuest3 = detail.quest3Days;
     }
 
     public abstract void quest1();
@@ -64,6 +66,14 @@ public abstract class NPC {
 
     public void setQuest3(boolean quest3) {
         this.quest3 = quest3;
+    }
+
+    public int getTillQuest3() {
+        return tillQuest3;
+    }
+
+    public void setTillQuest3(int tillQuest3) {
+        this.tillQuest3 = tillQuest3;
     }
 }
 

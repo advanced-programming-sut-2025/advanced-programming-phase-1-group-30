@@ -217,6 +217,16 @@ public class NewGameController {
                     players1.getNPCMeetToday().put(npc,false);
                 }
             }
+            for(NPC npc : App.getCurrentGame().getNPCs()) {
+                if(npc.getTillQuest3() == 0){
+                    for(Player players1 : App.getCurrentGame().getPlayers()){
+                        players1.getActivatedQuestNPC().get(npc).add(3);
+                    }
+                    npc.setTillQuest3(-1);
+                } else if(npc.getTillQuest3() > 0){
+                    npc.setTillQuest3(npc.getTillQuest3() - 1);
+                }
+            }
 
             App.getCurrentGame().getCurrentTime().setHour(9);
             App.getCurrentGame().setCurrentWeather(App.getCurrentGame().getTomorrowWeather());

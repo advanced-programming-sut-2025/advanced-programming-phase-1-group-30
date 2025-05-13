@@ -37,7 +37,7 @@ public enum NPCDetail {
 
     public final String name;
     public final Tile tile;
-    private final int quest3Days;
+    public final int quest3Days;
     public final ArrayList<String> favoriteGiftsName = new ArrayList<>();
 
     NPCDetail(String name, int x , int y, int quest3Days, ArrayList<String> favoriteGifts) {

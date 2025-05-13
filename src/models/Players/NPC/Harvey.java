@@ -1,6 +1,15 @@
 package models.Players.NPC;
 
 import models.App;
+import models.Items.ArtisanGoods.ArtisanGood;
+import models.Items.ArtisanGoods.ArtisanGoodType;
+import models.Items.Foods.Food;
+import models.Items.Foods.FoodType;
+import models.Items.IndustrialProducts.IndustrialProduct;
+import models.Items.IndustrialProducts.IndustrialProductType;
+import models.Items.Item;
+import models.Items.Products.ForagingMineral;
+import models.Items.Products.ForagingMineralType;
 import models.Maps.Weather;
 import models.Players.Player;
 import views.GameMenu;
@@ -13,17 +22,115 @@ public class Harvey extends NPC {
 
     @Override
     public void quest1() {
+        if(isQuest1()){
+            GameMenu.printResult("This quest is completed.");
+            return;
+        }
 
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Item request = Item.findItemByName("grape",player.getBackPack().getItems());
+        int rate = 1;
+        if(player.getFriendshipsNPC().get(App.getCurrentGame().getNPCs().get(2)) == 2){
+            rate = 2;
+        }
+        if(request == null) {
+            GameMenu.printResult("You don't have grape!");
+        } else {
+            if(request.getCount() < 12){
+                GameMenu.printResult("You need at least 12 grape!");
+                return;
+            } else if(request.getCount() == 12){
+                player.getBackPack().getItems().remove(request);
+            } else {
+                request.setCount(request.getCount() - 12);
+            }
+            int count = 750 * rate;
+            player.setMoney(player.getMoney() + count);
+
+            GameMenu.printResult("Congratulations! You have successfully completed the quest!");
+            this.setQuest1(true);
+            for(Player player1 :App.getCurrentGame().getPlayers()){
+                Integer a = 1;
+                player1.getActivatedQuestNPC().get(App.getCurrentGame().getNPCs().get(2)).remove(a);
+            }
+        }
     }
 
     @Override
     public void quest2() {
+        if(isQuest2()){
+            GameMenu.printResult("This quest is completed.");
+            return;
+        }
 
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Item request = Item.findItemByName("salmon",player.getBackPack().getItems());
+        int rate = 1;
+        if(player.getFriendshipsNPC().get(App.getCurrentGame().getNPCs().get(2)) == 2){
+            rate = 2;
+        }
+        if(request == null) {
+            GameMenu.printResult("You don't have salmon!");
+        } else {
+            if(request.getCount() == 1){
+                player.getBackPack().getItems().remove(request);
+            } else {
+                request.setCount(request.getCount() - 1);
+            }
+
+            NPC npc = App.getCurrentGame().getNPCs().get(1);
+            player.getFriendshipsNPC().put(npc,player.getFriendshipsNPC().get(npc) + 200);
+            if(player.getFriendshipsNPC().get(npc) >= 200 && player.getFriendshipsNPC().get(npc) < 400
+                    && !npc.isQuest2()){
+                player.getActivatedQuestNPC().get(npc).add(2);
+            }
+
+            GameMenu.printResult("Congratulations! You have successfully completed the quest!");
+            this.setQuest2(true);
+            for(Player player1 :App.getCurrentGame().getPlayers()){
+                Integer a = 2;
+                player1.getActivatedQuestNPC().get(App.getCurrentGame().getNPCs().get(2)).remove(a);
+            }
+        }
     }
 
     @Override
     public void quest3() {
+        if(isQuest3()){
+            GameMenu.printResult("This quest is completed.");
+            return;
+        }
 
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Item request = Item.findItemByName("wine",player.getBackPack().getItems());
+        int rate = 1;
+        if(player.getFriendshipsNPC().get(App.getCurrentGame().getNPCs().get(2)) == 2){
+            rate = 2;
+        }
+        if(request == null) {
+            GameMenu.printResult("You don't have wine!");
+        } else {
+           if(request.getCount() == 1){
+                player.getBackPack().getItems().remove(request);
+            } else {
+                request.setCount(request.getCount() - 150);
+            }
+            int count = 5 * rate;
+            Item reward = new Food(count, FoodType.SALAD);
+            Item newItem = Item.findItemByName("salad",player.getBackPack().getItems());
+            if(newItem == null) {
+                player.getBackPack().getItems().add(reward);
+            } else {
+                newItem.setCount(newItem.getCount() + count);
+            }
+
+            GameMenu.printResult("Congratulations! You have successfully completed the quest!");
+            this.setQuest3(true);
+            for(Player player1 :App.getCurrentGame().getPlayers()){
+                Integer a = 3;
+                player1.getActivatedQuestNPC().get(App.getCurrentGame().getNPCs().get(2)).remove(a);
+            }
+        }
     }
 
     @Override
