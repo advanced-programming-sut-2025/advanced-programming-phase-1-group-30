@@ -5,6 +5,7 @@ import models.Commands.Menus;
 import models.Users.RegisterQuestions;
 import models.Users.User;
 import views.GameMenu;
+import views.LoginMenu;
 import views.RegisterMenu;
 
 import java.util.Scanner;
@@ -22,7 +23,7 @@ public class LoginMenuController {
             RegisterMenu.printResult("User not found");
             return;
         }
-        if (!user.getPassword().equals(password)) {
+        if (!user.getPassword().equals(RegisterMenuController.HashPassword(password))) {
             RegisterMenu.printResult("Wrong password");
             return;
         }
@@ -52,7 +53,43 @@ public class LoginMenuController {
         Matcher matcher;
         if ((matcher = Pattern.compile("answer\\s+-a\\s+(?<answer>.+?)\\s*").matcher(scanner.nextLine())).matches()) {
             if (matcher.group("answer").equals(user.getAnswer())) {
-                RegisterMenu.printResult("Your password is: " + user.getPassword());
+                RegisterMenu.printResult("choose a new password");
+                while(true) {
+                    String password = scanner.nextLine();
+
+                    if (!Pattern.compile("[A-Za-z0-9?><,\"';\\\\:\\/|\\]\\[}{+=)(*&^%$#!]*").matcher(password).matches()) {
+                        RegisterMenu.printResult("Password is invalid!");
+                        continue;
+                    }
+
+                    if (!Pattern.compile("[A-Za-z0-9?><,\"';\\\\:\\/|\\]\\[}{+=)(*&^%$#!]{9,}").matcher(password).matches()) {
+                        RegisterMenu.printResult("Password has to be at least 9 characters!");
+                        continue;
+                    }
+
+                    if (!Pattern.compile("(?=.*[A-Z]).*").matcher(password).matches()) {
+                        RegisterMenu.printResult("Password has to have at least one Uppercase letter!");
+                        continue;
+                    }
+
+                    if (!Pattern.compile("(?=.*[a-z]).*").matcher(password).matches()) {
+                        RegisterMenu.printResult("Password has to have at least one Lowercase letter!");
+                        continue;
+                    }
+
+                    if (!Pattern.compile("(?=.*[0-9]).*").matcher(password).matches()) {
+                        RegisterMenu.printResult("Password has to have at least one digit!");
+                        continue;
+                    }
+
+                    if (!Pattern.compile("(?=.*[?><,\"';\\\\:\\/|\\]\\[}{+=)(*&^%$#!]).*").matcher(password).matches()) {
+                        RegisterMenu.printResult("Password has to have at least one special character!");
+                        continue;
+                    }
+                    user.setPassword(password);
+                    RegisterMenu.printResult("Successfully changed password");
+                    return;
+                }
             } else {
                 RegisterMenu.printResult("Wrong answer");
             }

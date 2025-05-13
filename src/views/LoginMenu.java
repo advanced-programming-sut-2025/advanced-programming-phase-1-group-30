@@ -57,5 +57,6 @@ public class LoginMenu implements AppMenu {
 //             LoginMenuController.logout();
             return;
         }
+        System.out.println("Invalid command");
     }
 }
