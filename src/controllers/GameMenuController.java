@@ -216,9 +216,12 @@ public class GameMenuController {
         }
 
         Tile targetTile = tiles[newX][newY];
-        int rate = 1;
+        double rate = 1;
         if(App.getCurrentGame().getCurrentWeather().equals(Weather.SUNNY)){
             rate = 2;
+        } else if(App.getCurrentGame().getCurrentWeather().equals(Weather.RAIN) ||
+                App.getCurrentGame().getCurrentWeather().equals(Weather.STORM)){
+            rate = 1.5;
         }
 
         if(wield instanceof Hoe){
@@ -234,7 +237,7 @@ public class GameMenuController {
                 } else {
                     GameMenu.printResult("Not possible.");
                 }
-                player.setEnergy(player.getEnergy() - rate * energyNeeded);
+                player.setEnergy(player.getEnergy() - (int) rate * energyNeeded);
             }else{
                 GameMenu.printResult("You don't have enough energy!");
             }
@@ -291,7 +294,7 @@ public class GameMenuController {
                         energyNeeded -= 1;
                     }
                 }
-                player.setEnergy(player.getEnergy() - rate * energyNeeded);
+                player.setEnergy(player.getEnergy() - (int) rate * energyNeeded);
             }else{
                 GameMenu.printResult("You don't have enough energy!");
             }
@@ -353,7 +356,7 @@ public class GameMenuController {
                         energyNeeded -= 1;
                     }
                 }
-                player.setEnergy(player.getEnergy() - rate * energyNeeded);
+                player.setEnergy(player.getEnergy() - (int) rate * energyNeeded);
             }else{
                 GameMenu.printResult("You don't have enough energy!");
             }
@@ -383,7 +386,7 @@ public class GameMenuController {
                         GameMenu.printResult("You spilled some water on the ground.");
                     }
                 }
-                player.setEnergy(player.getEnergy() - rate * energyNeeded);
+                player.setEnergy(player.getEnergy() - (int) rate * energyNeeded);
             }else{
                 GameMenu.printResult("You don't have enough energy!");
             }
@@ -425,21 +428,21 @@ public class GameMenuController {
                     targetTile.setType(TileTypes.DIRT);
                     GameMenu.printResult("Tile type changed to Dirt!");
                 }
-                player.setEnergy(player.getEnergy() - 2 * rate);
+                player.setEnergy(player.getEnergy() - 2 * (int) rate);
             }else{
                 GameMenu.printResult("You don't have enough energy!");
             }
         } else if(wield instanceof MilkPail){
             if(player.getEnergy() > 4){
                 // shir bedoshe TODO
-                player.setEnergy(player.getEnergy() - 4 * rate);
+                player.setEnergy(player.getEnergy() - 4 * (int) rate);
             }else{
                 GameMenu.printResult("You don't have enough energy!");
             }
         } else if(wield instanceof Shear){
             if(player.getEnergy() > 4){
                 // pashm bezane TODO
-                player.setEnergy(player.getEnergy() - 4 * rate);
+                player.setEnergy(player.getEnergy() - 4 * (int) rate);
             }else{
                 GameMenu.printResult("You don't have enough energy!");
             }
@@ -508,7 +511,7 @@ public class GameMenuController {
         }
         // Check for plantable tile
         Tile targetTile = tiles[newX][newY];
-        if (!targetTile.getType().equals(TileTypes.PLANTABLE)) {
+        if (!(targetTile.getType().equals(TileTypes.PLANTABLE) || ((targetTile.getType().equals(TileTypes.GREENHOUSE) && player.getMap().getGreenHouse() != null)))) {
             GameMenu.printResult("Tile is not plantable!");
             return;
         }
@@ -539,41 +542,44 @@ public class GameMenuController {
                         {0, -1},      // current tile is bottom-left
                         {-1, -1}      // current tile is bottom-right
                 };
-                if (seed.getCrop().getType().isCanBecomeGiant()) {
-                    for (int[] offset : squareOffsets) {
-                        int baseX = newX + offset[0];
-                        int baseY = newY + offset[1];
 
-                        // Bounds check
-                        if (baseX < 0 || baseY < 0 || baseX + 1 >= tiles.length || baseY + 1 >= tiles[0].length)
-                            continue;
+                if(targetTile.getType().equals(TileTypes.PLANTABLE)) {
+                    if (seed.getCrop().getType().isCanBecomeGiant()) {
+                        for (int[] offset : squareOffsets) {
+                            int baseX = newX + offset[0];
+                            int baseY = newY + offset[1];
 
-                        Tile t1 = tiles[baseX][baseY];
-                        Tile t2 = tiles[baseX + 1][baseY];
-                        Tile t3 = tiles[baseX][baseY + 1];
-                        Tile t4 = tiles[baseX + 1][baseY + 1];
+                            // Bounds check
+                            if (baseX < 0 || baseY < 0 || baseX + 1 >= tiles.length || baseY + 1 >= tiles[0].length)
+                                continue;
 
-                        if (t1.isPlanted() && t2.isPlanted() && t3.isPlanted() && t4.isPlanted() &&
-                                t1.getCrop() != null && t2.getCrop() != null && t3.getCrop() != null && t4.getCrop() != null &&
-                                t1.getCrop().getType().equals(plantedCrop) &&
-                                t2.getCrop().getType().equals(plantedCrop) &&
-                                t3.getCrop().getType().equals(plantedCrop) &&
-                                t4.getCrop().getType().equals(plantedCrop)) {
-                            Tile[] tiles1 = {t1, t2, t3, t4};
-                            GiantCrop giantCrop = new GiantCrop(10, t1.getCrop().getType(), tiles1);
-                            for (Tile tile : tiles1) {
-                                if (giantCrop.getCurrentStage() < tile.getCrop().getCurrentStage()) {
-                                    giantCrop.setCurrentStage(tile.getCrop().getCurrentStage());
-                                    if (giantCrop.getDaysPassed() < tile.getCrop().getDaysPassed()) {
-                                        giantCrop.setDaysPassed(tile.getCrop().getDaysPassed());
+                            Tile t1 = tiles[baseX][baseY];
+                            Tile t2 = tiles[baseX + 1][baseY];
+                            Tile t3 = tiles[baseX][baseY + 1];
+                            Tile t4 = tiles[baseX + 1][baseY + 1];
+
+                            if (t1.isPlanted() && t2.isPlanted() && t3.isPlanted() && t4.isPlanted() &&
+                                    t1.getCrop() != null && t2.getCrop() != null && t3.getCrop() != null && t4.getCrop() != null &&
+                                    t1.getCrop().getType().equals(plantedCrop) &&
+                                    t2.getCrop().getType().equals(plantedCrop) &&
+                                    t3.getCrop().getType().equals(plantedCrop) &&
+                                    t4.getCrop().getType().equals(plantedCrop)) {
+                                Tile[] tiles1 = {t1, t2, t3, t4};
+                                GiantCrop giantCrop = new GiantCrop(10, t1.getCrop().getType(), tiles1);
+                                for (Tile tile : tiles1) {
+                                    if (giantCrop.getCurrentStage() < tile.getCrop().getCurrentStage()) {
+                                        giantCrop.setCurrentStage(tile.getCrop().getCurrentStage());
+                                        if (giantCrop.getDaysPassed() < tile.getCrop().getDaysPassed()) {
+                                            giantCrop.setDaysPassed(tile.getCrop().getDaysPassed());
+                                        }
                                     }
+                                    tile.setGiantCrops(tiles1);
+                                    tile.setGiantCrop(true);
+                                    tile.setCrop(giantCrop);
                                 }
-                                tile.setGiantCrops(tiles1);
-                                tile.setGiantCrop(true);
-                                tile.setCrop(giantCrop);
-                            }
 
-                            break; // Stop after finding one
+                                break; // Stop after finding one
+                            }
                         }
                     }
                 }
