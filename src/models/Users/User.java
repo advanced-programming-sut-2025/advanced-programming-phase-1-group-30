@@ -1,5 +1,6 @@
 package models.Users;
 
+import controllers.RegisterMenuController;
 import models.App;
 import models.Players.Player;
 
@@ -18,7 +19,7 @@ public class User {
 
     public User(String username, String password, String nickname, String email, int registerQuestionNumber, String answer, String gender) {
         this.username = username;
-        this.password = password;
+        this.password = RegisterMenuController.HashPassword(password);
         this.nickname = nickname;
         this.email = email;
         this.numOfGames = 0;
@@ -40,7 +41,7 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = RegisterMenuController.HashPassword(password);
     }
 
     public String getNickname() {
