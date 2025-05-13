@@ -14,6 +14,7 @@ import models.Items.Item;
 import models.Items.Products.GiantCrop;
 import models.Maps.Map;
 import models.Maps.Tile;
+import models.Maps.TileTypes;
 import models.Maps.Weather;
 import models.Players.Friendship;
 import models.Players.NPC.NPC;
@@ -219,19 +220,40 @@ public class NewGameController {
 
                                 if (!tiles[i][j].isReadyToHarvest()) {
                                     tiles[i][j].getCrop().setDaysPassed(tiles[i][j].getCrop().getDaysPassed() + 1);
-                                }
-                                if (tiles[i][j].isReadyToHarvest()) {
-
-                                } else {
-                                    if (tiles[i][j].getCrop().getCurrentStage() <= 4) {
+                                    if (tiles[i][j].getCrop().isWateredToday()) {
+                                        tiles[i][j].getCrop().setDaysNotWatered(0);
+                                    }
+                                    if (!tiles[i][j].getCrop().isWateredToday()) {
+                                        tiles[i][j].getCrop().setDaysNotWatered(tiles[i][j].getCrop().getDaysNotWatered() + 1);
+                                        if (tiles[i][j].getCrop().getDaysNotWatered() >= 2) {
+                                            tiles[i][j].setCrop(null);
+                                            tiles[i][j].setPlanted(false);
+                                            tiles[i][j].setReadyToHarvest(false);
+                                            tiles[i][j].setItem(null);
+                                            tiles[i][j].setType(TileTypes.DIRT);
+                                            continue;
+                                        }
+                                    }
+                                    if (tiles[i][j].getCrop().isWateredToday()) {
+                                        tiles[i][j].getCrop().setWateredToday(false);
+                                    }
+                                    if (tiles[i][j].getCrop().getCurrentStage() < tiles[i][j].getCrop().getStages().size()) {
                                         if (tiles[i][j].getCrop().getStages().get(tiles[i][j].getCrop().getCurrentStage()) == tiles[i][j].getCrop().getDaysPassed()) {
-                                            if (tiles[i][j].getCrop().getCurrentStage() == 4) {
+                                            if (tiles[i][j].getCrop().getCurrentStage() == tiles[i][j].getCrop().getStages().size()) {
                                                 tiles[i][j].setReadyToHarvest(true);
+                                                tiles[i][j].getCrop().setCurrentStage(tiles[i][j].getCrop().getCurrentStage() + 1);
                                             } else {
                                                 tiles[i][j].getCrop().setCurrentStage(tiles[i][j].getCrop().getCurrentStage() + 1);
                                                 tiles[i][j].getCrop().setDaysPassed(0);
                                             }
                                         }
+                                    }
+                                    if (tiles[i][j].getCrop().getCurrentStage() == tiles[i][j].getCrop().getStages().size()) {
+                                        tiles[i][j].getCrop().setDaysPassed(tiles[i][j].getCrop().getDaysPassed() - 1);
+                                        tiles[i][j].setReadyToHarvest(true);
+                                    }
+                                    if ((App.getCurrentGame().getCurrentWeather().equals(Weather.RAIN) || App.getCurrentGame().getCurrentWeather().equals(Weather.STORM)) && !tiles[i][j].getType().equals(TileTypes.GREENHOUSE)) {
+                                        tiles[i][j].getCrop().setWateredToday(true);
                                     }
                                 }
                             } else {
@@ -244,13 +266,9 @@ public class NewGameController {
                                     u = j;
                                     if (!tiles[i][j].isReadyToHarvest()) {
                                         tiles[i][j].getCrop().setDaysPassed(tiles[i][j].getCrop().getDaysPassed() + 1);
-                                    }
-                                    if (tiles[i][j].isReadyToHarvest()) {
-
-                                    } else {
-                                        if (tiles[i][j].getCrop().getCurrentStage() <= 4) {
+                                        if (tiles[i][j].getCrop().getCurrentStage() <= tiles[i][j].getCrop().getStages().size()) {
                                             if (tiles[i][j].getCrop().getStages().get(tiles[i][j].getCrop().getCurrentStage()) == tiles[i][j].getCrop().getDaysPassed()) {
-                                                if (tiles[i][j].getCrop().getCurrentStage() == 4) {
+                                                if (tiles[i][j].getCrop().getCurrentStage() == tiles[i][j].getCrop().getStages().size()) {
                                                     tiles[i][j].setReadyToHarvest(true);
                                                     for (Tile tile : tiles1) {
                                                         tile.setReadyToHarvest(true);
@@ -260,6 +278,9 @@ public class NewGameController {
                                                     tiles[i][j].getCrop().setDaysPassed(0);
                                                 }
                                             }
+                                        }
+                                        if (tiles[i][j].getCrop().getCurrentStage() == tiles[i][j].getCrop().getStages().size()) {
+                                            tiles[i][j].setReadyToHarvest(true);
                                         }
                                     }
                                 }
