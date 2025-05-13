@@ -18,6 +18,9 @@ public class Tile {
     private boolean isHarvestable;
     private boolean isPlanted;
     private boolean readyToHarvest;
+    private Tile[] giantCrop = new Tile[4];
+    private boolean isGiantCrop = false;
+    private boolean giantCropCheck = false;
     private Crop crop;
 
     public Tile(int x, int y, TileTypes type, boolean walkable, boolean isHarvestable) {
@@ -138,5 +141,29 @@ public class Tile {
 
     public void setCrop(Crop crop) {
         this.crop = crop;
+    }
+
+    public Tile[] getGiantCrop() {
+        return giantCrop;
+    }
+
+    public boolean isGiantCrop() {
+        return isGiantCrop;
+    }
+
+    public void setGiantCrop(boolean giantCrop) {
+        isGiantCrop = giantCrop;
+    }
+
+    public boolean isGiantCropCheck() {
+        return giantCropCheck;
+    }
+
+    public void setGiantCropCheck(boolean giantCropCheck) {
+        this.giantCropCheck = giantCropCheck;
+    }
+
+    public void setGiantCrops(Tile[] giantCrop) {
+        this.giantCrop = giantCrop;
     }
 }

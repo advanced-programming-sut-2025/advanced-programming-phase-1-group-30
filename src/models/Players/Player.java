@@ -72,7 +72,7 @@ public class Player {
         this.backPack.addItem(new Basket(1, BasketType.NORMAL));
         this.backPack.addItem(new Scythe(1));
         this.trashCan = new TrashCan(TrashCanType.INITIAL_TRASHCAN);
-        this.backPack.addItem(new ForgingSeed(1, ForgingSeedType.BLUEBERRY_SEEDS)); //TODO tile & initial seed
+        this.backPack.addItem(new ForgingSeed(4, ForgingSeedType.CAULIFLOWER_SEEDS)); //TODO tile & initial seed
         this.money = 0;
         this.selectionNumber = selectionNumber;
         this.maxEnergy = 200;
