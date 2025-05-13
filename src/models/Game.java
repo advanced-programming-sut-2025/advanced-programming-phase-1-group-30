@@ -21,12 +21,10 @@ public class Game {
     private ArrayList<Trade> trades = new ArrayList<>();
     private ArrayList<NPC> NPCs = new ArrayList<>();
 
-    public Game(ArrayList<Player> players) {
+    public Game() {
         this.map = null;
-        this.currentPlayer = App.getCurrentUser().getPlayer();
         this.currentTime = new Time();
         this.currentWeather = Weather.SUNNY;
-        this.players = players;
         this.trades = null;
         this.NPCs.add(new Sebastian());
         this.NPCs.add(new Abigail());
@@ -81,4 +79,6 @@ public class Game {
     public ArrayList<NPC> getNPCs() {
         return NPCs;
     }
+
+
 }

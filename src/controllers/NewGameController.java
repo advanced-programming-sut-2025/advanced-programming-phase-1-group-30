@@ -25,6 +25,7 @@ public class NewGameController {
         User user1 = null;
         User user2 = null;
         User user3 = null;
+        Game game = new Game();
         ArrayList<Player> players = new ArrayList<>();
         Player playerX = new Player(App.getCurrentUser().getUsername(), 1);
         players.add(playerX);
@@ -99,7 +100,7 @@ public class NewGameController {
                 }
             }
         }
-        Game game = new Game(players);
+        game.setPlayers(players);
         game.setTomorrowWeather(Weather.SUNNY);
         game.setCurrentPlayer(playerX);
         App.setCurrentGame(game);
