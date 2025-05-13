@@ -42,7 +42,7 @@ public enum NPCDetail {
 
     NPCDetail(String name, int x , int y, int quest3Days, ArrayList<String> favoriteGifts) {
         this.name = name;
-        this.tile = App.getMaps().get(0).getTiles()[x][y];
+        this.tile = null;
         this.quest3Days = quest3Days;
         this.favoriteGiftsName.addAll(favoriteGifts);
     }

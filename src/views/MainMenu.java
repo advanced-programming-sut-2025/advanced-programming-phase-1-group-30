@@ -17,7 +17,7 @@ public class MainMenu implements AppMenu {
         if (matcher.matches()) {
             String menuName = matcher.group("menuName");
 
-            ProfileMenuController.ChangeMenu(menuName);
+            MainMenuController.ChangeMenu(menuName);
             return;
         }
 

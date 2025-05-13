@@ -8,16 +8,18 @@ public class MainMenuController {
     public static void logout() {
         App.setCurrentUser(null);
         RegisterMenu.printResult("User logged out successfully");
+        App.setCurrentMenu(Menus.LoginMenu);
     }
 
     public static void ChangeMenu(String menuName) {
         String nameMenu = App.getCurrentMenu().getName();
-        // Menus menu = ProfileMenuController.FindMenu(menuName);
-        if (nameMenu.equals(App.getCurrentMenu().getName())) {
+        Menus menu = ProfileMenuController.FindMenu(menuName);
+        if (menu == null ||nameMenu.equals(menuName)) {
             RegisterMenu.printResult("Invalid menu name");
             return;
         }
         RegisterMenu.printResult("Redirecting to " + menuName);
+        App.setCurrentMenu(menu);
     }
 
     public static void ShowCurrentMenu() {

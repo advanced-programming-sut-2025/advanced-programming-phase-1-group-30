@@ -47,7 +47,7 @@ public class GameMenuController {
         player.getMap().createGreenHouse();
     }
 
-    public static void walk(String xStr, String yStr) {
+    public static void walk(String xStr, String yStr, Scanner scanner) {
         int x = Integer.parseInt(xStr);
         int y = Integer.parseInt(yStr);
 
@@ -62,7 +62,8 @@ public class GameMenuController {
             Tile alt = PathFinder.findNearestReachable(map, start, target);
             if (alt != null) {
                 path = PathFinder.findPath(map, start, alt);
-                GameMenu.printResult("Destination blocked. Moving to nearest reachable tile.");
+                GameMenu.printResult("Destination blocked.");
+                return;
             } else {
                 GameMenu.printResult("No path found to destination or any nearby tile.");
                 return;
@@ -79,6 +80,7 @@ public class GameMenuController {
         if (player.getEnergy() <= 0) {
             player.setPassedOut(true);
             GameMenu.printResult("Player passed out!");
+            NewGameController.NextTurn(scanner);
         }
     }
     public static void printMap(String x, String y, String size) {
@@ -101,7 +103,7 @@ public class GameMenuController {
     }
     public static void energyShow() {
         if (App.getCurrentGame().getCurrentPlayer().getEnergy() > 8000) {
-            GameMenu.printResult("=== Cheat code activated: UNLIMITED ENERGY! ===");
+            GameMenu.printResult("=== Player Energy: UNLIMITED ENERGY! ===");
         } else
             GameMenu.printResult("=== Player Energy: " + App.getCurrentGame().getCurrentPlayer().getEnergy() + " ===");
     }

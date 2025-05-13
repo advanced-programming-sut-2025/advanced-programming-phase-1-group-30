@@ -80,6 +80,7 @@ public class Map {
     }
     public Map(int id) {
         this.id = id;
+//        this.barns.add(new Barn(4,7, 20, 20, 4, "regular"));
         loadMap(this);
     }
 

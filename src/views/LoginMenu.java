@@ -51,11 +51,10 @@ public class LoginMenu implements AppMenu {
             return;
         }
 
-        // TODO answer bayad dakhel forgot-password piadesazi shavad
 
         matcher = LoginMenuCommands.USER_LOGOUT.regexMatcher(command);
         if (matcher.matches()) {
-            // LoginMenuController.Logout();
+//             LoginMenuController.logout();
             return;
         }
     }
