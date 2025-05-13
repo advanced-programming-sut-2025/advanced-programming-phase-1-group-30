@@ -4,6 +4,7 @@ import models.App;
 import models.Commands.Menus;
 import models.Users.RegisterQuestions;
 import models.Users.User;
+import views.GameMenu;
 import views.RegisterMenu;
 
 import java.util.Scanner;
@@ -26,7 +27,9 @@ public class LoginMenuController {
             return;
         }
         App.setCurrentUser(user);    // TODO flag stay logged in ro ok kon!
+        App.setCurrentMenu(Menus.MainMenu);
         RegisterMenu.printResult("User logged in");
+        RegisterMenu.printResult("Redirecting to main menu");
     }
 
     public static void ForgotPassword(String username, Scanner scanner) {  // TODO aval oon question taeed piade sazi shavad

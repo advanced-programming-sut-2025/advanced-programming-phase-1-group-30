@@ -75,7 +75,7 @@ public class DateAndWeatherController {
         }
     }
 
-    public static void CheatAdvanceDate(String amount) {
+    public static void cheatAdvanceDate(String amount) {
         int x = Integer.parseInt(amount);
         if (x >= 28) {
             GameMenu.printResult("You can't cheat more than 28 days");
@@ -85,7 +85,10 @@ public class DateAndWeatherController {
         if (x + App.getCurrentGame().getCurrentTime().getDay() > 28) {
             App.getCurrentGame().getCurrentTime().setDay(x - (28 - App.getCurrentGame().getCurrentTime().getDay()));
             ChangeSeason();
+        } else {
+            App.getCurrentGame().getCurrentTime().setDay(App.getCurrentGame().getCurrentTime().getDay() + x);
         }
+        GameMenu.printResult("Cheat code activated: " + x + " days passed");
     }
 
     static void ChangeSeason() {

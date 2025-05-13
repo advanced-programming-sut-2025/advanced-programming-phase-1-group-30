@@ -51,6 +51,11 @@ public class GameMenu implements AppMenu {
             DateAndWeatherController.cheatAdvanceTime(matcher.group("X"));
             return;
         }
+        matcher = GameMenuCommands.CHEAT_DATE.regexMatcher(command);
+        if (matcher.matches()) {
+            DateAndWeatherController.cheatAdvanceDate(matcher.group("X"));
+            return;
+        }
         matcher = GameMenuCommands.DATE.regexMatcher(command);
         if (matcher.matches()) {
             DateAndWeatherController.Date();
@@ -93,7 +98,7 @@ public class GameMenu implements AppMenu {
         }
         matcher = GameMenuCommands.WALK.regexMatcher(command);
         if (matcher.matches()) {
-            GameMenuController.walk(matcher.group("x"), matcher.group("y"));
+            GameMenuController.walk(matcher.group("x"), matcher.group("y"), scanner);
             return;
         }
         matcher = GameMenuCommands.INVENTORY_SHOW.regexMatcher(command);
@@ -338,7 +343,11 @@ public class GameMenu implements AppMenu {
             GameMenuController.questFinish(matcher.group("index"));
             return;
         }
-        
+        matcher = GameMenuCommands.EXIT_GAME.regexMatcher(command);
+        if (matcher.matches()) {
+            // TODO update chiza
+            return;
+        }
 
         System.out.println("Invalid command.");
     }

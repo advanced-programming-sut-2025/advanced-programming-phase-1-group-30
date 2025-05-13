@@ -26,45 +26,67 @@ public class NewGameController {
         User user2 = null;
         User user3 = null;
         Game game = new Game();
+        App.setCurrentGame(game);
         ArrayList<Player> players = new ArrayList<>();
         Player playerX = new Player(App.getCurrentUser().getUsername(), 1);
         players.add(playerX);
         if (username1 == null &&
             username2 == null &&
-            username3 == null) GameMenu.printResult("You should at least enter one user");
+            username3 == null) {
+            GameMenu.printResult("You should at least enter one user");
+            return;
+        }
 
         if (username1 != null) {
             user1 = User.findUserByUsername(username1);
-            if (user1 == null) GameMenu.printResult("Invalid User1");
-            if (user1.isInGame()) GameMenu.printResult("User1 already in Game");
+            if (user1 == null) {
+                GameMenu.printResult("Invalid User1");
+                return;
+            }
+            if (user1.isInGame()) {
+                GameMenu.printResult("User1 already in Game");
+                return;
+            }
             
             Player player1 = new Player(user1.getUsername(), 2);
             user1.setPlayer(player1);
-            user1.changeInGame();
             players.add(player1);
         }
 
         if (username2 != null) {
             user2 = User.findUserByUsername(username2);
-            if (user2 == null) GameMenu.printResult("Invalid User2");
-            if (user2.isInGame()) GameMenu.printResult("User2 already in Game");
+            if (user2 == null) {
+                GameMenu.printResult("Invalid User2");
+                return;
+            }
+            if (user2.isInGame()) {
+                GameMenu.printResult("User2 already in Game");
+                return;
+            }
 
             Player player2 = new Player(user2.getUsername(), 3);
             user2.setPlayer(player2);
-            user2.changeInGame();
             players.add(player2);
         }
 
         if (username3 != null) {
             user3 = User.findUserByUsername(username3);
-            if (user3 == null) GameMenu.printResult("Invalid User3");
-            if (user3.isInGame()) GameMenu.printResult("User3 already in Game");
+            if (user3 == null) {
+                GameMenu.printResult("Invalid User3");
+                return;
+            }
+            if (user3.isInGame()) {
+                GameMenu.printResult("User3 already in Game");
+                return;
+            }
 
             Player player3 = new Player(user3.getUsername(), 4);
             user3.setPlayer(player3);
-            user3.changeInGame();
             players.add(player3);
         }
+        user1.changeInGame();
+        user2.changeInGame();
+        user3.changeInGame();
         App.getMaps().add(new Map(1));
         App.getMaps().add(new Map(2));
         App.getMaps().add(new Map(3));
@@ -103,7 +125,6 @@ public class NewGameController {
         game.setPlayers(players);
         game.setTomorrowWeather(Weather.SUNNY);
         game.setCurrentPlayer(playerX);
-        App.setCurrentGame(game);
         GameMenu.printResult("Starting new game...");
     }
 
@@ -114,6 +135,7 @@ public class NewGameController {
         List<Player> players = App.getCurrentGame().getPlayers();
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         for (Player player : players) {
+
             if (player.getSelectionNumber() == currentPlayer.getSelectionNumber() + 1) {
                 if (player.isPassedOut()) continue;
                 App.getCurrentGame().setCurrentPlayer(player);
@@ -169,12 +191,12 @@ public class NewGameController {
             }
         }
 
-        for (Player player : players) {
-            if (!player.isPassedOut()) {
-                App.getCurrentGame().setCurrentPlayer(player);
-                break;
-            }
-        }
+//        for (Player player : players) {
+//            if (!player.isPassedOut()) {
+//                App.getCurrentGame().setCurrentPlayer(player);
+//                break;
+//            }
+//        }
 
         int currentTime = App.getCurrentGame().getCurrentTime().getHour();
         if (currentTime == 21) {
@@ -240,5 +262,6 @@ public class NewGameController {
         }
         else
             App.getCurrentGame().getCurrentTime().setHour(currentTime + 1);
+        GameMenu.printResult("Current player: " + App.getCurrentGame().getCurrentPlayer().getUsername());
     }
 }
