@@ -87,6 +87,7 @@ public class Cow extends Animal {
                     GameMenu.printResult("You don't have enough space in your backpack!");
                 } else {
                     player.getBackPack().addItem(newItem);
+                    setFriendship(Math.max(getFriendship() + 5, 1000));
                     if (newItem.getName().equals(this.milk.getName())) {
                         GameMenu.printResult("Milk collected!");
                     } else if (newItem.getName().equals(this.bigMilk.getName())) {

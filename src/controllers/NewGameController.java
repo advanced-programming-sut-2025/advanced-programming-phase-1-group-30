@@ -31,6 +31,8 @@ public class NewGameController {
         App.setCurrentGame(game);
         ArrayList<Player> players = new ArrayList<>();
         Player playerX = new Player(App.getCurrentUser().getUsername(), 1);
+        User use = User.findUserByUsername(playerX.getUsername());
+        use.setPlayer(playerX);
         players.add(playerX);
         if (username1 == null &&
             username2 == null &&

@@ -16,6 +16,9 @@ public class Animal {
     private int y;
     private Coop coop;
     private Barn barn;
+    private boolean isOut = false;
+    private int firstX;
+    private int firstY;
 
     public Animal(int price, String name, int friendship, boolean fedToday, boolean petToday, int x, int y, RanchCosts type) {
         this.price = price;
@@ -27,6 +30,8 @@ public class Animal {
         this.x = x;
         this.y = y;
         this.type = type;
+        this.firstX = x;
+        this.firstY = y;
     }
 
     public int getPrice() {
@@ -103,5 +108,58 @@ public class Animal {
 
     public void setBarn(Barn barn) {
         this.barn = barn;
+    }
+    public String name(Animal animal) {
+        switch (animal.getType()) {
+            case CHICKEN -> {
+                return "Chicken";
+            }
+            case DUCK -> {
+                return "Duck";
+            }
+            case SHEEP -> {
+                return "Sheep";
+            }
+            case PIG -> {
+                return "Pig";
+            }
+            case GOAT -> {
+                return "Goat";
+            }
+            case RABBIT -> {
+                return "Rabbit";
+            }
+            case COW -> {
+                return "Cow";
+            }
+            case DINOSAUR -> {
+                return "Dinosaur";
+            }
+        }
+        return "";
+    }
+
+    public boolean isOut() {
+        return isOut;
+    }
+
+    public void setOut(boolean out) {
+        isOut = out;
+    }
+
+    public int getFirstX() {
+        return firstX;
+    }
+
+    public void setFirstX(int firstX) {
+        this.firstX = firstX;
+    }
+
+    public int getFirstY() {
+        return firstY;
+    }
+
+    public void setFirstY(int firstY) {
+        this.firstY = firstY;
     }
 }

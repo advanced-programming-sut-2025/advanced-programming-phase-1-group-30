@@ -12,7 +12,7 @@ public enum TreeType {
     PEACH_TREE("Peach Tree", ForgingSeedType.PEACH_SAPLING, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.PEACH),
     APPLE_TREE("Apple Tree", ForgingSeedType.APPLE_SAPLING, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.APPLE),
     POMEGRANATE_TREE("Pomegranate Tree", ForgingSeedType.POMEGRANATE_SAPLING, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.POMEGRANATE),
-    OAK_TREE("Oak Tree", ForgingSeedType.ACORNS, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.OAK_RESIN),
+    OAK_TREE("Oak Tree", ForgingSeedType.OAK_TREE, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.OAK_RESIN),
     MAPLE_TREE("Maple Tree", ForgingSeedType.MAPLE_SEEDS, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.MAPLE_SYRUP),
     PINE_TREE("Pine Tree", ForgingSeedType.PINE_CONES, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.PINE_TAR),
     MAHOGANY_TREE("Mahogany Tree", ForgingSeedType.MAHOGANY_SEEDS, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.SAP),

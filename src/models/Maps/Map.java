@@ -80,7 +80,6 @@ public class Map {
                     mapInstance.tiles[x][y] = Tile.createTileFromType(x, y, tileType);
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -89,7 +88,6 @@ public class Map {
     public Map(int id) {
         this.id = id;
         loadMap(this, id);
-
     }
 
     public ArrayList<Building> getBuildings() {

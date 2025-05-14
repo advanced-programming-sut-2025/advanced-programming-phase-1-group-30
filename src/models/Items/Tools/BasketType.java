@@ -1,11 +1,11 @@
 package models.Items.Tools;
 
 public enum BasketType {
-    NORMAL("normal wateringCan",0,40),
-    COPPER("copper wateringCan",1,55),
-    IRON("iron wateringCan",2,70),
-    GOLD("gold wateringCan",3,85),
-    IRIDIUM("iridium wateringCan",4,100);
+    NORMAL("normal watering Can",0,40),
+    COPPER("copper watering Can",1,55),
+    IRON("iron watering Can",2,70),
+    GOLD("gold watering Can",3,85),
+    IRIDIUM("iridium watering Can",4,100);
 
     private final String name;
     private final int energyUsed;
