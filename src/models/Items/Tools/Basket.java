@@ -7,6 +7,7 @@ public class Basket extends Tool {
     public Basket(int count, BasketType type) {
         super(count, type.getName());
         this.type = type;
+        this.remainingWater = type.getCapacity();
     }
 
     public BasketType getType() {

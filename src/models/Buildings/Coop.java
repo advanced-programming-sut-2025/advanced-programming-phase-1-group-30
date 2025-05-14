@@ -8,7 +8,7 @@ public class Coop extends Building {
     private final int capacity;
     private int currentNumberOfAnimals;
     private final String type;
-    private ArrayList<Animal> animals;
+    private ArrayList<Animal> animals = new ArrayList<>();
 
     public Coop(int height, int width, int startX, int startY, int capacity, String type) {
         super(height, width, startX, startY);

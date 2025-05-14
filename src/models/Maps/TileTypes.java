@@ -10,5 +10,12 @@ public enum TileTypes {
     GRASS,
     BARN,
     COOP,
-    QUARRY;
+    QUARRY,
+    BLACKSMITH,
+    MARINES_RANCH,
+    THE_STARDROP_SALOON,
+    CARPENTERS_SHOP,
+    JOJOMART,
+    PIERRES_GENERAL_STORE,
+    FISH_SHOP;
 }

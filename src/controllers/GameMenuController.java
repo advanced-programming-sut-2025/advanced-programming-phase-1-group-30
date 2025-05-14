@@ -3,6 +3,7 @@ package controllers;
 import models.Animals.*;
 import models.App;
 import models.Buildings.*;
+import models.Game;
 import models.Items.Gift;
 import models.Items.Products.*;
 import models.Items.Products.ShopProducts.ShopProduct;
@@ -155,7 +156,7 @@ public class GameMenuController {
 
     public static void ToolsEquip(String name) {
         for(Item items: App.getCurrentGame().getCurrentPlayer().getBackPack().getItems()){
-            if(items.getName().equals(name)){
+            if(items.getName().toLowerCase().equals(name.toLowerCase())){
                 App.getCurrentGame().getCurrentPlayer().setWield(items);
                 GameMenu.printResult("You equipped " + name + ". It's now ready to use.");
                 return;
@@ -187,6 +188,11 @@ public class GameMenuController {
         Player player = App.getCurrentGame().getCurrentPlayer();
         Item wield = player.getWield();
         Tile[][] tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
+
+        if(player.isInCity()){
+            GameMenu.printResult("You can't use tools in city!");
+            return;
+        }
 
 
         int x = player.getX();
@@ -303,10 +309,9 @@ public class GameMenuController {
             if(player.getForaging() == 450){
                 energyNeeded -= 1;
             }
-
             if(player.getEnergy() > energyNeeded){
                 if(targetTile.getItem() != null) {
-                    if (targetTile.getItem() instanceof Tree) {
+                    if (targetTile.getItem() instanceof Tree || ((ForgingSeed)targetTile.getItem()).getType().getTreeOrCrop() == 1) {
                         Item wood = new Item(12, "wood", 10);
                         Item sap = new Item(2, "sap", 10);
 
@@ -336,6 +341,15 @@ public class GameMenuController {
                         } else {
                             newWood.setCount(newWood.getCount() + 1);
                             newSap.setCount(newSap.getCount() + 1);
+                        }
+                        if (targetTile.getItem() != null && targetTile.getItem() instanceof ForgingSeed) {
+                            if (((ForgingSeed) targetTile.getItem()).getType().getTreeOrCrop() == 1) {
+                                targetTile.setItem(null);
+                                targetTile.setCrop(null);
+                                targetTile.setReadyToHarvest(false);
+                                targetTile.setPlanted(false);
+                                targetTile.setType(TileTypes.DIRT);
+                            }
                         }
 
                         targetTile.setItem(null);
@@ -371,11 +385,14 @@ public class GameMenuController {
                     ((Basket) wield).setRemainingWater(((Basket) wield).getType().getCapacity());
                     GameMenu.printResult("Splash! Your bucket is full and ready to go.");
                 } else {
+                    if (((Basket) wield).getRemainingWater() <= 0) {
+                        System.out.println("Basket is empty!");
+                        return;
+                    }
                     ((Basket) wield).setRemainingWater(((Basket) wield).getRemainingWater() - 1);
-
                     if(targetTile.getItem() != null) {
                         if (targetTile.getItem() instanceof ForgingSeed) {
-                            ((ForgingSeed) targetTile.getItem()).setWatered(true);
+                            targetTile.getCrop().setWateredToday(true);
                             GameMenu.printResult("You give the plants a refreshing splash!");
                             player.increaseFarming(5);
                         } else {
@@ -396,37 +413,62 @@ public class GameMenuController {
         } else if(wield instanceof Scythe){
             if(player.getEnergy() > 2){
                 if(targetTile.isReadyToHarvest()){
-                    GameMenu.printResult("You harvested " + targetTile.getCrop() +" and added it to your backpack!");
-                    Item newItem = Item.findItemByName(targetTile.getCrop().getName(), player.getBackPack().getItems());
-
-                    if(newItem != null){
-                        newItem.setCount(newItem.getCount() + targetTile.getCrop().getCount());
-                    } else {
-                        if(player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()){
-                            GameMenu.printResult("You don't have enough space in your backpack!");
-                            return;
-                        } else{
-                            player.getBackPack().addItem(targetTile.getCrop());
-                            player.increaseFarming(5);
+                    ForgingSeed seed = (ForgingSeed) targetTile.getItem();
+                    if (seed.getType().getTreeOrCrop() == 1) {
+                        GameMenu.printResult("You collected " + targetTile.getCrop().getName() + " and added it to your backpack!");
+                        Item newItem = Item.findItemByName(targetTile.getCrop().getName(), player.getBackPack().getItems());
+                        if(newItem != null){
+                            newItem.setCount(newItem.getCount() + targetTile.getCrop().getCount());
+                        } else {
+                            if(player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()){
+                                GameMenu.printResult("You don't have enough space in your backpack!");
+                                return;
+                            } else{
+                                player.getBackPack().addItem(targetTile.getCrop());
+                                player.increaseFarming(5);
+                            }
                         }
-                    }
-                    if (targetTile.getCrop() instanceof GiantCrop) {
-                        Tile[] tiles1 = ((GiantCrop) targetTile.getCrop()).getTiles();
-                        for (Tile tile : tiles1) {
-                            tile.setReadyToHarvest(false);
-                            tile.setCrop(null);
-                            tile.setItem(null);
-                            tile.setGiantCrop(false);
-                        }
-                    } else {
                         targetTile.setReadyToHarvest(false);
-                        targetTile.setCrop(null);
-                        targetTile.setItem(null);
-                        targetTile.setGiantCrop(false);
+                        targetTile.getCrop().setDaysPassed(0);
+                        targetTile.getCrop().setCurrentStage(0);
+                        targetTile.getCrop().setDaysNotWatered(0);
+                    } else {
+                        GameMenu.printResult("You harvested " + targetTile.getCrop().getName() + " and added it to your backpack!");
+                        Item newItem = Item.findItemByName(targetTile.getCrop().getName(), player.getBackPack().getItems());
+                        targetTile.setPlanted(false);
+                        if (newItem != null) {
+                            newItem.setCount(newItem.getCount() + targetTile.getCrop().getCount());
+                        } else {
+                            if (player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()) {
+                                GameMenu.printResult("You don't have enough space in your backpack!");
+                                return;
+                            } else {
+                                player.getBackPack().addItem(targetTile.getCrop());
+                                player.increaseFarming(5);
+                            }
+                        }
+                        if (targetTile.getCrop() instanceof GiantCrop) {
+                            Tile[] tiles1 = ((GiantCrop) targetTile.getCrop()).getTiles();
+                            for (Tile tile : tiles1) {
+                                tile.setReadyToHarvest(false);
+                                tile.setCrop(null);
+                                tile.setItem(null);
+                                tile.setGiantCrop(false);
+                                tile.setPlanted(false);
+                            }
+                        } else {
+                            targetTile.setReadyToHarvest(false);
+                            targetTile.setCrop(null);
+                            targetTile.setItem(null);
+                            targetTile.setGiantCrop(false);
+                        }
                     }
+
                 } else if(targetTile.getType().equals(TileTypes.GRASS)){
                     targetTile.setType(TileTypes.DIRT);
                     GameMenu.printResult("Tile type changed to Dirt!");
+                } else {
+                    GameMenu.printResult("Nothing here to harvest!");
                 }
                 player.setEnergy(player.getEnergy() - 2 * (int) rate);
             }else{
@@ -535,7 +577,6 @@ public class GameMenuController {
                 GameMenu.printResult("Planted " + seed.getName() + " at (" + newX + ", " + newY + ")");
                 CropType plantedCrop = seed.getCrop().getType();
 
-// Check 4 possible 2x2 squares the tile could be part of
                 int[][] squareOffsets = {
                         {0, 0},       // current tile is top-left of square
                         {-1, 0},      // current tile is top-right
@@ -612,7 +653,7 @@ public class GameMenuController {
                     "=== Current Stage: " + targetTile.getCrop().getCurrentStage() + " ===\n" +
                     "=== Days Remaining: " + daysRemaining + " ===\n" +
                     "=== Is Fertilized: " + seed.isFertilized() + " ===\n" +
-                    "=== Watered Today: " + x + " ==="); // TODO
+                    "=== Watered Today: " + targetTile.getCrop().isWateredToday() + " ==="); // TODO
             if (targetTile.isReadyToHarvest()) {
                 GameMenu.printResult("=== Ready to Harvest! ===");
             }
@@ -631,6 +672,11 @@ public class GameMenuController {
         int x = player.getX();
         int y = player.getY();
         int dx = 0, dy = 0;
+
+        if(player.isInCity()){
+            GameMenu.printResult("You cant fertilize in city!");
+            return;
+        }
 
         switch (direction) {
             case "w": dy = -1; break;      // up
@@ -746,9 +792,16 @@ public class GameMenuController {
         Tile[][] tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
 
 
+        if(player.isInCity()){
+            GameMenu.printResult("You cant place item in city!");
+            return;
+        }
+
+
         int x = player.getX();
         int y = player.getY();
         int dx = 0, dy = 0;
+
 
         switch (direction) {
             case "w": dy = -1; break;
@@ -970,8 +1023,8 @@ public class GameMenuController {
 
         try {
             CarpenterCosts item = CarpenterCosts.valueOf(normalized);
-            for (int i = x; i < item.getWidth(); i++) {
-                for (int j = y; j < item.getLength(); j++) {
+            for (int i = x; i < item.getWidth() + x; i++) {
+                for (int j = y - item.getLength(); j < y; j++) {
                     if (tiles[i][j].getItem() != null) {
                         GameMenu.printResult("Not enough space!");
                         return;
@@ -1029,8 +1082,8 @@ public class GameMenuController {
             item1.setCount(item1.getCount() - item.getWood());
             item2.setCount(item2.getCount() - item.getStone());
             player.setMoney(player.getMoney() - item.getCost());
-            for (int i = x; i < item.getWidth(); i++) {
-                for (int j = y; j < item.getLength(); j++) {
+            for (int i = x; i < x + item.getWidth(); i++) {
+                for (int j = y - item.getLength(); j < y; j++) {
                     if (barnORcoop == 1) {
                         tiles[i][j].setType(TileTypes.BARN);
                     } else if (barnORcoop == 0) {
@@ -1047,6 +1100,16 @@ public class GameMenuController {
             System.out.println("Invalid item: " + name);
         }
     }
+//    public int animalX(ArrayList<Coop> coops) {
+//        int x = 0;
+//        for (Coop coop : coops) {
+//            for (Animal animal : coop.getAnimals()) {
+//                if (animal.getX() == x) {
+//
+//                }
+//            }
+//        }
+//    }
     public static void buyAnimal(String animal1, String name) {
         // TODO go to marnie's ranch
         String animal2 = animal1.toUpperCase().replace(" ", "_");
@@ -1069,11 +1132,11 @@ public class GameMenuController {
             case CHICKEN -> {
                 int check = 0;
                 for (Coop coop : player.getMap().getCoops()) {
-                    if (coop.getCapacity() > coop.getCurrentNumberOfAnimals()) {
-                        Animal animal = new Chicken(800, name, 0, false, false, coop.getStartX() + coop.getCurrentNumberOfAnimals(), coop.getStartY() + coop.getCurrentNumberOfAnimals());
+                    if (coop.getCapacity() > coop.getAnimals().size()) {
+                        Animal animal = new Chicken(800, name, 0, false, false, coop.getStartX() + coop.getAnimals().size(), coop.getStartY() - coop.getAnimals().size() - 1);
                         coop.getAnimals().add(animal);
                         animal.setCoop(coop);
-                        coop.setCurrentNumberOfAnimals(coop.getCurrentNumberOfAnimals());
+                        coop.setCurrentNumberOfAnimals(coop.getAnimals().size());
                         player.getAnimals().add(animal);
                         check = 1;
                         break;
@@ -1086,11 +1149,11 @@ public class GameMenuController {
             case DUCK -> {
                 int check = 0;
                 for (Coop coop : player.getMap().getCoops()) {
-                    if (!coop.getType().equals("regular") && coop.getCapacity() > coop.getCurrentNumberOfAnimals()) {
-                        Animal animal = new Duck(1200, name, 0, false, false, coop.getStartX() + coop.getCurrentNumberOfAnimals(), coop.getStartY() + coop.getCurrentNumberOfAnimals());
+                    if (!coop.getType().equals("regular") && coop.getCapacity() > coop.getAnimals().size()) {
+                        Animal animal = new Duck(1200, name, 0, false, false, coop.getStartX() + coop.getAnimals().size(), coop.getStartY() + coop.getAnimals().size());
                         coop.getAnimals().add(animal);
                         animal.setCoop(coop);
-                        coop.setCurrentNumberOfAnimals(coop.getCurrentNumberOfAnimals());
+                        coop.setCurrentNumberOfAnimals(coop.getAnimals().size());
                         player.getAnimals().add(animal);
                         check = 1;
                         break;
@@ -1103,11 +1166,11 @@ public class GameMenuController {
             case RABBIT -> {
                 int check = 0;
                 for (Coop coop : player.getMap().getCoops()) {
-                    if (!coop.getType().equals("regular") && !coop.getType().equals("big") && coop.getCapacity() > coop.getCurrentNumberOfAnimals()) {
-                        Animal animal = new Rabbit(8000, name, 0, false, false, coop.getStartX() + coop.getCurrentNumberOfAnimals(), coop.getStartY() + coop.getCurrentNumberOfAnimals());
+                    if (!coop.getType().equals("regular") && !coop.getType().equals("big") && coop.getCapacity() > coop.getAnimals().size()) {
+                        Animal animal = new Rabbit(8000, name, 0, false, false, coop.getStartX() + coop.getAnimals().size(), coop.getStartY() + coop.getAnimals().size());
                         coop.getAnimals().add(animal);
                         animal.setCoop(coop);
-                        coop.setCurrentNumberOfAnimals(coop.getCurrentNumberOfAnimals());
+                        coop.setCurrentNumberOfAnimals(coop.getAnimals().size());
                         player.getAnimals().add(animal);
                         check = 1;
                         break;
@@ -1120,10 +1183,10 @@ public class GameMenuController {
             case DINOSAUR -> {
                 int check = 0;
                 for (Coop coop : player.getMap().getCoops()) {
-                    if (!coop.getType().equals("regular") && !coop.getType().equals("deluxe") && coop.getCapacity() > coop.getCurrentNumberOfAnimals()) {
-                        Animal animal = new Dinosaur(800, name, 0, false, false, coop.getStartX() + coop.getCurrentNumberOfAnimals(), coop.getStartY() + coop.getCurrentNumberOfAnimals());
+                    if (!coop.getType().equals("regular") && !coop.getType().equals("deluxe") && coop.getCapacity() > coop.getAnimals().size()) {
+                        Animal animal = new Dinosaur(800, name, 0, false, false, coop.getStartX() + coop.getAnimals().size(), coop.getStartY() + coop.getAnimals().size());
                         coop.getAnimals().add(animal);
-                        coop.setCurrentNumberOfAnimals(coop.getCurrentNumberOfAnimals());
+                        coop.setCurrentNumberOfAnimals(coop.getAnimals().size());
                         player.getAnimals().add(animal);
                         check = 1;
                         break;
@@ -1136,12 +1199,12 @@ public class GameMenuController {
             case COW -> {
                 int check = 0;
                 for (Barn barn : player.getMap().getBarns()) {
-                    if (barn.getCapacity() > barn.getCurrentNumberOfAnimals()) {
-                        Animal animal = new Cow(1500, name, 0, false, false, barn.getStartX() + barn.getCurrentNumberOfAnimals(), barn.getStartY() + barn.getCurrentNumberOfAnimals());
+                    if (barn.getCapacity() > barn.getAnimals().size()) {
+                        Animal animal = new Cow(1500, name, 0, false, false, barn.getStartX() + barn.getAnimals().size(), barn.getStartY() + barn.getAnimals().size());
                         barn.getAnimals().add(animal);
                         animal.setBarn(barn);
                         player.getAnimals().add(animal);
-                        barn.setCurrentNumberOfAnimals(barn.getCurrentNumberOfAnimals());
+                        barn.setCurrentNumberOfAnimals(barn.getAnimals().size());
                         check = 1;
                         break;
                     }
@@ -1153,12 +1216,12 @@ public class GameMenuController {
             case GOAT -> {
                 int check = 0;
                 for (Barn barn : player.getMap().getBarns()) {
-                    if (!barn.getType().equals("regular") && barn.getCapacity() > barn.getCurrentNumberOfAnimals()) {
-                        Animal animal = new Goat(4000, name, 0, false, false, barn.getStartX() + barn.getCurrentNumberOfAnimals(), barn.getStartY() + barn.getCurrentNumberOfAnimals());
+                    if (!barn.getType().equals("regular") && barn.getCapacity() > barn.getAnimals().size()) {
+                        Animal animal = new Goat(4000, name, 0, false, false, barn.getStartX() + barn.getAnimals().size(), barn.getStartY() + barn.getAnimals().size());
                         barn.getAnimals().add(animal);
                         animal.setBarn(barn);
                         player.getAnimals().add(animal);
-                        barn.setCurrentNumberOfAnimals(barn.getCurrentNumberOfAnimals());
+                        barn.setCurrentNumberOfAnimals(barn.getAnimals().size());
                         check = 1;
                         break;
                     }
@@ -1170,12 +1233,12 @@ public class GameMenuController {
             case SHEEP -> {
                 int check = 0;
                 for (Barn barn : player.getMap().getBarns()) {
-                    if (!barn.getType().equals("regular") && !barn.getType().equals("big") && barn.getCapacity() > barn.getCurrentNumberOfAnimals()) {
-                        Animal animal = new Sheep(8000, name, 0, false, false, barn.getStartX() + barn.getCurrentNumberOfAnimals(), barn.getStartY() + barn.getCurrentNumberOfAnimals());
+                    if (!barn.getType().equals("regular") && !barn.getType().equals("big") && barn.getCapacity() > barn.getAnimals().size()) {
+                        Animal animal = new Sheep(8000, name, 0, false, false, barn.getStartX() + barn.getAnimals().size(), barn.getStartY() + barn.getAnimals().size());
                         barn.getAnimals().add(animal);
                         animal.setBarn(barn);
                         player.getAnimals().add(animal);
-                        barn.setCurrentNumberOfAnimals(barn.getCurrentNumberOfAnimals());
+                        barn.setCurrentNumberOfAnimals(barn.getAnimals().size());
                         check = 1;
                         break;
                     }
@@ -1187,12 +1250,12 @@ public class GameMenuController {
             case PIG -> {
                 int check = 0;
                 for (Barn barn : player.getMap().getBarns()) {
-                    if (!barn.getType().equals("regular") && !barn.getType().equals("big") && barn.getCapacity() > barn.getCurrentNumberOfAnimals()) {
-                        Animal animal = new Cow(16000, name, 0, false, false, barn.getStartX() + barn.getCurrentNumberOfAnimals(), barn.getStartY() + barn.getCurrentNumberOfAnimals());
+                    if (!barn.getType().equals("regular") && !barn.getType().equals("big") && barn.getCapacity() > barn.getAnimals().size()) {
+                        Animal animal = new Cow(16000, name, 0, false, false, barn.getStartX() + barn.getAnimals().size(), barn.getStartY() + barn.getAnimals().size());
                         barn.getAnimals().add(animal);
                         animal.setBarn(barn);
                         player.getAnimals().add(animal);
-                        barn.setCurrentNumberOfAnimals(barn.getCurrentNumberOfAnimals());
+                        barn.setCurrentNumberOfAnimals(barn.getAnimals().size());
                         check = 1;
                         break;
                     }
@@ -1233,6 +1296,7 @@ public class GameMenuController {
                 } else {
                     GameMenu.printResult("Animal pet successfully!");
                 }
+                animal.setPetToday(true);
                 return;
             }
         }
@@ -1241,6 +1305,10 @@ public class GameMenuController {
     }
 
     public static void cheatSetFriendship(String name, String amount) {
+        if (Integer.parseInt(amount) > 1000) {
+            GameMenu.printResult("Invalid amount.");
+            return;
+        }
         Player player = App.getCurrentGame().getCurrentPlayer();
         for (Animal animal : player.getAnimals()) {
             if (animal.getName().equals(name)) {
@@ -1253,7 +1321,7 @@ public class GameMenuController {
     public static void animals() {
         Player player = App.getCurrentGame().getCurrentPlayer();
         for (Animal animal : player.getAnimals()) {
-            GameMenu.printResult("=== Animal: " + animal.getClass() + " " + animal.getName() + " ===");
+            GameMenu.printResult("=== Animal: " + animal.name(animal) + " " + animal.getName() + " ===");
             GameMenu.printResult("=== Friendship: " + animal.getFriendship() + " ===");
             GameMenu.printResult("=== Is fed today: " + animal.isFedToday() + " ===");
             GameMenu.printResult("=== Is pet today: " + animal.isPetToday() + " ===");
@@ -1261,6 +1329,35 @@ public class GameMenuController {
         }
     }
     public static void shepherdAnimals(String name, String x, String y){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Tile[][] tiles = player.getMap().getTiles();
+        Weather w = App.getCurrentGame().getCurrentWeather();
+        if (w.equals(Weather.RAIN) || w.equals(Weather.SNOW) || w.equals(Weather.STORM)) {
+            GameMenu.printResult("Weather is not great for sheperding animal!");
+            return;
+        }
+        for (Animal animal : player.getAnimals()) {
+            if (animal.getName().equals(name)) {
+                if (!animal.isOut()) {
+                    if (tiles[Integer.parseInt(x)][Integer.parseInt(y)].isWalkable()) {
+                        animal.setX(Integer.parseInt(x));
+                        animal.setY(Integer.parseInt(y));
+                        animal.setFedToday(true);
+                        animal.setOut(true);
+                        animal.setFriendship(Math.min(animal.getFriendship() + 8, 1000));
+                        GameMenu.printResult("Animal is out!");
+                    } else {
+                        GameMenu.printResult("Tile is not walkable!");
+                    }
+                } else {
+                    animal.setX(animal.getFirstX());
+                    animal.setY(animal.getFirstY());
+                    animal.setOut(false);
+                    GameMenu.printResult("Animal back to safety!");
+                }
+                break;
+            }
+        }
     }
     public static void feedHay(String name){
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -1270,6 +1367,7 @@ public class GameMenuController {
                 if (hay != null && hay.getCount() > 0) {
                     hay.setCount(hay.getCount() - 1);
                     animal.setFedToday(true);
+                    animal.setFriendship(Math.max(animal.getFriendship() + 10, 1000));
                     GameMenu.printResult("Animal fed successfully!");
                 } else {
                     GameMenu.printResult("Not enough hay!");
@@ -1282,7 +1380,7 @@ public class GameMenuController {
         Player player = App.getCurrentGame().getCurrentPlayer();
         for (Animal animal : player.getAnimals()) {
             if (animal.isProductReady()) {
-                GameMenu.printResult("=== " + animal.getName() + " " + animal.getClass() + "'s product is ready to collect! ===");
+                GameMenu.printResult("=== " + animal.getName() + " " + animal.name(animal) + "'s product is ready to collect! ===");
             }
         }
     }
@@ -1313,6 +1411,11 @@ public class GameMenuController {
         }
     }
     public static void fishing(String fishingPole){
+        if(App.getCurrentGame().getCurrentPlayer().isInCity()){
+            GameMenu.printResult("You can't fish in city!");
+            return;
+        }
+
         ArrayList<FishType> fishTypes = new ArrayList<>();
         for (FishType fishType : FishType.values()) {
             if (fishType.getSeason().equals(App.getCurrentGame().getCurrentTime().getSeason()))
@@ -2255,5 +2358,67 @@ public class GameMenuController {
             }
         }
         GameMenu.printResult("You have to be next to the NPC you want!");
+    }
+
+    public static void printCityMap() {
+        App.getMaps().get(4).printFullMap();
+    }
+    public static void printPlayerFullMap(){
+        App.getCurrentGame().getCurrentPlayer().getMap().printFullMap();
+    }
+    public static void goToCity(){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if(!player.isInCity()){
+            player.setInCity(true);
+            Map map = App.getMaps().get(4);
+            int x = 0;
+            int y = 0;
+            while(true){
+                Tile tile = map.getTiles()[x++][y];
+                if(tile.getType().equals(TileTypes.GRASS) || tile.getType().equals(TileTypes.DIRT)){
+                    if(tile.getItem() == null){
+                        for(Player player1 : App.getCurrentGame().getPlayers()){
+                            if(player1.isInCity()){
+                                if(player1.getX() == player.getX() && player1.getY() == player.getY()){
+                                    player.setX(x-1);
+                                    player.setY(y);
+                                }
+                            }
+                        }
+                    }
+                }
+                if (x == 80) {
+                    y++;
+                    x = 0;
+                }
+            }
+        } else {
+            GameMenu.printResult("You currently in the city!");
+        }
+
+    }
+    public static void goToFarm(){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if(player.isInCity()){
+            player.setInCity(true);
+            Map map = player.getMap();
+            int x = 0;
+            int y = 0;
+            while(true){
+                Tile tile = map.getTiles()[x++][y];
+                if(tile.getType().equals(TileTypes.GRASS) || tile.getType().equals(TileTypes.DIRT)){
+                    if(tile.getItem() == null){
+                        player.setX(x-1);
+                        player.setY(y);
+                    }
+                }
+                if (x == 80) {
+                    y++;
+                    x = 0;
+                }
+            }
+        } else {
+            GameMenu.printResult("You currently in your farm!");
+        }
     }
 }

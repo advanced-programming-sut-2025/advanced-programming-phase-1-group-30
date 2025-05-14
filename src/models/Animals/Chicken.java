@@ -84,6 +84,7 @@ public class Chicken extends Animal {
                     GameMenu.printResult(newItem.getName() + " collected!");
                     this.egg = null;
                     this.bigEgg = null;
+                    this.setProductReady(false);
                 }
             }
         }
