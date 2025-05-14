@@ -22,4 +22,6 @@ public class MilkPail extends Tool {
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
+
+
 }

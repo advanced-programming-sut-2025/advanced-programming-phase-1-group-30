@@ -1,8 +1,8 @@
 package models.Invetory;
 
 public enum BackPackType {
-    INITIAL_BACKPACK(12),
-    BIG_BACKPACK(24),
+    INITIAL_BACKPACK(25),
+    BIG_BACKPACK(50),
     DELUX_BACKPACK(-1);
 
     private final int capacity;

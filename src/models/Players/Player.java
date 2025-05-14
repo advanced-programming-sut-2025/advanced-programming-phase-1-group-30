@@ -74,6 +74,7 @@ public class Player {
         this.backPack.addItem(new Hoe(1, HoeType.NORMAL));
         this.backPack.addItem(new Pickaxe(1, PickaxeType.NORMAL));
         this.backPack.addItem(new Basket(1, BasketType.NORMAL));
+        this.backPack.addItem(new MilkPail(1, 10));
         this.backPack.addItem(new Scythe(1));
         this.trashCan = new TrashCan(TrashCanType.INITIAL_TRASHCAN);
         this.backPack.addItem(new ForgingSeed(4, ForgingSeedType.APRICOT_SAPLING)); //TODO tile & initial seed
