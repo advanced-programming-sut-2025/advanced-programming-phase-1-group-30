@@ -63,6 +63,7 @@ public class Sheep extends Animal {
                     GameMenu.printResult("You don't have enough space in your backpack!");
                 } else{
                     player.getBackPack().addItem(newItem);
+                    setFriendship(Math.max(getFriendship() + 5, 1000));
                     GameMenu.printResult("Wool collected!");
                     this.wool = null;
                 }
