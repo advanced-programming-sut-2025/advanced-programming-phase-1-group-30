@@ -98,6 +98,7 @@ public class Chicken extends Animal {
                     this.egg = null;
                     this.bigEgg = null;
                     this.setProductReady(false);
+
                 } else {
                     if (player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()) {
                         GameMenu.printResult("You don't have enough space in your backpack!");

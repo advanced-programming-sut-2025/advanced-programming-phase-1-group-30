@@ -88,13 +88,20 @@ public class NewGameController {
             user3.setPlayer(player3);
             players.add(player3);
         }
-        user1.changeInGame();
-        user2.changeInGame();
-        user3.changeInGame();
+        if(user1 != null) {
+            user1.changeInGame();
+        }
+        if(user2 != null) {
+            user2.changeInGame();
+        }
+        if(user3 != null) {
+            user3.changeInGame();
+        }
         App.getMaps().add(new Map(1));
         App.getMaps().add(new Map(2));
         App.getMaps().add(new Map(3));
         App.getMaps().add(new Map(4));
+        App.getMaps().add(new Map(-1));
         GameMenu.printResult("Please select your maps...");
 
         for (Player player : players) {

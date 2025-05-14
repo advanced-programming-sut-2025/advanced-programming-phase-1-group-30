@@ -61,6 +61,7 @@ public class Player {
     private ArrayList<Gift> gifts = new ArrayList<>();
     private Player askedMarriage = null;
     private String gender;
+    private boolean inCity;
 
     public Player(String username, int selectionNumber) {
         this.username = username;
@@ -85,6 +86,7 @@ public class Player {
         this.maxEnergy = 200;
         this.building = new Building(0, 0, 0, 0); //TODO home!!!
         this.recipes = null;
+        this.inCity = false;
         for(int i = 0; i < 5; i++){
             this.friendshipsNPC.put(App.getCurrentGame().getNPCs().get(i), 0);
             this.activatedQuestNPC.put(App.getCurrentGame().getNPCs().get(i), new ArrayList<>(List.of(1)));
@@ -344,5 +346,13 @@ public class Player {
             );
         }
         money += delta;
+    }
+
+    public boolean isInCity() {
+        return inCity;
+    }
+
+    public void setInCity(boolean inCity) {
+        this.inCity = inCity;
     }
 }

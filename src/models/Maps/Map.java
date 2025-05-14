@@ -53,12 +53,14 @@ public class Map {
     public static void loadMap(Map mapInstance, int id) {
         try {
             InputStream inputStream;
-            if (id == 2) {
-                inputStream = Map.class.getClassLoader().getResourceAsStream("map.json");
+            if(id == -1){
+                inputStream = Map.class.getResourceAsStream("/resources/mapCity.json");;
+            } else if (id == 2) {
+                inputStream = Map.class.getResourceAsStream("/resources/map.json");
             } else if (id == 3) {
-                inputStream = Map.class.getClassLoader().getResourceAsStream("map(1).json");
+                inputStream = Map.class.getResourceAsStream("/resources/map(1).json");
             } else {
-                inputStream = Map.class.getClassLoader().getResourceAsStream("map(2).json");
+                inputStream = Map.class.getResourceAsStream("/resources/map(2).json");
             }
             if (inputStream == null) {
                 throw new FileNotFoundException("map.json not found in resources!");
@@ -77,7 +79,7 @@ public class Map {
                     String tileType = row.getString(x);
 
                     // You need to create the right Tile object based on the type
-                    mapInstance.tiles[x][y] = Tile.createTileFromType(x, y, tileType);
+                    mapInstance.tiles[x][y] = Tile.createTileFromType(x, y, tileType, id);
                 }
             }
         } catch (Exception e) {
@@ -130,6 +132,107 @@ public class Map {
         } else {
             for (int i = x; i < x + size; i++) {
                 for (int j = y; j < y + size; j++) {
+                    if (tiles[j][i].getType().equals(TileTypes.DIRT)) {
+                        if (tiles[j][i].getItem() != null) {
+                            if (tiles[j][i].getItem().getClass().equals(Stone.class)) {
+                                System.out.print("\uD83E\uDEA8");
+                            } else if (tiles[j][i].getItem().getClass().equals(Tree.class)) {
+                                System.out.print("\uD83C\uDF33");
+                            }
+                        } else {
+                            if (player.getX() == j && player.getY() == i) {
+                                System.out.print(RED + "\uD83D\uDE00" + RESET);
+                            } else
+                                System.out.print(LIGHT_YELLOW + "⬛ " + RESET);
+                        }
+                    } else if (tiles[j][i].getType().equals(TileTypes.GRASS)) {
+                        if (tiles[j][i].getItem() != null) {
+                            if (tiles[j][i].getItem().getClass().equals(Stone.class)) {
+                                System.out.print("\uD83E\uDEA8");
+                            } else if (tiles[j][i].getItem().getClass().equals(Tree.class)) {
+                                System.out.print("\uD83C\uDF33");
+                            }
+                        } else {
+                            if (player.getX() == j && player.getY() == i) {
+                                System.out.print(RED + "\uD83D\uDE00" + RESET);
+                            } else{
+                                System.out.print("🟩");
+                            }
+                        }
+                    } else if (tiles[j][i].getType().equals(TileTypes.WATER)) {
+                        if (player.getX() == j && player.getY() == i) {
+                            System.out.print(RED + "\uD83D\uDE00" + RESET);
+                        } else
+                            System.out.print(BLUE + "⬛ " + RESET);
+                    } else if (tiles[j][i].getType().equals(TileTypes.HUT)) {
+                        if (player.getX() == j && player.getY() == i) {
+                            System.out.print(RED + "\uD83D\uDE00" + RESET);
+                        } else
+                            System.out.print(BLUE + "\uD83C\uDFE0" + RESET);
+                    } else if (tiles[j][i].getType().equals(TileTypes.QUARRY)) {
+                        if (player.getX() == j && player.getY() == i) {
+                            System.out.print(RED + "\uD83D\uDE00" + RESET);
+                        } else
+                            System.out.print(GRAY + "⬛ " + RESET);
+                    } else if (tiles[j][i].getType().equals(TileTypes.GREENHOUSE)) {
+                        if (player.getX() == j && player.getY() == i) {
+                            System.out.print(RED + "\uD83D\uDE00" + RESET);
+                        } else
+                            System.out.print(DARK_GREEN + "⬛ " + RESET);
+                    } else if (tiles[j][i].getType().equals(TileTypes.BARN)) {
+                        if (player.getX() == j && player.getY() == i) {
+                            System.out.print(RED + "\uD83D\uDE00" + RESET);
+                            for (Animal animal : player.getAnimals()) {
+                                if (animal.getX() == j && animal.getY() == i) {
+                                    if (animal instanceof Sheep) {
+                                        System.out.print("\uD83D\uDC11 ");
+                                    } else if (animal instanceof Cow) {
+                                        System.out.print("\uD83D\uDC04 ");
+                                    } else {
+                                        System.out.println("A ");
+                                    }
+                                }
+                            }
+                        } else
+                            System.out.print(BRIGHT_BLUE + "⬛ " + RESET);
+                    } else if (tiles[j][i].getType().equals(TileTypes.COOP)) {
+                        if (player.getX() == j && player.getY() == i) {
+                            System.out.print(RED + "\uD83D\uDE00" + RESET);
+                        } else {
+                            int v = 0;
+                            for (Animal animal : player.getAnimals()) {
+                                if (animal.getX() == j && animal.getY() == i) {
+                                    if (animal instanceof Chicken) {
+                                        System.out.print("\uD83D\uDC14");
+                                    } else if (animal instanceof Duck) {
+                                        System.out.print("\uD83D\uDC04 ");
+                                    } else {
+                                        System.out.println("A ");
+                                    }
+                                    v = 1;
+                                }
+                            }
+
+                            if (v == 0) {
+                                System.out.print(LIGHT_GRAY + "⬛ " + RESET);
+                            }
+                        }
+                    } else {
+                        if (player.getX() == j && player.getY() == i) {
+                            System.out.print(RED + "\uD83D\uDE00" + RESET);
+                        } else
+                            System.out.print(RED + "⬛ " + RESET);
+                    }
+                }
+                System.out.println();
+            }
+        }
+    }
+
+    public void printFullMap() {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+            for (int i = 0; i < 60; i++) {
+                for (int j = 0; j < 80; j++) {
                     if (tiles[j][i].getType().equals(TileTypes.DIRT)) {
                         if (tiles[j][i].getItem() != null) {
                             if (tiles[j][i].getItem().getClass().equals(Stone.class)) {
@@ -223,7 +326,6 @@ public class Map {
                 }
                 System.out.println();
             }
-        }
     }
 
     public Tile[][] getTiles() {

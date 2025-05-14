@@ -3,6 +3,7 @@ package controllers;
 import models.Animals.*;
 import models.App;
 import models.Buildings.*;
+import models.Game;
 import models.Items.Gift;
 import models.Items.Products.*;
 import models.Items.Products.ShopProducts.ShopProduct;
@@ -188,6 +189,11 @@ public class GameMenuController {
         Item wield = player.getWield();
         Tile[][] tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
 
+        if(player.isInCity()){
+            GameMenu.printResult("You can't use tools in city!");
+            return;
+        }
+
 
         int x = player.getX();
         int y = player.getY();
@@ -304,6 +310,7 @@ public class GameMenuController {
                 energyNeeded -= 1;
             }
             if(player.getEnergy() > energyNeeded){
+
                 if(targetTile.getItem() != null && (targetTile.getItem() instanceof ForgingSeed || targetTile.getItem() instanceof Tree)) {
                     if (targetTile.getItem() instanceof Tree || ((ForgingSeed)targetTile.getItem()).getType().getTreeOrCrop() == 1) {
                         Item wood = new Item(12, "wood", 10);
@@ -667,6 +674,11 @@ public class GameMenuController {
         int y = player.getY();
         int dx = 0, dy = 0;
 
+        if(player.isInCity()){
+            GameMenu.printResult("You cant fertilize in city!");
+            return;
+        }
+
         switch (direction) {
             case "w": dy = -1; break;      // up
             case "s": dy = 1; break;       // down
@@ -781,9 +793,16 @@ public class GameMenuController {
         Tile[][] tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
 
 
+        if(player.isInCity()){
+            GameMenu.printResult("You cant place item in city!");
+            return;
+        }
+
+
         int x = player.getX();
         int y = player.getY();
         int dx = 0, dy = 0;
+
 
         switch (direction) {
             case "w": dy = -1; break;
@@ -1149,6 +1168,7 @@ public class GameMenuController {
                 int check = 0;
                 for (Coop coop : player.getMap().getCoops()) {
                     if (!coop.getType().equals("regular") && !coop.getType().equals("big") && coop.getCapacity() > coop.getAnimals().size()) {
+
                         Animal animal = new Rabbit(8000, name, 0, false, false, coop.getStartX() + coop.getAnimals().size(), coop.getStartY() - coop.getAnimals().size() - 1);
                         coop.getAnimals().add(animal);
                         animal.setCoop(coop);
@@ -1166,6 +1186,7 @@ public class GameMenuController {
                 int check = 0;
                 for (Coop coop : player.getMap().getCoops()) {
                     if (!coop.getType().equals("regular") && !coop.getType().equals("deluxe") && coop.getCapacity() > coop.getAnimals().size()) {
+
                         Animal animal = new Dinosaur(800, name, 0, false, false, coop.getStartX() + coop.getAnimals().size(), coop.getStartY() - coop.getAnimals().size() - 1);
                         coop.getAnimals().add(animal);
                         coop.setCurrentNumberOfAnimals(coop.getAnimals().size());
@@ -1199,6 +1220,7 @@ public class GameMenuController {
                 int check = 0;
                 for (Barn barn : player.getMap().getBarns()) {
                     if (!barn.getType().equals("regular") && barn.getCapacity() > barn.getAnimals().size()) {
+
                         Animal animal = new Goat(4000, name, 0, false, false, barn.getStartX() + barn.getAnimals().size(), barn.getStartY() - barn.getAnimals().size() - 1);
                         barn.getAnimals().add(animal);
                         animal.setBarn(barn);
@@ -1216,6 +1238,7 @@ public class GameMenuController {
                 int check = 0;
                 for (Barn barn : player.getMap().getBarns()) {
                     if (!barn.getType().equals("regular") && !barn.getType().equals("big") && barn.getCapacity() > barn.getAnimals().size()) {
+
                         Animal animal = new Sheep(8000, name, 0, false, false, barn.getStartX() + barn.getAnimals().size(), barn.getStartY() - barn.getAnimals().size() - 1);
                         barn.getAnimals().add(animal);
                         animal.setBarn(barn);
@@ -1233,6 +1256,7 @@ public class GameMenuController {
                 int check = 0;
                 for (Barn barn : player.getMap().getBarns()) {
                     if (!barn.getType().equals("regular") && !barn.getType().equals("big") && barn.getCapacity() > barn.getAnimals().size()) {
+
                         Animal animal = new Cow(16000, name, 0, false, false, barn.getStartX() + barn.getAnimals().size(), barn.getStartY() - barn.getAnimals().size() - 1);
                         barn.getAnimals().add(animal);
                         animal.setBarn(barn);
@@ -1399,6 +1423,11 @@ public class GameMenuController {
         }
     }
     public static void fishing(String fishingPole){
+        if(App.getCurrentGame().getCurrentPlayer().isInCity()){
+            GameMenu.printResult("You can't fish in city!");
+            return;
+        }
+
         ArrayList<FishType> fishTypes = new ArrayList<>();
         for (FishType fishType : FishType.values()) {
             if (fishType.getSeason().equals(App.getCurrentGame().getCurrentTime().getSeason()))
@@ -2341,5 +2370,67 @@ public class GameMenuController {
             }
         }
         GameMenu.printResult("You have to be next to the NPC you want!");
+    }
+
+    public static void printCityMap() {
+        App.getMaps().get(4).printFullMap();
+    }
+    public static void printPlayerFullMap(){
+        App.getCurrentGame().getCurrentPlayer().getMap().printFullMap();
+    }
+    public static void goToCity(){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if(!player.isInCity()){
+            player.setInCity(true);
+            Map map = App.getMaps().get(4);
+            int x = 0;
+            int y = 0;
+            while(true){
+                Tile tile = map.getTiles()[x++][y];
+                if(tile.getType().equals(TileTypes.GRASS) || tile.getType().equals(TileTypes.DIRT)){
+                    if(tile.getItem() == null){
+                        for(Player player1 : App.getCurrentGame().getPlayers()){
+                            if(player1.isInCity()){
+                                if(player1.getX() == player.getX() && player1.getY() == player.getY()){
+                                    player.setX(x-1);
+                                    player.setY(y);
+                                }
+                            }
+                        }
+                    }
+                }
+                if (x == 80) {
+                    y++;
+                    x = 0;
+                }
+            }
+        } else {
+            GameMenu.printResult("You currently in the city!");
+        }
+
+    }
+    public static void goToFarm(){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if(player.isInCity()){
+            player.setInCity(true);
+            Map map = player.getMap();
+            int x = 0;
+            int y = 0;
+            while(true){
+                Tile tile = map.getTiles()[x++][y];
+                if(tile.getType().equals(TileTypes.GRASS) || tile.getType().equals(TileTypes.DIRT)){
+                    if(tile.getItem() == null){
+                        player.setX(x-1);
+                        player.setY(y);
+                    }
+                }
+                if (x == 80) {
+                    y++;
+                    x = 0;
+                }
+            }
+        } else {
+            GameMenu.printResult("You currently in your farm!");
+        }
     }
 }

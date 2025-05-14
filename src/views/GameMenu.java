@@ -112,29 +112,29 @@ public class GameMenu implements AppMenu {
             return;
         }
         matcher = GameMenuCommands.EQUIP_TOOL.regexMatcher(command);
-        if(matcher.matches()){
+        if (matcher.matches()) {
             String name = matcher.group("name");
             GameMenuController.ToolsEquip(name);
             return;
         }
         matcher = GameMenuCommands.CURRENT_TOOL.regexMatcher(command);
-        if(matcher.matches()){
+        if (matcher.matches()) {
             GameMenuController.ShowCurrentTool();
             return;
         }
         matcher = GameMenuCommands.AVAILABLE_TOOLS.regexMatcher(command);
-        if(matcher.matches()){
+        if (matcher.matches()) {
             GameMenuController.ShowAvailableTools();
             return;
         }
         matcher = GameMenuCommands.Tool_Use.regexMatcher(command);
-        if(matcher.matches()){
+        if (matcher.matches()) {
             String direction = matcher.group("direction");
             GameMenuController.toolUse(direction);
             return;
         }
         matcher = GameMenuCommands.PLANT.regexMatcher(command);
-        if(matcher.matches()){
+        if (matcher.matches()) {
             String seed = matcher.group("seed");
             String direction = matcher.group("direction");
             GameMenuController.plant(seed, direction);
@@ -346,6 +346,16 @@ public class GameMenu implements AppMenu {
         matcher = GameMenuCommands.QUESTS_FINISH.regexMatcher(command);
         if (matcher.matches()) {
             GameMenuController.questFinish(matcher.group("index"));
+            return;
+        }
+        matcher = GameMenuCommands.PRINT_CITY_MAP.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.printCityMap();
+            return;
+        }
+        matcher = GameMenuCommands.PRINT_FULL_MAP.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.printPlayerFullMap();
             return;
         }
         matcher = GameMenuCommands.TALK.regexMatcher(command);
