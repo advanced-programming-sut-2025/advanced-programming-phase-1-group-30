@@ -291,7 +291,7 @@ public class GameMenuController {
                 energyNeeded -= 1;
             }
             if(player.getEnergy() > energyNeeded){
-                if(targetTile.getItem() != null) {
+                if(targetTile.getItem() != null && (targetTile.getItem() instanceof ForgingSeed || targetTile.getItem() instanceof Tree)) {
                     if (targetTile.getItem() instanceof Tree || ((ForgingSeed)targetTile.getItem()).getType().getTreeOrCrop() == 1) {
                         Item wood = new Item(12, "wood", 10);
                         Item sap = new Item(2, "sap", 10);
@@ -1111,7 +1111,7 @@ public class GameMenuController {
                 int check = 0;
                 for (Coop coop : player.getMap().getCoops()) {
                     if (!coop.getType().equals("regular") && coop.getCapacity() > coop.getAnimals().size()) {
-                        Animal animal = new Duck(1200, name, 0, false, false, coop.getStartX() + coop.getAnimals().size(), coop.getStartY() + coop.getAnimals().size());
+                        Animal animal = new Duck(1200, name, 0, false, false, coop.getStartX() + coop.getAnimals().size(), coop.getStartY() - coop.getAnimals().size() - 1);
                         coop.getAnimals().add(animal);
                         animal.setCoop(coop);
                         coop.setCurrentNumberOfAnimals(coop.getAnimals().size());
@@ -1128,7 +1128,7 @@ public class GameMenuController {
                 int check = 0;
                 for (Coop coop : player.getMap().getCoops()) {
                     if (!coop.getType().equals("regular") && !coop.getType().equals("big") && coop.getCapacity() > coop.getAnimals().size()) {
-                        Animal animal = new Rabbit(8000, name, 0, false, false, coop.getStartX() + coop.getAnimals().size(), coop.getStartY() + coop.getAnimals().size());
+                        Animal animal = new Rabbit(8000, name, 0, false, false, coop.getStartX() + coop.getAnimals().size(), coop.getStartY() - coop.getAnimals().size() - 1);
                         coop.getAnimals().add(animal);
                         animal.setCoop(coop);
                         coop.setCurrentNumberOfAnimals(coop.getAnimals().size());
@@ -1145,7 +1145,7 @@ public class GameMenuController {
                 int check = 0;
                 for (Coop coop : player.getMap().getCoops()) {
                     if (!coop.getType().equals("regular") && !coop.getType().equals("deluxe") && coop.getCapacity() > coop.getAnimals().size()) {
-                        Animal animal = new Dinosaur(800, name, 0, false, false, coop.getStartX() + coop.getAnimals().size(), coop.getStartY() + coop.getAnimals().size());
+                        Animal animal = new Dinosaur(800, name, 0, false, false, coop.getStartX() + coop.getAnimals().size(), coop.getStartY() - coop.getAnimals().size() - 1);
                         coop.getAnimals().add(animal);
                         coop.setCurrentNumberOfAnimals(coop.getAnimals().size());
                         player.getAnimals().add(animal);
@@ -1161,7 +1161,7 @@ public class GameMenuController {
                 int check = 0;
                 for (Barn barn : player.getMap().getBarns()) {
                     if (barn.getCapacity() > barn.getAnimals().size()) {
-                        Animal animal = new Cow(1500, name, 0, false, false, barn.getStartX() + barn.getAnimals().size(), barn.getStartY() + barn.getAnimals().size());
+                        Animal animal = new Cow(1500, name, 0, false, false, barn.getStartX() + barn.getAnimals().size(), barn.getStartY() - barn.getAnimals().size() - 1);
                         barn.getAnimals().add(animal);
                         animal.setBarn(barn);
                         player.getAnimals().add(animal);
@@ -1178,7 +1178,7 @@ public class GameMenuController {
                 int check = 0;
                 for (Barn barn : player.getMap().getBarns()) {
                     if (!barn.getType().equals("regular") && barn.getCapacity() > barn.getAnimals().size()) {
-                        Animal animal = new Goat(4000, name, 0, false, false, barn.getStartX() + barn.getAnimals().size(), barn.getStartY() + barn.getAnimals().size());
+                        Animal animal = new Goat(4000, name, 0, false, false, barn.getStartX() + barn.getAnimals().size(), barn.getStartY() - barn.getAnimals().size() - 1);
                         barn.getAnimals().add(animal);
                         animal.setBarn(barn);
                         player.getAnimals().add(animal);
@@ -1195,7 +1195,7 @@ public class GameMenuController {
                 int check = 0;
                 for (Barn barn : player.getMap().getBarns()) {
                     if (!barn.getType().equals("regular") && !barn.getType().equals("big") && barn.getCapacity() > barn.getAnimals().size()) {
-                        Animal animal = new Sheep(8000, name, 0, false, false, barn.getStartX() + barn.getAnimals().size(), barn.getStartY() + barn.getAnimals().size());
+                        Animal animal = new Sheep(8000, name, 0, false, false, barn.getStartX() + barn.getAnimals().size(), barn.getStartY() - barn.getAnimals().size() - 1);
                         barn.getAnimals().add(animal);
                         animal.setBarn(barn);
                         player.getAnimals().add(animal);
@@ -1212,7 +1212,7 @@ public class GameMenuController {
                 int check = 0;
                 for (Barn barn : player.getMap().getBarns()) {
                     if (!barn.getType().equals("regular") && !barn.getType().equals("big") && barn.getCapacity() > barn.getAnimals().size()) {
-                        Animal animal = new Cow(16000, name, 0, false, false, barn.getStartX() + barn.getAnimals().size(), barn.getStartY() + barn.getAnimals().size());
+                        Animal animal = new Cow(16000, name, 0, false, false, barn.getStartX() + barn.getAnimals().size(), barn.getStartY() - barn.getAnimals().size() - 1);
                         barn.getAnimals().add(animal);
                         animal.setBarn(barn);
                         player.getAnimals().add(animal);
@@ -1328,7 +1328,7 @@ public class GameMenuController {
                 if (hay != null && hay.getCount() > 0) {
                     hay.setCount(hay.getCount() - 1);
                     animal.setFedToday(true);
-                    animal.setFriendship(Math.max(animal.getFriendship() + 10, 1000));
+                    animal.setFriendship(Math.min(animal.getFriendship() + 10, 1000));
                     GameMenu.printResult("Animal fed successfully!");
                 } else {
                     GameMenu.printResult("Not enough hay!");
@@ -1339,6 +1339,7 @@ public class GameMenuController {
     }
     public static void produces(){
         Player player = App.getCurrentGame().getCurrentPlayer();
+        GameMenu.printResult("+++ Ready Products +++");
         for (Animal animal : player.getAnimals()) {
             if (animal.isProductReady()) {
                 GameMenu.printResult("=== " + animal.getName() + " " + animal.name(animal) + "'s product is ready to collect! ===");
@@ -1348,9 +1349,14 @@ public class GameMenuController {
     public static void collectProduce(String name){
         Player player = App.getCurrentGame().getCurrentPlayer();
         for (Animal animal : player.getAnimals()) {
-            if (animal.isProductReady()) {
-                animal.collectProduct();
-                return;
+            if (animal.getName().equals(name)) {
+                if (animal.isProductReady()) {
+                    System.out.println("yes");
+                    animal.collectProduct();
+                    return;
+                } else {
+                    GameMenu.printResult("Product is not ready!");
+                }
             }
         }
     }

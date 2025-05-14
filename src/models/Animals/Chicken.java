@@ -70,21 +70,44 @@ public class Chicken extends Animal {
             GameMenu.printResult("Product is not ready!");
         } else {
             Player player = App.getCurrentGame().getCurrentPlayer();
-            Item newItem = this.egg;
+            Item newItem;
             if (this.egg == null) {
                 newItem = this.bigEgg;
-            }
-            if(Item.findItemByName(egg.getName(), player.getBackPack().getItems()) != null){
-                newItem.setCount(newItem.getCount() + 1);
-            }else{
-                if(player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()){
-                    GameMenu.printResult("You don't have enough space in your backpack!");
-                } else{
-                    player.getBackPack().addItem(newItem);
+                if(Item.findItemByName(bigEgg.getName(), player.getBackPack().getItems()) != null){
+                    Item.findItemByName(bigEgg.getName(), player.getBackPack().getItems()).setCount(Item.findItemByName(bigEgg.getName(), player.getBackPack().getItems()).getCount() + 1);
                     GameMenu.printResult(newItem.getName() + " collected!");
                     this.egg = null;
                     this.bigEgg = null;
                     this.setProductReady(false);
+                }else{
+                    if(player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()){
+                        GameMenu.printResult("You don't have enough space in your backpack!");
+                    } else{
+                        player.getBackPack().addItem(newItem);
+                        GameMenu.printResult(newItem.getName() + " collected!");
+                        this.egg = null;
+                        this.bigEgg = null;
+                        this.setProductReady(false);
+                    }
+                }
+            } else {
+                newItem = this.egg;
+                if (Item.findItemByName(egg.getName(), player.getBackPack().getItems()) != null) {
+                    Item.findItemByName(egg.getName(), player.getBackPack().getItems()).setCount(Item.findItemByName(egg.getName(), player.getBackPack().getItems()).getCount() + 1);
+                    GameMenu.printResult(newItem.getName() + " collected!");
+                    this.egg = null;
+                    this.bigEgg = null;
+                    this.setProductReady(false);
+                } else {
+                    if (player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()) {
+                        GameMenu.printResult("You don't have enough space in your backpack!");
+                    } else {
+                        player.getBackPack().addItem(newItem);
+                        GameMenu.printResult(newItem.getName() + " collected!");
+                        this.egg = null;
+                        this.bigEgg = null;
+                        this.setProductReady(false);
+                    }
                 }
             }
         }

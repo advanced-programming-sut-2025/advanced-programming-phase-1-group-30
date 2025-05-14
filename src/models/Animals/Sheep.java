@@ -55,9 +55,11 @@ public class Sheep extends Animal {
             GameMenu.printResult("Product is not ready!");
         } else {
             Item newItem = this.wool;
-
             if (Item.findItemByName(wool.getName(), player.getBackPack().getItems()) != null) {
-                newItem.setCount(newItem.getCount() + 1);
+                Item.findItemByName(wool.getName(), player.getBackPack().getItems()).setCount(Item.findItemByName(wool.getName(), player.getBackPack().getItems()).getCount() + 1);
+                GameMenu.printResult(newItem.getName() + " has been collected!");
+                this.wool = null;
+                this.setProductReady(false);
             } else {
                 if(player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()){
                     GameMenu.printResult("You don't have enough space in your backpack!");
@@ -66,6 +68,7 @@ public class Sheep extends Animal {
                     setFriendship(Math.max(getFriendship() + 5, 1000));
                     GameMenu.printResult("Wool collected!");
                     this.wool = null;
+                    this.setProductReady(false);
                 }
             }
         }
