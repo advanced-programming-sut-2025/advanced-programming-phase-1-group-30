@@ -2394,6 +2394,8 @@ public class GameMenuController {
                                 if(player1.getX() == player.getX() && player1.getY() == player.getY()){
                                     player.setX(x-1);
                                     player.setY(y);
+                                    GameMenu.printResult("You are in city now!");
+                                    return;
                                 }
                             }
                         }
@@ -2422,6 +2424,8 @@ public class GameMenuController {
                     if(tile.getItem() == null){
                         player.setX(x-1);
                         player.setY(y);
+                        GameMenu.printResult("You are in your farm now!");
+                        return;
                     }
                 }
                 if (x == 80) {
