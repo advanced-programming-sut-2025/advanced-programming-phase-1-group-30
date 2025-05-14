@@ -241,7 +241,12 @@ public class GameMenu implements AppMenu {
         }
         matcher = GameMenuCommands.PET.regexMatcher(command);
         if (matcher.matches()) {
-            GameMenuController.fishing(matcher.group("name"));
+            GameMenuController.pet(matcher.group("name"));
+            return;
+        }
+        matcher = GameMenuCommands.ANIMALS.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.animals();
             return;
         }
         matcher = GameMenuCommands.CHEAT_SET_FRIENDSHIP.regexMatcher(command);
@@ -346,6 +351,44 @@ public class GameMenu implements AppMenu {
         matcher = GameMenuCommands.PRINT_CITY_MAP.regexMatcher(command);
         if (matcher.matches()) {
             GameMenuController.printCityMap();
+        matcher = GameMenuCommands.TALK.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.talk(matcher.group("username"), matcher.group("message"));
+            return;
+        }
+        matcher = GameMenuCommands.GIFT.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.gift(matcher.group("username"), matcher.group("item"), matcher.group("amount"));
+            return;
+        }
+        matcher = GameMenuCommands.GIFT_HISTORY.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.giftHistory(matcher.group("username"));
+            return;
+        }
+        matcher = GameMenuCommands.GIFT_LIST.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.giftList();
+            return;
+        }
+        matcher = GameMenuCommands.TALK_HISTORY.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.talkHistory(matcher.group("username"));
+            return;
+        }
+        matcher = GameMenuCommands.HUG.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.hug(matcher.group("username"));
+            return;
+        }
+        matcher = GameMenuCommands.FLOWER.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.flower(matcher.group("username"));
+            return;
+        }
+        matcher = GameMenuCommands.ASK_MARRIAGE.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.askMarriage(matcher.group("username"), matcher.group("ring"));
             return;
         }
         matcher = GameMenuCommands.EXIT_GAME.regexMatcher(command);

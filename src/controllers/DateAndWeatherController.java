@@ -135,6 +135,17 @@ public class DateAndWeatherController {
                 for (Animal animal : player.getAnimals()) {
                     if (animal.isFedToday()) {
                         animal.produceProduct();
+                        animal.setFedToday(false);
+                    } else {
+                        animal.setFriendship(Math.max(animal.getFriendship() - 20 , 0));
+                    }
+                    if (animal.isPetToday()) {
+                        animal.setPetToday(false);
+                    } else {
+                        animal.setFriendship(Math.max(animal.getFriendship() / 200 - 10 , 0));
+                    }
+                    if (animal.isOut()) {
+                        animal.setFriendship(Math.max(animal.getFriendship() - 20 , 0) );
                     }
                 }
                 for (java.util.Map.Entry<Player, Friendship> entry : player.getFriendships().entrySet()) {
