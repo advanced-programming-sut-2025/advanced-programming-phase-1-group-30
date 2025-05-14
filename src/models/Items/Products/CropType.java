@@ -46,7 +46,8 @@ public enum CropType {
     YAM("Yam", ForgingSeedType.YAM_SEEDS, new ArrayList<Integer>(Arrays.asList(1, 3, 3, 3)), 10, true, -1, 160, true, 45, 20, new ArrayList<Season>(Arrays.asList(Season.FALL)), false),
     SWEET_GEM_BERRY("Sweet Gem Berry", ForgingSeedType.RARE_SEED, new ArrayList<Integer>(Arrays.asList(2, 4, 6, 6, 6)), 24, true, -1, 3000, false, -1, -1, new ArrayList<Season>(Arrays.asList(Season.FALL)), false),
     POWDERMELON("Powdermelon", ForgingSeedType.POWDERMELON_SEEDS, new ArrayList<Integer>(Arrays.asList(1, 2, 1, 2, 1)), 7, true, -1, 60, true, 63, 28, new ArrayList<Season>(Arrays.asList(Season.WINTER)), true),
-    ANCIENT_FRUIT("Ancient Fruit", ForgingSeedType.ANCIENT_SEEDS, new ArrayList<Integer>(Arrays.asList(2, 7, 7, 7, 5)), 28, false, 7, 550, false, -1, -1, new ArrayList<Season>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL)), false);
+    ANCIENT_FRUIT("Ancient Fruit", ForgingSeedType.ANCIENT_SEEDS, new ArrayList<Integer>(Arrays.asList(2, 7, 7, 7, 5)), 28, false, 7, 550, false, -1, -1, new ArrayList<Season>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL)), false),
+    MUSHROOM("Mushroom", ForgingSeedType.MUSHROOM_TREE_SEEDS, new ArrayList<Integer>(Arrays.asList(1, 1, 1, 1)), 12, false, 7, 20, true, 5, 5, new ArrayList<Season>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL)), false);
 
     private final String name;
     private final ForgingSeedType source;
