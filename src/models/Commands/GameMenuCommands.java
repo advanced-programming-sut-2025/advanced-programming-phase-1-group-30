@@ -85,7 +85,9 @@ public enum GameMenuCommands {
     QUESTS_LIST("^\\s*quests\\s+list\\s*$"),
     QUESTS_FINISH("^\\s*quests\\s+finish\\s+-i\\s+(?<index>.*\\S)\\s*$"),
     PRINT_CITY_MAP("^\\s*print\\s+city\\s+map\\s*$"),
-    PRINT_FULL_MAP("^\\s*print\\s+full\\s+map\\s*$");
+    PRINT_FULL_MAP("^\\s*print\\s+full\\s+map\\s*$"),
+    GoToCity("^\\s*go\\s+to\\s+city\\s*$"),
+    GoToFarm("^\\s*go\\s+to\\s+farm\\s*$"),;
 
 
 
