@@ -1509,26 +1509,26 @@ public class GameMenuController {
             GameMenu.printResult("No item with given name found!");
             return;
         }
-        GameMenu.printResult("You got (*1)" + name);
+        GameMenu.printResult("You got (x1)" + name);
     }
 
     public static void showAllProducts() {
-        if (App.getCurrentGame().getCurrentPlayer().getBuilding() instanceof Blacksmith) {
-            GameMenu.printResult(MaintainerController.printingShopProducts("Blacksmith", BlacksmithCosts.values()));
-        } else if (App.getCurrentGame().getCurrentPlayer().getBuilding() instanceof Carpenter) {
-            GameMenu.printResult(MaintainerController.printingShopProducts("Carpenter", CarpenterCosts.values()));
-        } else if (App.getCurrentGame().getCurrentPlayer().getBuilding() instanceof FishShop) {
-            GameMenu.printResult(MaintainerController.printingShopProducts("FishShop", FishShopCosts.values()));
-        } else if (App.getCurrentGame().getCurrentPlayer().getBuilding() instanceof GeneralStore) {
-            GameMenu.printResult(MaintainerController.printingShopProducts("GeneralStore", GeneralStoreCosts.values()));
-        } else if (App.getCurrentGame().getCurrentPlayer().getBuilding() instanceof JojaMart) {
-            GameMenu.printResult(MaintainerController.printingShopProducts("JojaMart", JojaMartCosts.values()));
-        } else if (App.getCurrentGame().getCurrentPlayer().getBuilding() instanceof Ranch) {
-            GameMenu.printResult(MaintainerController.printingShopProducts("Ranch", RanchCosts.values()));
-        } else if (App.getCurrentGame().getCurrentPlayer().getBuilding() instanceof Saloon) {
-            GameMenu.printResult(MaintainerController.printingShopProducts("Saloon", SaloonCosts.values()));
-        } else {
-            GameMenu.printResult("You are not int a store!");
+        switch (App.getCurrentGame().getCurrentPlayer().getBuilding()) {
+            case Blacksmith blacksmith ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts("Blacksmith", BlacksmithCosts.values()));
+            case Carpenter carpenter ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts("Carpenter", CarpenterCosts.values()));
+            case FishShop fishShop ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts("FishShop", FishShopCosts.values()));
+            case GeneralStore generalStore ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts("GeneralStore", GeneralStoreCosts.values()));
+            case JojaMart jojaMart ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts("JojaMart", JojaMartCosts.values()));
+            case Ranch ranch ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts("Ranch", RanchCosts.values()));
+            case Saloon saloon ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts("Saloon", SaloonCosts.values()));
+            case null, default -> GameMenu.printResult("You are not int a store!");
         }
     }
 
