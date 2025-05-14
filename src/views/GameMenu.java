@@ -398,6 +398,17 @@ public class GameMenu implements AppMenu {
             GameMenuController.askMarriage(matcher.group("username"), matcher.group("ring"));
             return;
         }
+        matcher = GameMenuCommands.GoToCity.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.goToCity();
+            return;
+        }
+        matcher = GameMenuCommands.GoToFarm.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.goToFarm();
+            return;
+        }
+
         matcher = GameMenuCommands.EXIT_GAME.regexMatcher(command);
         if (matcher.matches()) {
             // TODO update chiza
