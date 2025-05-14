@@ -145,7 +145,7 @@ public class DateAndWeatherController {
                         animal.setFriendship(Math.max(animal.getFriendship() / 200 - 10 , 0));
                     }
                     if (animal.isOut()) {
-                        animal.setFriendship(Math.max(animal.getFriendship() - 20 , 0) );
+                        animal.setFriendship(Math.max(animal.getFriendship() - 20 , 0));
                     }
                 }
                 for (java.util.Map.Entry<Player, Friendship> entry : player.getFriendships().entrySet()) {

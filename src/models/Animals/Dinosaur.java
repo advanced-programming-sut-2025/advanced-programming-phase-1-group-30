@@ -53,7 +53,10 @@ public class Dinosaur extends Animal {
             Item newItem = this.dinosaurEgg;
 
             if (Item.findItemByName(dinosaurEgg.getName(), player.getBackPack().getItems()) != null) {
-                newItem.setCount(newItem.getCount() + 1);
+                Item.findItemByName(dinosaurEgg.getName(), player.getBackPack().getItems()).setCount(Item.findItemByName(dinosaurEgg.getName(), player.getBackPack().getItems()).getCount() + 1);
+                GameMenu.printResult(newItem.getName() + " has been collected!");
+                this.dinosaurEgg = null;
+                this.setProductReady(false);
             } else {
                 if(player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()){
                     GameMenu.printResult("You don't have enough space in your backpack!");
@@ -61,6 +64,7 @@ public class Dinosaur extends Animal {
                     player.getBackPack().addItem(newItem);
                     GameMenu.printResult("Dinosaur egg collected!");
                     this.dinosaurEgg = null;
+                    this.setProductReady(false);
                 }
             }
         }
