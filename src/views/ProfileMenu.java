@@ -69,5 +69,6 @@ public class ProfileMenu implements AppMenu {
             ProfileMenuController.UserInfo();
             return;
         }
+        System.out.println("Invalid command");
     }
 }

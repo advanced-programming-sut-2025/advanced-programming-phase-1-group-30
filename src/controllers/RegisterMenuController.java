@@ -7,6 +7,8 @@ import models.Users.RegisterQuestions;
 import models.Users.User;
 import views.RegisterMenu;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -147,5 +149,21 @@ public class RegisterMenuController {
 
     public static void Exit() {
         App.setCurrentMenu(Menus.MainMenu);
+    }
+
+    public static String HashPassword(String password) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+            StringBuilder hexString = new StringBuilder();
+
+            for (byte b : hash) {
+                hexString.append(String.format("%02x", b));
+            }
+
+            return hexString.toString();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

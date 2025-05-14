@@ -3,8 +3,10 @@ package models.Items.ArtisanGoods;
 import java.util.ArrayList;
 import java.util.List;
 
+import models.Animals.FishType;
 import models.Items.Item;
 import models.Items.IndustrialProducts.IndustrialProductType;
+import models.Items.Products.CropType;
 
 public enum ArtisanGoodType {
     HONEY("Honey", "It's a sweet syrup produced by bees.", 75, 4 * 24, new ArrayList<>(), 350, IndustrialProductType.BEE_HOUSE),
@@ -19,12 +21,12 @@ public enum ArtisanGoodType {
     BEER("Beer", "Drink in moderation.", 50, 1 * 24, new ArrayList<>(List.of(new Item(1, "Wheat", 0))), 200, IndustrialProductType.KEG),
     VINEGAR("Vinegar", "An aged fermented liquid used in many cooking recipes.", 13, 10, new ArrayList<>(List.of(new Item(1, "Rice", 0))), 100, IndustrialProductType.KEG),
     COFFEE("Coffee", "It smells delicious. This is sure to give you a boost.", 75, 2, new ArrayList<>(List.of(new Item(5, "Coffee Bean", 0))), 150, IndustrialProductType.KEG),
-    JUICE("Juice", "A sweet, nutritious beverage.", 2, 4 * 24, new ArrayList<>(List.of(new Item(1, "Any Vegetable", 0))), 2.25, IndustrialProductType.KEG),
+    JUICE("Juice", "A sweet, nutritious beverage.", 2 * CropType.GRAPE.getEnergy(), 4 * 24, new ArrayList<>(List.of(new Item(1, "Grape", 0))), 2.25 * CropType.GRAPE.getBaseSellPrice(), IndustrialProductType.KEG),
     MEAD("Mead", "A fermented beverage made from honey.\nDrink in moderation.", 100, 10, new ArrayList<>(List.of(new Item(1, "Honey", 0))), 300, IndustrialProductType.KEG),
     PALE_ALE("Pale Ale", "Drink in moderation.", 50, 3 * 24, new ArrayList<>(List.of(new Item(1, "Hops", 0))), 300, IndustrialProductType.KEG),
-    WINE("Wine", "Drink in moderation.", 1.75, 7 * 24, new ArrayList<>(List.of(new Item(1, "Any Fruit", 0))), 3, IndustrialProductType.KEG),
-    DRIED_MUSHROOMS("Dried Mushrooms", "A package of gourmet mushrooms.", 50, 24, new ArrayList<>(List.of(new Item(5, "Any Mushroom", 0))), 25, IndustrialProductType.DEHYDRATOR),
-    DRIED_FRUIT("Dried Fruit", "Chewy pieces of dried fruit.", 75, 24, new ArrayList<>(List.of(new Item(5, "Any Fruit (except Grapes)", 0))), 25, IndustrialProductType.DEHYDRATOR),
+    WINE("Wine", "Drink in moderation.", 1.75 * CropType.TOMATO.getEnergy(), 7 * 24, new ArrayList<>(List.of(new Item(1, "Tomato", 0))), 3 * CropType.TOMATO.getBaseSellPrice(), IndustrialProductType.KEG),
+    DRIED_MUSHROOMS("Dried Mushrooms", "A package of gourmet mushrooms.", 50, 24, new ArrayList<>(List.of(new Item(5, "Mushroom", 0))), CropType.MUSHROOM.getBaseSellPrice() + 25, IndustrialProductType.DEHYDRATOR),
+    DRIED_FRUIT("Dried Fruit", "Chewy pieces of dried fruit.", 75, 24, new ArrayList<>(List.of(new Item(5, "Tomato", 0))), CropType.TOMATO.getBaseSellPrice() * 25, IndustrialProductType.DEHYDRATOR),
     RAISINS("Raisins", "It's said to be the Junimos' favorite food.", 125, 24, new ArrayList<>(List.of(new Item(5, "Grapes", 0))), 600, IndustrialProductType.DEHYDRATOR),
     COAL("Coal", "Turns 10 pieces of wood into one piece of coal.", 0, 1, new ArrayList<>(List.of(new Item(10, "Wood", 0))), 50, IndustrialProductType.CHARCOAL_KILN),
     CLOTH("Cloth", "A bolt of fine wool cloth.", 0, 4, new ArrayList<>(List.of(new Item(1, "Wool", 0))), 470, IndustrialProductType.LOOM),
@@ -40,16 +42,16 @@ public enum ArtisanGoodType {
         new Item(1, "Sunflower Seeds", 0),
         new Item(1, "Sunflower", 0)
     )), 100, IndustrialProductType.OIL_MAKER),
-    PICKLES("Pickles", "A jar of your home-made pickles.", 1.75, 6, new ArrayList<>(List.of(new Item(1, "Any Vegetable", 0))), 50, IndustrialProductType.PRESERVES_JAR),
-    JELLY("Jelly", "Gooey.", 2, 3 * 24, new ArrayList<>(List.of(new Item(1, "Any Fruit", 0))), 50, IndustrialProductType.PRESERVES_JAR),
-    SMOKED_FISH("Smoked Fish", "A whole fish, smoked to perfection.", 1.5, 1, new ArrayList<>(List.of(
-        new Item(1, "Any Fish", 0),
+    PICKLES("Pickles", "A jar of your home-made pickles.", 1.75 * CropType.PUMPKIN.getEnergy(), 6, new ArrayList<>(List.of(new Item(1, "Pumpkin", 0))), 2 * CropType.PUMPKIN.getEnergy() + 50, IndustrialProductType.PRESERVES_JAR),
+    JELLY("Jelly", "Gooey.", CropType.CARROT.getEnergy() * 2, 3 * 24, new ArrayList<>(List.of(new Item(1, "Carrot", 0))), CropType.CARROT.getBaseSellPrice() + 50, IndustrialProductType.PRESERVES_JAR),
+    SMOKED_FISH("Smoked Fish", "A whole fish, smoked to perfection.", 60, 1, new ArrayList<>(List.of(
+        new Item(1, "Salmon", 0),
         new Item(1, "Coal", 0)
-    )), 2, IndustrialProductType.FISH_SMOKER),
+    )), 2 * FishType.SALMON.getBasePrice(), IndustrialProductType.FISH_SMOKER),
     METAL_BAR("Any metal bar", "Turns ore and coal into metal bars.", 0, 4, new ArrayList<>(List.of(
-        new Item(5, "Any Ore", 0),
+        new Item(5, "Stone", 0),
         new Item(1, "Coal", 0)
-    )), 2, IndustrialProductType.FURNACE);
+    )), 25, IndustrialProductType.FURNACE);
 
 
     private final String name;
