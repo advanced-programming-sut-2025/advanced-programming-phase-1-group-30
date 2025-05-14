@@ -2263,4 +2263,8 @@ public class GameMenuController {
         }
         GameMenu.printResult("You have to be next to the NPC you want!");
     }
+
+    public static void printCityMap() {
+        App.getMaps().get(4).printMap();
+    }
 }

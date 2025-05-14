@@ -83,7 +83,8 @@ public enum GameMenuCommands {
     GIFT_NPC("^\\s*gift\\s+NPC\\s+(?<npcName>.*\\S)\\s+-i\\s+(?<item>.*\\S)\\s*$"),
     FRIENDSHIP_NPC_LIST("^\\s*friendship\\s+NPC\\s+list\\s*$"),
     QUESTS_LIST("^\\s*quests\\s+list\\s*$"),
-    QUESTS_FINISH("^\\s*quests\\s+finish\\s+-i\\s+(?<index>.*\\S)\\s*$");
+    QUESTS_FINISH("^\\s*quests\\s+finish\\s+-i\\s+(?<index>.*\\S)\\s*$"),
+    PRINT_CITY_MAP("^\\s*print\\s+city\\s*$");
 
 
     private final String commandRegex;

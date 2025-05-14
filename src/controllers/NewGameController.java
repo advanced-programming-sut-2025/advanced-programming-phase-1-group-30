@@ -93,6 +93,7 @@ public class NewGameController {
         App.getMaps().add(new Map(2));
         App.getMaps().add(new Map(3));
         App.getMaps().add(new Map(4));
+        App.getMaps().add(new Map(-1));
         GameMenu.printResult("Please select your maps...");
 
         for (Player player : players) {

@@ -53,7 +53,9 @@ public class Map {
     public static void loadMap(Map mapInstance, int id) {
         try {
             InputStream inputStream;
-            if (id == 2) {
+            if(id == -1){
+                inputStream = Map.class.getResourceAsStream("beautiful_map.json");
+            } else if (id == 2) {
                 inputStream = Map.class.getClassLoader().getResourceAsStream("map.json");
             } else if (id == 3) {
                 inputStream = Map.class.getClassLoader().getResourceAsStream("map(1).json");

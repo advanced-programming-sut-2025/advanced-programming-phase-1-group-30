@@ -343,6 +343,11 @@ public class GameMenu implements AppMenu {
             GameMenuController.questFinish(matcher.group("index"));
             return;
         }
+        matcher = GameMenuCommands.PRINT_CITY_MAP.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.printCityMap();
+            return;
+        }
         matcher = GameMenuCommands.EXIT_GAME.regexMatcher(command);
         if (matcher.matches()) {
             // TODO update chiza
