@@ -3,6 +3,7 @@ package controllers;
 import models.Animals.*;
 import models.App;
 import models.Buildings.*;
+import models.Invetory.BackPackType;
 import models.Game;
 import models.Items.Gift;
 import models.Items.Products.*;
@@ -1540,11 +1541,13 @@ public class GameMenuController {
     }
 
     public static void purchase(String name, int amount){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        
         if (App.getCurrentGame().getCurrentPlayer().getBuilding() == null) {
             GameMenu.printResult("You are not in a store!");
             return;
         }
-        ShopProduct item = (ShopProduct) Item.findItemByName(name, App.getCurrentGame().getCurrentPlayer().getBuilding().getItems());
+        ShopProduct item = (ShopProduct) Item.findItemByName(name, player.getBuilding().getItems());
 
         if (item == null) {
             GameMenu.printResult("No item with given name found!");
@@ -1561,16 +1564,44 @@ public class GameMenuController {
             return;
         }
 
-        if (item.getCost() * amount > App.getCurrentGame().getCurrentPlayer().getMoney()) {
+        if (item.getCost() * amount > player.getMoney()) {
             GameMenu.printResult("You don't have enough money!");
             return;
         }
+
+        if (name == "Large pack") {
+            if (player.getBackPack().getType().equals(BackPackType.INITIAL_BACKPACK)) {
+                player.getBackPack().setType(BackPackType.BIG_BACKPACK);
+                player.setMoney(player.getMoney() - item.getCost() * amount);
+                item.sold(amount);
+                GameMenu.printResult("Backpack upgraded to Large Backpack successfully");
+            }
+            else
+                GameMenu.printResult("You can't update your backpack!");
+            return;
+        }
+        if (name == "Deluxe pack") {
+            if (player.getBackPack().getType().equals(BackPackType.BIG_BACKPACK)) {
+                player.getBackPack().setType(BackPackType.DELUX_BACKPACK);
+                player.setMoney(player.getMoney() - item.getCost() * amount);
+                item.sold(amount);
+                GameMenu.printResult("Backpack upgraded to Delux Backpack successfully");
+            }
+            else
+                GameMenu.printResult("You can't update your backpack!");
+            return;
+        }
+
+        if (player.getBackPack().getType().getCapacity() < player.getBackPack().getItems().size() + amount) {
+            GameMenu.printResult("You don't have enough space in your backpack!");
+            return;
+        }
         
-        if (amount == item.getCount()) App.getCurrentGame().getCurrentPlayer().getBuilding().removeItem(item);
+        if (amount == item.getCount()) player.getBuilding().removeItem(item);
         else item.changeCount(-1  * amount);
 
-        App.getCurrentGame().getCurrentPlayer().setMoney(App.getCurrentGame().getCurrentPlayer().getMoney() - item.getCost() * amount);
-        App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(item);
+        player.setMoney(player.getMoney() - item.getCost() * amount);
+        player.getBackPack().addItem(item);
         item.sold(amount);
         GameMenu.printResult("Item purchased successfully");
     }
