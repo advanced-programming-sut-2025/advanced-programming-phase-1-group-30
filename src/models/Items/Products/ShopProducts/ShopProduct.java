@@ -1,16 +1,19 @@
 package models.Items.Products.ShopProducts;
 
 import models.Items.Item;
+import models.TimeAndDate.Season;
 public class ShopProduct extends Item {
     private final int cost;
     private int soldToday;
     private final int sellLimit;
+    private final Season season;
 
-    public ShopProduct(int count, String name, int sellLimit, int cost) {
+    public ShopProduct(int count, String name, int sellLimit, int cost, Season season) {
         super(count, name, cost);
         this.cost = cost;
         this.soldToday = 0;
         this.sellLimit = sellLimit;
+        this.season = season;
     }
 
     public int getCost() {
@@ -29,4 +32,7 @@ public class ShopProduct extends Item {
         return sellLimit;
     }
 
+    public Season getSeason() {
+        return season;
+    }
 }

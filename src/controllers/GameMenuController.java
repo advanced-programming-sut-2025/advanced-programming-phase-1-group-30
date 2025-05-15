@@ -24,6 +24,7 @@ import models.Maps.Weather;
 import models.Players.Friendship;
 import models.Players.NPC.NPC;
 import models.Players.NPC.NPCDetail;
+import models.TimeAndDate.Season;
 import models.Players.Player;
 import models.Players.Trade;
 import models.Users.User;
@@ -1573,10 +1574,16 @@ public class GameMenuController {
             GameMenu.printResult("You are not in a store!");
             return;
         }
+
         ShopProduct item = (ShopProduct) Item.findItemByName(name, player.getBuilding().getItems());
 
         if (item == null) {
             GameMenu.printResult("No item with given name found!");
+            return;
+        }
+
+        if (!item.getSeason().equals(Season.ALL) && !item.getSeason().equals(App.getCurrentGame().getCurrentTime().getSeason())) {
+            GameMenu.printResult("You can buy " + name + " in " + item.getSeason().getName() + ", not in " + App.getCurrentGame().getCurrentTime().getSeason().getName());
             return;
         }
 
