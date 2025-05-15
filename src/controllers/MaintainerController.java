@@ -22,6 +22,8 @@ import models.Buildings.Ranch;
 import models.Buildings.RanchCosts;
 import models.Buildings.Saloon;
 import models.Buildings.SaloonCosts;
+import models.Invetory.ShippingBin;
+import models.Invetory.ShippingBinType;
 import models.Items.Item;
 import models.Items.ItemFactory;
 import models.Items.ItemsInteface;
@@ -298,4 +300,18 @@ public class MaintainerController {
         }
     }
 
+    public static void emptyShippingBin() {
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            if (player.getShippingBin().getItems() == null) continue;
+
+            int money = 0;
+            for (Item item : player.getShippingBin().getItems()) {
+                money += (int) player.getShippingBin().getType().calculateNewPrice(item.getPrice() * item.getCount());
+            }
+
+            player.setMoney(player.getMoney() + money);
+            player.getShippingBin().setItems(new ArrayList<>());
+        }
+        GameMenu.printResult("Shipping Bins were emptied!");
+    }
 }

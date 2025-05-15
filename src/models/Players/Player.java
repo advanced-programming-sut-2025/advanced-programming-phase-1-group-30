@@ -61,6 +61,7 @@ public class Player {
     private String gender;
     private boolean inCity;
     private Map savedMap;
+    private ArrayList<Item> shippingBinItems = new ArrayList<>();
 
     public Player(String username, int selectionNumber) {
         this.username = username;
@@ -381,5 +382,17 @@ public class Player {
 
     public void setCityY(int cityY) {
         this.cityY = cityY;
+    }
+
+    public ArrayList<Item> getShippingBinItems() {
+        return shippingBinItems;
+    }
+
+    public void resetShippingBinItems() {
+        this.shippingBinItems = new ArrayList<>();
+    }
+
+    public void addShippingBinItem(Item shippingBinItem) {
+        this.shippingBinItems.add(shippingBinItem);
     }
 }
