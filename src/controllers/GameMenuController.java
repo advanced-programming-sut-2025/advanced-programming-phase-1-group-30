@@ -1452,7 +1452,6 @@ public class GameMenuController {
     }
    
     public static void artisanUse(String artisanName, String itemName) {
-        //TODO
         IndustrialProductType recipe = null;
         Player player = App.getCurrentGame().getCurrentPlayer();
         for (IndustrialProductType craftingRecipe : App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()) {
@@ -1461,6 +1460,21 @@ public class GameMenuController {
 
         if (recipe == null) {
             GameMenu.printResult("No recipe with given name were found!");
+            return;
+        }
+
+        ArtisanGoodType item = null;
+        for (ArtisanGoodType artisanGoodType : ArtisanGoodType.values()) {
+            if (artisanGoodType.getName().equals(itemName)) item = artisanGoodType;
+        }
+
+        if (item == null) {
+            GameMenu.printResult("No item with given name were found!");
+            return;
+        }
+
+        if (!item.getSource().equals(recipe)) {
+            GameMenu.printResult("You can't make " + itemName + " with " + artisanName);
             return;
         }
 
@@ -1493,7 +1507,8 @@ public class GameMenuController {
                 backpackItem.changeCount(-1 * ingredient.getCount());
         }
 
-        App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(new IndustrialProduct(1, recipe));
+        App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(new ArtisanGood(1, item));
+        GameMenu.printResult(itemName + " (x1) added to your backpack successfully!");
     }
 
     public static void artisanGet(String name) {
