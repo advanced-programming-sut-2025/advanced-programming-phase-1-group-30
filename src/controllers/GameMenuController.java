@@ -851,16 +851,26 @@ public class GameMenuController {
     }
     
     public static void putRefrigerator(String item) {
-        Item wantedItem = Item.findItemByName(item, App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Item wantedItem = Item.findItemByName(item, player.getBackPack().getItems());
 
-        if (wantedItem == null)
+        if (wantedItem == null) {
             GameMenu.printResult("No Item Found!");
+            return;
+        }
 
-        if (wantedItem.getClass() != Food.class)
+        if (wantedItem.getClass() != Food.class) {
             GameMenu.printResult("Item is not eatable");
+            return;
+        }
 
-        App.getCurrentGame().getCurrentPlayer().getBackPack().removeItem(wantedItem);
-        App.getCurrentGame().getCurrentPlayer().getRefrigerator().addItem(wantedItem);
+        if (player.getRefrigerator().getItems().size() + 1 > player.getRefrigerator().getCAPTIYITY()) {
+            GameMenu.printResult("Refrigerator is full!");
+            return;
+        }
+
+        player.getBackPack().removeItem(wantedItem);
+        player.getRefrigerator().addItem(wantedItem);
     }
 
     public static void pickRefrigerator(String item) {
@@ -1593,7 +1603,7 @@ public class GameMenuController {
             return;
         }
 
-        if (player.getBackPack().getType().getCapacity() < player.getBackPack().getItems().size() + amount) {
+        if (player.getBackPack().getType().getCapacity() < player.getBackPack().getItems().size() + 1) {
             GameMenu.printResult("You don't have enough space in your backpack!");
             return;
         }
