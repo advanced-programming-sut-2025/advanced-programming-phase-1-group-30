@@ -9,10 +9,9 @@ import models.Buildings.GreenHouse;
 import models.Items.Products.Stone;
 import models.Items.Products.Tree;
 import models.Players.Player;
-// import org.json.JSONArray;
-// import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import views.GameMenu;
-
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -51,40 +50,40 @@ public class Map {
     private GreenHouse greenHouse = null;
 
     public static void loadMap(Map mapInstance, int id) {
-        // try {
-        //     InputStream inputStream;
-        //     if(id == -1){
-        //         inputStream = Map.class.getResourceAsStream("/resources/mapCity.json");;
-        //     } else if (id == 2) {
-        //         inputStream = Map.class.getResourceAsStream("/resources/map.json");
-        //     } else if (id == 3) {
-        //         inputStream = Map.class.getResourceAsStream("/resources/map(1).json");
-        //     } else {
-        //         inputStream = Map.class.getResourceAsStream("/resources/map(2).json");
-        //     }
-        //     if (inputStream == null) {
-        //         throw new FileNotFoundException("map.json not found in resources!");
-        //     }
-        //     String content = new String(inputStream.readAllBytes());
+         try {
+             InputStream inputStream;
+             if(id == -1){
+                 inputStream = Map.class.getResourceAsStream("/resources/mapCity.json");;
+             } else if (id == 2) {
+                 inputStream = Map.class.getResourceAsStream("/resources/map.json");
+             } else if (id == 3) {
+                 inputStream = Map.class.getResourceAsStream("/resources/map(1).json");
+             } else {
+                 inputStream = Map.class.getResourceAsStream("/resources/map(2).json");
+             }
+             if (inputStream == null) {
+                 throw new FileNotFoundException("map.json not found in resources!");
+             }
+             String content = new String(inputStream.readAllBytes());
 
-        //     JSONObject json = new JSONObject(content);
+             JSONObject json = new JSONObject(content);
 
-        //     int width = json.getInt("width");
-        //     int height = json.getInt("height");
-        //     JSONArray tilesArray = json.getJSONArray("tiles");
+             int width = json.getInt("width");
+             int height = json.getInt("height");
+             JSONArray tilesArray = json.getJSONArray("tiles");
 
-        //     for (int y = 0; y < height; y++) {
-        //         JSONArray row = tilesArray.getJSONArray(y);
-        //         for (int x = 0; x < width; x++) {
-        //             String tileType = row.getString(x);
+             for (int y = 0; y < height; y++) {
+                 JSONArray row = tilesArray.getJSONArray(y);
+                 for (int x = 0; x < width; x++) {
+                     String tileType = row.getString(x);
 
-        //             // You need to create the right Tile object based on the type
-        //             mapInstance.tiles[x][y] = Tile.createTileFromType(x, y, tileType, id);
-        //         }
-        //     }
-        // } catch (Exception e) {
-        //     e.printStackTrace();
-        // }
+                     // You need to create the right Tile object based on the type
+                     mapInstance.tiles[x][y] = Tile.createTileFromType(x, y, tileType, id);
+                 }
+             }
+         } catch (Exception e) {
+             e.printStackTrace();
+         }
     }
 
     public Map(int id) {
