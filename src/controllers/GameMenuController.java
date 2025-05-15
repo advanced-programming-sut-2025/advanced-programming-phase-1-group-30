@@ -30,6 +30,8 @@ import views.GameMenu;
 import views.RegisterMenu;
 import java.util.*;
 
+import static models.Maps.PathFinder.countTurns;
+
 public class GameMenuController {
     public static void greenHouseBuild() {
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -53,38 +55,80 @@ public class GameMenuController {
     public static void walk(String xStr, String yStr, Scanner scanner) {
         int x = Integer.parseInt(xStr);
         int y = Integer.parseInt(yStr);
-
-        Tile[][] map = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Tile start = map[player.getX()][player.getY()];
-        Tile target = map[x][y];
+        Tile[][] map;
+        Tile start;
+        Tile target;
+        if (player.isInCity()) {
+            map = App.getMaps().get(4).getTiles();
+            start = map[player.getCityX()][player.getCityY()];
+            target = map[x][y];
+        } else {
+            map = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
+            start = map[player.getX()][player.getY()];
+            target = map[x][y];
+        }
 
         List<Tile> path = PathFinder.findPath(map, start, target);
-
-        if (path == null) {
+        if (path == null || path.isEmpty()) {
             Tile alt = PathFinder.findNearestReachable(map, start, target);
             if (alt != null) {
                 path = PathFinder.findPath(map, start, alt);
                 GameMenu.printResult("Destination blocked.");
-                return;
             } else {
                 GameMenu.printResult("No path found to destination or any nearby tile.");
                 return;
             }
         }
 
-        if (path.isEmpty()) {
-            GameMenu.printResult("Are you NUTS??");
-            return;
+// Walk step-by-step and deduct energy along the way
+        Tile current = start;
+        int dx1 = 0, dy1 = 0;
+        double energy = player.getEnergy();
+
+        for (int i = 0; i < path.size(); i++) {
+            Tile next = path.get(i);
+            int dx2 = next.getX() - current.getX();
+            int dy2 = next.getY() - current.getY();
+
+            boolean isTurn = (i > 0) && (dx1 != dx2 || dy1 != dy2);
+            double stepCost = isTurn ? 11 : 1; // same logic: 1 + 10 if turning
+
+            energy -= stepCost / 20;
+
+            if (energy <= 0) {
+                // Player passes out at `current` tile (not the next one)
+                if (!player.isInCity()) {
+                    player.setX(current.getX());
+                    player.setY(current.getY());
+                } else {
+                    player.setCityX(current.getX());
+                    player.setCityY(current.getY());
+                }
+
+                player.setEnergy(0);
+                player.setPassedOut(true);
+                GameMenu.printResult("Player passed out at (" + current.getX() + ", " + current.getY() + ")!");
+                NewGameController.NextTurn(scanner);
+                return;
+            }
+
+            // Move to next tile
+            if (!player.isInCity()) {
+                player.setX(next.getX());
+                player.setY(next.getY());
+            } else {
+                player.setCityX(next.getX());
+                player.setCityY(next.getY());
+            }
+
+            dx1 = dx2;
+            dy1 = dy2;
+            current = next;
         }
-        player.setX(path.getLast().getX());
-        player.setY(path.getLast().getY());
-        player.setEnergy(player.getEnergy() - (path.size() / 20));
-        if (player.getEnergy() <= 0) {
-            player.setPassedOut(true);
-            GameMenu.printResult("Player passed out!");
-            NewGameController.NextTurn(scanner);
-        }
+
+        player.setEnergy((int)energy);
+        GameMenu.printResult("You are at: " + current.getX() + " " + current.getY());
     }
     public static void printMap(String x, String y, String size) {
         int X = Integer.parseInt(x);
