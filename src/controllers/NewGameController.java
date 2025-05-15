@@ -158,7 +158,6 @@ public class NewGameController {
 
         Player nextPlayer = null;
 
-// Loop once through all players
         do {
             Player candidate = players.get(nextSelection);
             if (!candidate.isPassedOut()) {
@@ -168,17 +167,12 @@ public class NewGameController {
             nextSelection = (nextSelection + 1) % totalPlayers;
         } while (nextSelection != startSelection);
 
-// If all are passed out
         if (nextPlayer == null) {
             GameMenu.printResult("All players are passed out. Ending round...");
             return; // Or trigger end-of-day logic
         }
 
-// ✅ Set the next player
         App.getCurrentGame().setCurrentPlayer(nextPlayer);
-
-// 🧠 Make sure this logic is NOT inside an infinite loop!
-// And make sure turn-advancing logic (e.g., startTurn, update UI) follows
 
         currentPlayer = App.getCurrentGame().getCurrentPlayer();
         GameMenu.printResult("Current player: " + App.getCurrentGame().getCurrentPlayer().getUsername());
@@ -300,9 +294,7 @@ public class NewGameController {
                                         if (tiles[i][j].getCrop().getStages().get(tiles[i][j].getCrop().getCurrentStage()) == tiles[i][j].getCrop().getDaysPassed()) {
                                             if (tiles[i][j].getCrop().getCurrentStage() == tiles[i][j].getCrop().getStages().size()) {
                                                 tiles[i][j].setReadyToHarvest(true);
-                                                tiles[i][j].getCrop().setCurrentStage(tiles[i][j].getCrop().getCurrentStage() + 1);
                                             } else {
-                                                tiles[i][j].getCrop().setCurrentStage(tiles[i][j].getCrop().getCurrentStage() + 1);
                                                 tiles[i][j].getCrop().setDaysPassed(0);
                                             }
                                         }
@@ -350,6 +342,17 @@ public class NewGameController {
                 for (Animal animal : player.getAnimals()) {
                     if (animal.isFedToday()) {
                         animal.produceProduct();
+                        animal.setFedToday(false);
+                    } else {
+                        animal.setFriendship(Math.max(animal.getFriendship() - 20 , 0));
+                    }
+                    if (animal.isPetToday()) {
+                        animal.setPetToday(false);
+                    } else {
+                        animal.setFriendship(Math.max(animal.getFriendship() / 200 - 10 , 0));
+                    }
+                    if (animal.isOut()) {
+                        animal.setFriendship(Math.max(animal.getFriendship() - 20, 0));
                     }
                 }
                 for (java.util.Map.Entry<Player, Friendship> entry : player.getFriendships().entrySet()) {
@@ -377,9 +380,6 @@ public class NewGameController {
 
             App.getCurrentGame().getCurrentTime().setHour(9);
             App.getCurrentGame().setCurrentWeather(App.getCurrentGame().getTomorrowWeather());
-            if (App.getCurrentGame().getCurrentWeather().equals(Weather.STORM)) {
-
-            }
             DateAndWeatherController.setTWeather();
             if (App.getCurrentGame().getCurrentTime().getDay() == 28) {
                 App.getCurrentGame().getCurrentTime().setDay(1);

@@ -1,7 +1,7 @@
 package models.Items.Tools;
 
 public enum BasketType {
-    NORMAL("normal watering Can",0,40),
+    NORMAL("normal watering Can",0,300),
     COPPER("copper watering Can",1,55),
     IRON("iron watering Can",2,70),
     GOLD("gold watering Can",3,85),

@@ -154,6 +154,7 @@ public class DateAndWeatherController {
                     }
                 }
 
+                MaintainerController.randomPlanting(player);
                 for (Animal animal : player.getAnimals()) {
                     if (animal.isFedToday()) {
                         animal.produceProduct();
