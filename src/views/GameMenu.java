@@ -86,6 +86,11 @@ public class GameMenu implements AppMenu {
             DateAndWeatherController.WeatherForecast();
             return;
         }
+        matcher = GameMenuCommands.CHEAT_THOR.regexMatcher(command);
+        if (matcher.matches()) {
+            DateAndWeatherController.cheatThor(matcher.group("x"), matcher.group("y"));
+            return;
+        }
         matcher = GameMenuCommands.PRINT_MAP.regexMatcher(command);
         if (matcher.matches()) {
             GameMenuController.printMap(matcher.group("x"), matcher.group("y"), matcher.group("size"));
