@@ -515,7 +515,7 @@ public class GameMenuController {
         sb.append(MaintainerController.arrayListToString("Stages", craft.getStages()));
         sb.append("Total Harvest Time: " + craft.getTotalHarvestTime() + "\n");
         sb.append("One Time: " + craft.isOneTime() + "\n");
-        sb.append("Regrowth Time: " + craft.getName() + "\n");
+        sb.append("Regrowth Time: " + craft.getRegrowthTime() + "\n");
         sb.append("Base Sell Price: " + craft.getBaseSellPrice() + "\n");
         sb.append("Is Edible: " + craft.isEdible() + "\n");
         sb.append("Base Energy: " + craft.getEnergy() + "\n");
@@ -972,7 +972,8 @@ public class GameMenuController {
         }
 
         App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(new Food(1, recipe));
-        App.getCurrentGame().getCurrentPlayer().changeEnergy(3);
+        App.getCurrentGame().getCurrentPlayer().changeEnergy(-3);
+        GameMenu.printResult(name + " (x1) added successfully!");
     }
 
     public static void eat(String name) {
@@ -991,7 +992,7 @@ public class GameMenuController {
         if (food.getCount() == 0)
             App.getCurrentGame().getCurrentPlayer().getBackPack().removeItem(food);
         
-        App.getCurrentGame().getCurrentPlayer().changeEnergy(food.getType().getEnergy());
+        App.getCurrentGame().getCurrentPlayer().changeEnergy(Math.max(food.getType().getEnergy(), App.getCurrentGame().getCurrentPlayer().getMaxEnergy()));
         GameMenu.printResult("Food eaten successfully");
     }
     public static void showCookingRecipe(){}
@@ -1439,6 +1440,7 @@ public class GameMenuController {
     }
    
     public static void artisanUse(String artisanName, String itemName) {
+        //TODO
         IndustrialProductType recipe = null;
         Player player = App.getCurrentGame().getCurrentPlayer();
         for (IndustrialProductType craftingRecipe : App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()) {
@@ -1496,7 +1498,7 @@ public class GameMenuController {
     }
 
     public static void showAllProducts() {
-        // App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getBlacksmith());
+        App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getBlacksmith());
         switch (App.getCurrentGame().getCurrentPlayer().getBuilding()) {
             case Blacksmith blacksmith ->
                     GameMenu.printResult(MaintainerController.printingShopProducts("Blacksmith", BlacksmithCosts.values()));
@@ -1517,7 +1519,7 @@ public class GameMenuController {
     }
 
     public static void showAvailableProducts() {
-        // App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getBlacksmith());
+        App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getBlacksmith());
         switch (App.getCurrentGame().getCurrentPlayer().getBuilding()) {
             case Blacksmith blacksmith ->
                     GameMenu.printResult(MaintainerController.printingShopProducts2("Blacksmith", App.getCurrentGame().getBlacksmith().getItems()));
@@ -1538,6 +1540,10 @@ public class GameMenuController {
     }
 
     public static void purchase(String name, int amount){
+        if (App.getCurrentGame().getCurrentPlayer().getBuilding() == null) {
+            GameMenu.printResult("You are not in a store!");
+            return;
+        }
         ShopProduct item = (ShopProduct) Item.findItemByName(name, App.getCurrentGame().getCurrentPlayer().getBuilding().getItems());
 
         if (item == null) {
@@ -1554,7 +1560,6 @@ public class GameMenuController {
             GameMenu.printResult("Daily Limit Reached");
             return;
         }
-        // TODO reset daily limit in next day
 
         if (item.getCost() * amount > App.getCurrentGame().getCurrentPlayer().getMoney()) {
             GameMenu.printResult("You don't have enough money!");

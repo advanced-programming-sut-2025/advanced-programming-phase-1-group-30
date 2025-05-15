@@ -41,7 +41,7 @@ public enum GameMenuCommands {
     PLACE_ITEM("^\\s*place\\s+item\\s+-n\\s+(?<itemName>.*\\S)\\s+-d\\s+(?<direction>.*\\S)\\s*$"),
     CHEAT_ADD_ITEM("^\\s*cheat\\s+add\\s+item\\s+-n\\s+(?<itemName>.*\\S)\\s+-c\\s+(?<count>\\d+)\\s*$"),
     COOKING_REFRIGERATOR("^\\s*cooking\\s+refrigerator\\s+(?<action>put|pick)\\s+(?<item>.*\\S)\\s*$"),
-    COOKING_SHOW_RECIPES("^\\s*cooking\\s+show\\s+recipes(\\s+(?<all>-a))\\s*$"),
+    COOKING_SHOW_RECIPES("^\\s*cooking\\s+show\\s+recipes(\\s+(?<all>-a))?\\s*$"),
     COOKING_ADD_RECIPE("^\\s*cooking\\s+add\\s+recipe\\s+-n\\s+(?<name>.*\\S)\\s*$"),
     COOKING_PREPARE("^\\s*cooking\\s+prepare\\s+(?<recipeName>.*\\S)\\s*$"),
     EAT("^\\s*eat\\s+(?<foodName>.*\\S)\\s*$"),

@@ -52,7 +52,7 @@ public class Player {
     private final ArrayList<Animal> playerAnimals = new ArrayList<>();
     private ArrayList<IndustrialProductType> craftingRecipes = new ArrayList<>();
     private Building building;
-    private ArrayList<FoodType> recipes = new ArrayList<>();
+    private ArrayList<FoodType> recipes;
     private HashMap<NPC,Integer> friendshipsNPC = new HashMap<>();
     private HashMap<NPC,ArrayList<Integer>> activatedQuestNPC = new HashMap<>();
     private HashMap<NPC,Boolean> NPCMeetToday  = new HashMap<>();
@@ -84,7 +84,7 @@ public class Player {
         this.selectionNumber = selectionNumber;
         this.maxEnergy = 200;
         this.building = new Building(0, 0, 0, 0); //TODO home!!!
-        this.recipes = null;
+        this.recipes = new ArrayList<>();
         this.inCity = false;
         for(int i = 0; i < 5; i++){
             this.friendshipsNPC.put(App.getCurrentGame().getNPCs().get(i), 0);
