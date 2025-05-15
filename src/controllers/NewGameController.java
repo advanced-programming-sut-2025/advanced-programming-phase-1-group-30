@@ -155,8 +155,7 @@ public class NewGameController {
         int startSelection = nextSelection;
 
         Player nextPlayer = null;
-
-// Loop once through all players
+        
         do {
             Player candidate = players.get(nextSelection);
             if (!candidate.isPassedOut()) {
@@ -166,17 +165,12 @@ public class NewGameController {
             nextSelection = (nextSelection + 1) % totalPlayers;
         } while (nextSelection != startSelection);
 
-// If all are passed out
         if (nextPlayer == null) {
             GameMenu.printResult("All players are passed out. Ending round...");
             return; // Or trigger end-of-day logic
         }
 
-// ✅ Set the next player
         App.getCurrentGame().setCurrentPlayer(nextPlayer);
-
-// 🧠 Make sure this logic is NOT inside an infinite loop!
-// And make sure turn-advancing logic (e.g., startTurn, update UI) follows
 
         currentPlayer = App.getCurrentGame().getCurrentPlayer();
         GameMenu.printResult("Current player: " + App.getCurrentGame().getCurrentPlayer().getUsername());

@@ -53,6 +53,7 @@ public class GameMenuController {
     }
 
     public static void walk(String xStr, String yStr, Scanner scanner) {
+        // TODO set the building! if in city
         int x = Integer.parseInt(xStr);
         int y = Integer.parseInt(yStr);
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -963,7 +964,10 @@ public class GameMenuController {
 
         boolean recipeLeared = false;
         for (FoodType foodType : App.getCurrentGame().getCurrentPlayer().getRecipes()) {
-            if (foodType.equals(recipe)) recipeLeared = true;
+            if (foodType.equals(recipe)) {
+                recipeLeared = true;
+                break;
+            }
         }
         if (!recipeLeared) {
             GameMenu.printResult("You didn't learn this recipe!");
@@ -1855,6 +1859,7 @@ public class GameMenuController {
         }
         if (player.getGender().equals(otherPlayer.getGender())) {
             GameMenu.printResult("that's gay tbh");
+            return;
         }
         if (player.getFriendships().get(otherPlayer).getLevel() < 4 || (player.getFriendships().get(otherPlayer).getLevel() == 3 &&
                 player.getFriendships().get(player).getXp() < 400)) {

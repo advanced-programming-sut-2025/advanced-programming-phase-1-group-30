@@ -50,6 +50,7 @@ public enum CropType implements ItemsInteface {
     ANCIENT_FRUIT("Ancient Fruit", ForagingSeedType.ANCIENT_SEEDS, new ArrayList<Integer>(Arrays.asList(2, 7, 7, 7, 5)), 28, false, 7, 550, false, -1, -1, new ArrayList<Season>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL)), false),
     MUSHROOM("Mushroom", ForagingSeedType.MUSHROOM_TREE_SEEDS, new ArrayList<Integer>(Arrays.asList(1, 1, 1, 1)), 12, false, 7, 20, true, 5, 5, new ArrayList<Season>(Arrays.asList(Season.SPRING, Season.SUMMER, Season.FALL)), false);
 
+
     private final String name;
     private final ForagingSeedType source;
 	private final ArrayList<Integer> stages;
