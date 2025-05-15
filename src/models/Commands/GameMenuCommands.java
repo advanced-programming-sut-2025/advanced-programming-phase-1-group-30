@@ -66,7 +66,7 @@ public enum GameMenuCommands {
     FRIENDSHIPS("^\\s*friendships\\s*$"),
     TALK("^\\s*talk\\s+-u\\s+(?<username>.*\\S)\\s+-m\\s+(?<message>.*\\S)\\s*$"),
     TALK_HISTORY("^\\s*talk\\s+history\\s+-u\\s+(?<username>.*\\S)\\s*$"),
-    GIFT("^\\s*gift\\s+-u\\s+(?<username>.*\\S)\\s+-i\\s+(?<item>.*\\S)\\s+-a\\s+(?<amount>.*\\S)\\s*$"),
+    GIFT("^\\s*gift\\s+-u\\s+(?<username>.*\\S)\\s+-i\\s+(?<item>.+?)\\s+-a\\s+(?<amount>.*\\S)\\s*$"),
     GIFT_LIST("^\\s*gift\\s+list\\s*$"),
     GIFT_RATE("^\\s*gift\\s+rate\\s+-i\\s+(?<giftNumber>.*\\S)\\s+-r\\s+(?<rate>.*\\S)\\s*$"),
     GIFT_HISTORY("^\\s*gift\\s+history\\s+-u\\s+(?<username>.*\\S)\\s*$"),

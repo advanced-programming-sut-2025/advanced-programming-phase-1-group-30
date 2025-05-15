@@ -156,6 +156,7 @@ public class NewGameController {
             }
         }
         currentPlayer = App.getCurrentGame().getCurrentPlayer();
+        GameMenu.printResult("Current player: " + App.getCurrentGame().getCurrentPlayer().getUsername());
         if (currentPlayer.getAskedMarriage() != null) {
             GameMenu.printResult(currentPlayer.getAskedMarriage().getUsername() + " asked you to be soulmates for the rest of your lives!");
             String command = scanner.nextLine();
@@ -187,21 +188,25 @@ public class NewGameController {
             if (gift.isRated()) {
                 continue;
             }
-            int check = 0;
-            if (!gift.isRated()) {
-                check = 1;
-            }
-            if (check == 0) {
-                GameMenu.printResult("You have a gift that you should rate:");
-            }
+            GameMenu.printResult("You have a gift that you should rate:");
             GameMenu.printResult("Rate this gift from 1 to 5: " + gift.getCount() + " " + gift.getName() + " from " + gift.getSentPlayer().getUsername());
-            String command = scanner.nextLine();
-            Matcher matcher = GameMenuCommands.GIFT_RATE.regexMatcher(command);
-            if (matcher.matches()) {
-                int rate = Integer.parseInt(matcher.group("rate"));
-                int xp = (rate - 3) * 30 + 15;
-                currentPlayer.getFriendships().get(gift.getSentPlayer()).addXp(xp, false, false);
+            while (true) {
+                String command = scanner.nextLine();
+                Matcher matcher = GameMenuCommands.GIFT_RATE.regexMatcher(command);
+                if (matcher.matches()) {
+                    int rate = Integer.parseInt(matcher.group("rate"));
+                    int xp = (rate - 3) * 30 + 15;
+                    currentPlayer.getFriendships().get(gift.getSentPlayer()).addXp(xp, false, false);
+                    if (rate < 3) {
+                        GameMenu.printResult("What an Awful gift!");
+                    } else
+                        GameMenu.printResult("Thank you " + gift.getSentPlayer().getUsername() + "!!");
+                    break;
+                } else {
+                    GameMenu.printResult("Rate it with the given format");
+                }
             }
+            gift.setRated(true);
         }
 
 //        for (Player player : players) {
@@ -339,6 +344,5 @@ public class NewGameController {
         }
         else
             App.getCurrentGame().getCurrentTime().setHour(currentTime + 1);
-        GameMenu.printResult("Current player: " + App.getCurrentGame().getCurrentPlayer().getUsername());
     }
 }

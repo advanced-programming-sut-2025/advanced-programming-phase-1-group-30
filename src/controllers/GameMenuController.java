@@ -1600,17 +1600,21 @@ public class GameMenuController {
         Player player = App.getCurrentGame().getCurrentPlayer();
         GameMenu.printResult("=== Friendships ===");
         for (java.util.Map.Entry<Player, Friendship> entry : player.getFriendships().entrySet()) {
-            GameMenu.printResult(entry.getKey().getUsername() + ": " + entry.getValue().getLevel());
+            GameMenu.printResult(entry.getKey().getUsername() + ": " + entry.getValue().getLevel() + " xp: " + entry.getValue().getXp());
         }
     }
     public static void talk(String username, String message){
-        String newMessage = message + " +++ sent at: " + App.getCurrentGame().getCurrentTime().getDay() + " " + App.getCurrentGame().getCurrentTime().getHour();
+        String newMessage = "\"" + message + "\"" + " => sent at: " + App.getCurrentGame().getCurrentTime().getDay() + "th " + App.getCurrentGame().getCurrentTime().getSeason().getName() + " " + App.getCurrentGame().getCurrentTime().getHour();
         Player player = App.getCurrentGame().getCurrentPlayer();
         if (User.findUserByUsername(username) == null) {
             GameMenu.printResult("There is no one with this username!");
             return;
         }
         Player otherPlayer = User.findUserByUsername(username).getPlayer();
+        if (player.equals(otherPlayer)) {
+            GameMenu.printResult("You can't talk to yourself!");
+            return;
+        }
         player.getFriendships().get(otherPlayer).getTalkHistory().add(newMessage);
         if (!Player.areAdjacent(player, otherPlayer)) {
             GameMenu.printResult("Player is not available to talk!");
@@ -1632,6 +1636,10 @@ public class GameMenuController {
             return;
         }
         Player otherPlayer = User.findUserByUsername(username).getPlayer();
+        if (player.equals(otherPlayer)) {
+            GameMenu.printResult("There is no one with this username!");
+            return;
+        }
         ArrayList<String> talkHistory = player.getFriendships().get(otherPlayer).getTalkHistory();
         for (String message : talkHistory) {
             GameMenu.printResult(message);
@@ -1644,6 +1652,10 @@ public class GameMenuController {
             return;
         }
         Player otherPlayer = User.findUserByUsername(username).getPlayer();
+        if (player.equals(otherPlayer)) {
+            GameMenu.printResult("There is no one with this username!");
+            return;
+        }
         if (!Player.areAdjacent(player, otherPlayer)) {
             GameMenu.printResult("Player is not available to talk!");
             return;
@@ -1658,16 +1670,18 @@ public class GameMenuController {
             GameMenu.printResult("Not enough number of this Item");
             return;
         }
+        int x = 0;
         for (Item item1 : otherPlayer.getBackPack().getItems()) {
             if (item1.getName().equals(gift.getName())) {
                 Item.findItemByName(item, otherPlayer.getBackPack().getItems()).changeCount(amount);
                 GameMenu.printResult("Gift sent to " + username + " successfully!");
-                break;
-            } else {
-                otherPlayer.getBackPack().addItem(new Item(amount, item, item1.getPrice()));
-                GameMenu.printResult("Gift sent to " + username + " successfully!");
+                x = 1;
                 break;
             }
+        }
+        if (x == 0) {
+            otherPlayer.getBackPack().addItem(new Item(amount, item, gift.getPrice()));
+            GameMenu.printResult("Gift sent to " + username + " successfully!");
         }
         gift.changeCount(-amount);
         if (gift.getCount() == 0) {
@@ -1688,6 +1702,10 @@ public class GameMenuController {
             return;
         }
         Player otherPlayer = User.findUserByUsername(username).getPlayer();
+        if (player.equals(otherPlayer)) {
+            GameMenu.printResult("There is no one with this username!");
+            return;
+        }
         GameMenu.printResult("Gifts " + username + " sent to you: ");
         for (Gift gift : player.getGifts()) {
             if (gift.getSentPlayer().equals(otherPlayer)) {
@@ -1695,7 +1713,7 @@ public class GameMenuController {
             }
         }
         GameMenu.printResult("Gifts you sent to " + username + ": ");
-        for (Gift gift : otherPlayer.getGifts()) {
+        for (Gift gift : player.getGifts()) {
             if (gift.getSentPlayer().equals(player)) {
                 GameMenu.printResult("You sent " + gift.getSentPlayer().getUsername() + " " + gift.getCount() + " " + gift.getName());
             }
@@ -1708,6 +1726,10 @@ public class GameMenuController {
             return;
         }
         Player otherPlayer = User.findUserByUsername(username).getPlayer();
+        if (player.equals(otherPlayer)) {
+            GameMenu.printResult("There is no one with this username!");
+            return;
+        }
         if (player.getFriendships().get(otherPlayer).getLevel() < 2) {
             GameMenu.printResult("Hanooz zoode!");
             return;
@@ -1727,6 +1749,10 @@ public class GameMenuController {
             return;
         }
         Player otherPlayer = User.findUserByUsername(username).getPlayer();
+        if (player.equals(otherPlayer)) {
+            GameMenu.printResult("There is no one with this username!");
+            return;
+        }
         if (!Player.areAdjacent(player, otherPlayer)) {
             GameMenu.printResult("Player is not available!");
             return;
@@ -1762,6 +1788,10 @@ public class GameMenuController {
             return;
         }
         Player otherPlayer = User.findUserByUsername(username).getPlayer();
+        if (player.equals(otherPlayer)) {
+            GameMenu.printResult("There is no one with this username!");
+            return;
+        }
         if (!Player.areAdjacent(player, otherPlayer)) {
             GameMenu.printResult("Player is not available!");
             return;
@@ -2373,68 +2403,103 @@ public class GameMenuController {
     }
 
     public static void printCityMap() {
-        App.getMaps().get(4).printFullMap();
+        App.getMaps().get(4).printCitysMap();
     }
     public static void printPlayerFullMap(){
         App.getCurrentGame().getCurrentPlayer().getMap().printFullMap();
     }
     public static void goToCity(){
         Player player = App.getCurrentGame().getCurrentPlayer();
-        if(!player.isInCity()){
+        if (!player.isInCity()) {
             player.setInCity(true);
-            Map map = App.getMaps().get(4);
+            Map map = App.getMaps().get(4); // City map
             int x = 0;
             int y = 0;
-            while(true){
-                Tile tile = map.getTiles()[x++][y];
-                if(tile.getType().equals(TileTypes.GRASS) || tile.getType().equals(TileTypes.DIRT)){
-                    if(tile.getItem() == null){
-                        for(Player player1 : App.getCurrentGame().getPlayers()){
-                            if(player1.isInCity()){
-                                if(player1.getX() == player.getX() && player1.getY() == player.getY()){
-                                    player.setX(x-1);
-                                    player.setY(y);
-                                    GameMenu.printResult("You are in city now!");
-                                    return;
-                                }
+
+            while (true) {
+                Tile tile = map.getTiles()[x][y];
+
+                if ((tile.getType().equals(TileTypes.GRASS) || tile.getType().equals(TileTypes.DIRT))
+                        && tile.getItem() == null) {
+
+                    boolean occupied = false;
+                    for (Player otherPlayer : App.getCurrentGame().getPlayers()) {
+                        if (otherPlayer != player && otherPlayer.isInCity()) {
+                            if (otherPlayer.getCityX() == x && otherPlayer.getCityY() == y) {
+                                occupied = true;
+                                break;
                             }
                         }
                     }
+
+                    if (!occupied) {
+                        player.setCityX(x);
+                        player.setCityY(y);
+                        player.setX(-1);
+                        player.setY(-1);
+                        GameMenu.printResult("You are in the city now!");
+                        return;
+                    }
+
+                    // ❗ If occupied, try next tile (x++)
                 }
-                if (x == 80) {
+
+                x++;
+                if (x == 80) { // Assuming 80 is width
                     y++;
                     x = 0;
                 }
-            }
-        } else {
-            GameMenu.printResult("You currently in the city!");
-        }
 
+                // Optional: prevent infinite loop
+                if (y >= map.getTiles()[0].length) {
+                    GameMenu.printResult("No available city tile found.");
+                    return;
+                }
+            }
+
+        } else {
+            GameMenu.printResult("You are already in the city!");
+        }
     }
-    public static void goToFarm(){
+    public static void goToFarm() {
         Player player = App.getCurrentGame().getCurrentPlayer();
-        if(player.isInCity()){
-            player.setInCity(true);
-            Map map = player.getMap();
+
+        if (player.isInCity()) {
+            player.setInCity(false); // ✅ leaving the city
+
+            // 🔄 Switch to the player's personal farm map
+            Tile[][] tiles = player.getMap().getTiles();
+
             int x = 0;
             int y = 0;
-            while(true){
-                Tile tile = map.getTiles()[x++][y];
-                if(tile.getType().equals(TileTypes.GRASS) || tile.getType().equals(TileTypes.DIRT)){
-                    if(tile.getItem() == null){
-                        player.setX(x-1);
-                        player.setY(y);
-                        GameMenu.printResult("You are in your farm now!");
+
+            while (true) {
+                Tile tile = tiles[x][y];
+
+                if ((tile.getType().equals(TileTypes.GRASS) || tile.getType().equals(TileTypes.DIRT))
+                        && tile.getItem() == null) {
+                    player.setX(x);
+                    player.setY(y);
+                    player.setCityX(-1);
+                    player.setCityY(-1);
+                    GameMenu.printResult("You are in your farm now!");
+                    return;
+                }
+
+                x++;
+                if (x == tiles.length) {
+                    x = 0;
+                    y++;
+                    if (y == tiles[0].length) {
+                        GameMenu.printResult("No valid tile found on your farm!");
                         return;
                     }
                 }
-                if (x == 80) {
-                    y++;
-                    x = 0;
-                }
             }
+
         } else {
-            GameMenu.printResult("You currently in your farm!");
+            GameMenu.printResult("You are already in your farm!");
         }
     }
+
 }

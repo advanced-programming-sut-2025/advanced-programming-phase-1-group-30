@@ -3,6 +3,7 @@ package models;
 import java.util.ArrayList;
 
 import models.Maps.GreatMap;
+import models.Maps.Map;
 import models.Maps.Weather;
 import models.Players.NPC.*;
 import models.Players.NPC.Sebastian;
@@ -20,6 +21,7 @@ public class Game {
     private ArrayList<Player> players;
     private ArrayList<Trade> trades = new ArrayList<>();
     private ArrayList<NPC> NPCs = new ArrayList<>();
+    private Map currentMap;
 
     public Game() {
         this.map = null;
@@ -80,5 +82,11 @@ public class Game {
         return NPCs;
     }
 
+    public Map getCurrentMap() {
+        return currentMap;
+    }
 
+    public void setCurrentMap(Map currentMap) {
+        this.currentMap = currentMap;
+    }
 }

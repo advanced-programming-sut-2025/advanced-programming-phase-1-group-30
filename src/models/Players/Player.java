@@ -31,6 +31,8 @@ import java.util.List;
 public class Player {
     private int x;
     private int y;
+    private int cityX;
+    private int cityY;
     private final String username;
     private Map map;
     private int energy;
@@ -62,6 +64,7 @@ public class Player {
     private Player askedMarriage = null;
     private String gender;
     private boolean inCity;
+    private Map savedMap;
 
     public Player(String username, int selectionNumber) {
         this.username = username;
@@ -327,9 +330,13 @@ public class Player {
     }
 
     public static boolean areAdjacent(Player player, Player otherPlayer) {
-        int dx = Math.abs(player.getX() - otherPlayer.getX());
-        int dy = Math.abs(player.getY() - otherPlayer.getY());
-        return (dx <= 1 && dy <= 1) && !(dx == 0 && dy == 0);
+        if (player.inCity && otherPlayer.inCity) {
+            int dx = Math.abs(player.getCityX() - otherPlayer.getCityX());
+            int dy = Math.abs(player.getCityY() - otherPlayer.getCityY());
+            return (dx <= 1 && dy <= 1) && !(dx == 0 && dy == 0);
+        } else {
+            return false;
+        }
     }
 
     public String getGender() {
@@ -354,5 +361,29 @@ public class Player {
 
     public void setInCity(boolean inCity) {
         this.inCity = inCity;
+    }
+
+    public Map getSavedMap() {
+        return savedMap;
+    }
+
+    public void setSavedMap(Map savedMap) {
+        this.savedMap = savedMap;
+    }
+
+    public int getCityX() {
+        return cityX;
+    }
+
+    public void setCityX(int cityX) {
+        this.cityX = cityX;
+    }
+
+    public int getCityY() {
+        return cityY;
+    }
+
+    public void setCityY(int cityY) {
+        this.cityY = cityY;
     }
 }
