@@ -1,7 +1,5 @@
 package models.Players;
 
-import models.Items.Item;
-
 public class Trade {
     private Player getter;
     private Player giver;

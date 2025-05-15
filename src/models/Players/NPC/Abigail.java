@@ -1,13 +1,9 @@
 package models.Players.NPC;
 
 import models.App;
-import models.Game;
 import models.Items.IndustrialProducts.IndustrialProduct;
 import models.Items.IndustrialProducts.IndustrialProductType;
 import models.Items.Item;
-import models.Items.Products.ForagingMineral;
-import models.Items.Products.ForagingMineralType;
-import models.Maps.GreatMap;
 import models.Maps.Weather;
 import models.Players.Player;
 import views.GameMenu;
