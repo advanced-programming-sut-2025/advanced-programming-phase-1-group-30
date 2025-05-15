@@ -1,14 +1,16 @@
 package models.Items.Products.ShopProducts;
 
-public class CarpenterProducts extends ShopProduct {
-    private final CarpenterProducts type;
+import models.Buildings.CarpenterCosts;
 
-    public CarpenterProducts(int count, CarpenterProducts type) {
-        super(count, type.getName(), type.getSellLimit(), type.getCost());
+public class CarpenterProducts extends ShopProduct {
+    private final CarpenterCosts type;
+
+    public CarpenterProducts(int count, CarpenterCosts type) {
+        super(count, type.getName(), type.getDailyLimit(), type.getCost());
         this.type = type;
     }
 
-    public CarpenterProducts getType() {
+    public CarpenterCosts getType() {
         return type;
     }
 }

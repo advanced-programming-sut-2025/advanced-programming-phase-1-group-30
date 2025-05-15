@@ -1,6 +1,8 @@
 package models.Buildings;
 
-public enum RanchCosts {
+import models.Items.ItemsInteface;
+
+public enum RanchCosts implements ItemsInteface {
     HAY("Hay", 50, 999999, null, 0),
     MILK_PAIL("Milk Pail", 1000, 1, null, 0),
     SHEARS("Shears", 1000, 1, null, 0),

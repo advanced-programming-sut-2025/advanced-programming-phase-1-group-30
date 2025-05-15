@@ -1,6 +1,8 @@
 package models.Items.Products;
 
-public enum ForagingMineralType {
+import models.Items.ItemsInteface;
+
+public enum ForagingMineralType implements ItemsInteface {
     QUARTZ("quartz","A clear crystal commonly found in caves and mines.", 25,3),
     EARTH_CRYSTAL("earth crystal","A resinous substance found near the surface.", 50,3),
     FROZEN_TEAR("frozen tear","A crystal fabled to be the frozen tears of a yeti.", 75,3),

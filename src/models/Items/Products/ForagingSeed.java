@@ -1,18 +1,18 @@
 package models.Items.Products;
 
-public class ForgingSeed extends Product {
-    private final ForgingSeedType type;
+public class ForagingSeed extends Product {
+    private final ForagingSeedType type;
     private Crop crop;
     private boolean isFertilized;
     private boolean isWatered;
 
-    public ForgingSeed(int count, ForgingSeedType type) {
+    public ForagingSeed(int count, ForagingSeedType type) {
         super(count, type.getName(), 0);
         this.type = type;
         this.crop = new Crop(1, type.getCrop());
     }
 
-    public ForgingSeedType getType() {
+    public ForagingSeedType getType() {
         return type;
     }
     public Crop getCrop() {

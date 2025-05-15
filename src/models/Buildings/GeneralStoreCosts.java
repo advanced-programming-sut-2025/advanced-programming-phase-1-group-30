@@ -1,8 +1,9 @@
 package models.Buildings;
 
+import models.Items.ItemsInteface;
 import models.TimeAndDate.Season;
 
-public enum GeneralStoreCosts {
+public enum GeneralStoreCosts implements ItemsInteface {
     RICE("rice", "A basic grain often served under vegetables.", 200, Integer.MAX_VALUE, Season.ALL),
     WHEAT_FLOUR("wheat flour", "A common cooking ingredient made from crushed wheat seeds.", 100, Integer.MAX_VALUE, Season.ALL),
     BOUQUET("bouquet", "A gift that shows your romantic interest.", 1000, 2, Season.ALL),
