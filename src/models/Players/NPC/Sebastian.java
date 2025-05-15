@@ -1,7 +1,6 @@
 package models.Players.NPC;
 
 import models.App;
-import models.Game;
 import models.Items.Item;
 import models.Items.Products.ForagingMineral;
 import models.Items.Products.ForagingMineralType;

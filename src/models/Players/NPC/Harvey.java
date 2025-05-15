@@ -1,15 +1,9 @@
 package models.Players.NPC;
 
 import models.App;
-import models.Items.ArtisanGoods.ArtisanGood;
-import models.Items.ArtisanGoods.ArtisanGoodType;
 import models.Items.Foods.Food;
 import models.Items.Foods.FoodType;
-import models.Items.IndustrialProducts.IndustrialProduct;
-import models.Items.IndustrialProducts.IndustrialProductType;
 import models.Items.Item;
-import models.Items.Products.ForagingMineral;
-import models.Items.Products.ForagingMineralType;
 import models.Maps.Weather;
 import models.Players.Player;
 import views.GameMenu;

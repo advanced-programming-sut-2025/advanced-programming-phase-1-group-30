@@ -1,6 +1,8 @@
 package models.Buildings;
 
-public enum FishShopCosts {
+import models.Items.ItemsInteface;
+
+public enum FishShopCosts implements ItemsInteface {
     FISH_SMOKER_RECIPE("A recipe to make Fish Smoker", "Use this recipe to craft a Fish Smoker.", 10000, -1, 1),
     TROUT_SOUP("Trout Soup", "Pretty salty.", 250, -1, 1),
     BAMBOO_POLE("Bamboo Pole", "Use in the water to catch fish.", 500, -1, 1),

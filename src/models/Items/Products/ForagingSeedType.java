@@ -1,8 +1,9 @@
 package models.Items.Products;
 
+import models.Items.ItemsInteface;
 import models.TimeAndDate.Season;
 
-public enum ForgingSeedType {
+public enum ForagingSeedType implements ItemsInteface {
     JAZZ_SEEDS("Jazz Seeds", Season.SPRING, CropType.BLUE_JAZZ, null, 0),
     CARROT_SEEDS("Carrot Seeds", Season.SPRING, CropType.CARROT, null, 0),
     CAULIFLOWER_SEEDS("Cauliflower Seeds", Season.SPRING, CropType.CAULIFLOWER, null, 0),
@@ -68,7 +69,7 @@ public enum ForgingSeedType {
     private final int treeOrCrop; // 0 for crop, 1 for tree
 
 
-    private ForgingSeedType(String name, Season season, CropType crop, FruitType fruit, int treeOrCrop) {
+    private ForagingSeedType(String name, Season season, CropType crop, FruitType fruit, int treeOrCrop) {
         this.name = name;
         this.season = season;
         this.crop = crop;

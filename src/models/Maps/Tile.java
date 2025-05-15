@@ -23,29 +23,45 @@ public class Tile {
     private boolean giantCropCheck = false;
     private Crop crop;
 
-    public Tile(int x, int y, TileTypes type, boolean walkable, boolean isHarvestable) {
+    public Tile(int x, int y, TileTypes type, boolean walkable, boolean isHarvestable, int id) {
         this.type = type;
         this.x = x;
         this.y = y;
         this.walkable = walkable;
-        Tile.putItemInTile(this);
+        if (id != -1){
+            Tile.putItemInTile(this);
+        }
         this.isHarvestable = isHarvestable;
         this.isPlanted = false;
     }
-    public static Tile createTileFromType(int x, int y, String tileType) {
+    public static Tile createTileFromType(int x, int y, String tileType, int id) {
         switch (tileType.toLowerCase()) {
             case "dirt":
-                return new Tile(x, y, TileTypes.DIRT, true, true);
+                return new Tile(x, y, TileTypes.DIRT, true, true, id);
             case "grass":
-                return new Tile(x, y, TileTypes.GRASS, true, true);
+                return new Tile(x, y, TileTypes.GRASS, true, true, id);
             case "river":
-                return new Tile(x, y, TileTypes.WATER, false, false);
+                return new Tile(x, y, TileTypes.WATER, false, false, id);
             case "hut":
-                return new Tile(x, y, TileTypes.HUT, false, false);
+                return new Tile(x, y, TileTypes.HUT, false, false, id);
             case "greenhouse":
-                return new Tile(x, y, TileTypes.GREENHOUSE, false, false);
+                return new Tile(x, y, TileTypes.GREENHOUSE, false, false, id);
             case "quarry":
-                return new Tile(x, y, TileTypes.QUARRY, true, false);
+                return new Tile(x, y, TileTypes.QUARRY, true, false, id);
+            case "blacksmith":
+                return new Tile(x, y, TileTypes.BLACKSMITH, true, true, id);
+            case "carpenters-shop":
+                return new Tile(x, y, TileTypes.CARPENTERS_SHOP, true, true, id);
+            case "jojomart":
+                return new Tile(x, y, TileTypes.JOJOMART, false, false, id);
+            case "pierres-store":
+                return new Tile(x, y, TileTypes.PIERRES_GENERAL_STORE, false, false, id);
+            case "fish-shop":
+                return new Tile(x, y, TileTypes.FISH_SHOP, false, false, id);
+            case "marnies-ranch":
+                return new Tile(x, y, TileTypes.MARINES_RANCH, true, false, id);
+            case "stardrop-saloon":
+                return new Tile(x, y, TileTypes.THE_STARDROP_SALOON, true, false, id);
             default:
                 throw new IllegalArgumentException("Unknown tile type: " + tileType);
         }

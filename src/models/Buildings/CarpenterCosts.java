@@ -1,6 +1,8 @@
 package models.Buildings;
 
-public enum CarpenterCosts {
+import models.Items.ItemsInteface;
+
+public enum CarpenterCosts implements ItemsInteface {
     WOOD("Wood", 10, 0, 0, 0, 0, Integer.MAX_VALUE),
     STONE("Stone", 20, 0, 0, 0, 0, Integer.MAX_VALUE),
     BARN("Barn", 6000, 350, 150, 7, 4, 1),

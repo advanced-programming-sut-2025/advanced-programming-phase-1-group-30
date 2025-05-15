@@ -5,10 +5,11 @@ import java.util.List;
 
 import models.Animals.FishType;
 import models.Items.Item;
+import models.Items.ItemsInteface;
 import models.Items.IndustrialProducts.IndustrialProductType;
 import models.Items.Products.CropType;
 
-public enum ArtisanGoodType {
+public enum ArtisanGoodType implements ItemsInteface {
     HONEY("Honey", "It's a sweet syrup produced by bees.", 75, 4 * 24, new ArrayList<>(), 350, IndustrialProductType.BEE_HOUSE),
     CHEESE("Cheese", "It's your basic cheese.", 100, 3, new ArrayList<>(List.of(
         new Item(1, "Milk", 0),

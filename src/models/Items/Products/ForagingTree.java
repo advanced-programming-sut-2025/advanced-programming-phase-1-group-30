@@ -2,14 +2,14 @@ package models.Items.Products;
 
 
 public class ForagingTree extends Product {
-    private final ForagingCropType type;
+    private final ForagingTreeType type;
 
-    public ForagingTree(int count, ForagingCropType type) {
-        super(count, type.getName(), type.getBaseSellPrice());
+    public ForagingTree(int count, ForagingTreeType type) {
+        super(count, type.getName(), 0);
         this.type = type;
     }
 
-    public ForagingCropType getType() {
+    public ForagingTreeType getType() {
         return type;
     }
 }

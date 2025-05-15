@@ -1,11 +1,12 @@
 package models.Items.IndustrialProducts;
 
 import models.Items.Item;
+import models.Items.ItemsInteface;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public enum IndustrialProductType {
+public enum IndustrialProductType implements ItemsInteface {
     CHERRY_BOMB("cherry bomb", "Destroys everything within a 3-tile radius",
             new ArrayList<>(List.of(new Item(4, "copper ore", 0), new Item(1, "coal", 0))), 50),
 
@@ -73,26 +74,26 @@ public enum IndustrialProductType {
                     new Item(5, "pine cone", 0),
                     new Item(5, "mahogany seed", 0))), 100);
 
-    public final String name;
-    public final String description;
-    public final ArrayList<Item> ingredients;
-    public final int sellPrice;
+    private final String name;
+    private final String description;
+    private final ArrayList<Item> ingredients;
+    private final int sellPrice;
 
     public String getName() {
         return name;
-}
+    }
 
     public String getDescription() {
         return description;
-}
+    }       
 
     public ArrayList<Item> getIngredients() {
         return ingredients;
-}
+    }
 
     public int getSellPrice() {
         return sellPrice;
-}
+    }
 
     IndustrialProductType(String name, String description, ArrayList<Item> ingredients, int sellPrice) {
         this.name = name;

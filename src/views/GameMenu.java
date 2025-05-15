@@ -86,6 +86,11 @@ public class GameMenu implements AppMenu {
             DateAndWeatherController.WeatherForecast();
             return;
         }
+        matcher = GameMenuCommands.CHEAT_THOR.regexMatcher(command);
+        if (matcher.matches()) {
+            DateAndWeatherController.cheatThor(matcher.group("x"), matcher.group("y"));
+            return;
+        }
         matcher = GameMenuCommands.PRINT_MAP.regexMatcher(command);
         if (matcher.matches()) {
             GameMenuController.printMap(matcher.group("x"), matcher.group("y"), matcher.group("size"));
@@ -112,29 +117,29 @@ public class GameMenu implements AppMenu {
             return;
         }
         matcher = GameMenuCommands.EQUIP_TOOL.regexMatcher(command);
-        if(matcher.matches()){
+        if (matcher.matches()) {
             String name = matcher.group("name");
             GameMenuController.ToolsEquip(name);
             return;
         }
         matcher = GameMenuCommands.CURRENT_TOOL.regexMatcher(command);
-        if(matcher.matches()){
+        if (matcher.matches()) {
             GameMenuController.ShowCurrentTool();
             return;
         }
         matcher = GameMenuCommands.AVAILABLE_TOOLS.regexMatcher(command);
-        if(matcher.matches()){
+        if (matcher.matches()) {
             GameMenuController.ShowAvailableTools();
             return;
         }
         matcher = GameMenuCommands.Tool_Use.regexMatcher(command);
-        if(matcher.matches()){
+        if (matcher.matches()) {
             String direction = matcher.group("direction");
             GameMenuController.toolUse(direction);
             return;
         }
         matcher = GameMenuCommands.PLANT.regexMatcher(command);
-        if(matcher.matches()){
+        if (matcher.matches()) {
             String seed = matcher.group("seed");
             String direction = matcher.group("direction");
             GameMenuController.plant(seed, direction);
@@ -292,7 +297,7 @@ public class GameMenu implements AppMenu {
         }
         matcher = GameMenuCommands.SHOW_ALL_AVAILABLE_PRODUCTS.regexMatcher(command);
         if (matcher.matches()) {
-            GameMenuController.showAllProducts(); //TODO only availabls
+            GameMenuController.showAvailableProducts();
             return;
         }
         matcher = GameMenuCommands.PURCHASE.regexMatcher(command);
@@ -351,6 +356,13 @@ public class GameMenu implements AppMenu {
         matcher = GameMenuCommands.PRINT_CITY_MAP.regexMatcher(command);
         if (matcher.matches()) {
             GameMenuController.printCityMap();
+            return;
+        }
+        matcher = GameMenuCommands.PRINT_FULL_MAP.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.printPlayerFullMap();
+            return;
+        }
         matcher = GameMenuCommands.TALK.regexMatcher(command);
         if (matcher.matches()) {
             GameMenuController.talk(matcher.group("username"), matcher.group("message"));
@@ -391,6 +403,17 @@ public class GameMenu implements AppMenu {
             GameMenuController.askMarriage(matcher.group("username"), matcher.group("ring"));
             return;
         }
+        matcher = GameMenuCommands.GoToCity.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.goToCity();
+            return;
+        }
+        matcher = GameMenuCommands.GoToFarm.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.goToFarm();
+            return;
+        }
+
         matcher = GameMenuCommands.EXIT_GAME.regexMatcher(command);
         if (matcher.matches()) {
             // TODO update chiza

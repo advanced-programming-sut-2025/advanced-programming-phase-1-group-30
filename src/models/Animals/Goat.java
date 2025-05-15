@@ -31,7 +31,7 @@ public class Goat extends Animal {
                 qualityAssign(quality);
             } else {
                 if (rand < chance) {
-                    this.bigGoatMilk = new Item(1, "big goat milk", AnimalProductType.GOAT_BIG_MILK.getPrice());
+                    this.bigGoatMilk = new Item(1, "big goat goatMilk", AnimalProductType.GOAT_BIG_MILK.getPrice());
                     if (quality >= 0 && quality < 0.5) {
                         this.bigGoatMilk.setQuality("regular");
                         this.bigGoatMilk.setCof(1);
@@ -55,7 +55,7 @@ public class Goat extends Animal {
     }
 
     private void qualityAssign(double quality) {
-        this.goatMilk = new Item(1, "goat milk", AnimalProductType.GOAT_MILK.getPrice());
+        this.goatMilk = new Item(1, "goat goatMilk", AnimalProductType.GOAT_MILK.getPrice());
         if (quality >= 0 && quality < 0.5) {
             this.goatMilk.setQuality("regular");
             this.goatMilk.setCof(1);
@@ -80,25 +80,48 @@ public class Goat extends Animal {
         if (!isProductReady()) {
             GameMenu.printResult("Product is not ready!");
         } else {
-            Item newItem = this.goatMilk;
+            Item newItem;
             if (this.goatMilk == null) {
                 newItem = this.bigGoatMilk;
-            }
-            if(Item.findItemByName(bigGoatMilk.getName(), player.getBackPack().getItems()) != null){
-                newItem.setCount(newItem.getCount() + 1);
-            }else{
-                if(player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()){
-                    GameMenu.printResult("You don't have enough space in your backpack!");
-                } else{
-                    player.getBackPack().addItem(newItem);
-                    if (newItem.getName().equals(this.goatMilk.getName())) {
-                        GameMenu.printResult("Goat milk collected!");
-                    } else if (newItem.getName().equals(this.bigGoatMilk.getName())) {
-                        GameMenu.printResult("Big goat milk collected!");
-                    }
-
+                if(Item.findItemByName(bigGoatMilk.getName(), player.getBackPack().getItems()) != null){
+                    Item.findItemByName(bigGoatMilk.getName(), player.getBackPack().getItems()).setCount(Item.findItemByName(bigGoatMilk.getName(), player.getBackPack().getItems()).getCount() + 1);
+                    setFriendship(Math.min(getFriendship() + 5, 1000));
+                    GameMenu.printResult(newItem.getName() + " has been collected!");
                     this.goatMilk = null;
                     this.bigGoatMilk = null;
+                    this.setProductReady(false);
+                }else{
+                    if(player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()){
+                        GameMenu.printResult("You don't have enough space in your backpack!");
+                    } else {
+                        player.getBackPack().addItem(newItem);
+                        setFriendship(Math.min(getFriendship() + 5, 1000));
+                        GameMenu.printResult(newItem.getName() + " has been collected!");
+                        this.goatMilk = null;
+                        this.bigGoatMilk = null;
+                        this.setProductReady(false);
+                    }
+                }
+            } else {
+                newItem = this.goatMilk;
+                if (Item.findItemByName(goatMilk.getName(), player.getBackPack().getItems()) != null) {
+                    Item.findItemByName(goatMilk.getName(), player.getBackPack().getItems()).setCount(Item.findItemByName(goatMilk.getName(), player.getBackPack().getItems()).getCount() + 1);
+                    setFriendship(Math.min(getFriendship() + 5, 1000));
+                    GameMenu.printResult(newItem.getName() + " has been collected!");
+                    this.goatMilk = null;
+                    this.bigGoatMilk = null;
+                    this.setProductReady(false);
+                } else {
+                    if (player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()) {
+                        GameMenu.printResult("You don't have enough space in your backpack!");
+                    } else {
+                        player.getBackPack().addItem(newItem);
+                        setFriendship(Math.min(getFriendship() + 5, 1000));
+                        GameMenu.printResult(newItem.getName() + " has been collected!");
+                        this.goatMilk = null;
+                        this.bigGoatMilk = null;
+                        this.setProductReady(false);
+                    }
                 }
             }
         }

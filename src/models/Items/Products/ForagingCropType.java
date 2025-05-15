@@ -1,8 +1,9 @@
 package models.Items.Products;
 
+import models.Items.ItemsInteface;
 import models.TimeAndDate.Season;
 
-public enum ForagingCropType {
+public enum ForagingCropType implements ItemsInteface {
     COMMON_MUSHROOM("Common Mushroom", Season.ALL, 40, 38),
     DAFFODIL("Daffodil", Season.SPRING, 30, 0),
     DANDELION("Dandelion", Season.SPRING, 40, 25),

@@ -1,8 +1,9 @@
 package models.Items.Products;
 
+import models.Items.ItemsInteface;
 import models.TimeAndDate.Season;
 
-public enum ForagingTreeType {
+public enum ForagingTreeType implements ItemsInteface {
     ACORNS("Acorns", Season.ALL),
     MAPLE_SEEDS("Maple Seeds", Season.ALL),
     PINE_CONES("Pine Cones", Season.ALL),

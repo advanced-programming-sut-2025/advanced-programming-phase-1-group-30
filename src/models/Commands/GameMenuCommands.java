@@ -18,6 +18,7 @@ public enum GameMenuCommands {
     SEASON("^\\s*season\\s*$"),
     WEATHER("^\\s*weather\\s*$"),
     WEATHER_FORECAST("^\\s*weather\\s+forecast\\s*$"),
+    CHEAT_THOR("^cheat\\s+Thor\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\s*$"),
     PRINT_MAP("^\\s*print\\s+map\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s+-s\\s+(?<size>\\d+)\\s*$"),
     HELPREADINGMAP("^\\s*help\\s+reading\\s+map\\s*$"),
     ENERGY_SHOW("^\\s*energy\\s+show\\s*$"),
@@ -39,7 +40,7 @@ public enum GameMenuCommands {
     CRAFTING_SHOW_RECIPES("^\\s*crafting\\s+show\\s+recipes\\s*$"),
     CRAFTING_CRAFT("^\\s*crafting\\s+craft\\s+(?<itemName>.*\\S)\\s*$"),
     PLACE_ITEM("^\\s*place\\s+item\\s+-n\\s+(?<itemName>.*\\S)\\s+-d\\s+(?<direction>.*\\S)\\s*$"),
-    CHEAT_ADD_ITEM("^\\s*cheat\\s+add\\s+item\\s+-n\\s+(?<itemName>.*\\S)\\s+-c\\s+(?<count>.*\\S)\\s*$"),
+    CHEAT_ADD_ITEM("^\\s*cheat\\s+add\\s+item\\s+-n\\s+(?<itemName>.*\\S)\\s+-c\\s+(?<count>\\d+)\\s*$"),
     COOKING_REFRIGERATOR("^\\s*cooking\\s+refrigerator\\s+(?<action>put|pick)\\s+(?<item>.*\\S)\\s*$"),
     COOKING_SHOW_RECIPES("^\\s*cooking\\s+show\\s+recipes(\\s+(?<all>-a))\\s*$"),
     COOKING_ADD_RECIPE("^\\s*cooking\\s+add\\s+recipe\\s+-n\\s+(?<name>.*\\S)\\s*$"),
@@ -66,7 +67,7 @@ public enum GameMenuCommands {
     FRIENDSHIPS("^\\s*friendships\\s*$"),
     TALK("^\\s*talk\\s+-u\\s+(?<username>.*\\S)\\s+-m\\s+(?<message>.*\\S)\\s*$"),
     TALK_HISTORY("^\\s*talk\\s+history\\s+-u\\s+(?<username>.*\\S)\\s*$"),
-    GIFT("^\\s*gift\\s+-u\\s+(?<username>.*\\S)\\s+-i\\s+(?<item>.*\\S)\\s+-a\\s+(?<amount>.*\\S)\\s*$"),
+    GIFT("^\\s*gift\\s+-u\\s+(?<username>.*\\S)\\s+-i\\s+(?<item>.+?)\\s+-a\\s+(?<amount>.*\\S)\\s*$"),
     GIFT_LIST("^\\s*gift\\s+list\\s*$"),
     GIFT_RATE("^\\s*gift\\s+rate\\s+-i\\s+(?<giftNumber>.*\\S)\\s+-r\\s+(?<rate>.*\\S)\\s*$"),
     GIFT_HISTORY("^\\s*gift\\s+history\\s+-u\\s+(?<username>.*\\S)\\s*$"),
@@ -84,7 +85,11 @@ public enum GameMenuCommands {
     FRIENDSHIP_NPC_LIST("^\\s*friendship\\s+NPC\\s+list\\s*$"),
     QUESTS_LIST("^\\s*quests\\s+list\\s*$"),
     QUESTS_FINISH("^\\s*quests\\s+finish\\s+-i\\s+(?<index>.*\\S)\\s*$"),
-    PRINT_CITY_MAP("^\\s*print\\s+city\\s*$");
+    PRINT_CITY_MAP("^\\s*print\\s+city\\s+map\\s*$"),
+    PRINT_FULL_MAP("^\\s*print\\s+full\\s+map\\s*$"),
+    GoToCity("^\\s*go\\s+to\\s+city\\s*$"),
+    GoToFarm("^\\s*go\\s+to\\s+farm\\s*$"),;
+
 
 
     private final String commandRegex;

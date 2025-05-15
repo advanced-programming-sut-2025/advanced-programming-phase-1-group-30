@@ -1,10 +1,8 @@
 package models.Players;
 
 import models.Animals.Animal;
-import models.Animals.Chicken;
 import models.App;
 import models.Buildings.Building;
-import models.Buildings.CarpenterCosts;
 import models.Invetory.BackPack;
 import models.Invetory.BackPackType;
 import models.Invetory.Refrigerator;
@@ -16,13 +14,11 @@ import models.Items.Gift;
 import models.Items.Item;
 import models.Items.Foods.FoodType;
 import models.Items.IndustrialProducts.IndustrialProductType;
-import models.Items.Products.ForgingSeed;
-import models.Items.Products.ForgingSeedType;
-import models.Items.Products.ShopProducts.CarpenterProducts;
+import models.Items.Products.ForagingSeed;
+import models.Items.Products.ForagingSeedType;
 import models.Items.Tools.*;
 import models.Maps.Map;
 import models.Players.NPC.NPC;
-import models.Players.NPC.NPCDetail;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +27,8 @@ import java.util.List;
 public class Player {
     private int x;
     private int y;
+    private int cityX;
+    private int cityY;
     private final String username;
     private Map map;
     private int energy;
@@ -61,6 +59,8 @@ public class Player {
     private ArrayList<Gift> gifts = new ArrayList<>();
     private Player askedMarriage = null;
     private String gender;
+    private boolean inCity;
+    private Map savedMap;
 
     public Player(String username, int selectionNumber) {
         this.username = username;
@@ -73,9 +73,10 @@ public class Player {
         this.backPack.addItem(new Hoe(1, HoeType.NORMAL));
         this.backPack.addItem(new Pickaxe(1, PickaxeType.NORMAL));
         this.backPack.addItem(new Basket(1, BasketType.NORMAL));
+        this.backPack.addItem(new MilkPail(1, 10));
         this.backPack.addItem(new Scythe(1));
         this.trashCan = new TrashCan(TrashCanType.INITIAL_TRASHCAN);
-        this.backPack.addItem(new ForgingSeed(4, ForgingSeedType.APRICOT_SAPLING)); //TODO tile & initial seed
+        this.backPack.addItem(new ForagingSeed(4, ForagingSeedType.APRICOT_SAPLING)); //TODO tile & initial seed
         this.backPack.addItem(new Item(1000, "wood", 10));
         this.backPack.addItem(new Item(1000, "stone", 20));
         this.backPack.addItem(new Item(50, "hay", 50));
@@ -84,6 +85,7 @@ public class Player {
         this.maxEnergy = 200;
         this.building = new Building(0, 0, 0, 0); //TODO home!!!
         this.recipes = null;
+        this.inCity = false;
         for(int i = 0; i < 5; i++){
             this.friendshipsNPC.put(App.getCurrentGame().getNPCs().get(i), 0);
             this.activatedQuestNPC.put(App.getCurrentGame().getNPCs().get(i), new ArrayList<>(List.of(1)));
@@ -324,9 +326,13 @@ public class Player {
     }
 
     public static boolean areAdjacent(Player player, Player otherPlayer) {
-        int dx = Math.abs(player.getX() - otherPlayer.getX());
-        int dy = Math.abs(player.getY() - otherPlayer.getY());
-        return (dx <= 1 && dy <= 1) && !(dx == 0 && dy == 0);
+        if (player.inCity && otherPlayer.inCity) {
+            int dx = Math.abs(player.getCityX() - otherPlayer.getCityX());
+            int dy = Math.abs(player.getCityY() - otherPlayer.getCityY());
+            return (dx <= 1 && dy <= 1) && !(dx == 0 && dy == 0);
+        } else {
+            return false;
+        }
     }
 
     public String getGender() {
@@ -343,5 +349,37 @@ public class Player {
             );
         }
         money += delta;
+    }
+
+    public boolean isInCity() {
+        return inCity;
+    }
+
+    public void setInCity(boolean inCity) {
+        this.inCity = inCity;
+    }
+
+    public Map getSavedMap() {
+        return savedMap;
+    }
+
+    public void setSavedMap(Map savedMap) {
+        this.savedMap = savedMap;
+    }
+
+    public int getCityX() {
+        return cityX;
+    }
+
+    public void setCityX(int cityX) {
+        this.cityX = cityX;
+    }
+
+    public int getCityY() {
+        return cityY;
+    }
+
+    public void setCityY(int cityY) {
+        this.cityY = cityY;
     }
 }
