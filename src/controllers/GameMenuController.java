@@ -1570,9 +1570,15 @@ public class GameMenuController {
     public static void purchase(String name, int amount){
         Player player = App.getCurrentGame().getCurrentPlayer();
         
-        if (App.getCurrentGame().getCurrentPlayer().getBuilding() == null) {
+        if (player.getBuilding() == null) {
             GameMenu.printResult("You are not in a store!");
             return;
+        }
+
+        if (App.getCurrentGame().getCurrentTime().getHour() < player.getBuilding().getStartHour() ||
+            App.getCurrentGame().getCurrentTime().getHour() > player.getBuilding().getEndHour()) {
+                GameMenu.printResult("Store is closed! return sometime else!");
+                return;
         }
 
         ShopProduct item = (ShopProduct) Item.findItemByName(name, player.getBuilding().getItems());
