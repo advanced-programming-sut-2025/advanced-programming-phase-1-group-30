@@ -999,7 +999,7 @@ public class GameMenuController {
             GameMenu.printResult("No food with given name were found!");
             return;
         }
-            
+        
         food.changeCount(-1);
         if (food.getCount() == 0)
             App.getCurrentGame().getCurrentPlayer().getBackPack().removeItem(food);
@@ -1510,7 +1510,7 @@ public class GameMenuController {
     }
 
     public static void showAllProducts() {
-        App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getBlacksmith());
+        App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getGeneralStore());
         switch (App.getCurrentGame().getCurrentPlayer().getBuilding()) {
             case Blacksmith blacksmith ->
                     GameMenu.printResult(MaintainerController.printingShopProducts("Blacksmith", BlacksmithCosts.values()));
@@ -1531,7 +1531,7 @@ public class GameMenuController {
     }
 
     public static void showAvailableProducts() {
-        App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getBlacksmith());
+        App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getGeneralStore());
         switch (App.getCurrentGame().getCurrentPlayer().getBuilding()) {
             case Blacksmith blacksmith ->
                     GameMenu.printResult(MaintainerController.printingShopProducts2("Blacksmith", App.getCurrentGame().getBlacksmith().getItems()));
