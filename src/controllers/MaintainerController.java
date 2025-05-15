@@ -133,9 +133,9 @@ public class MaintainerController {
         int randomNumber = random.nextInt(chance);
         if (randomNumber == 0) {
             GameMenu.printResult("You are under attack by CROWS!");
-            randomNumber = random.nextInt(3) + 1;
-
             ArrayList<Item> products = App.getCurrentGame().getCurrentPlayer().getProducts();
+            randomNumber = Math.min(random.nextInt(3) + 1, products.size());
+
             for (int i = 0; i < randomNumber; i++) {
                 GameMenu.printResult("You loose " + products.get(i).getCount() + " " + products.get(i).getName());
                 products.remove(i);
@@ -146,32 +146,22 @@ public class MaintainerController {
     public static <T> String printingShopProducts(String name, T[] list) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(name + " Products: ");
+        sb.append(name + " Products:\n");
         
         for (int i = 0; i < list.length; i++) {
-            sb.append(list[i]);
-            if (i < list.length - 1) {
-                sb.append(" - ");
-            } else {
-                sb.append("\n");
-            }
+            sb.append(list[i] + "\n");
         }
 
         return sb.toString();
     }
 
-    public static <T extends ItemsInteface> String printingShopProducts2(String name, ArrayList<T> list) {
+    public static <T> String printingShopProducts2(String name, ArrayList<Item> list) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(name + " Products: ");
+        sb.append(name + " Products:\n");
         
         for (int i = 0; i < list.size(); i++) {
-            sb.append(list.get(i).getName());
-            if (i < list.size() - 1) {
-                sb.append(" - ");
-            } else {
-                sb.append("\n");
-            }
+            sb.append(list.get(i).getName() + ": " + list.get(i).getCount() + "\n");
         }
 
         return sb.toString();
@@ -232,7 +222,7 @@ public class MaintainerController {
 
         for (int i = 0; i < rand.nextInt(items.size()); i++) {
             BlacksmithCosts type = items.get(i);
-            int count = 1 + rand.nextInt(type.getDailyLimit());
+            int count = 1 + Math.max(rand.nextInt(type.getDailyLimit()), 10);
             blacksmith.addItem(new BlacksmithProducts(count, type));
         }
     }
@@ -246,7 +236,7 @@ public class MaintainerController {
 
         for (int i = 0; i < rand.nextInt(items.size()); i++) {
             CarpenterCosts type = items.get(i);
-            int count = 1 + rand.nextInt(type.getDailyLimit());
+            int count = 1 + Math.max(rand.nextInt(type.getDailyLimit()), 10);
             carpenter.addItem(new CarpenterProducts(count, type));
         }
     }
@@ -260,7 +250,7 @@ public class MaintainerController {
 
         for (int i = 0; i < rand.nextInt(items.size()); i++) {
             FishShopCosts type = items.get(i);
-            int count = 1 + rand.nextInt(type.getDailyLimit());
+            int count = 1 + Math.max(rand.nextInt(type.getDailyLimit()), 10);
             fishShop.addItem(new FishShopProducts(count, type));
         }
     }
@@ -274,7 +264,7 @@ public class MaintainerController {
 
         for (int i = 0; i < rand.nextInt(items.size()); i++) {
             GeneralStoreCosts type = items.get(i);
-            int count = 1 + rand.nextInt(type.getDailyLimit());
+            int count = 1 + Math.max(rand.nextInt(type.getDailyLimit()), 10);
             store.addItem(new GeneralStoreProducts(count, type));
         }
     }
@@ -286,10 +276,10 @@ public class MaintainerController {
         Collections.shuffle(items);
         Random rand = new Random();
 
-        for (int i = 0; i < rand.nextInt(items.size()); i++) {
+        for (int i = 0; i < Math.min(rand.nextInt(items.size()) + 5, items.size()); i++) {
             JojaMartCosts type = items.get(i);
-            int count = 1 + rand.nextInt(type.getDailyLimit());
-            jojaMart.addItem(new JojaMartProducts(count, type));
+            int count = 1 + Math.max(rand.nextInt(type.getDailyLimit()), 10);
+            if (type.getSeason().equals(App.getCurrentGame().getCurrentTime().getSeason())) jojaMart.addItem(new JojaMartProducts(count, type));
         }
     }
 
@@ -302,7 +292,7 @@ public class MaintainerController {
 
         for (int i = 0; i < rand.nextInt(items.size()); i++) {
             RanchCosts type = items.get(i);
-            int count = 1 + rand.nextInt(type.getDailyLimit());
+            int count = 1 + Math.max(rand.nextInt(type.getDailyLimit()), 10);
             ranch.addItem(new RanchProducts(count, type));
         }
     }
@@ -316,9 +306,23 @@ public class MaintainerController {
 
         for (int i = 0; i < rand.nextInt(items.size()); i++) {
             SaloonCosts type = items.get(i);
-            int count = 1 + rand.nextInt(type.getDailyLimit());
+            int count = 1 + Math.max(rand.nextInt(type.getDailyLimit()), 10);
             saloon.addItem(new SaloonProducts(count, type));
         }
     }
 
+    public static void emptyShippingBin() {
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            if (player.getShippingBin().getItems() == null) continue;
+
+            int money = 0;
+            for (Item item : player.getShippingBin().getItems()) {
+                money += (int) player.getShippingBin().getType().calculateNewPrice(item.getPrice() * item.getCount());
+            }
+
+            player.setMoney(player.getMoney() + money);
+            player.getShippingBin().setItems(new ArrayList<>());
+        }
+        GameMenu.printResult("Shipping Bins were emptied!");
+    }
 }

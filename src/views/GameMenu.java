@@ -213,9 +213,9 @@ public class GameMenu implements AppMenu {
         matcher = GameMenuCommands.COOKING_SHOW_RECIPES.regexMatcher(command);
         if (matcher.matches()) {
             if (matcher.group("all") == null)
-                GameMenuController.showCookingRecipe(false);
-            else
                 GameMenuController.showCookingRecipe(true);
+            else
+                GameMenuController.showCookingRecipe(false);
             return;
         }
         matcher = GameMenuCommands.COOKING_ADD_RECIPE.regexMatcher(command);

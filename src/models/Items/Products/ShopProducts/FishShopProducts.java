@@ -6,7 +6,7 @@ public class FishShopProducts extends ShopProduct {
     private final FishShopCosts type;
 
     public FishShopProducts(int count, FishShopCosts type) {
-        super(count, type.getName(), type.getDailyLimit(), type.getPrice());
+        super(count, type.getName(), type.getDailyLimit(), type.getPrice(), type.getSeason());
         this.type = type;
     }
 
