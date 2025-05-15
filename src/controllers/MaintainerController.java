@@ -22,8 +22,6 @@ import models.Buildings.Ranch;
 import models.Buildings.RanchCosts;
 import models.Buildings.Saloon;
 import models.Buildings.SaloonCosts;
-import models.Invetory.ShippingBin;
-import models.Invetory.ShippingBinType;
 import models.Items.Item;
 import models.Items.ItemFactory;
 import models.Items.ItemsInteface;
@@ -112,9 +110,9 @@ public class MaintainerController {
         int randomNumber = random.nextInt(chance);
         if (randomNumber == 0) {
             GameMenu.printResult("You are under attack by CROWS!");
-            randomNumber = random.nextInt(3) + 1;
-
             ArrayList<Item> products = App.getCurrentGame().getCurrentPlayer().getProducts();
+            randomNumber = Math.min(random.nextInt(3) + 1, products.size());
+
             for (int i = 0; i < randomNumber; i++) {
                 GameMenu.printResult("You loose " + products.get(i).getCount() + " " + products.get(i).getName());
                 products.remove(i);
