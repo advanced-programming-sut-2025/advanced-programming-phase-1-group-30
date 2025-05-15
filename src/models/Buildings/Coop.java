@@ -11,7 +11,7 @@ public class Coop extends Building {
     private ArrayList<Animal> animals = new ArrayList<>();
 
     public Coop(int height, int width, int startX, int startY, int capacity, String type) {
-        super(height, width, startX, startY);
+        super(height, width, startX, startY, 9, 21);
         this.type = type;
         this.capacity = capacity;
         this.currentNumberOfAnimals = 0;

@@ -6,7 +6,7 @@ public class SaloonProducts extends ShopProduct {
     private final SaloonCosts type;
 
     public SaloonProducts(int count, SaloonCosts type) {
-        super(count, type.getName(), type.getDailyLimit(), type.getCost());
+        super(count, type.getName(), type.getDailyLimit(), type.getCost(), type.getSeason());
         this.type = type;
     }
 
