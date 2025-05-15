@@ -1,6 +1,8 @@
 package models.Buildings;
 
-public enum BlacksmithCosts {
+import models.Items.ItemsInteface;
+
+public enum BlacksmithCosts implements ItemsInteface {
     CopperOre("Copper one", 75,Integer.MAX_VALUE),
     IronOre("Iron", 150, Integer.MAX_VALUE),
     Coal("Coal", 150, Integer.MAX_VALUE),

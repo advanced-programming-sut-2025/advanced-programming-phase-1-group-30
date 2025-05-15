@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import models.Items.Item;
+import models.Items.ItemsInteface;
 
-public enum FoodType {
+public enum FoodType implements ItemsInteface {
     FRIED_EGG("Fried egg", new ArrayList<>(List.of(new Item(1, "Egg", 0))), 50, "-", "Starter", 35),
     BAKED_FISH("Baked Fish", new ArrayList<>(List.of(new Item(1, "Sardine", 0), new Item(1, "Salmon", 0), new Item(1, "Wheat", 0))), 75, "-", "Starter", 100),
     SALAD("Salad", new ArrayList<>(List.of(new Item(1, "Leek", 0), new Item(1, "Dandelion", 0))), 113, "-", "Starter", 110),

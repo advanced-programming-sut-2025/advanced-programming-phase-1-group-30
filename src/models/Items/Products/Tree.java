@@ -1,6 +1,6 @@
 package models.Items.Products;
 
-public class Tree extends Product{
+public class Tree extends Product {
     private final TreeType type;
     private boolean isHitByThunder;
 

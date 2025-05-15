@@ -1,8 +1,9 @@
 package models.Buildings;
 
+import models.Items.ItemsInteface;
 import models.TimeAndDate.Season;
 
-public enum GeneralStoreCosts {
+public enum GeneralStoreCosts implements ItemsInteface {
     RICE("rice", "A basic grain often served under vegetables.", 200, Integer.MAX_VALUE, Season.ALL),
     WHEAT_FLOUR("wheat flour", "A common cooking ingredient made from crushed wheat seeds.", 100, Integer.MAX_VALUE, Season.ALL),
     BOUQUET("bouquet", "A gift that shows your romantic interest.", 1000, 2, Season.ALL),
@@ -47,7 +48,10 @@ public enum GeneralStoreCosts {
     AMARANTH_SEEDS("amaranth seeds", "Plant these in the fall. Takes 7 days. Harvest with scythe.", 70, 5, Season.FALL),
     GRAPE_STARTER("grape starter", "Plant in fall. Takes 10 days. Keeps producing. Trellis.", 60, 5, Season.FALL),
     WHEAT_SEEDS_FALL("wheat seeds (fall)", "Plant in summer or fall. Takes 4 days to mature. Harvest with scythe.", 10, 5, Season.FALL),
-    ARTICHOKE_SEEDS("artichoke seeds", "Plant in the fall. Takes 8 days to mature.", 30, 5, Season.FALL);
+    ARTICHOKE_SEEDS("artichoke seeds", "Plant in the fall. Takes 8 days to mature.", 30, 5, Season.FALL),
+
+    LARGE_PACK("Large pack", "Unlocks the 2nd row of inventory (12 more slots, total 24).", 2000, 1, Season.ALL),
+    DELUXE_PACK("Deluxe pack", "Unlocks the 3rd row of inventory (infinite slots).", 10000, 1, Season.ALL);
 
     public final String name;
     public final String description;

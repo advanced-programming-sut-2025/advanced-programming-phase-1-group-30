@@ -2,7 +2,15 @@ package models;
 
 import java.util.ArrayList;
 
+import models.Buildings.Blacksmith;
+import models.Buildings.Carpenter;
+import models.Buildings.FishShop;
+import models.Buildings.GeneralStore;
+import models.Buildings.JojaMart;
+import models.Buildings.Ranch;
+import models.Buildings.Saloon;
 import models.Maps.GreatMap;
+import models.Maps.Map;
 import models.Maps.Weather;
 import models.Players.NPC.*;
 import models.Players.NPC.Sebastian;
@@ -20,6 +28,43 @@ public class Game {
     private ArrayList<Player> players;
     private ArrayList<Trade> trades = new ArrayList<>();
     private ArrayList<NPC> NPCs = new ArrayList<>();
+    private Map currentMap;
+
+    private final Blacksmith blacksmith;
+    private final Carpenter carpenter;
+    private final FishShop fishShop;
+    private final GeneralStore generalStore;
+    private final JojaMart jojaMart;
+    private final Ranch ranch;
+    private final Saloon saloon;
+
+    public Blacksmith getBlacksmith() {
+        return blacksmith;
+    }
+
+    public Carpenter getCarpenter() {
+        return carpenter;
+    }
+
+    public FishShop getFishShop() {
+        return fishShop;
+    }
+
+    public GeneralStore getGeneralStore() {
+        return generalStore;
+    }
+
+    public JojaMart getJojaMart() {
+        return jojaMart;
+    }
+
+    public Ranch getRanch() {
+        return ranch;
+    }
+
+    public Saloon getSaloon() {
+        return saloon;
+    }
 
     public Game() {
         this.map = null;
@@ -31,6 +76,13 @@ public class Game {
         this.NPCs.add(new Harvey());
         this.NPCs.add(new Leah());
         this.NPCs.add(new Robin());
+        this.blacksmith = new Blacksmith(0, 0, 0, 0);
+        this.carpenter = new Carpenter(0, 0, 0, 0);
+        this.fishShop = new FishShop(0, 0, 0, 0);
+        this.generalStore = new GeneralStore(0, 0, 0, 0);
+        this.jojaMart = new JojaMart(0, 0, 0, 0);
+        this.ranch = new Ranch(0, 0, 0, 0);
+        this.saloon = new Saloon(0, 0, 0, 0);
     }
     
     public GreatMap getGreatMap() {
@@ -80,5 +132,11 @@ public class Game {
         return NPCs;
     }
 
+    public Map getCurrentMap() {
+        return currentMap;
+    }
 
+    public void setCurrentMap(Map currentMap) {
+        this.currentMap = currentMap;
+    }
 }

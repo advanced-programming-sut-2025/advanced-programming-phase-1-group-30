@@ -1,6 +1,8 @@
 package models.Items.Products;
 
-public enum AnimalProductType {
+import models.Items.ItemsInteface;
+
+public enum AnimalProductType implements ItemsInteface {
     EGG("Egg", 50),
     BIG_EGG("Big Egg", 95),
     DUCK_EGG("Duck Egg", 95),

@@ -1,6 +1,8 @@
 package models.Buildings;
 
-public enum SaloonCosts {
+import models.Items.ItemsInteface;
+
+public enum SaloonCosts implements ItemsInteface {
     Beer("Beer", 400, Integer.MAX_VALUE),
     Salad("Salad", 220, Integer.MAX_VALUE),
     Bread("Bread", 120, Integer.MAX_VALUE),
