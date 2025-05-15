@@ -1582,11 +1582,6 @@ public class GameMenuController {
             return;
         }
 
-        if (!item.getSeason().equals(Season.ALL) && !item.getSeason().equals(App.getCurrentGame().getCurrentTime().getSeason())) {
-            GameMenu.printResult("You can buy " + name + " in " + item.getSeason().getName() + ", not in " + App.getCurrentGame().getCurrentTime().getSeason().getName());
-            return;
-        }
-
         if (item.getCount() < amount) {
             GameMenu.printResult("Not enough number of this Item. Only have + " + item.getCount());
             return;
@@ -1602,26 +1597,56 @@ public class GameMenuController {
             return;
         }
 
-        if (name == "Large pack") {
-            if (player.getBackPack().getType().equals(BackPackType.INITIAL_BACKPACK)) {
-                player.getBackPack().setType(BackPackType.BIG_BACKPACK);
-                player.setMoney(player.getMoney() - item.getCost() * amount);
-                item.sold(amount);
-                GameMenu.printResult("Backpack upgraded to Large Backpack successfully");
+        if (player.getBuilding().getClass() == GeneralStore.class) {
+            if (name == "Large pack") {
+                if (player.getBackPack().getType().equals(BackPackType.INITIAL_BACKPACK)) {
+                    player.getBackPack().setType(BackPackType.BIG_BACKPACK);
+                    player.setMoney(player.getMoney() - item.getCost() * amount);
+                    item.sold(amount);
+                    GameMenu.printResult("Backpack upgraded to Large Backpack successfully");
+                }
+                else
+                    GameMenu.printResult("You can't update your backpack!");
+                return;
             }
-            else
-                GameMenu.printResult("You can't update your backpack!");
+            if (name == "Deluxe pack") {
+                if (player.getBackPack().getType().equals(BackPackType.BIG_BACKPACK)) {
+                    player.getBackPack().setType(BackPackType.DELUX_BACKPACK);
+                    player.setMoney(player.getMoney() - item.getCost() * amount);
+                    item.sold(amount);
+                    GameMenu.printResult("Backpack upgraded to Delux Backpack successfully");
+                }
+                else
+                    GameMenu.printResult("You can't update your backpack!");
+                return;
+            }
+
+            if (player.getBackPack().getType().getCapacity() < player.getBackPack().getItems().size() + 1) {
+                GameMenu.printResult("You don't have enough space in your backpack!");
+                return;
+            }
+            
+            if (amount == item.getCount()) player.getBuilding().removeItem(item);
+            else item.changeCount(-1  * amount);
+
+            if (item.getSeason().equals(Season.ALL) || item.getSeason().equals(App.getCurrentGame().getCurrentTime().getSeason())) {
+                GeneralStoreCosts generalItem = null;
+                for (GeneralStoreCosts generalItem2 : GeneralStoreCosts.values()) {
+                    if (generalItem2.getName().equals(item.getName())) generalItem = generalItem2;
+                }
+                player.setMoney(player.getMoney() - generalItem.getSeasonPrice() * amount);
+            } else {
+                player.setMoney(player.getMoney() - item.getCost() * amount);
+            }
+            
+            player.getBackPack().addItem(item);
+            item.sold(amount);
+            GameMenu.printResult("Item purchased successfully");
             return;
         }
-        if (name == "Deluxe pack") {
-            if (player.getBackPack().getType().equals(BackPackType.BIG_BACKPACK)) {
-                player.getBackPack().setType(BackPackType.DELUX_BACKPACK);
-                player.setMoney(player.getMoney() - item.getCost() * amount);
-                item.sold(amount);
-                GameMenu.printResult("Backpack upgraded to Delux Backpack successfully");
-            }
-            else
-                GameMenu.printResult("You can't update your backpack!");
+
+        if (!item.getSeason().equals(Season.ALL) && !item.getSeason().equals(App.getCurrentGame().getCurrentTime().getSeason())) {
+            GameMenu.printResult("You can buy " + name + " in " + item.getSeason().getName() + ", not in " + App.getCurrentGame().getCurrentTime().getSeason().getName());
             return;
         }
 

@@ -253,10 +253,10 @@ public class MaintainerController {
         Collections.shuffle(items);
         Random rand = new Random();
 
-        for (int i = 0; i < rand.nextInt(items.size()); i++) {
+        for (int i = 0; i < Math.min(rand.nextInt(items.size()) + 5, items.size()); i++) {
             JojaMartCosts type = items.get(i);
             int count = 1 + Math.max(rand.nextInt(type.getDailyLimit()), 10);
-            jojaMart.addItem(new JojaMartProducts(count, type));
+            if (type.getSeason().equals(App.getCurrentGame().getCurrentTime().getSeason())) jojaMart.addItem(new JojaMartProducts(count, type));
         }
     }
 
