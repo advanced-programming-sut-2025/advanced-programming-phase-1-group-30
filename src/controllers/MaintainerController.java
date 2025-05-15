@@ -2,17 +2,25 @@ package controllers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 import models.App;
 import models.Pair;
+import models.Buildings.Blacksmith;
 import models.Buildings.BlacksmithCosts;
+import models.Buildings.Carpenter;
 import models.Buildings.CarpenterCosts;
+import models.Buildings.FishShop;
 import models.Buildings.FishShopCosts;
+import models.Buildings.GeneralStore;
 import models.Buildings.GeneralStoreCosts;
+import models.Buildings.JojaMart;
 import models.Buildings.JojaMartCosts;
+import models.Buildings.Ranch;
 import models.Buildings.RanchCosts;
+import models.Buildings.Saloon;
 import models.Buildings.SaloonCosts;
 import models.Items.Item;
 import models.Items.ItemFactory;
@@ -51,7 +59,7 @@ import models.Players.Player;
 import views.GameMenu;
 
 public class MaintainerController {
-    public static final List<Pair<Class<? extends Enum<?>>, ItemFactory<?>>> ITEM_TYPES = Arrays.asList(
+    private static final List<Pair<Class<? extends Enum<?>>, ItemFactory<?>>> ITEM_TYPES = Arrays.asList(
         new Pair<>(FoodType.class, (ItemFactory<FoodType>) (count, recipe) -> new Food(count, recipe)),
         new Pair<>(IndustrialProductType.class, (ItemFactory<IndustrialProductType>) (count, recipe) -> new IndustrialProduct(count, recipe)),
         new Pair<>(ArtisanGoodType.class, (ItemFactory<ArtisanGoodType>) (count, recipe) -> new ArtisanGood(count, recipe)),
@@ -120,7 +128,24 @@ public class MaintainerController {
         for (int i = 0; i < list.length; i++) {
             sb.append(list[i]);
             if (i < list.length - 1) {
-                sb.append("-");
+                sb.append(" - ");
+            } else {
+                sb.append("\n");
+            }
+        }
+
+        return sb.toString();
+    }
+
+    public static <T extends ItemsInteface> String printingShopProducts2(String name, ArrayList<T> list) {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(name + " Products: ");
+        
+        for (int i = 0; i < list.size(); i++) {
+            sb.append(list.get(i).getName());
+            if (i < list.size() - 1) {
+                sb.append(" - ");
             } else {
                 sb.append("\n");
             }
@@ -164,4 +189,113 @@ public class MaintainerController {
         GameMenu.printResult("Item " + name + " not found in any category.");
         return false;
     }
+
+    public static void updateAllShops() {
+        updateBlacksmith();
+        updateCarpenter();
+        updateFishShop();
+        updateGeneralStore();
+        updateJojaMart();
+        updateRanch();
+        updateSaloon();
+    }
+
+    private static void updateBlacksmith() {
+        Blacksmith blacksmith =  App.getCurrentGame().getBlacksmith();
+        blacksmith.removeItems();
+        ArrayList<BlacksmithCosts> items = new ArrayList<>(List.of(BlacksmithCosts.values()));
+        Collections.shuffle(items);
+        Random rand = new Random();
+
+        for (int i = 0; i < rand.nextInt(items.size()); i++) {
+            BlacksmithCosts type = items.get(i);
+            int count = 1 + rand.nextInt(type.getDailyLimit());
+            blacksmith.addItem(new BlacksmithProducts(count, type));
+        }
+    }
+
+    private static void updateCarpenter() {
+        Carpenter carpenter = App.getCurrentGame().getCarpenter();
+        carpenter.removeItems();
+        ArrayList<CarpenterCosts> items = new ArrayList<>(List.of(CarpenterCosts.values()));
+        Collections.shuffle(items);
+        Random rand = new Random();
+
+        for (int i = 0; i < rand.nextInt(items.size()); i++) {
+            CarpenterCosts type = items.get(i);
+            int count = 1 + rand.nextInt(type.getDailyLimit());
+            carpenter.addItem(new CarpenterProducts(count, type));
+        }
+    }
+
+    private static void updateFishShop() {
+        FishShop fishShop = App.getCurrentGame().getFishShop();
+        fishShop.removeItems();
+        ArrayList<FishShopCosts> items = new ArrayList<>(List.of(FishShopCosts.values()));
+        Collections.shuffle(items);
+        Random rand = new Random();
+
+        for (int i = 0; i < rand.nextInt(items.size()); i++) {
+            FishShopCosts type = items.get(i);
+            int count = 1 + rand.nextInt(type.getDailyLimit());
+            fishShop.addItem(new FishShopProducts(count, type));
+        }
+    }
+
+    private static void updateGeneralStore() {
+        GeneralStore store = App.getCurrentGame().getGeneralStore();
+        store.removeItems();
+        ArrayList<GeneralStoreCosts> items = new ArrayList<>(List.of(GeneralStoreCosts.values()));
+        Collections.shuffle(items);
+        Random rand = new Random();
+
+        for (int i = 0; i < rand.nextInt(items.size()); i++) {
+            GeneralStoreCosts type = items.get(i);
+            int count = 1 + rand.nextInt(type.getDailyLimit());
+            store.addItem(new GeneralStoreProducts(count, type));
+        }
+    }
+
+    private static void updateJojaMart() {
+        JojaMart jojaMart = App.getCurrentGame().getJojaMart();
+        jojaMart.removeItems();
+        ArrayList<JojaMartCosts> items = new ArrayList<>(List.of(JojaMartCosts.values()));
+        Collections.shuffle(items);
+        Random rand = new Random();
+
+        for (int i = 0; i < rand.nextInt(items.size()); i++) {
+            JojaMartCosts type = items.get(i);
+            int count = 1 + rand.nextInt(type.getDailyLimit());
+            jojaMart.addItem(new JojaMartProducts(count, type));
+        }
+    }
+
+    private static void updateRanch() {
+        Ranch ranch = App.getCurrentGame().getRanch();
+        ranch.removeItems();
+        ArrayList<RanchCosts> items = new ArrayList<>(List.of(RanchCosts.values()));
+        Collections.shuffle(items);
+        Random rand = new Random();
+
+        for (int i = 0; i < rand.nextInt(items.size()); i++) {
+            RanchCosts type = items.get(i);
+            int count = 1 + rand.nextInt(type.getDailyLimit());
+            ranch.addItem(new RanchProducts(count, type));
+        }
+    }
+
+    private static void updateSaloon() {
+        Saloon saloon = App.getCurrentGame().getSaloon();
+        saloon.removeItems();
+        ArrayList<SaloonCosts> items = new ArrayList<>(List.of(SaloonCosts.values()));
+        Collections.shuffle(items);
+        Random rand = new Random();
+
+        for (int i = 0; i < rand.nextInt(items.size()); i++) {
+            SaloonCosts type = items.get(i);
+            int count = 1 + rand.nextInt(type.getDailyLimit());
+            saloon.addItem(new SaloonProducts(count, type));
+        }
+    }
+
 }

@@ -292,7 +292,7 @@ public class GameMenu implements AppMenu {
         }
         matcher = GameMenuCommands.SHOW_ALL_AVAILABLE_PRODUCTS.regexMatcher(command);
         if (matcher.matches()) {
-            GameMenuController.showAllProducts(); //TODO only availabls
+            GameMenuController.showAvailableProducts();
             return;
         }
         matcher = GameMenuCommands.PURCHASE.regexMatcher(command);

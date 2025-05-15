@@ -1,7 +1,6 @@
 package models.Items.Products.ShopProducts;
 
 import models.Items.Item;
-
 public class ShopProduct extends Item {
     private final int cost;
     private int soldToday;

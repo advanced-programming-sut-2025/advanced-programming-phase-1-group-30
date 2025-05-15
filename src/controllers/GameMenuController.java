@@ -1496,6 +1496,7 @@ public class GameMenuController {
     }
 
     public static void showAllProducts() {
+        // App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getBlacksmith());
         switch (App.getCurrentGame().getCurrentPlayer().getBuilding()) {
             case Blacksmith blacksmith ->
                     GameMenu.printResult(MaintainerController.printingShopProducts("Blacksmith", BlacksmithCosts.values()));
@@ -1511,11 +1512,30 @@ public class GameMenuController {
                     GameMenu.printResult(MaintainerController.printingShopProducts("Ranch", RanchCosts.values()));
             case Saloon saloon ->
                     GameMenu.printResult(MaintainerController.printingShopProducts("Saloon", SaloonCosts.values()));
-            case null, default -> GameMenu.printResult("You are not int a store!");
+            case null, default -> GameMenu.printResult("You are not in a store!");
         }
     }
 
-    public static void showAvailableProducts() {}
+    public static void showAvailableProducts() {
+        // App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getBlacksmith());
+        switch (App.getCurrentGame().getCurrentPlayer().getBuilding()) {
+            case Blacksmith blacksmith ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts2("Blacksmith", App.getCurrentGame().getBlacksmith().getItems()));
+            case Carpenter carpenter ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts2("Carpenter", App.getCurrentGame().getCarpenter().getItems()));
+            case FishShop fishShop ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts2("FishShop", App.getCurrentGame().getFishShop().getItems()));
+            case GeneralStore generalStore ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts2("GeneralStore", App.getCurrentGame().getGeneralStore().getItems()));
+            case JojaMart jojaMart ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts2("JojaMart", App.getCurrentGame().getJojaMart().getItems()));
+            case Ranch ranch ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts2("Ranch", App.getCurrentGame().getRanch().getItems()));
+            case Saloon saloon ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts2("Saloon", App.getCurrentGame().getSaloon().getItems()));
+            case null, default -> GameMenu.printResult("You are not in a store!");
+        }
+    }
 
     public static void purchase(String name, int amount){
         ShopProduct item = (ShopProduct) Item.findItemByName(name, App.getCurrentGame().getCurrentPlayer().getBuilding().getItems());

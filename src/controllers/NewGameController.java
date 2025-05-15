@@ -137,6 +137,7 @@ public class NewGameController {
         game.setTomorrowWeather(Weather.SUNNY);
         game.setCurrentPlayer(playerX);
         GameMenu.printResult("Starting new game...");
+        MaintainerController.updateAllShops();
     }
 
     public static void LoadGame() {}
@@ -218,6 +219,7 @@ public class NewGameController {
 
         int currentTime = App.getCurrentGame().getCurrentTime().getHour();
         if (currentTime == 21) {
+            MaintainerController.updateAllShops();
             for (Player player : App.getCurrentGame().getPlayers()) {
                 player.setEnergy(player.getMaxEnergy());
                 if (player.isPassedOut()) {

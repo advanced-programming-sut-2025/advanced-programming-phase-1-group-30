@@ -2,7 +2,9 @@ package models.Items;
 
 import java.util.ArrayList;
 
-public class Item {
+import models.Items.Products.ShopProducts.ShopProduct;
+
+public class Item implements ItemsInteface {
     private final String name;
     private int count;
     private String quality;
@@ -57,6 +59,13 @@ public class Item {
 
     public static Item findItemByName(String name, ArrayList<Item> items) {
         for (Item item : items) {
+            if (item.getName().matches(name)) return item;
+        }
+        return null;
+    }
+
+    public static ShopProduct findShopProductByName(String name, ArrayList<ShopProduct> items) {
+        for (ShopProduct item : items) {
             if (item.getName().matches(name)) return item;
         }
         return null;
