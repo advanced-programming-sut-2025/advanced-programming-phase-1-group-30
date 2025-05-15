@@ -1,8 +1,9 @@
 package models.Buildings;
 
+import models.Items.ItemsInteface;
 import models.TimeAndDate.Season;
 
-public enum JojaMartCosts {
+public enum JojaMartCosts implements ItemsInteface {
     // --- Permanent Stock ---
     JojaCola("Joja Cola", 75, Integer.MAX_VALUE, Season.ALL),
     AncientSeed("Ancient Seed", 500, 1, Season.ALL),

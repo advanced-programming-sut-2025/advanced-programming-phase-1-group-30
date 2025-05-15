@@ -42,6 +42,7 @@ public class DateAndWeatherController {
         }
         if (x + App.getCurrentGame().getCurrentTime().getHour() > 22) {
             App.getCurrentGame().setCurrentWeather(App.getCurrentGame().getTomorrowWeather());
+            MaintainerController.updateAllShops();
             App.getCurrentGame().getCurrentTime().setHour((x - (22 - App.getCurrentGame().getCurrentTime().getHour())) + 9);
             for (Player player : App.getCurrentGame().getPlayers()) {
                 player.setEnergy(player.getMaxEnergy());

@@ -1,6 +1,5 @@
 package models.Players.NPC;
 
-import models.Items.Item;
 import models.Maps.Tile;
 
 import java.util.ArrayList;

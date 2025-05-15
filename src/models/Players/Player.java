@@ -1,10 +1,8 @@
 package models.Players;
 
 import models.Animals.Animal;
-import models.Animals.Chicken;
 import models.App;
 import models.Buildings.Building;
-import models.Buildings.CarpenterCosts;
 import models.Invetory.BackPack;
 import models.Invetory.BackPackType;
 import models.Invetory.Refrigerator;
@@ -16,13 +14,11 @@ import models.Items.Gift;
 import models.Items.Item;
 import models.Items.Foods.FoodType;
 import models.Items.IndustrialProducts.IndustrialProductType;
-import models.Items.Products.ForgingSeed;
-import models.Items.Products.ForgingSeedType;
-import models.Items.Products.ShopProducts.CarpenterProducts;
+import models.Items.Products.ForagingSeed;
+import models.Items.Products.ForagingSeedType;
 import models.Items.Tools.*;
 import models.Maps.Map;
 import models.Players.NPC.NPC;
-import models.Players.NPC.NPCDetail;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -80,7 +76,7 @@ public class Player {
         this.backPack.addItem(new MilkPail(1, 10));
         this.backPack.addItem(new Scythe(1));
         this.trashCan = new TrashCan(TrashCanType.INITIAL_TRASHCAN);
-        this.backPack.addItem(new ForgingSeed(4, ForgingSeedType.APRICOT_SAPLING)); //TODO tile & initial seed
+        this.backPack.addItem(new ForagingSeed(4, ForagingSeedType.APRICOT_SAPLING)); //TODO tile & initial seed
         this.backPack.addItem(new Item(1000, "wood", 10));
         this.backPack.addItem(new Item(1000, "stone", 20));
         this.backPack.addItem(new Item(50, "hay", 50));
