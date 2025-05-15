@@ -784,6 +784,7 @@ public class GameMenuController {
                         player.getBackPack().getItems().add(crafted);
                     }
                     GameMenu.printResult("You have successfully crafted " + recipe.getName() + "!");
+                    player.getMap().changeHasScareCrow();
                 } else{
                     GameMenu.printResult("Sorry! you don't have the recipe for " + recipe.getName());
                 }
