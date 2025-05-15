@@ -1,5 +1,6 @@
 package models.Players;
 
+import controllers.NewGameController;
 import models.Animals.Animal;
 import models.App;
 import models.Buildings.Building;
@@ -19,10 +20,12 @@ import models.Items.Products.ForagingSeedType;
 import models.Items.Tools.*;
 import models.Maps.Map;
 import models.Players.NPC.NPC;
+import views.GameMenu;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
 
 public class Player {
     private int x;
@@ -61,6 +64,7 @@ public class Player {
     private String gender;
     private boolean inCity;
     private Map savedMap;
+    private int lastEnergy;
 
     public Player(String username, int selectionNumber) {
         this.username = username;
@@ -76,13 +80,14 @@ public class Player {
         this.backPack.addItem(new MilkPail(1, 10));
         this.backPack.addItem(new Scythe(1));
         this.trashCan = new TrashCan(TrashCanType.INITIAL_TRASHCAN);
-        this.backPack.addItem(new ForagingSeed(4, ForagingSeedType.APRICOT_SAPLING)); //TODO tile & initial seed
+        this.backPack.addItem(new ForagingSeed(4, ForagingSeedType.ORANGE_SAPLING)); //TODO tile & initial seed
         this.backPack.addItem(new Item(1000, "wood", 10));
         this.backPack.addItem(new Item(1000, "stone", 20));
         this.backPack.addItem(new Item(50, "hay", 50));
         this.money = 20000;
         this.selectionNumber = selectionNumber;
         this.maxEnergy = 200;
+        this.lastEnergy = maxEnergy;
         this.building = new Building(0, 0, 0, 0); //TODO home!!!
         this.recipes = null;
         this.inCity = false;
@@ -381,5 +386,20 @@ public class Player {
 
     public void setCityY(int cityY) {
         this.cityY = cityY;
+    }
+
+    public int getLastEnergy() {
+        return lastEnergy;
+    }
+
+    public void setLastEnergy(int lastEnergy) {
+        this.lastEnergy = lastEnergy;
+    }
+    public static void checkUsedEnergy(Player player, Scanner scanner) {
+        if (player.lastEnergy - player.energy > 50) {
+            player.lastEnergy = player.energy;
+            GameMenu.printResult("You used your maximum energy possible for your turn!");
+            NewGameController.NextTurn(scanner);
+        }
     }
 }

@@ -4,11 +4,11 @@ import models.Items.ItemsInteface;
 import models.TimeAndDate.Season;
 
 public enum ForagingTreeType implements ItemsInteface {
-    ACORNS("Acorns", Season.ALL),
-    MAPLE_SEEDS("Maple Seeds", Season.ALL),
-    PINE_CONES("Pine Cones", Season.ALL),
-    MAHOGANY_SEEDS("Mahogany Seeds", Season.ALL),
-    MUSHROOM_TREE_SEEDS("Mushroom Tree Seeds", Season.ALL);
+    ACORNS("acorns", Season.ALL),
+    MAPLE_SEEDS("maple seeds", Season.ALL),
+    PINE_CONES("pine cones", Season.ALL),
+    MAHOGANY_SEEDS("mahogany seeds", Season.ALL),
+    MUSHROOM_TREE_SEEDS("mushroom tree seeds", Season.ALL);
 
     private final String name;
     private final Season season;

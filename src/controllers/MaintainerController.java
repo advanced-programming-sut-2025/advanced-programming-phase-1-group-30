@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Random;
 
 import models.App;
+import models.Maps.Tile;
+import models.Maps.TileTypes;
 import models.Pair;
 import models.Buildings.Blacksmith;
 import models.Buildings.BlacksmithCosts;
@@ -79,6 +81,27 @@ public class MaintainerController {
         new Pair<>(RanchCosts.class, (ItemFactory<RanchCosts>) (count, recipe) -> new RanchProducts(count, recipe)),
         new Pair<>(SaloonCosts.class, (ItemFactory<SaloonCosts>) (count, recipe) -> new SaloonProducts(count, recipe))
     );
+
+    public static void randomPlanting(Player player) {
+        Tile[][] tiles = player.getMap().getTiles();
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                Tile targetTile = tiles[i][j];
+                Random rand = new Random();
+                int x = rand.nextInt(100);
+                if ((targetTile.getType().equals(TileTypes.DIRT) || targetTile.getType().equals(TileTypes.GRASS)) && x == 85 && targetTile.getItem() == null) {
+                    ForagingSeedType randomSeed = ForagingSeedType.values()[new Random().nextInt(ForagingSeedType.values().length)];
+                    ForagingSeed seed = new ForagingSeed(1, randomSeed);
+                    targetTile.setItem(seed);
+                    seed.setFertilized(false);
+                    targetTile.setPlanted(true);
+                    targetTile.setReadyToHarvest(false);
+                    targetTile.setCrop(seed.getCrop());
+                    targetTile.setType(TileTypes.PLANTABLE);
+                }
+            }
+        }
+    }
     
     public static void loadMap(){
         Map map = new Map(1);

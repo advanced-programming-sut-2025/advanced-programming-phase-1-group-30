@@ -9,6 +9,7 @@ public class Crop extends Product{
     private boolean notNeedWaterAnymore = false;
     private boolean wateredToday = false;
     private int daysNotWatered = 0;
+    private int regrowthTime = 0;
 
     public Crop(int count, CropType type) {
         super(count, type.getName(), type.getBaseSellPrice());
@@ -59,5 +60,13 @@ public class Crop extends Product{
 
     public void setDaysNotWatered(int daysNotWatered) {
         this.daysNotWatered = daysNotWatered;
+    }
+
+    public int getRegrowthTime() {
+        return regrowthTime;
+    }
+
+    public void setRegrowthTime(int regrowthTime) {
+        this.regrowthTime = regrowthTime;
     }
 }
