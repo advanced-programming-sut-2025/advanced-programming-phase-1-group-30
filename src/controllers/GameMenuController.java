@@ -1567,7 +1567,11 @@ public class GameMenuController {
         }
     }
 
-    public static void purchase(String name, int amount){
+    public static void purchase(String name, String count){
+        int amount;
+        if (count != null) amount = Integer.parseInt(count);
+        else amount = 1;
+
         Player player = App.getCurrentGame().getCurrentPlayer();
         
         if (player.getBuilding() == null) {
@@ -1675,7 +1679,7 @@ public class GameMenuController {
         GameMenu.printResult("Cheart confirm successfully. Your money: " + App.getCurrentGame().getCurrentPlayer().getMoney());
     }
 
-    public static void sell(String name, int amount){
+    public static void sell(String name, String count){
         Player player = App.getCurrentGame().getCurrentPlayer();
         Item item = Item.findItemByName(name, player.getBackPack().getItems());
 
@@ -1684,6 +1688,10 @@ public class GameMenuController {
             return;
         }
 
+        int amount;
+        if (count != null) amount = Integer.parseInt(count);
+        else amount = item.getCount();
+
         if (item.getCount() < amount) {
             GameMenu.printResult("Not enough number of this Item. Only have + " + item.getCount());
             return;
@@ -1691,7 +1699,7 @@ public class GameMenuController {
 
         //TODO be near shippingbin
 
-        if (item.getCount() == amount)player.getBackPack().removeItem(item);
+        if (item.getCount() == amount) player.getBackPack().removeItem(item);
         else item.changeCount(-1  * amount);
 
         player.getShippingBin().addItem(item);

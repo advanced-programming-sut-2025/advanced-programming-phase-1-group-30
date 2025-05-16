@@ -297,8 +297,7 @@ public class GameMenu implements AppMenu {
         }
         matcher = GameMenuCommands.PURCHASE.regexMatcher(command);
         if (matcher.matches()) {
-            // TODO -n is null
-            GameMenuController.purchase(matcher.group("productName"), Integer.parseInt(matcher.group("count")));
+            GameMenuController.purchase(matcher.group("productName"), matcher.group("count"));
             return;
         }
         matcher = GameMenuCommands.CHEAT_ADD_DOLLARS.regexMatcher(command);
