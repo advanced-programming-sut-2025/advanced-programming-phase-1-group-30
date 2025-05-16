@@ -317,7 +317,7 @@ public class MaintainerController {
 
             int money = 0;
             for (Item item : player.getShippingBin().getItems()) {
-                money += (int) player.getShippingBin().getType().calculateNewPrice(item.getPrice() * item.getCount());
+                money += (int) player.getShippingBin().getType().calculateNewPrice(item.getPrice() * item.getCount(), item.getCof());
             }
 
             player.setMoney(player.getMoney() + money);

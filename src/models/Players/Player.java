@@ -88,8 +88,8 @@ public class Player {
         this.money = 20000;
         this.selectionNumber = selectionNumber;
         this.maxEnergy = 200;
+        this.building = new Building(0, 0, 0, 0, 9, 21); //TODO home!!!
         this.lastEnergy = maxEnergy;
-        this.building = new Building(0, 0, 0, 0); //TODO home!!!
         this.recipes = new ArrayList<>();
         this.inCity = false;
         for(int i = 0; i < 5; i++){

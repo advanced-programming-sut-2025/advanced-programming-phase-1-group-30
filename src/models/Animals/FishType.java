@@ -3,37 +3,39 @@ package models.Animals;
 import models.TimeAndDate.Season;
 
 public enum FishType {
-    SALMON("Salmon", 75, Season.FALL),
-    SARDINE("Sardine", 40, Season.FALL),
-    SHAD("Shad", 60, Season.FALL),
-    BLUE_DISCUS("Blue Discus", 120, Season.FALL),
-    MIDNIGHT_CARP("Midnight Carp", 150, Season.WINTER),
-    SQUID("Squid", 80, Season.WINTER),
-    TUNA("Tuna", 100, Season.WINTER),
-    PERCH("Perch", 55, Season.WINTER),
-    FLOUNDER("Flounder", 100, Season.SPRING),
-    LIONFISH("Lionfish", 100, Season.SPRING),
-    HERRING("Herring", 30, Season.SPRING),
-    GHOSTFISH("Ghostfish", 45, Season.SPRING),
-    TILAPIA("Tilapia", 75, Season.SUMMER),
-    DORADO("Dorado", 100, Season.SUMMER),
-    SUNFISH("Sunfish", 30, Season.SUMMER),
-    RAINBOW_TROUT("Rainbow Trout", 65, Season.SUMMER),
+    SALMON("Salmon", 75, Season.FALL, false),
+    SARDINE("Sardine", 40, Season.FALL, false),
+    SHAD("Shad", 60, Season.FALL, false),
+    BLUE_DISCUS("Blue Discus", 120, Season.FALL, false),
+    MIDNIGHT_CARP("Midnight Carp", 150, Season.WINTER, false),
+    SQUID("Squid", 80, Season.WINTER, false),
+    TUNA("Tuna", 100, Season.WINTER, false),
+    PERCH("Perch", 55, Season.WINTER, false),
+    FLOUNDER("Flounder", 100, Season.SPRING, false),
+    LIONFISH("Lionfish", 100, Season.SPRING, false),
+    HERRING("Herring", 30, Season.SPRING, false),
+    GHOSTFISH("Ghostfish", 45, Season.SPRING, false),
+    TILAPIA("Tilapia", 75, Season.SUMMER, false),
+    DORADO("Dorado", 100, Season.SUMMER, false),
+    SUNFISH("Sunfish", 30, Season.SUMMER, false),
+    RAINBOW_TROUT("Rainbow Trout", 65, Season.SUMMER, false),
 
     // Legendary Fish
-    LEGEND("Legend", 5000, Season.SPRING),
-    GLACIERFISH("Glacierfish", 1000, Season.WINTER),
-    ANGLER("Angler", 900, Season.FALL),
-    CRIMSONFISH("Crimsonfish", 1500, Season.SUMMER);
+    LEGEND("Legend", 5000, Season.SPRING, true),
+    GLACIERFISH("Glacierfish", 1000, Season.WINTER, true),
+    ANGLER("Angler", 900, Season.FALL, true),
+    CRIMSONFISH("Crimsonfish", 1500, Season.SUMMER, true);
 
     private final String displayName;
     private final int basePrice;
     private final Season season;
+    private final boolean legendary;
 
-    FishType(String displayName, int basePrice, Season season) {
+    FishType(String displayName, int basePrice, Season season, boolean legendary) {
         this.displayName = displayName;
         this.basePrice = basePrice;
         this.season = season;
+        this.legendary = legendary;
     }
     
     public String getDisplayName() {
@@ -44,5 +46,9 @@ public enum FishType {
     }
     public Season getSeason() {
         return season;
+    }
+    
+    public boolean isLegendary() {
+        return legendary;
     }
 }
