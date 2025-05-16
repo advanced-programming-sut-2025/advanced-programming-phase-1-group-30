@@ -6,6 +6,7 @@ import models.Buildings.Barn;
 import models.Buildings.Building;
 import models.Buildings.Coop;
 import models.Buildings.GreenHouse;
+import models.Items.Products.ForagingMineral;
 import models.Items.Products.Stone;
 import models.Items.Products.Tree;
 import models.Players.Player;
@@ -450,10 +451,16 @@ public class Map {
                     } else
                         System.out.print("\uD83C\uDFDA\uFE0F");
                 } else if (tiles[j][i].getType().equals(TileTypes.QUARRY)) {
-                    if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
-                        System.out.print(RED + "\uD83D\uDE00" + RESET);
-                    } else
-                        System.out.print("\uD83D\uDFEB");
+                    if (tiles[j][i].getItem() != null) {
+                        if (tiles[j][i].getItem().getClass().equals(ForagingMineral.class)) {
+                            System.out.print("\uD83E\uDEA8");
+                        }
+                    } else {
+                        if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
+                            System.out.print(RED + "\uD83D\uDE00" + RESET);
+                        } else
+                            System.out.print("\uD83D\uDFEB");
+                    }
                 }else if (tiles[j][i].getType().equals(TileTypes.GREENHOUSE)) {
                     if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);

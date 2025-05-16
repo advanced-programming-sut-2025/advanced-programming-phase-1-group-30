@@ -371,7 +371,7 @@ public class GameMenuController {
                 if(targetTile.getItem() != null && (targetTile.getItem() instanceof ForagingSeed || targetTile.getItem() instanceof Tree)) {
                     if (targetTile.getItem() instanceof Tree || ((ForagingSeed)targetTile.getItem()).getType().getTreeOrCrop() == 1) {
                         Item wood = new Item(12, "wood", 10);
-                        Item sap = new Item(2, ((ForagingSeed)targetTile.getItem()).getCrop().getType().getName(), 10);
+                        Item sap = new Item(2, "sap", 10);
 
                         Item newWood = Item.findItemByName(wood.getName(), player.getBackPack().getItems());
                         Item newSap = Item.findItemByName(sap.getName(), player.getBackPack().getItems());
@@ -477,6 +477,7 @@ public class GameMenuController {
                         if(newItem != null){
                             newItem.setCount(newItem.getCount() + targetTile.getCrop().getCount());
                             GameMenu.printResult("You collected " + targetTile.getCrop().getName() + " and added it to your backpack!");
+                            player.increaseFarming(5);
                         } else {
                             if(player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()){
                                 GameMenu.printResult("You don't have enough space in your backpack!");
@@ -497,6 +498,7 @@ public class GameMenuController {
                         if (newItem != null) {
                             newItem.setCount(newItem.getCount() + targetTile.getCrop().getCount());
                             GameMenu.printResult("You harvested " + targetTile.getCrop().getName() + " and added it to your backpack!");
+                            player.increaseFarming(5);
                         } else {
                             if (player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()) {
                                 GameMenu.printResult("You don't have enough space in your backpack!");
@@ -642,7 +644,7 @@ public class GameMenuController {
                 if (item.getCount() == 0) {
                     player.getBackPack().getItems().remove(item);
                 }
-                tiles[newX][newY].setReadyToHarvest(false);
+                tiles[newX][newY].setReadyToHarvest(true);
                 tiles[newX][newY].setCrop(seed.getCrop());
 
                 GameMenu.printResult("Planted " + seed.getName() + " at (" + newX + ", " + newY + ")");
@@ -2769,6 +2771,17 @@ public class GameMenuController {
     }
     public static void printPlayerFullMap(){
         App.getCurrentGame().getCurrentPlayer().getMap().printFullMap();
+    }
+    public static void printGreatMap(){
+        GameMenuController.printCityMap();
+        GameMenu.printResult("");
+        Player temp = App.getCurrentGame().getCurrentPlayer();
+        for(Player player : App.getCurrentGame().getPlayers()){
+            App.getCurrentGame().setCurrentPlayer(player);
+            GameMenuController.printPlayerFullMap();
+            GameMenu.printResult("");
+        }
+        App.getCurrentGame().setCurrentPlayer(temp);
     }
     public static void goToCity(){
         Player player = App.getCurrentGame().getCurrentPlayer();

@@ -371,6 +371,11 @@ public class GameMenu implements AppMenu {
             GameMenuController.printPlayerFullMap();
             return;
         }
+        matcher = GameMenuCommands.PRINT_GREAT_MAP.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.printGreatMap();
+            return;
+        }
         matcher = GameMenuCommands.TALK.regexMatcher(command);
         if (matcher.matches()) {
             GameMenuController.talk(matcher.group("username"), matcher.group("message"));
@@ -445,6 +450,13 @@ public class GameMenu implements AppMenu {
             App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getGeneralStore());
             App.getCurrentGame().getGeneralStore().addItem(new GeneralStoreProducts(1, GeneralStoreCosts.LARGE_PACK));
             System.out.println("CHEAT");
+            return;
+        }
+        if (command.equals("xp")) {
+            System.out.println(App.getCurrentGame().getCurrentPlayer().getFarming());
+            System.out.println(App.getCurrentGame().getCurrentPlayer().getMining());
+            System.out.println(App.getCurrentGame().getCurrentPlayer().getForaging());
+            System.out.println(App.getCurrentGame().getCurrentPlayer().getFishing());
             return;
         }
 

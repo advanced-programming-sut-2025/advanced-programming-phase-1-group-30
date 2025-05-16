@@ -21,7 +21,7 @@ import models.TimeAndDate.Time;
 
 public class Game {
     private int id;
-    private GreatMap map;
+    private GreatMap map = new GreatMap();
     private Player currentPlayer;
     private Time currentTime;
     private Weather currentWeather;
@@ -69,7 +69,6 @@ public class Game {
 
     public Game() {
         this.id = App.getGames().size() + 1;
-        this.map = null;
         this.currentTime = new Time();
         this.currentWeather = Weather.SUNNY;
         this.trades = null;
