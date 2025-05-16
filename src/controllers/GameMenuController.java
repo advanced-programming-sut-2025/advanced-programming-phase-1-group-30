@@ -1439,6 +1439,18 @@ public class GameMenuController {
             GameMenu.printResult("You can't fish in city!");
             return;
         }
+        Tile[][] tiles = App.getCurrentGame().getCurrentMap().getTiles();
+        if (!tiles[player.getX() + 1][player.getY() + 1].getType().equals(TileTypes.WATER) &&
+            !tiles[player.getX() + 1][player.getY()].getType().equals(TileTypes.WATER) &&
+            !tiles[player.getX() + 1][player.getY() - 1].getType().equals(TileTypes.WATER) &&
+            !tiles[player.getX()][player.getY() + 1].getType().equals(TileTypes.WATER) &&
+            !tiles[player.getX()][player.getY() - 1].getType().equals(TileTypes.WATER) &&
+            !tiles[player.getX() - 1][player.getY() + 1].getType().equals(TileTypes.WATER) &&
+            !tiles[player.getX() - 1][player.getY()].getType().equals(TileTypes.WATER) &&
+            !tiles[player.getX() - 1][player.getY() - 1].getType().equals(TileTypes.WATER)) {
+            GameMenu.printResult("You are not near water!");
+            return;
+        }
 
         ArrayList<FishType> fishTypes = new ArrayList<>();
         for (FishType fishType : FishType.values()) {
