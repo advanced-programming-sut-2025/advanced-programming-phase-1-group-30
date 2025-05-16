@@ -11,6 +11,7 @@ import models.Invetory.ShippingBin;
 import models.Invetory.ShippingBinType;
 import models.Invetory.TrashCan;
 import models.Invetory.TrashCanType;
+import models.Items.Foods.Food;
 import models.Items.Gift;
 import models.Items.Item;
 import models.Items.Foods.FoodType;
@@ -23,10 +24,8 @@ import models.Players.NPC.NPC;
 import models.Users.User;
 import views.GameMenu;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.sql.SQLData;
+import java.util.*;
 
 public class Player {
     private int x;
@@ -71,6 +70,10 @@ public class Player {
     private boolean levelBuff = false;
     private HashMap<String, Integer> buffs = new HashMap<>();
     private User user;
+    private String newTalk;
+    private Player hamsar = null;
+    private boolean gotRejected = false;
+    private int daysGotRejected = -1;
 
     public Player(User user,String username, int selectionNumber) {
         this.user = user;
@@ -91,6 +94,7 @@ public class Player {
         this.backPack.addItem(new Item(1000, "wood", 10));
         this.backPack.addItem(new Item(1000, "stone", 20));
         this.backPack.addItem(new Item(50, "hay", 50));
+        this.backPack.addItem(new Food(2, FoodType.TRIPLE_SHOT_ESPRESSO));
         this.money = 20000;
         this.selectionNumber = selectionNumber;
         this.maxEnergy = 200;
@@ -103,19 +107,35 @@ public class Player {
             this.activatedQuestNPC.put(App.getCurrentGame().getNPCs().get(i), new ArrayList<>(List.of(1)));
             this.NPCMeetToday.put(App.getCurrentGame().getNPCs().get(i), false);
         }
-        this.buffs.put("triple shot espresso", 0);
-        this.buffs.put("hash browns", 0);
-        this.buffs.put("pancakes", 0);
-        this.buffs.put("red plate", 0);
-        this.buffs.put("farmer's lunch", 0);
-        this.buffs.put("survival burger", 0);
-        this.buffs.put("dish o' the Sea", 0);
-        this.buffs.put("seaform pudding", 0);
-        this.buffs.put("miner's treat", 0);
+        this.buffs.put("triple shot espresso", -1);
+        this.buffs.put("hash browns", -1);
+        this.buffs.put("pancakes", -1);
+        this.buffs.put("red plate", -1);
+        this.buffs.put("farmer's lunch", -1);
+        this.buffs.put("survival burger", -1);
+        this.buffs.put("dish o' the Sea", -1);
+        this.buffs.put("seaform pudding", -1);
+        this.buffs.put("miner's treat", -1);
     }
 
     public String getUsername() {
         return username;
+    }
+
+    public boolean isGotRejected() {
+        return gotRejected;
+    }
+
+    public int getDaysGotRejected() {
+        return daysGotRejected;
+    }
+
+    public void setDaysGotRejected(int daysGotRejected) {
+        this.daysGotRejected = daysGotRejected;
+    }
+
+    public void setGotRejected(boolean gotRejected) {
+        this.gotRejected = gotRejected;
     }
 
     public Map getMap() {
@@ -258,6 +278,53 @@ public class Player {
         this.mining += increase;
         if(this.mining > 450){
             this.mining = 450;
+        }
+    }
+    public static void updateBuffs(List<Player> players) {
+        for (Player player : players) {
+
+            for (java.util.Map.Entry<String, Integer> entry : player.getBuffs().entrySet()) {
+                String buffName = entry.getKey();
+                int timeLeft = entry.getValue();
+
+                if (timeLeft > 1) {
+                    // Decrement buff duration
+                    entry.setValue(timeLeft - 1);
+                } else if (timeLeft == -1) {
+                    //nothing
+                } else {
+                    entry.setValue(-1);
+                    GameMenu.printResult(player.getUsername() + "'s buff \"" + buffName + "\" is over!");
+
+                    // Revert buff effect
+                    switch (buffName) {
+                        case "red plate" -> {
+                            player.setMaxEnergy(player.getMaxEnergy() - 50);
+                            GameMenu.printResult("Max energy decreased by 50.");
+                        }
+                        case "triple shot espresso" -> {
+                            player.setMaxEnergy(player.getMaxEnergy() - 100);
+                            GameMenu.printResult("Max energy decreased by 100.");
+                        }
+                        case "hash browns", "farmer's lunch" -> {
+                            player.setFarming(player.getFarming() - 1);
+                            GameMenu.printResult("Farming skill decreased by 1.");
+                        }
+                        case "pancakes", "survival burger" -> {
+                            player.setForaging(player.getForaging() - 1);
+                            GameMenu.printResult("Foraging skill decreased by 1.");
+                        }
+                        case "dish o' the sea", "seaform pudding" -> {
+                            player.setFishing(player.getFishing() - 1);
+                            GameMenu.printResult("Fishing skill decreased by 1.");
+                        }
+                        case "miner's treat" -> {
+                            player.setMining(player.getMining() - 1);
+                            GameMenu.printResult("Mining skill decreased by 1.");
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -467,5 +534,21 @@ public class Player {
     }
     public User getUser() {
         return user;
+    }
+
+    public String isNewTalk() {
+        return newTalk;
+    }
+
+    public void setNewTalk(String newTalk) {
+        this.newTalk = newTalk;
+    }
+
+    public Player getHamsar() {
+        return hamsar;
+    }
+
+    public void setHamsar(Player hamsar) {
+        this.hamsar = hamsar;
     }
 }

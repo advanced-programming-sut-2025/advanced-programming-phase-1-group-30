@@ -55,6 +55,13 @@ public class DateAndWeatherController {
                     player.setEnergy((player.getMaxEnergy() * 3) / 4);
                     player.setPassedOut(false);
                 }
+                if (player.isGotRejected()) {
+                    player.setEnergy(player.getMaxEnergy() / 2);
+                    player.setDaysGotRejected(player.getDaysGotRejected() - 1);
+                    if (player.getDaysGotRejected() == 0) {
+                        player.setGotRejected(false);
+                    }
+                }
                 Tile[][] tiles = player.getMap().getTiles();
 
                 if (App.getCurrentGame().getCurrentWeather().equals(Weather.STORM)) {
