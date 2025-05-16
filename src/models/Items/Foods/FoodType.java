@@ -16,7 +16,7 @@ public enum FoodType implements ItemsInteface {
     PIZZA("pizza", new ArrayList<>(List.of(new Item(1, "wheat flour", 0), new Item(1, "tomato", 0), new Item(1, "cheese", 0))), 150, "-", "stardrop saloon", 300),
     TORTILLA("tortilla", new ArrayList<>(List.of(new Item(1, "corn", 0))), 50, "-", "stardrop saloon", 50),
     MAKI_ROLL("maki roll", new ArrayList<>(List.of(new Item(1, "any fish", 0), new Item(1, "rice", 0), new Item(1, "fiber", 0))), 100, "-", "stardrop saloon", 220),
-    TRIPLE_SHOT_ESPRESSO("Triple Shot Espresso", new ArrayList<>(List.of(new Item(3, "coffee", 0))), 200, "Max Energy +100 (5 hours)", "stardrop saloon", 450),
+    TRIPLE_SHOT_ESPRESSO("triple shot espresso", new ArrayList<>(List.of(new Item(3, "coffee", 0))), 200, "Max Energy +100 (5 hours)", "stardrop saloon", 450),
     COOKIE("cookie", new ArrayList<>(List.of(new Item(1, "wheat flour", 0), new Item(1, "sugar", 0), new Item(1, "egg", 0))), 90, "-", "stardrop saloon", 140),
     HASH_BROWNS("hash browns", new ArrayList<>(List.of(new Item(1, "potato", 0), new Item(1, "oil", 0))), 90, "Farming (5 hours)", "stardrop saloon", 120),
     PANCAKES("pancakes", new ArrayList<>(List.of(new Item(1, "wheat flour", 0), new Item(1, "egg", 0))), 90, "Foraging (11 hours)", "stardrop saloon", 80),

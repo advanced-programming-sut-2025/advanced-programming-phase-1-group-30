@@ -3,6 +3,7 @@ package models.Items;
 import models.Players.Player;
 
 public class Gift extends Item {
+    private int rate;
     private boolean isRated = false;
     private Player sentPlayer;
     public Gift(int count, String name, Player sentPlayer, int price) {
@@ -19,4 +20,11 @@ public class Gift extends Item {
         return sentPlayer;
     }
 
+    public int getRate() {
+        return rate;
+    }
+
+    public void setRate(int rate) {
+        this.rate = rate;
+    }
 }

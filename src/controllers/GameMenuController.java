@@ -1104,42 +1104,44 @@ public class GameMenuController {
         GameMenu.printResult("Food eaten successfully");
         if (food.getName().equals("red plate")) {
             GameMenu.printResult("You got buffed for 3 hours! Max energy set to " + (player.getMaxEnergy() + 50));
-            player.changeEnergy(player.getMaxEnergy() + 50);
+            player.changeEnergy(50);
+            player.setMaxEnergy(player.getMaxEnergy() + 50);
             player.getBuffs().put("red plate", 3);
         } else if (food.getName().equals("triple shot espresso")) {
             GameMenu.printResult("You got buffed for 5 hours! Max energy set to " + (player.getMaxEnergy() + 100));
-            player.changeEnergy(player.getMaxEnergy() + 100);
+            player.changeEnergy(100);
+            player.setMaxEnergy(player.getMaxEnergy() + 100);
             player.getBuffs().put("triple shot espresso", 5);
         } else if (food.getName().equals("hash browns")) {
-            GameMenu.printResult("You got buffed for 5 hours!  Farming skill added by 1!");
+            GameMenu.printResult("You got buffed for 5 hours!  Farming  skill level added by 1!");
             player.getBuffs().put("hash browns", 5);
             player.setFarming(player.getFarming() + 1);
         } else if (food.getName().equals("pancakes")) {
-            GameMenu.printResult("You got buffed for 11 hours! Foraging skill added by 1!");
+            GameMenu.printResult("You got buffed for 11 hours! Foraging  skill level added by 1!");
             player.getBuffs().put("pancakes", 11);
             player.setForaging(player.getForaging() + 1);
         } else if (food.getName().equals("farmer's lunch")) {
-            GameMenu.printResult("You got buffed for 5 hours! Farming skill added by 1!");
+            GameMenu.printResult("You got buffed for 5 hours! Farming  skill level added by 1!");
             player.getBuffs().put("farmer's lunch", 5);
             player.setFarming(player.getFarming() + 1);
         } else if (food.getName().equals("survival burger")) {
-            GameMenu.printResult("You got buffed for 5 hours! Foraging skill added by 1!");
+            GameMenu.printResult("You got buffed for 5 hours! Foraging  skill level added by 1!");
             player.getBuffs().put("survival burger", 5);
             player.setForaging(player.getForaging() + 1);
         } else if (food.getName().equals("dish o' the sea")) {
-            GameMenu.printResult("You got buffed for 5 hours! Fishing skill added by 1!");
+            GameMenu.printResult("You got buffed for 5 hours! Fishing  skill level added by 1!");
             player.getBuffs().put("dish o' the sea", 5);
             player.setFishing(player.getFishing() + 1);
         } else if (food.getName().equals("seaform pudding")) {
-            GameMenu.printResult("You got buffed for 10 hours! Fishing skill added by 1!");
+            GameMenu.printResult("You got buffed for 10 hours! Fishing  skill level added by 1!");
             player.getBuffs().put("seaform pudding", 10);
             player.setFishing(player.getFishing() + 1);
         } else if (food.getName().equals("miner's treat")) {
-            GameMenu.printResult("You got buffed for 5 hours! Mining skill added by 1!");
+            GameMenu.printResult("You got buffed for 5 hours! Mining  skill level added by 1!");
             player.getBuffs().put("miner's treat", 5);
             player.setMining(player.getMining() + 1);
         }
-        App.getCurrentGame().getCurrentPlayer().changeEnergy(Math.max(food.getType().getEnergy(), App.getCurrentGame().getCurrentPlayer().getMaxEnergy()));
+        App.getCurrentGame().getCurrentPlayer().setEnergy(Math.min(player.getEnergy() + food.getType().getEnergy(), App.getCurrentGame().getCurrentPlayer().getMaxEnergy()));
     }
     public static void showCookingRecipe(){}
 
@@ -1578,18 +1580,18 @@ public class GameMenuController {
             return;
         }
 
-        // Tile[][] tiles = App.getCurrentGame().getCurrentMap().getTiles();
-        // if (!tiles[player.getX() + 1][player.getY() + 1].getType().equals(TileTypes.WATER) &&
-        //     !tiles[player.getX() + 1][player.getY()].getType().equals(TileTypes.WATER) &&
-        //     !tiles[player.getX() + 1][player.getY() - 1].getType().equals(TileTypes.WATER) &&
-        //     !tiles[player.getX()][player.getY() + 1].getType().equals(TileTypes.WATER) &&
-        //     !tiles[player.getX()][player.getY() - 1].getType().equals(TileTypes.WATER) &&
-        //     !tiles[player.getX() - 1][player.getY() + 1].getType().equals(TileTypes.WATER) &&
-        //     !tiles[player.getX() - 1][player.getY()].getType().equals(TileTypes.WATER) &&
-        //     !tiles[player.getX() - 1][player.getY() - 1].getType().equals(TileTypes.WATER)) {
-        //     GameMenu.printResult("You are not near water!");
-        //     return;
-        // }
+         Tile[][] tiles = App.getCurrentGame().getCurrentMap().getTiles();
+         if (!tiles[player.getX() + 1][player.getY() + 1].getType().equals(TileTypes.WATER) &&
+             !tiles[player.getX() + 1][player.getY()].getType().equals(TileTypes.WATER) &&
+             !tiles[player.getX() + 1][player.getY() - 1].getType().equals(TileTypes.WATER) &&
+             !tiles[player.getX()][player.getY() + 1].getType().equals(TileTypes.WATER) &&
+             !tiles[player.getX()][player.getY() - 1].getType().equals(TileTypes.WATER) &&
+             !tiles[player.getX() - 1][player.getY() + 1].getType().equals(TileTypes.WATER) &&
+             !tiles[player.getX() - 1][player.getY()].getType().equals(TileTypes.WATER) &&
+             !tiles[player.getX() - 1][player.getY() - 1].getType().equals(TileTypes.WATER)) {
+             GameMenu.printResult("You are not near water!");
+             return;
+         }
 
         ArrayList<FishType> fishTypes = new ArrayList<>();
         for (FishType fishType : FishType.values()) {
@@ -2017,7 +2019,7 @@ public class GameMenuController {
         }
     }
     public static void talk(String username, String message){
-        String newMessage = "\"" + message + "\"" + " => sent at: " + App.getCurrentGame().getCurrentTime().getDay() + "th " + App.getCurrentGame().getCurrentTime().getSeason().getName() + " " + App.getCurrentGame().getCurrentTime().getHour();
+        String newMessage = "\"" + message + "\"" + " => sent at: " + App.getCurrentGame().getCurrentTime().getDay() + "th " + App.getCurrentGame().getCurrentTime().getSeason().getName() + " " + App.getCurrentGame().getCurrentTime().getHour() + " o'clock";
         Player player = App.getCurrentGame().getCurrentPlayer();
         if (User.findUserByUsername(username) == null) {
             GameMenu.printResult("There is no one with this username!");
@@ -2041,6 +2043,7 @@ public class GameMenuController {
             otherPlayer.getFriendships().get(player).setTalkedToday(true);
         }
         GameMenu.printResult("Message sent successfully!");
+        otherPlayer.setNewTalk(player.getUsername());
     }
     public static void talkHistory(String username){
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -2105,7 +2108,7 @@ public class GameMenuController {
     public static void giftList(){
         Player player = App.getCurrentGame().getCurrentPlayer();
         for (Gift gift : player.getGifts()) {
-            GameMenu.printResult(gift.getSentPlayer().getUsername() + " sent you " + gift.getCount() + " " + gift.getName());
+            GameMenu.printResult(gift.getSentPlayer().getUsername() + " sent you " + gift.getCount() + " " + gift.getName() + " and you gave it " + gift.getRate() + " out of 5!");
         }
     }
     public static void giftHistory(String username){
@@ -2835,6 +2838,7 @@ public class GameMenuController {
     }
     public static void goToCity(){
         Player player = App.getCurrentGame().getCurrentPlayer();
+
         if (!player.isInCity()) {
             player.setInCity(true);
             Map map = App.getMaps().get(4); // City map
@@ -2863,6 +2867,7 @@ public class GameMenuController {
                         player.setX(-1);
                         player.setY(-1);
                         GameMenu.printResult("You are in the city now!");
+                        App.getCurrentGame().setCurrentMap(App.getMaps().get(4));
                         return;
                     }
 
@@ -2888,7 +2893,6 @@ public class GameMenuController {
     }
     public static void goToFarm() {
         Player player = App.getCurrentGame().getCurrentPlayer();
-
         if (player.isInCity()) {
             player.setInCity(false); // ✅ leaving the city
 
@@ -2908,6 +2912,7 @@ public class GameMenuController {
                     player.setCityX(-1);
                     player.setCityY(-1);
                     GameMenu.printResult("You are in your farm now!");
+                    App.getCurrentGame().setCurrentMap(player.getMap());
                     return;
                 }
 
