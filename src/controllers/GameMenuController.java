@@ -132,6 +132,18 @@ public class GameMenuController {
             dy1 = dy2;
             current = next;
         }
+        if (player.isInCity()) {
+            switch (map[player.getCityX()][player.getCityY()].getType()) {
+                case JOJOMART -> player.setBuilding(App.getCurrentGame().getJojaMart());
+                case FISH_SHOP -> player.setBuilding(App.getCurrentGame().getFishShop());
+                case MARINES_RANCH -> player.setBuilding(App.getCurrentGame().getRanch());
+                case BLACKSMITH -> player.setBuilding(App.getCurrentGame().getBlacksmith());
+                case CARPENTERS_SHOP -> player.setBuilding(App.getCurrentGame().getCarpenter());
+                case THE_STARDROP_SALOON -> player.setBuilding(App.getCurrentGame().getSaloon());
+                case PIERRES_GENERAL_STORE -> player.setBuilding(App.getCurrentGame().getGeneralStore());
+                default -> player.setBuilding(null);
+            }
+        }
 
         player.setEnergy((int)energy);
         GameMenu.printResult("You are at: " + current.getX() + " " + current.getY());
@@ -1074,7 +1086,8 @@ public class GameMenuController {
 
     public static void eat(String name) {
         Food food = null;
-        for (Item foodItem : App.getCurrentGame().getCurrentPlayer().getBackPack().getItems()) {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        for (Item foodItem : player.getBackPack().getItems()) {
             if (foodItem.getClass() == Food.class && foodItem.getName().equals(name))
                 food = (Food) foodItem;
         }
@@ -1083,13 +1096,48 @@ public class GameMenuController {
             GameMenu.printResult("No food with given name were found!");
             return;
         }
-        
         food.changeCount(-1);
         if (food.getCount() == 0)
             App.getCurrentGame().getCurrentPlayer().getBackPack().removeItem(food);
-        
-        App.getCurrentGame().getCurrentPlayer().changeEnergy(Math.max(food.getType().getEnergy(), App.getCurrentGame().getCurrentPlayer().getMaxEnergy()));
         GameMenu.printResult("Food eaten successfully");
+        if (food.getName().equals("red plate")) {
+            GameMenu.printResult("You got buffed for 3 hours! Max energy set to " + (player.getMaxEnergy() + 50));
+            player.changeEnergy(player.getMaxEnergy() + 50);
+            player.getBuffs().put("red plate", 3);
+        } else if (food.getName().equals("triple shot espresso")) {
+            GameMenu.printResult("You got buffed for 5 hours! Max energy set to " + (player.getMaxEnergy() + 100));
+            player.changeEnergy(player.getMaxEnergy() + 100);
+            player.getBuffs().put("triple shot espresso", 5);
+        } else if (food.getName().equals("hash browns")) {
+            GameMenu.printResult("You got buffed for 5 hours!  Farming skill added by 1!");
+            player.getBuffs().put("hash browns", 5);
+            player.setFarming(player.getFarming() + 1);
+        } else if (food.getName().equals("pancakes")) {
+            GameMenu.printResult("You got buffed for 11 hours! Foraging skill added by 1!");
+            player.getBuffs().put("pancakes", 11);
+            player.setForaging(player.getForaging() + 1);
+        } else if (food.getName().equals("farmer's lunch")) {
+            GameMenu.printResult("You got buffed for 5 hours! Farming skill added by 1!");
+            player.getBuffs().put("farmer's lunch", 5);
+            player.setFarming(player.getFarming() + 1);
+        } else if (food.getName().equals("survival burger")) {
+            GameMenu.printResult("You got buffed for 5 hours! Foraging skill added by 1!");
+            player.getBuffs().put("survival burger", 5);
+            player.setForaging(player.getForaging() + 1);
+        } else if (food.getName().equals("dish o' the sea")) {
+            GameMenu.printResult("You got buffed for 5 hours! Fishing skill added by 1!");
+            player.getBuffs().put("dish o' the sea", 5);
+            player.setFishing(player.getFishing() + 1);
+        } else if (food.getName().equals("seaform pudding")) {
+            GameMenu.printResult("You got buffed for 10 hours! Fishing skill added by 1!");
+            player.getBuffs().put("seaform pudding", 10);
+            player.setFishing(player.getFishing() + 1);
+        } else if (food.getName().equals("miner's treat")) {
+            GameMenu.printResult("You got buffed for 5 hours! Mining skill added by 1!");
+            player.getBuffs().put("miner's treat", 5);
+            player.setMining(player.getMining() + 1);
+        }
+        App.getCurrentGame().getCurrentPlayer().changeEnergy(Math.max(food.getType().getEnergy(), App.getCurrentGame().getCurrentPlayer().getMaxEnergy()));
     }
     public static void showCookingRecipe(){}
 
@@ -1671,81 +1719,83 @@ public class GameMenuController {
     }
 
     public static void showAllProducts() {
-
-       Player player = App.getCurrentGame().getCurrentPlayer();
-       if (!player.isInCity()) {
-           GameMenu.printResult("You are not in the city!");
-           return;
-       }
-       Tile[][] tiles = App.getMaps().get(4).getTiles();
-//       switch (tiles[player.getCityX()][player.getCityX()].getType()) {
-//           case BLACKSMITH ->
-//                   App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getGeneralStore());
-//           switch (App.getCurrentGame().getCurrentPlayer().getBuilding()) {
-//               case Blacksmith blacksmith ->
-//                       GameMenu.printResult(MaintainerController.printingShopProducts("Blacksmith", BlacksmithCosts.values()));
-//               case CARPENTERS_SHOP ->
-//                       GameMenu.printResult(MaintainerController.printingShopProducts("Carpenter", CarpenterCosts.values()));
-//               case FISH_SHOP ->
-//                       GameMenu.printResult(MaintainerController.printingShopProducts("FishShop", FishShopCosts.values()));
-//               case PIERRES_GENERAL_STORE ->
-//                       GameMenu.printResult(MaintainerController.printingShopProducts("GeneralStore", GeneralStoreCosts.values()));
-//               case JOJOMART ->
-//                       GameMenu.printResult(MaintainerController.printingShopProducts("JojaMart", JojaMartCosts.values()));
-//               case MARINES_RANCH ->
-//                       GameMenu.printResult(MaintainerController.printingShopProducts("Ranch", RanchCosts.values()));
-//               case THE_STARDROP_SALOON ->
-//                       GameMenu.printResult(MaintainerController.printingShopProducts("Saloon", SaloonCosts.values()));
-//               case null, default -> GameMenu.printResult("You are not in a store!");
-//           }
-//       }
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if (!player.isInCity()) {
+            GameMenu.printResult("You are not in the city!");
+            return;
+        }
+        Tile[][] tiles = App.getMaps().get(4).getTiles();
+        switch (tiles[player.getCityX()][player.getCityX()].getType()) {
+            case BLACKSMITH ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts("Blacksmith", BlacksmithCosts.values()));
+            case CARPENTERS_SHOP ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts("Carpenter", CarpenterCosts.values()));
+            case FISH_SHOP ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts("FishShop", FishShopCosts.values()));
+            case PIERRES_GENERAL_STORE ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts("GeneralStore", GeneralStoreCosts.values()));
+            case JOJOMART ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts("JojaMart", JojaMartCosts.values()));
+            case MARINES_RANCH ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts("Ranch", RanchCosts.values()));
+            case THE_STARDROP_SALOON ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts("Saloon", SaloonCosts.values()));
+            case null, default -> GameMenu.printResult("You are not in a store!");
+        }
     }
 
     public static void showAvailableProducts() {
-       Player player = App.getCurrentGame().getCurrentPlayer();
-       if (!player.isInCity()) {
-           GameMenu.printResult("You are not in the city!");
-           return;
-       }
-       Tile[][] tiles = App.getMaps().get(4).getTiles();
-//       switch (tiles[player.getCityX()][player.getCityX()].getType()) {
-//           case BLACKSMITH ->
-//                   App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getGeneralStore());
-//           switch (App.getCurrentGame().getCurrentPlayer().getBuilding()) {
-//               case Blacksmith blacksmith ->
-//                       GameMenu.printResult(MaintainerController.printingShopProducts2("Blacksmith", App.getCurrentGame().getBlacksmith().getItems()));
-//               case CARPENTERS_SHOP ->
-//                       GameMenu.printResult(MaintainerController.printingShopProducts2("Carpenter", App.getCurrentGame().getCarpenter().getItems()));
-//               case FISH_SHOP ->
-//                       GameMenu.printResult(MaintainerController.printingShopProducts2("FishShop", App.getCurrentGame().getFishShop().getItems()));
-//               case PIERRES_GENERAL_STORE ->
-//                       GameMenu.printResult(MaintainerController.printingShopProducts2("GeneralStore", App.getCurrentGame().getGeneralStore().getItems()));
-//               case JOJOMART ->
-//                       GameMenu.printResult(MaintainerController.printingShopProducts2("JojaMart", App.getCurrentGame().getJojaMart().getItems()));
-//               case MARINES_RANCH ->
-//                       GameMenu.printResult(MaintainerController.printingShopProducts2("Ranch", App.getCurrentGame().getRanch().getItems()));
-//               case THE_STARDROP_SALOON ->
-//                       GameMenu.printResult(MaintainerController.printingShopProducts2("Saloon", App.getCurrentGame().getSaloon().getItems()));
-//               case null, default -> GameMenu.printResult("You are not in a store!");
-//           }
-//       }
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if (!player.isInCity()) {
+            GameMenu.printResult("You are not in the city!");
+            return;
+        }
+        Tile[][] tiles = App.getMaps().get(4).getTiles();
+        switch (tiles[player.getCityX()][player.getCityX()].getType()) {
+            case BLACKSMITH ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts2("Blacksmith", App.getCurrentGame().getBlacksmith().getItems()));
+            case CARPENTERS_SHOP ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts2("Carpenter", App.getCurrentGame().getCarpenter().getItems()));
+            case FISH_SHOP ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts2("FishShop", App.getCurrentGame().getFishShop().getItems()));
+            case PIERRES_GENERAL_STORE ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts2("GeneralStore", App.getCurrentGame().getGeneralStore().getItems()));
+            case JOJOMART ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts2("JojaMart", App.getCurrentGame().getJojaMart().getItems()));
+            case MARINES_RANCH ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts2("Ranch", App.getCurrentGame().getRanch().getItems()));
+            case THE_STARDROP_SALOON ->
+                    GameMenu.printResult(MaintainerController.printingShopProducts2("Saloon", App.getCurrentGame().getSaloon().getItems()));
+            case null, default -> GameMenu.printResult("You are not in a store!");
+        }
     }
-
+ 
     public static void purchase(String name, String count){
         int amount;
         if (count != null) amount = Integer.parseInt(count);
         else amount = 1;
-
         Player player = App.getCurrentGame().getCurrentPlayer();
         
         if (player.getBuilding() == null) {
             GameMenu.printResult("You are not in a store!");
             return;
         }
+        if (player.getBuilding().equals(App.getCurrentGame().getCarpenter())) {
+            GameMenu.printResult("Use this command to buy items: \n" +
+                    "build -a <building name> -l <x , y> (place where you want to build the building in your farm)");
+            return;
+        }
+
+        if (player.getBuilding().equals(App.getCurrentGame().getRanch())) {
+            GameMenu.printResult("Use this command to buy items: \n" +
+                    "buy animal -a <animal> -n <name> (place where you want to build the building in your farm)");
+            return;
+        }
 
         if (App.getCurrentGame().getCurrentTime().getHour() < player.getBuilding().getStartHour() ||
             App.getCurrentGame().getCurrentTime().getHour() > player.getBuilding().getEndHour()) {
-                GameMenu.printResult("Store is closed! return sometime else!");
+
+                GameMenu.printResult("Store is closed! The working our is from " + player.getBuilding().getStartHour() + " to " + player.getBuilding().getEndHour());
                 return;
         }
 

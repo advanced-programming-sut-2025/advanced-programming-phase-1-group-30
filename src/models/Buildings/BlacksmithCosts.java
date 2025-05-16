@@ -4,18 +4,18 @@ import models.Items.ItemsInteface;
 import models.TimeAndDate.Season;
 
 public enum BlacksmithCosts implements ItemsInteface {
-    CopperOre("Copper one", 75,Integer.MAX_VALUE, Season.ALL),
-    IronOre("Iron", 150, Integer.MAX_VALUE, Season.ALL),
-    Coal("Coal", 150, Integer.MAX_VALUE, Season.ALL),
-    GoldOre("Gold", 400, Integer.MAX_VALUE, Season.ALL),
-    CopperTool("Copper Tool", 2000, 1, Season.ALL),
-    IronTool("Iron Tool", 5000, 1, Season.ALL),
-    GoldTool("Gold Tool", 10000, 1, Season.ALL),
-    IridiumTool("Iridium Tool", 25000, 1, Season.ALL),
-    CopperTrashCan("Copper Trash Can", 1000, 1, Season.ALL),
-    IronTrashCan("Iron Trash Can", 2500, 1, Season.ALL),
-    GoldTrashCan("Gold Trash Can", 5000, 1, Season.ALL),
-    IridiumTrashCan("Iridium Trash Can", 12500, 1, Season.ALL);
+    CopperOre("copper one", 75,Integer.MAX_VALUE, Season.ALL),
+    IronOre("iron", 150, Integer.MAX_VALUE, Season.ALL),
+    Coal("coal", 150, Integer.MAX_VALUE, Season.ALL),
+    GoldOre("gold", 400, Integer.MAX_VALUE, Season.ALL),
+    CopperTool("copper tool", 2000, 1, Season.ALL),
+    IronTool("iron tool", 5000, 1, Season.ALL),
+    GoldTool("gold tool", 10000, 1, Season.ALL),
+    IridiumTool("iridium tool", 25000, 1, Season.ALL),
+    CopperTrashCan("copper trash can", 1000, 1, Season.ALL),
+    IronTrashCan("iron trash can", 2500, 1, Season.ALL),
+    GoldTrashCan("gold trash can", 5000, 1, Season.ALL),
+    IridiumTrashCan("iridium trash can", 12500, 1, Season.ALL);
 
     
     private final String name;

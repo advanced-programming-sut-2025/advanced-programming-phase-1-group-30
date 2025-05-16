@@ -4,17 +4,17 @@ import models.Items.ItemsInteface;
 import models.TimeAndDate.Season;
 
 public enum RanchCosts implements ItemsInteface {
-    HAY("Hay", 50, 999999, null, 0, Season.ALL),
-    MILK_PAIL("Milk Pail", 1000, 1, null, 0, Season.ALL),
-    SHEARS("Shears", 1000, 1, null, 0, Season.ALL),
-    CHICKEN("Chicken", 800, 2, BuildingsInfo.Coop, 1, Season.ALL),
-    COW("Cow", 1500, 2, BuildingsInfo.Barn, 1, Season.ALL),
-    GOAT("Goat", 4000, 2, BuildingsInfo.Barn, 2, Season.ALL),
-    DUCK("Duck", 1200, 2, BuildingsInfo.Coop, 2, Season.ALL),
-    SHEEP("Sheep", 8000, 2, BuildingsInfo.Barn, 3, Season.ALL),
-    RABBIT("Rabbit", 8000, 2, BuildingsInfo.Coop, 3, Season.ALL),
-    DINOSAUR("Dinosaur", 14000, 2, BuildingsInfo.Coop, 2, Season.ALL),
-    PIG("Pig", 16000, 2, BuildingsInfo.Barn, 3, Season.ALL);
+    HAY("hay", 50, 999999, null, 0, Season.ALL),
+    MILK_PAIL("milk pail", 1000, 1, null, 0, Season.ALL),
+    SHEARS("shears", 1000, 1, null, 0, Season.ALL),
+    CHICKEN("chicken", 800, 2, BuildingsInfo.Coop, 1, Season.ALL),
+    COW("cow", 1500, 2, BuildingsInfo.Barn, 1, Season.ALL),
+    GOAT("goat", 4000, 2, BuildingsInfo.Barn, 2, Season.ALL),
+    DUCK("duck", 1200, 2, BuildingsInfo.Coop, 2, Season.ALL),
+    SHEEP("sheep", 8000, 2, BuildingsInfo.Barn, 3, Season.ALL),
+    RABBIT("rabbit", 8000, 2, BuildingsInfo.Coop, 3, Season.ALL),
+    DINOSAUR("dinosaur", 14000, 2, BuildingsInfo.Coop, 2, Season.ALL),
+    PIG("pig", 16000, 2, BuildingsInfo.Barn, 3, Season.ALL);
 
 
     private final String name;
