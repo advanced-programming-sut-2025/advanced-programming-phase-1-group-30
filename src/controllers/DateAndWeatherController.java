@@ -108,14 +108,28 @@ public class DateAndWeatherController {
                                     }
 
                                     if (tiles[i][j].getCrop().getCurrentStage() < tiles[i][j].getCrop().getStages().size()) {
+                                        if (i == 51 && j == 49) {
+                                            System.out.println("inja " + tiles[i][j].getCrop().getDaysPassed());
+                                            System.out.println();
+                                        }
                                         if (tiles[i][j].getCrop().getStages().get(tiles[i][j].getCrop().getCurrentStage()) == tiles[i][j].getCrop().getDaysPassed()) {
+                                            if (i == 51 && j == 49)
+                                                System.out.println("injaaa");
+                                            if (i == 51 && j == 49)
+                                                System.out.println(tiles[i][j].getCrop().getCurrentStage() + " " + tiles[i][j].getCrop().getStages().size());
                                             if (tiles[i][j].getCrop().getCurrentStage() == tiles[i][j].getCrop().getStages().size()) {
                                                 tiles[i][j].setReadyToHarvest(true);
                                             } else {
+                                                if (i == 51 && j == 49)
+                                                    System.out.println(tiles[i][j].getCrop().getCurrentStage());
                                                 tiles[i][j].getCrop().setCurrentStage(tiles[i][j].getCrop().getCurrentStage() + 1);
+                                                if (i == 51 && j == 49)
+                                                    System.out.println(tiles[i][j].getCrop().getCurrentStage());
                                                 tiles[i][j].getCrop().setDaysPassed(0);
                                             }
                                         }
+                                    } else if (tiles[i][j].getCrop().getCurrentStage() == tiles[i][j].getCrop().getStages().size()) {
+                                        tiles[i][j].setReadyToHarvest(true);
                                     }
                                     if (tiles[i][j].getCrop().getCurrentStage() == tiles[i][j].getCrop().getStages().size()) {
                                         tiles[i][j].setReadyToHarvest(true);

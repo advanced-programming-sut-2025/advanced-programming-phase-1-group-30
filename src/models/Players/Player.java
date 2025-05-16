@@ -95,7 +95,7 @@ public class Player {
         this.backPack.addItem(new Item(1000, "wood", 10));
         this.backPack.addItem(new Item(1000, "stone", 20));
         this.backPack.addItem(new Item(50, "hay", 50));
-        this.backPack.addItem(new Food(2, FoodType.TRIPLE_SHOT_ESPRESSO));
+        this.backPack.addItem(new ForagingSeed(1, ForagingSeedType.BEAN_STARTER));
         this.money = 20000;
         this.selectionNumber = selectionNumber;
         this.maxEnergy = 200;
