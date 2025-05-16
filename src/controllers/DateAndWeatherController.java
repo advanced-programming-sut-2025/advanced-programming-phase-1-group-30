@@ -2,8 +2,10 @@ package controllers;
 
 import models.Animals.Animal;
 import models.App;
+import models.Items.Item;
 import models.Items.Products.Crop;
 import models.Items.Products.GiantCrop;
+import models.Items.Products.Tree;
 import models.Maps.Tile;
 import models.Maps.TileTypes;
 import models.Maps.Weather;
@@ -48,8 +50,27 @@ public class DateAndWeatherController {
                 player.setEnergy(player.getMaxEnergy());
                 if (player.isPassedOut()) {
                     player.setEnergy((player.getMaxEnergy() * 3) / 4);
+                    player.setPassedOut(false);
                 }
                 Tile[][] tiles = player.getMap().getTiles();
+
+                if (App.getCurrentGame().getCurrentWeather().equals(Weather.STORM)) {
+                    Random rand = new Random();
+
+                    for (int i = 0; i < 3; i++) {
+                        int x1 = rand.nextInt(60);
+                        int y = rand.nextInt(60);
+
+                        Tile tile = tiles[x1][y];
+
+                        if (tile.isPlanted()) {
+                            tile.setPlanted(false);
+                            tile.setItem(new Item(1, "coal", 15));
+                            tile.setCrop(null);
+                            tile.setType(TileTypes.DIRT);
+                        }
+                    }
+                }
                 int v = -1;
                 int u = -1;
                 for (int i = 0; i < tiles.length; i++) {
@@ -133,6 +154,7 @@ public class DateAndWeatherController {
                     }
                 }
 
+                MaintainerController.randomPlanting(player);
                 for (Animal animal : player.getAnimals()) {
                     if (animal.isFedToday()) {
                         animal.produceProduct();
@@ -177,6 +199,9 @@ public class DateAndWeatherController {
                 DateAndWeatherController.ChangeSeason();
             } else
                 App.getCurrentGame().getCurrentTime().setDay(App.getCurrentGame().getCurrentTime().getDay() + 1);
+            if (App.getCurrentGame().getCurrentWeather().equals(Weather.STORM)) {
+                GameMenu.printResult("Thor is angry at you!");
+            }
         } else
             App.getCurrentGame().getCurrentTime().setHour(App.getCurrentGame().getCurrentTime().getHour() + x);
         GameMenu.printResult("Cheat code activated: " + x + " hours passed");
@@ -247,7 +272,26 @@ public class DateAndWeatherController {
         GameMenu.printResult(App.getCurrentGame().getCurrentTime().getSeason().getName());
     }
 
-    public static void CheatThor(String x, String y) {}
+    public static void cheatThor(String x, String y) {
+        int x1 = Integer.parseInt(x);
+        int y1 = Integer.parseInt(y);
+        Tile[][] tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
+        Tile tile = tiles[x1][y1];
+
+        if (tile.isPlanted()) {
+            tile.setPlanted(false);
+            tile.setItem(new Item(1, "coal", 15));
+            tile.setCrop(null);
+            tile.setType(TileTypes.DIRT);
+            GameMenu.printResult("Your crop turned into coal by the power of odin's son!");
+        }
+        else if (tile.getItem() instanceof Tree) {
+            tile.setItem(new Item(1, "coal", 15));
+            tile.setType(TileTypes.DIRT);
+        }
+        GameMenu.printResult("Cheat code activated: Thor hits you with a lightning bolt!");
+
+    }
 
     public static void Weather() {
         GameMenu.printResult(App.getCurrentGame().getCurrentWeather().getName());

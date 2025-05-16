@@ -3,7 +3,9 @@ package views;
 import controllers.DateAndWeatherController;
 import controllers.GameMenuController;
 import controllers.NewGameController;
+import models.App;
 import models.Commands.GameMenuCommands;
+import models.Players.Player;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -16,7 +18,6 @@ public class GameMenu implements AppMenu {
     @Override
     public void check(String command, Scanner scanner) {
         Matcher matcher;
-
         matcher = GameMenuCommands.GAME_NEW.regexMatcher(command);
         if (matcher.matches()) {
             String username1 = matcher.group("username1");
@@ -25,6 +26,9 @@ public class GameMenu implements AppMenu {
 
             NewGameController.NewGame(username1, username2, username3, scanner);
             return;
+        }
+        if (App.getCurrentGame() != null) {
+            Player.checkUsedEnergy(App.getCurrentGame().getCurrentPlayer(), scanner);
         }
         matcher = GameMenuCommands.LOAD_GAME.regexMatcher(command);
         if (matcher.matches()) {
@@ -84,6 +88,11 @@ public class GameMenu implements AppMenu {
         matcher = GameMenuCommands.WEATHER_FORECAST.regexMatcher(command);
         if (matcher.matches()) {
             DateAndWeatherController.WeatherForecast();
+            return;
+        }
+        matcher = GameMenuCommands.CHEAT_THOR.regexMatcher(command);
+        if (matcher.matches()) {
+            DateAndWeatherController.cheatThor(matcher.group("x"), matcher.group("y"));
             return;
         }
         matcher = GameMenuCommands.PRINT_MAP.regexMatcher(command);

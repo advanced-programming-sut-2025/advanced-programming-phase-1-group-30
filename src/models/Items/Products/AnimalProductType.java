@@ -3,20 +3,20 @@ package models.Items.Products;
 import models.Items.ItemsInteface;
 
 public enum AnimalProductType implements ItemsInteface {
-    EGG("Egg", 50),
-    BIG_EGG("Big Egg", 95),
-    DUCK_EGG("Duck Egg", 95),
-    DUCK_FEATHER("Duck Feather", 250),
-    FLEECE("Fleece", 340),
-    RABBIT_LEG("Rabbit Leg", 565),
-    RABBIT_WOOL("Rabbit Wool", 340),
-    DINASOUR_EGG("Dinasour Egg", 350),
+    EGG("egg", 50),
+    BIG_EGG("big egg", 95),
+    DUCK_EGG("duck egg", 95),
+    DUCK_FEATHER("duck feather", 250),
+    FLEECE("fleece", 340),
+    RABBIT_LEG("rabbit leg", 565),
+    RABBIT_WOOL("rabbit wool", 340),
+    DINASOUR_EGG("dinasour egg", 350),
 
-    MILK("Milk", 125),
-    BIG_MILK("Big Milk", 190),
-    GOAT_MILK("Goat Milk", 225),
-    GOAT_BIG_MILK("Goat Big Milk", 345),
-    WOOL("Wool", 340),
+    MILK("milk", 125),
+    BIG_MILK("big milk", 190),
+    GOAT_MILK("goat milk", 225),
+    GOAT_BIG_MILK("goat big milk", 345),
+    WOOL("wool", 340),
     TRUFFLE("truffle", 625);
 
     private final String name;

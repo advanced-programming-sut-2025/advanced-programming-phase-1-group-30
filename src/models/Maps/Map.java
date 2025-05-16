@@ -9,10 +9,9 @@ import models.Buildings.GreenHouse;
 import models.Items.Products.Stone;
 import models.Items.Products.Tree;
 import models.Players.Player;
- import org.json.JSONArray;
- import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import views.GameMenu;
-
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -270,7 +269,7 @@ public class Map {
             for (int j = 0; j < 80; j++) {
                 boolean printed = false;
                 for (Player player1 : App.getCurrentGame().getPlayers()) {
-                    if (player1.getCityX() == i && player1.getCityY() == j) {
+                    if (player1.getCityX() == j && player1.getCityY() == i) {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);
                         printed = true;
                         break;

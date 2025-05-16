@@ -85,4 +85,34 @@ public class PathFinder {
         }
         return neighbors;
     }
+    public static int countTurns(List<Tile> path, Tile start) {
+        if (path == null || path.size() < 2) return 0;
+
+        int turns = 0;
+        Tile previous = start;
+        Tile current = path.get(0);
+
+        int dx1 = current.getX() - previous.getX();
+        int dy1 = current.getY() - previous.getY();
+
+        for (int i = 1; i < path.size(); i++) {
+            Tile next = path.get(i);
+
+            int dx2 = next.getX() - current.getX();
+            int dy2 = next.getY() - current.getY();
+
+            // Check if direction changed
+            if (dx1 != dx2 || dy1 != dy2) {
+                turns++;
+            }
+
+            // Move the window
+            dx1 = dx2;
+            dy1 = dy2;
+            current = next;
+        }
+
+        return turns;
+    }
+
 }

@@ -2,6 +2,7 @@ package controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
@@ -30,7 +31,7 @@ public class NewGameController {
         Game game = new Game();
         App.setCurrentGame(game);
         ArrayList<Player> players = new ArrayList<>();
-        Player playerX = new Player(App.getCurrentUser().getUsername(), 1);
+        Player playerX = new Player(App.getCurrentUser().getUsername(), 0);
         User use = User.findUserByUsername(playerX.getUsername());
         use.setPlayer(playerX);
         players.add(playerX);
@@ -52,7 +53,7 @@ public class NewGameController {
                 return;
             }
             
-            Player player1 = new Player(user1.getUsername(), 2);
+            Player player1 = new Player(user1.getUsername(), 1);
             user1.setPlayer(player1);
             players.add(player1);
         }
@@ -68,7 +69,7 @@ public class NewGameController {
                 return;
             }
 
-            Player player2 = new Player(user2.getUsername(), 3);
+            Player player2 = new Player(user2.getUsername(), 2);
             user2.setPlayer(player2);
             players.add(player2);
         }
@@ -84,7 +85,7 @@ public class NewGameController {
                 return;
             }
 
-            Player player3 = new Player(user3.getUsername(), 4);
+            Player player3 = new Player(user3.getUsername(), 3);
             user3.setPlayer(player3);
             players.add(player3);
         }
@@ -120,6 +121,8 @@ public class NewGameController {
                     mapIsSelected = true;
                     player.setX(1);
                     player.setY(1);
+                    player.setCityY(-1);
+                    player.setCityX(-1);
                 }
                 else {
                     GameMenu.printResult("Invalid command");
@@ -148,16 +151,29 @@ public class NewGameController {
     public static void NextTurn(Scanner scanner) {
         List<Player> players = App.getCurrentGame().getPlayers();
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
-        for (Player player : players) {
-            if (player.getSelectionNumber() == currentPlayer.getSelectionNumber() + 1) {
-                if (player.isPassedOut()) continue;
-                App.getCurrentGame().setCurrentPlayer(player);
+        int totalPlayers = players.size();
+
+        int nextSelection = (currentPlayer.getSelectionNumber() + 1) % totalPlayers;
+        int startSelection = nextSelection;
+
+        Player nextPlayer = null;
+
+        do {
+            Player candidate = players.get(nextSelection);
+            if (!candidate.isPassedOut()) {
+                nextPlayer = candidate;
                 break;
             }
-            else {
-                App.getCurrentGame().setCurrentPlayer(players.get(0));
-            }
+            nextSelection = (nextSelection + 1) % totalPlayers;
+        } while (nextSelection != startSelection);
+
+        if (nextPlayer == null) {
+            GameMenu.printResult("All players are passed out. Ending round...");
+            return; // Or trigger end-of-day logic
         }
+
+        App.getCurrentGame().setCurrentPlayer(nextPlayer);
+
         currentPlayer = App.getCurrentGame().getCurrentPlayer();
         GameMenu.printResult("Current player: " + App.getCurrentGame().getCurrentPlayer().getUsername());
         if (currentPlayer.getAskedMarriage() != null) {
@@ -228,9 +244,26 @@ public class NewGameController {
                 player.setEnergy(player.getMaxEnergy());
                 if (player.isPassedOut()) {
                     player.setEnergy((player.getMaxEnergy() * 3) / 4);
+                    player.setPassedOut(false);
                 }
-
                 Tile[][] tiles = player.getMap().getTiles();
+                if (App.getCurrentGame().getCurrentWeather().equals(Weather.STORM)) {
+                    Random rand = new Random();
+
+                    for (int i = 0; i < 3; i++) {
+                        int x = rand.nextInt(60);
+                        int y = rand.nextInt(60);
+
+                        Tile tile = tiles[x][y];
+
+                        if (tile.isPlanted()) {
+                            tile.setPlanted(false);
+                            tile.setItem(new Item(1, "coal", 15));
+                            tile.setCrop(null);
+                            tile.setType(TileTypes.DIRT);
+                        }
+                    }
+                }
                 int v = -1;
                 int u = -1;
                 for (int i = 0; i < tiles.length; i++) {
@@ -261,9 +294,7 @@ public class NewGameController {
                                         if (tiles[i][j].getCrop().getStages().get(tiles[i][j].getCrop().getCurrentStage()) == tiles[i][j].getCrop().getDaysPassed()) {
                                             if (tiles[i][j].getCrop().getCurrentStage() == tiles[i][j].getCrop().getStages().size()) {
                                                 tiles[i][j].setReadyToHarvest(true);
-                                                tiles[i][j].getCrop().setCurrentStage(tiles[i][j].getCrop().getCurrentStage() + 1);
                                             } else {
-                                                tiles[i][j].getCrop().setCurrentStage(tiles[i][j].getCrop().getCurrentStage() + 1);
                                                 tiles[i][j].getCrop().setDaysPassed(0);
                                             }
                                         }
@@ -311,6 +342,17 @@ public class NewGameController {
                 for (Animal animal : player.getAnimals()) {
                     if (animal.isFedToday()) {
                         animal.produceProduct();
+                        animal.setFedToday(false);
+                    } else {
+                        animal.setFriendship(Math.max(animal.getFriendship() - 20 , 0));
+                    }
+                    if (animal.isPetToday()) {
+                        animal.setPetToday(false);
+                    } else {
+                        animal.setFriendship(Math.max(animal.getFriendship() / 200 - 10 , 0));
+                    }
+                    if (animal.isOut()) {
+                        animal.setFriendship(Math.max(animal.getFriendship() - 20, 0));
                     }
                 }
                 for (java.util.Map.Entry<Player, Friendship> entry : player.getFriendships().entrySet()) {
@@ -338,15 +380,15 @@ public class NewGameController {
 
             App.getCurrentGame().getCurrentTime().setHour(9);
             App.getCurrentGame().setCurrentWeather(App.getCurrentGame().getTomorrowWeather());
-            if (App.getCurrentGame().getCurrentWeather().equals(Weather.STORM)) {
-
-            }
             DateAndWeatherController.setTWeather();
             if (App.getCurrentGame().getCurrentTime().getDay() == 28) {
                 App.getCurrentGame().getCurrentTime().setDay(1);
                 DateAndWeatherController.ChangeSeason();
             } else
                 App.getCurrentGame().getCurrentTime().setDay(App.getCurrentGame().getCurrentTime().getDay() + 1);
+            if (App.getCurrentGame().getCurrentWeather().equals(Weather.STORM)) {
+                GameMenu.printResult("Thor is angry at you!");
+            }
         }
         else
             App.getCurrentGame().getCurrentTime().setHour(currentTime + 1);

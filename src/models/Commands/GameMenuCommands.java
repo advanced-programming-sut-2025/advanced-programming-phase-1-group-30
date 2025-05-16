@@ -18,6 +18,7 @@ public enum GameMenuCommands {
     SEASON("^\\s*season\\s*$"),
     WEATHER("^\\s*weather\\s*$"),
     WEATHER_FORECAST("^\\s*weather\\s+forecast\\s*$"),
+    CHEAT_THOR("^cheat\\s+Thor\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\s*$"),
     PRINT_MAP("^\\s*print\\s+map\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s+-s\\s+(?<size>\\d+)\\s*$"),
     HELPREADINGMAP("^\\s*help\\s+reading\\s+map\\s*$"),
     ENERGY_SHOW("^\\s*energy\\s+show\\s*$"),
