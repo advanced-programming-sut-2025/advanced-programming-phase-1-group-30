@@ -50,8 +50,8 @@ public enum GeneralStoreCosts implements ItemsInteface {
     WHEAT_SEEDS_FALL("wheat seeds (fall)", "Plant in summer or fall. Takes 4 days to mature. Harvest with scythe.", 10, 5, Season.FALL),
     ARTICHOKE_SEEDS("artichoke seeds", "Plant in the fall. Takes 8 days to mature.", 30, 5, Season.FALL),
 
-    LARGE_PACK("Large pack", "Unlocks the 2nd row of inventory (12 more slots, total 24).", 2000, 1, Season.ALL),
-    DELUXE_PACK("Deluxe pack", "Unlocks the 3rd row of inventory (infinite slots).", 10000, 1, Season.ALL);
+    LARGE_PACK("large pack", "Unlocks the 2nd row of inventory (12 more slots, total 24).", 2000, 1, Season.ALL),
+    DELUXE_PACK("deluxe pack", "Unlocks the 3rd row of inventory (infinite slots).", 10000, 1, Season.ALL);
 
     public final String name;
     public final String description;

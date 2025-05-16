@@ -4,21 +4,21 @@ import models.Items.ItemsInteface;
 import models.TimeAndDate.Season;
 
 public enum SaloonCosts implements ItemsInteface {
-    Beer("Beer", 400, Integer.MAX_VALUE, Season.ALL),
-    Salad("Salad", 220, Integer.MAX_VALUE, Season.ALL),
-    Bread("Bread", 120, Integer.MAX_VALUE, Season.ALL),
-    Spaghetti("Spaghetti", 240, Integer.MAX_VALUE, Season.ALL),
-    Pizza("Pizza", 600, Integer.MAX_VALUE, Season.ALL),
-    Coffee("Coffee", 300, Integer.MAX_VALUE, Season.ALL),
-    HashbrownsRecipe("Hashbrowns Recipe", 50, 1, Season.ALL),
-    OmeletRecipe("Omelet Recipe", 100, 1, Season.ALL),
-    PancakesRecipe("Pancakes Recipe", 100, 1, Season.ALL),
-    BreadRecipe("Bread Recipe", 100, 1, Season.ALL),
-    TortillaRecipe("Tortilla Recipe", 100, 1, Season.ALL),
-    PizzaRecipe("Pizza Recipe", 150, 1, Season.ALL),
-    MakiRollRecipe("Maki Roll Recipe", 300, 1, Season.ALL),
-    TripleShotEspressoRecipe("Triple Shot Espresso Recipe", 5000, 1, Season.ALL),
-    CookieRecipe("Cookie Recipe", 300, 1, Season.ALL);
+    Beer("beer", 400, Integer.MAX_VALUE, Season.ALL),
+    Salad("salad", 220, Integer.MAX_VALUE, Season.ALL),
+    Bread("bread", 120, Integer.MAX_VALUE, Season.ALL),
+    Spaghetti("spaghetti", 240, Integer.MAX_VALUE, Season.ALL),
+    Pizza("pizza", 600, Integer.MAX_VALUE, Season.ALL),
+    Coffee("coffee", 300, Integer.MAX_VALUE, Season.ALL),
+    HashbrownsRecipe("hashbrowns recipe", 50, 1, Season.ALL),
+    OmeletRecipe("omelet recipe", 100, 1, Season.ALL),
+    PancakesRecipe("pancakes recipe", 100, 1, Season.ALL),
+    BreadRecipe("bread recipe", 100, 1, Season.ALL),
+    TortillaRecipe("tortilla recipe", 100, 1, Season.ALL),
+    PizzaRecipe("pizza recipe", 150, 1, Season.ALL),
+    MakiRollRecipe("maki roll recipe", 300, 1, Season.ALL),
+    TripleShotEspressoRecipe("triple shot espresso recipe", 5000, 1, Season.ALL),
+    CookieRecipe("cookie recipe", 300, 1, Season.ALL);
 
 
     private final String name;

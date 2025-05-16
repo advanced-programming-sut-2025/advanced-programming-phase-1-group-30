@@ -145,23 +145,30 @@ public class MaintainerController {
 
     public static <T> String printingShopProducts(String name, T[] list) {
         StringBuilder sb = new StringBuilder();
+        sb.append("=== ");
+        sb.append(name).append(" Products: ===\n");
 
-        sb.append(name + " Products:\n");
-        
-        for (int i = 0; i < list.length; i++) {
-            sb.append(list[i] + "\n");
+        for (T item : list) {
+            String formatted = item.toString().toLowerCase().replace('_', ' ');
+            sb.append(formatted).append("\n");
         }
 
         return sb.toString();
     }
 
+
     public static <T> String printingShopProducts2(String name, ArrayList<Item> list) {
         StringBuilder sb = new StringBuilder();
-
-        sb.append(name + " Products:\n");
+        sb.append("=== ");
+        sb.append(name + " Products: ===\n");
         
         for (int i = 0; i < list.size(); i++) {
-            sb.append(list.get(i).getName() + ": " + list.get(i).getCount() + "\n");
+            String count;
+            if (list.get(i).getCount() > 1000) {
+                count = "unlimited";
+            } else
+                count = String.valueOf(list.get(i).getCount());
+            sb.append(list.get(i).getName() + ": " + count + "      price: " + (int)list.get(i).getPrice() + "g\n");
         }
 
         return sb.toString();

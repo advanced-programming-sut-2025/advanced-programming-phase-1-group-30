@@ -66,6 +66,9 @@ public class Player {
     private Map savedMap;
     private int lastEnergy;
     private ArrayList<Item> shippingBinItems = new ArrayList<>();
+    private boolean energyBuff = false;
+    private boolean levelBuff = false;
+    private HashMap<String, Integer> buffs = new HashMap<>();
 
     public Player(String username, int selectionNumber) {
         this.username = username;
@@ -89,7 +92,7 @@ public class Player {
         this.selectionNumber = selectionNumber;
         this.maxEnergy = 200;
         this.lastEnergy = maxEnergy;
-        this.building = new Building(0, 0, 0, 0); //TODO home!!!
+        this.building = new Building(0, 0, 0, 0, 0, 0); //TODO home!!!
         this.recipes = new ArrayList<>();
         this.inCity = false;
         for(int i = 0; i < 5; i++){
@@ -97,6 +100,15 @@ public class Player {
             this.activatedQuestNPC.put(App.getCurrentGame().getNPCs().get(i), new ArrayList<>(List.of(1)));
             this.NPCMeetToday.put(App.getCurrentGame().getNPCs().get(i), false);
         }
+        this.buffs.put("triple shot espresso", 0);
+        this.buffs.put("hash browns", 0);
+        this.buffs.put("pancakes", 0);
+        this.buffs.put("red plate", 0);
+        this.buffs.put("farmer's lunch", 0);
+        this.buffs.put("survival burger", 0);
+        this.buffs.put("dish o' the Sea", 0);
+        this.buffs.put("seaform pudding", 0);
+        this.buffs.put("miner's treat", 0);
     }
 
     public String getUsername() {
@@ -402,8 +414,9 @@ public class Player {
             GameMenu.printResult("You used your maximum energy possible for your turn!");
             NewGameController.NextTurn(scanner);
         }
+    }
     public ArrayList<Item> getShippingBinItems() {
-        return shippingBinItems;
+        return this.shippingBinItems;
     }
 
     public void resetShippingBinItems() {
@@ -412,5 +425,41 @@ public class Player {
 
     public void addShippingBinItem(Item shippingBinItem) {
         this.shippingBinItems.add(shippingBinItem);
+    }
+
+    public boolean isEnergyBuff() {
+        return energyBuff;
+    }
+
+    public void setEnergyBuff(boolean energyBuff) {
+        this.energyBuff = energyBuff;
+    }
+
+    public boolean isLevelBuff() {
+        return levelBuff;
+    }
+
+    public void setLevelBuff(boolean levelBuff) {
+        this.levelBuff = levelBuff;
+    }
+
+    public HashMap<String, Integer> getBuffs() {
+        return buffs;
+    }
+
+    public void setFarming(int farming) {
+        this.farming = farming;
+    }
+
+    public void setForaging(int foraging) {
+        this.foraging = foraging;
+    }
+
+    public void setFishing(int fishing) {
+        this.fishing = fishing;
+    }
+
+    public void setMining(int mining) {
+        this.mining = mining;
     }
 }
