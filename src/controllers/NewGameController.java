@@ -8,6 +8,7 @@ import java.util.regex.Matcher;
 
 import models.Animals.Animal;
 import models.App;
+import models.Commands.Menus;
 import models.Game;
 import models.Commands.GameMenuCommands;
 import models.Items.Gift;
@@ -30,10 +31,12 @@ public class NewGameController {
         User user3 = null;
         Game game = new Game();
         App.setCurrentGame(game);
+        App.getGames().add(game);
         ArrayList<Player> players = new ArrayList<>();
-        Player playerX = new Player(App.getCurrentUser().getUsername(), 0);
+        Player playerX = new Player(App.getCurrentUser(),App.getCurrentUser().getUsername(), 0);
         User use = User.findUserByUsername(playerX.getUsername());
         use.setPlayer(playerX);
+        use.setNumOfGames(App.getCurrentUser().getNumOfGames() + 1);
         players.add(playerX);
         if (username1 == null &&
             username2 == null &&
@@ -53,8 +56,9 @@ public class NewGameController {
                 return;
             }
             
-            Player player1 = new Player(user1.getUsername(), 1);
+            Player player1 = new Player(user1,user1.getUsername(), 1);
             user1.setPlayer(player1);
+            user1.setNumOfGames(user1.getNumOfGames() + 1);
             players.add(player1);
         }
 
@@ -69,8 +73,9 @@ public class NewGameController {
                 return;
             }
 
-            Player player2 = new Player(user2.getUsername(), 2);
+            Player player2 = new Player(user2,user2.getUsername(), 2);
             user2.setPlayer(player2);
+            user2.setNumOfGames(user2.getNumOfGames() + 1);
             players.add(player2);
         }
 
@@ -85,8 +90,9 @@ public class NewGameController {
                 return;
             }
 
-            Player player3 = new Player(user3.getUsername(), 3);
+            Player player3 = new Player(user3,user3.getUsername(), 3);
             user3.setPlayer(player3);
+            user3.setNumOfGames(user3.getNumOfGames() + 1);
             players.add(player3);
         }
         if(user1 != null) {
@@ -145,9 +151,24 @@ public class NewGameController {
         MaintainerController.crowAttack();
     }
 
-    public static void LoadGame() {}
-    public static void ExitGame() {}
-    
+    public static void LoadGame(String idString) {
+        int id = Integer.parseInt(idString);
+        for(Game game : App.getGames()) {
+            if(game.getId() == id) {
+                App.getGames().add(game);
+                for(Player player : game.getPlayers()) {
+                    player.getUser().changeInGame();
+                }
+                App.setCurrentMenu(Menus.GameMenu);
+                App.setCurrentGame(game);
+                GameMenu.printResult("Loading game with id " + id + "...");
+                GameMenu.printResult("It's " + game.getCurrentPlayer().getUsername() + "'s turn");
+                return;
+            }
+        }
+        GameMenu.printResult("Game with id " + id + " doesn't exist");
+    }
+
     public static void NextTurn(Scanner scanner) {
         List<Player> players = App.getCurrentGame().getPlayers();
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
@@ -303,7 +324,9 @@ public class NewGameController {
                                         tiles[i][j].getCrop().setDaysPassed(tiles[i][j].getCrop().getDaysPassed() - 1);
                                         tiles[i][j].setReadyToHarvest(true);
                                     }
-                                    if ((App.getCurrentGame().getCurrentWeather().equals(Weather.RAIN) || App.getCurrentGame().getCurrentWeather().equals(Weather.STORM)) && !tiles[i][j].getType().equals(TileTypes.GREENHOUSE)) {
+                                    if ((App.getCurrentGame().getCurrentWeather().equals(Weather.RAIN) ||
+                                            App.getCurrentGame().getCurrentWeather().equals(Weather.STORM)) &&
+                                            !tiles[i][j].getType().equals(TileTypes.GREENHOUSE)) {
                                         tiles[i][j].getCrop().setWateredToday(true);
                                     }
                                 }

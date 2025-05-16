@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public enum GameMenuCommands {
     GAME_NEW("^\\s*game\\s+new\\s*(-u\\s+(?<username1>\\S+))?(\\s+(?<username2>\\S+))?(\\s+(?<username3>\\S+))?\\s*$"),
     GAME_MAP("^\\s*game\\s+map\\s+(?<mapNumber>\\d+)\\s+-g(?<gender>.+)\\s*$"),
-    LOAD_GAME("^\\s*load\\s+game\\s*$"),
+    LOAD_GAME("^\\s*load\\s+game\\s+(?<id>\\d+)\\s*$"),
     EXIT_GAME("^\\s*exit\\s+game\\s*$"),
     NEXT_TURN("^\\s*next\\s+turn\\s*$"),
     TIME("^\\s*time\\s*$"),
@@ -88,7 +88,8 @@ public enum GameMenuCommands {
     PRINT_CITY_MAP("^\\s*print\\s+city\\s+map\\s*$"),
     PRINT_FULL_MAP("^\\s*print\\s+full\\s+map\\s*$"),
     GoToCity("^\\s*go\\s+to\\s+city\\s*$"),
-    GoToFarm("^\\s*go\\s+to\\s+farm\\s*$"),;
+    GoToFarm("^\\s*go\\s+to\\s+farm\\s*$"),
+    Exit("^\\s*exit\\s+game\\s*$");
 
 
 

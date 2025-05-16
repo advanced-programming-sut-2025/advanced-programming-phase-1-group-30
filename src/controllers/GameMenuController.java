@@ -3,6 +3,7 @@ package controllers;
 import models.Animals.*;
 import models.App;
 import models.Buildings.*;
+import models.Commands.Menus;
 import models.Invetory.BackPackType;
 import models.Game;
 import models.Items.Gift;
@@ -1600,23 +1601,24 @@ public class GameMenuController {
         Tile[][] tiles = App.getMaps().get(4).getTiles();
         switch (tiles[player.getCityX()][player.getCityX()].getType()) {
             case BLACKSMITH ->
-        App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getGeneralStore());
-        switch (App.getCurrentGame().getCurrentPlayer().getBuilding()) {
-            case Blacksmith blacksmith ->
-                    GameMenu.printResult(MaintainerController.printingShopProducts("Blacksmith", BlacksmithCosts.values()));
-            case CARPENTERS_SHOP ->
-                    GameMenu.printResult(MaintainerController.printingShopProducts("Carpenter", CarpenterCosts.values()));
-            case FISH_SHOP ->
-                    GameMenu.printResult(MaintainerController.printingShopProducts("FishShop", FishShopCosts.values()));
-            case PIERRES_GENERAL_STORE ->
-                    GameMenu.printResult(MaintainerController.printingShopProducts("GeneralStore", GeneralStoreCosts.values()));
-            case JOJOMART ->
-                    GameMenu.printResult(MaintainerController.printingShopProducts("JojaMart", JojaMartCosts.values()));
-            case MARINES_RANCH ->
-                    GameMenu.printResult(MaintainerController.printingShopProducts("Ranch", RanchCosts.values()));
-            case THE_STARDROP_SALOON ->
-                    GameMenu.printResult(MaintainerController.printingShopProducts("Saloon", SaloonCosts.values()));
-            case null, default -> GameMenu.printResult("You are not in a store!");
+                    App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getGeneralStore());
+            switch (App.getCurrentGame().getCurrentPlayer().getBuilding()) {
+                case Blacksmith blacksmith ->
+                        GameMenu.printResult(MaintainerController.printingShopProducts("Blacksmith", BlacksmithCosts.values()));
+                case CARPENTERS_SHOP ->
+                        GameMenu.printResult(MaintainerController.printingShopProducts("Carpenter", CarpenterCosts.values()));
+                case FISH_SHOP ->
+                        GameMenu.printResult(MaintainerController.printingShopProducts("FishShop", FishShopCosts.values()));
+                case PIERRES_GENERAL_STORE ->
+                        GameMenu.printResult(MaintainerController.printingShopProducts("GeneralStore", GeneralStoreCosts.values()));
+                case JOJOMART ->
+                        GameMenu.printResult(MaintainerController.printingShopProducts("JojaMart", JojaMartCosts.values()));
+                case MARINES_RANCH ->
+                        GameMenu.printResult(MaintainerController.printingShopProducts("Ranch", RanchCosts.values()));
+                case THE_STARDROP_SALOON ->
+                        GameMenu.printResult(MaintainerController.printingShopProducts("Saloon", SaloonCosts.values()));
+                case null, default -> GameMenu.printResult("You are not in a store!");
+            }
         }
     }
 
@@ -1629,23 +1631,24 @@ public class GameMenuController {
         Tile[][] tiles = App.getMaps().get(4).getTiles();
         switch (tiles[player.getCityX()][player.getCityX()].getType()) {
             case BLACKSMITH ->
-        App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getGeneralStore());
-        switch (App.getCurrentGame().getCurrentPlayer().getBuilding()) {
-            case Blacksmith blacksmith ->
-                    GameMenu.printResult(MaintainerController.printingShopProducts2("Blacksmith", App.getCurrentGame().getBlacksmith().getItems()));
-            case CARPENTERS_SHOP ->
-                    GameMenu.printResult(MaintainerController.printingShopProducts2("Carpenter", App.getCurrentGame().getCarpenter().getItems()));
-            case FISH_SHOP ->
-                    GameMenu.printResult(MaintainerController.printingShopProducts2("FishShop", App.getCurrentGame().getFishShop().getItems()));
-            case PIERRES_GENERAL_STORE ->
-                    GameMenu.printResult(MaintainerController.printingShopProducts2("GeneralStore", App.getCurrentGame().getGeneralStore().getItems()));
-            case JOJOMART ->
-                    GameMenu.printResult(MaintainerController.printingShopProducts2("JojaMart", App.getCurrentGame().getJojaMart().getItems()));
-            case MARINES_RANCH ->
-                    GameMenu.printResult(MaintainerController.printingShopProducts2("Ranch", App.getCurrentGame().getRanch().getItems()));
-            case THE_STARDROP_SALOON ->
-                    GameMenu.printResult(MaintainerController.printingShopProducts2("Saloon", App.getCurrentGame().getSaloon().getItems()));
-            case null, default -> GameMenu.printResult("You are not in a store!");
+                    App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getGeneralStore());
+            switch (App.getCurrentGame().getCurrentPlayer().getBuilding()) {
+                case Blacksmith blacksmith ->
+                        GameMenu.printResult(MaintainerController.printingShopProducts2("Blacksmith", App.getCurrentGame().getBlacksmith().getItems()));
+                case CARPENTERS_SHOP ->
+                        GameMenu.printResult(MaintainerController.printingShopProducts2("Carpenter", App.getCurrentGame().getCarpenter().getItems()));
+                case FISH_SHOP ->
+                        GameMenu.printResult(MaintainerController.printingShopProducts2("FishShop", App.getCurrentGame().getFishShop().getItems()));
+                case PIERRES_GENERAL_STORE ->
+                        GameMenu.printResult(MaintainerController.printingShopProducts2("GeneralStore", App.getCurrentGame().getGeneralStore().getItems()));
+                case JOJOMART ->
+                        GameMenu.printResult(MaintainerController.printingShopProducts2("JojaMart", App.getCurrentGame().getJojaMart().getItems()));
+                case MARINES_RANCH ->
+                        GameMenu.printResult(MaintainerController.printingShopProducts2("Ranch", App.getCurrentGame().getRanch().getItems()));
+                case THE_STARDROP_SALOON ->
+                        GameMenu.printResult(MaintainerController.printingShopProducts2("Saloon", App.getCurrentGame().getSaloon().getItems()));
+                case null, default -> GameMenu.printResult("You are not in a store!");
+            }
         }
     }
 
@@ -2686,6 +2689,20 @@ public class GameMenuController {
         } else {
             GameMenu.printResult("You are already in your farm!");
         }
+
+    }
+
+    public static void exitGame(){
+        for(Player player : App.getCurrentGame().getPlayers()){
+            if(player.getMoney() > player.getUser().getMaxMoney()){
+                player.getUser().setMaxMoney(player.getMoney());
+            }
+            player.getUser().changeInGame();
+        }
+        App.setCurrentGame(null);
+        App.setCurrentMenu(Menus.MainMenu);
+        GameMenu.printResult("You exited the game!");
+        GameMenu.printResult("Redirecting to Main Menu");
     }
 
 }
