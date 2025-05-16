@@ -16,7 +16,7 @@ public enum ShippingBinType {
         return priceMultiplier;
     }
 
-    public double calculateNewPrice(double basePrice) {
-        return basePrice * priceMultiplier;
+    public double calculateNewPrice(double basePrice, double coff) {
+        return basePrice * priceMultiplier * coff;
     }
 }

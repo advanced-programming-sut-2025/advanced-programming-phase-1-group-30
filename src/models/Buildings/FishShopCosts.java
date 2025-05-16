@@ -6,10 +6,10 @@ import models.TimeAndDate.Season;
 public enum FishShopCosts implements ItemsInteface {
     FISH_SMOKER_RECIPE("A recipe to make Fish Smoker", "Use this recipe to craft a Fish Smoker.", 10000, -1, 1, Season.ALL),
     TROUT_SOUP("Trout Soup", "Pretty salty.", 250, -1, 1, Season.ALL),
+    TRAINING_POLE("Training Pole", "It's a lot easier to use than other rods, but can only catch basic fish.", 25, -1, 1, Season.ALL),
     BAMBOO_POLE("Bamboo Pole", "Use in the water to catch fish.", 500, -1, 1, Season.ALL),
-    TRAINING_ROD("Training Rod", "It's a lot easier to use than other rods, but can only catch basic fish.", 25, -1, 1, Season.ALL),
-    FIBERGLASS_ROD("Fiberglass Rod", "Use in the water to catch fish.", 1800, 2, 1, Season.ALL),
-    IRIDIUM_ROD("Iridium Rod", "Use in the water to catch fish.", 7500, 4, 1, Season.ALL);
+    FIBERGLASS_POLE("Fiberglass Pole", "Use in the water to catch fish.", 1800, 2, 1, Season.ALL),
+    IRIDIUM_POLE("Iridium Pole", "Use in the water to catch fish.", 7500, 4, 1, Season.ALL);
 
     private final String name;
     private final String description;

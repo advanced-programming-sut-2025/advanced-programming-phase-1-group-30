@@ -1420,6 +1420,21 @@ public class GameMenuController {
         }
     }
     public static void fishing(String fishingPole){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+
+        FishingPole fishingPole2 = null;
+        for (Item item : player.getBackPack().getItems()) {
+            if (item.getClass() == FishingPole.class) {
+                fishingPole2 = (FishingPole) item;
+                break;
+            }
+        }
+
+        if (fishingPole2 == null) {
+            GameMenu.printResult("You don't have any fishing pole");
+            return;
+        }
+
         if(App.getCurrentGame().getCurrentPlayer().isInCity()){
             GameMenu.printResult("You can't fish in city!");
             return;
@@ -1440,16 +1455,37 @@ public class GameMenuController {
         else if (App.getCurrentGame().getCurrentWeather().equals(Weather.RAIN)) M = 1.2;
         else if (App.getCurrentGame().getCurrentWeather().equals(Weather.STORM)) M = 0.5;
         else M = 1.0;
-        int skill = App.getCurrentGame().getCurrentPlayer().getFishing();
+        int skill = player.getFishing();
+        double pole = fishingPole2.getType().getPole();
 
         int count = (int) Math.floor(R * M * (skill + 2)) + 1;
         count = Math.min(count, 6);
 
-        //TODO fish quality
-        //TODO legndary fish
+        double fishQuality = Math.floor((R * (skill + 2) * pole) / (7 - M));
 
         Item fish = new Fish(count, fishType);
+        
+        String quality;
+        if (fishQuality <= 0.5) {
+            fish.setCof(1);
+            quality = "Normal";
+        }
+        else if (0.5 < fishQuality && fishQuality <= 0.7) {
+            fish.setCof(1.25);
+            quality = "Silver";
+        }
+        else if (0.7 < fishQuality && fishQuality <= 0.9) {
+            fish.setCof(1.5);
+            quality = "Gold";
+        }
+        else {
+            fish.setCof(2);
+            quality = "Iridium";
+        }
+
         App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(fish);
+        App.getCurrentGame().getCurrentPlayer().changeEnergy(-1 * fishingPole2.getType().getEnergyUsed());
+        GameMenu.printResult("Wow! You got " + count + " " + quality + " " + fishType.getDisplayName());
     }
    
     public static void artisanUse(String artisanName, String itemName) {

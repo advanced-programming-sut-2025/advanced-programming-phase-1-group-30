@@ -1,22 +1,19 @@
 package models.Items.Tools;
 
-import java.util.ArrayList;
-
-import models.Animals.FishType;
-
 public enum FishingPoleType {
-    TEST("test", 0,0, null);
+    TRAINING_POLE("Training Pole", 8, 0.1),
+    BAMBOO_POLE("Bamboo Pole", 8, 0.5),
+    FIBERGLASS_POLE("Fiberglass Pole", 6, 0.9),
+    IRIDIUM_POLE("Iridium Pole", 4, 1.2);
 
     private final String name;
     private final int energyUsed;
-    private final int cost;
-    private final ArrayList<FishType> stonesCanDestroy;
+    private final double pole;
 
-    private FishingPoleType(String name, int energyUsed, int cost, ArrayList<FishType> stonesCanDestroy) {
+    private FishingPoleType(String name, int energyUsed, double pole) {
         this.name = name;
         this.energyUsed = energyUsed;
-        this.cost = cost;
-        this.stonesCanDestroy = stonesCanDestroy;
+        this.pole = pole;
     }
 
     public String getName() {
@@ -26,12 +23,8 @@ public enum FishingPoleType {
     public int getEnergyUsed() {
         return energyUsed;
     }
-
-    public int getCost() {
-        return cost;
-    }
     
-    public ArrayList<FishType> getStonesCanDestroy() {
-        return stonesCanDestroy;
+    public double getPole() {
+        return pole;
     }
 }
