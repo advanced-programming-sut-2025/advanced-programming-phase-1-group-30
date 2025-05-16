@@ -93,10 +93,8 @@ public class Player {
         this.backPack.addItem(new ForagingSeed(4, ForagingSeedType.ORANGE_SAPLING)); //TODO tile & initial seed
         this.backPack.addItem(new Item(1000, "wood", 10));
         this.backPack.addItem(new Item(1000, "stone", 20));
-//        this.backPack.addItem(new Item(50, "hay", 50));
-        this.backPack.addItem(new Food(2, FoodType.TRIPLE_SHOT_ESPRESSO));
-        this.craftingRecipes.add(IndustrialProductType.MAYONNAISE_MACHINE);
-        this.backPack.addItem(new Item(1000, "copper bar", 20));
+        this.backPack.addItem(new Item(50, "hay", 50));
+        this.backPack.addItem(new ForagingSeed(1, ForagingSeedType.BEAN_STARTER));
         this.money = 20000;
         this.selectionNumber = selectionNumber;
         this.maxEnergy = 200;
@@ -366,6 +364,9 @@ public class Player {
     }
     public ArrayList<IndustrialProductType> getCraftingRecipes() {
         return craftingRecipes;
+    }
+    public void addCraftingRecipe(IndustrialProductType craftingRecipe) {
+        this.craftingRecipes.add(craftingRecipe);
     }
     public Building getBuilding() {
         return building;

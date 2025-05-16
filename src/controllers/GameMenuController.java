@@ -56,7 +56,6 @@ public class GameMenuController {
     }
 
     public static void walk(String xStr, String yStr, Scanner scanner) {
-        // TODO set the building! if in city
         int x = Integer.parseInt(xStr);
         int y = Integer.parseInt(yStr);
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -565,6 +564,7 @@ public class GameMenuController {
                         if(newItem != null){
                             newItem.setCount(newItem.getCount() + targetTile.getCrop().getCount());
                             GameMenu.printResult("You collected " + targetTile.getCrop().getName() + " and added it to your backpack!");
+                            targetTile.getCrop().setRegrowthTime(targetTile.getCrop().getRegrowthTime() + 1);
                             player.increaseFarming(5);
                         } else {
                             if(player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()){
@@ -573,8 +573,17 @@ public class GameMenuController {
                             } else{
                                 player.getBackPack().addItem(targetTile.getCrop());
                                 player.increaseFarming(5);
+                                targetTile.getCrop().setRegrowthTime(targetTile.getCrop().getRegrowthTime() + 1);
                                 GameMenu.printResult("You collected " + targetTile.getCrop().getName() + " and added it to your backpack!");
                             }
+                        }
+                        if (targetTile.getCrop().getType().getRegrowthTime() == targetTile.getCrop().getRegrowthTime()) {
+                            targetTile.setReadyToHarvest(false);
+                            targetTile.setCrop(null);
+                            targetTile.setItem(null);
+                            targetTile.setGiantCrop(false);
+                            targetTile.setPlanted(false);
+                            return;
                         }
 
                         targetTile.setReadyToHarvest(false);
@@ -595,6 +604,7 @@ public class GameMenuController {
                                 player.getBackPack().addItem(targetTile.getCrop());
                                 player.increaseFarming(5);
                                 GameMenu.printResult("You harvested " + targetTile.getCrop().getName() + " and added it to your backpack!");
+
                             }
                         }
                         if (targetTile.getCrop() instanceof GiantCrop) {
@@ -607,7 +617,7 @@ public class GameMenuController {
                                 tile.setPlanted(false);
                             }
                         } else {
-                            if (targetTile.getCrop().getRegrowthTime() >= targetTile.getCrop().getType().getRegrowthTime()) {
+                            if (targetTile.getCrop().getRegrowthTime() >= targetTile.getCrop().getType().getRegrowthTime() - 1) {
                                 targetTile.setReadyToHarvest(false);
                                 targetTile.setCrop(null);
                                 targetTile.setItem(null);
@@ -682,8 +692,34 @@ public class GameMenuController {
         RegisterMenu.printResult(sb.toString());
     }
     public static void plant(String seed1, String direction) {
-        ForagingSeed seed = (ForagingSeed) ForagingSeed.findItemByName(seed1, App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
+        ForagingSeed seed;
         Player player = App.getCurrentGame().getCurrentPlayer();
+        if (seed1.equals("mixed seeds") && (Item.findItemByName(seed1, player.getBackPack().getItems()) != null)) {
+            Season currentSeason = App.getCurrentGame().getCurrentTime().getSeason();
+
+            // Filter seeds based on season
+            List<ForagingSeedType> seasonalSeeds = new ArrayList<>();
+            for (ForagingSeedType type : ForagingSeedType.values()) {
+                if (type.getSeason() == currentSeason) {
+                    seasonalSeeds.add(type);
+                }
+            }
+
+            if (seasonalSeeds.isEmpty()) {
+                GameMenu.printResult("No available seeds for the current season.");
+                return;
+            }
+
+            // Pick a random type
+            Random rand = new Random();
+            ForagingSeedType chosenType = seasonalSeeds.get(rand.nextInt(seasonalSeeds.size()));
+
+            // Create a ForagingSeed instance from the type
+            seed = new ForagingSeed(1, chosenType);  // assuming such a constructor exists
+        } else {
+            seed = (ForagingSeed) Item.findItemByName(seed1, player.getBackPack().getItems());
+        }
+
         Tile[][] tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
 
         int x = player.getX();
@@ -883,6 +919,18 @@ public class GameMenuController {
             if(items instanceof Basket) {
                 GameMenu.printResult(items.getName() + " Remaining water: " + ((Basket) items).getRemainingWater() + "/" + ((Basket) items).getType().getCapacity());
             }
+        }
+    }
+    public static void craftAddRecipe(String itemName) {
+        IndustrialProductType item = null;
+        for (IndustrialProductType industrialProductType : IndustrialProductType.values()) {
+            if (industrialProductType.getName().equals(itemName)) item = industrialProductType;
+        }
+
+        if (item == null) GameMenu.printResult("No recipe with given name were found!");
+        else {
+            App.getCurrentGame().getCurrentPlayer().addCraftingRecipe(item);
+            GameMenu.printResult(itemName + " added successfully!");
         }
     }
     public static void showCraftingRecipes() {
@@ -1104,7 +1152,7 @@ public class GameMenuController {
         GameMenu.printResult("Recipe added successfully!");
     }
 
-    public static void cooking(String name) {
+    public static void cooking(String name, Scanner scanner) {
         FoodType recipe = FoodType.getrecipeByName(name);
         Player player = App.getCurrentGame().getCurrentPlayer();
         if (recipe == null) {
@@ -1128,7 +1176,10 @@ public class GameMenuController {
             return;
         }
         if (player.getEnergy() <= 3) {
-            GameMenu.printResult("You don't have enough energy to cook!");
+            player.setEnergy(0);
+            player.setPassedOut(true);
+            GameMenu.printResult("You have a carismatic passing out! WHILE COOKING");
+            NewGameController.NextTurn(scanner);
             return;
         }
 
@@ -1233,6 +1284,7 @@ public class GameMenuController {
             player.getBuffs().put("miner's treat", 5);
             player.setMining(player.getMining() + 1);
         }
+
         App.getCurrentGame().getCurrentPlayer().setEnergy(Math.min(player.getEnergy() + food.getType().getEnergy(), App.getCurrentGame().getCurrentPlayer().getMaxEnergy()));
     }
     public static void showCookingRecipe(){}
@@ -1773,7 +1825,7 @@ public class GameMenuController {
             return;
         }
 
-        for (Item ingredient : recipe.getIngredients()) {
+        for (Item ingredient : item.getIngredients()) {
             Item backpackItem = Item.findItemByName(ingredient.getName(), App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
 
             if (backpackItem == null) {
@@ -1788,7 +1840,7 @@ public class GameMenuController {
             }
         }
 
-        for (Item ingredient : recipe.getIngredients()) {
+        for (Item ingredient : item.getIngredients()) {
             Item backpackItem = Item.findItemByName(ingredient.getName(), App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
 
             if (ingredient.getCount() == backpackItem.getCount())
@@ -1820,8 +1872,8 @@ public class GameMenuController {
             GameMenu.printResult("You are not in the city!");
             return;
         }
-        Tile[][] tiles = App.getMaps().get(4).getTiles();
-        switch (tiles[player.getCityX()][player.getCityX()].getType()) {
+        Tile[][] tiles = App.getCurrentGame().getCurrentMap().getTiles();
+        switch (tiles[player.getCityX()][player.getCityY()].getType()) {
             case BLACKSMITH ->
                     GameMenu.printResult(MaintainerController.printingShopProducts("Blacksmith", BlacksmithCosts.values()));
             case CARPENTERS_SHOP ->
@@ -1847,7 +1899,7 @@ public class GameMenuController {
             return;
         }
         Tile[][] tiles = App.getMaps().get(4).getTiles();
-        switch (tiles[player.getCityX()][player.getCityX()].getType()) {
+        switch (tiles[player.getCityX()][player.getCityY()].getType()) {
             case BLACKSMITH ->
                     GameMenu.printResult(MaintainerController.printingShopProducts2("Blacksmith", App.getCurrentGame().getBlacksmith().getItems()));
             case CARPENTERS_SHOP ->
@@ -1985,7 +2037,7 @@ public class GameMenuController {
             if (amount == item.getCount()) player.getBuilding().removeItem(item);
             else item.changeCount(-1  * amount);
             
-            player.getBackPack().addItem(item);
+            player.getBackPack().addItem(new Item(amount, name, item.getCost()));
             item.sold(amount);
             GameMenu.printResult("Item purchased successfully");
             return;
@@ -2033,7 +2085,7 @@ public class GameMenuController {
                 player.setMoney(player.getMoney() - item.getCost() * amount);
             }
             
-            player.getBackPack().addItem(item);
+            player.getBackPack().addItem(new Item(amount, name, item.getCost()));
             item.sold(amount);
             GameMenu.printResult("Item purchased successfully");
             return;
@@ -2053,7 +2105,7 @@ public class GameMenuController {
         else item.changeCount(-1  * amount);
 
         player.setMoney(player.getMoney() - item.getCost() * amount);
-        player.getBackPack().addItem(item);
+        player.getBackPack().addItem(new Item(amount, name, item.getCost()));
         item.sold(amount);
         GameMenu.printResult("Item purchased successfully");
     }
@@ -2134,7 +2186,11 @@ public class GameMenuController {
             player.getFriendships().get(otherPlayer).setTalkedToday(true);
             otherPlayer.getFriendships().get(player).setTalkedToday(true);
         }
-        GameMenu.printResult("Message sent successfully!");
+        if (otherPlayer.equals(player.getHamsar())) {
+            player.setEnergy(Math.min(player.getMaxEnergy(), player.getEnergy() + 50));
+            GameMenu.printResult("Sent a message to love of my life!");
+        } else
+            GameMenu.printResult("Message sent successfully!");
         otherPlayer.setNewTalk(player.getUsername());
     }
     public static void talkHistory(String username){
@@ -2190,6 +2246,10 @@ public class GameMenuController {
         if (x == 0) {
             otherPlayer.getBackPack().addItem(new Item(amount, item, gift.getPrice()));
             GameMenu.printResult("Gift sent to " + username + " successfully!");
+        }
+        if (otherPlayer.equals(player.getHamsar())) {
+            player.setEnergy(Math.min(player.getMaxEnergy(), player.getEnergy() + 50));
+            GameMenu.printResult("Logic taamol ba hamsar baraye gift!!!");
         }
         gift.changeCount(-amount);
         if (gift.getCount() == 0) {
@@ -2248,7 +2308,11 @@ public class GameMenuController {
         }
         player.getFriendships().get(otherPlayer).addXp(60, false, false);
         otherPlayer.getFriendships().get(player).addXp(60, false, false);
-        GameMenu.printResult("Nice job! You hugged each other.");
+        if (otherPlayer.equals(player.getHamsar())) {
+            player.setEnergy(Math.min(player.getMaxEnergy(), player.getEnergy() + 50));
+            GameMenu.printResult("Bia too baghalam");
+        } else
+            GameMenu.printResult("Nice job! You hugged each other.");
     }
     public static void flower(String username){
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -2285,7 +2349,11 @@ public class GameMenuController {
         } else {
             otherBouquet.setCount(otherBouquet.getCount() + 1);
         }
-        GameMenu.printResult("Awwwwww =^-^=");
+        if (otherPlayer.equals(player.getHamsar())) {
+            player.setEnergy(Math.min(player.getMaxEnergy(), player.getEnergy() + 50));
+            GameMenu.printResult("Awwwwww =^-^=");
+        } else
+            GameMenu.printResult("One step closer!");
         player.getFriendships().get(otherPlayer).addXp(0, true, false);
         otherPlayer.getFriendships().get(player).addXp(0, true, false);
     }
