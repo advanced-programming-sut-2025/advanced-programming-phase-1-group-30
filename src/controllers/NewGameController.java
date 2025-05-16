@@ -1,9 +1,7 @@
 package controllers;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
+import java.security.PKCS12Attribute;
+import java.util.*;
 import java.util.regex.Matcher;
 
 import models.Animals.Animal;
@@ -194,6 +192,7 @@ public class NewGameController {
         }
 
         App.getCurrentGame().setCurrentPlayer(nextPlayer);
+        App.getCurrentGame().setCurrentMap(nextPlayer.getMap());
 
         currentPlayer = App.getCurrentGame().getCurrentPlayer();
         GameMenu.printResult("Current player: " + App.getCurrentGame().getCurrentPlayer().getUsername());
@@ -214,6 +213,8 @@ public class NewGameController {
                     currentPlayer.getFriendships().get(currentPlayer.getAskedMarriage()).addXp(0, false, true);
                     currentPlayer.getAskedMarriage().getFriendships().get(currentPlayer).addXp(0, false, true);
                     GameMenu.printResult("Jingo jinge saz miad o az baloy Shiraz miad!");
+                    currentPlayer.setHamsar(currentPlayer.getAskedMarriage());
+                    currentPlayer.getAskedMarriage().setHamsar(currentPlayer);
                 } else if (answer.equals("-reject")) {
                     currentPlayer.getAskedMarriage().getFriendships().get(currentPlayer).setLevel(0);
                     currentPlayer.getAskedMarriage().getFriendships().get(currentPlayer).setXp(0);
@@ -221,8 +222,14 @@ public class NewGameController {
                     currentPlayer.getFriendships().get(currentPlayer.getAskedMarriage()).setXp(0);
                     currentPlayer.setAskedMarriage(null);
                     GameMenu.printResult("Rejected. That was sad :(");
+                    currentPlayer.getAskedMarriage().setGotRejected(true);
+                    currentPlayer.getAskedMarriage().setDaysGotRejected(7);
                 }
             }
+        }
+        if (currentPlayer.isNewTalk() != null) {
+            GameMenu.printResult(currentPlayer.isNewTalk() + " sent you a message! use talk history -u " + currentPlayer.isNewTalk());
+            currentPlayer.setNewTalk(null);
         }
         for (Gift gift : currentPlayer.getGifts()) {
             if (gift.isRated()) {
@@ -235,6 +242,7 @@ public class NewGameController {
                 Matcher matcher = GameMenuCommands.GIFT_RATE.regexMatcher(command);
                 if (matcher.matches()) {
                     int rate = Integer.parseInt(matcher.group("rate"));
+                    gift.setRate(rate);
                     int xp = (rate - 3) * 30 + 15;
                     currentPlayer.getFriendships().get(gift.getSentPlayer()).addXp(xp, false, false);
                     if (rate < 3) {
@@ -248,6 +256,7 @@ public class NewGameController {
             }
             gift.setRated(true);
         }
+        Player.updateBuffs(players);
 
 //        for (Player player : players) {
 //            if (!player.isPassedOut()) {
