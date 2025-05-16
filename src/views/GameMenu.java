@@ -27,16 +27,17 @@ public class GameMenu implements AppMenu {
             NewGameController.NewGame(username1, username2, username3, scanner);
             return;
         }
-
-        matcher = GameMenuCommands.LOAD_GAME.regexMatcher(command);
-        if (matcher.matches()) {
-            NewGameController.LoadGame(matcher.group("id"));
-            return;
-        }
         if (App.getCurrentGame() != null) {
             Player.checkUsedEnergy(App.getCurrentGame().getCurrentPlayer(), scanner);
-        } else {
-            GameMenu.printResult("Invalid command.");
+        }
+        matcher = GameMenuCommands.LOAD_GAME.regexMatcher(command);
+        if (matcher.matches()) {
+            NewGameController.LoadGame();
+            return;
+        }
+        matcher = GameMenuCommands.EXIT_GAME.regexMatcher(command);
+        if (matcher.matches()) {
+            NewGameController.ExitGame();
             return;
         }
         matcher = GameMenuCommands.NEXT_TURN.regexMatcher(command);
@@ -87,6 +88,11 @@ public class GameMenu implements AppMenu {
         matcher = GameMenuCommands.WEATHER_FORECAST.regexMatcher(command);
         if (matcher.matches()) {
             DateAndWeatherController.WeatherForecast();
+            return;
+        }
+        matcher = GameMenuCommands.CheatWeather.regexMatcher(command);
+        if (matcher.matches()) {
+            DateAndWeatherController.CheatWeatherSet(matcher.group("type"));
             return;
         }
         matcher = GameMenuCommands.CHEAT_THOR.regexMatcher(command);
@@ -414,10 +420,16 @@ public class GameMenu implements AppMenu {
             GameMenuController.goToFarm();
             return;
         }
+        matcher = GameMenuCommands.BuildGreenhouse.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.greenHouseBuild();
+            return;
+        }
+
 
         matcher = GameMenuCommands.EXIT_GAME.regexMatcher(command);
         if (matcher.matches()) {
-            GameMenuController.exitGame();
+            // TODO update chiza
             return;
         }
 

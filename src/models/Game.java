@@ -29,7 +29,6 @@ public class Game {
     private ArrayList<Trade> trades = new ArrayList<>();
     private ArrayList<NPC> NPCs = new ArrayList<>();
     private Map currentMap;
-    private int id;
 
     private final Blacksmith blacksmith;
     private final Carpenter carpenter;
@@ -68,7 +67,6 @@ public class Game {
     }
 
     public Game() {
-        this.id = App.getGames().size() + 1;
         this.map = null;
         this.currentTime = new Time();
         this.currentWeather = Weather.SUNNY;
@@ -140,9 +138,5 @@ public class Game {
 
     public void setCurrentMap(Map currentMap) {
         this.currentMap = currentMap;
-    }
-
-    public int getId() {
-        return id;
     }
 }

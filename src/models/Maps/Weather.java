@@ -2,9 +2,9 @@ package models.Maps;
 
 public enum Weather {
     SUNNY("sunny"),
-    RAIN("rainy"),
+    RAIN("rain"),
     STORM("storm"),
-    SNOW("snowy");
+    SNOW("snow");
     public final String name;
 
     Weather(String name) {

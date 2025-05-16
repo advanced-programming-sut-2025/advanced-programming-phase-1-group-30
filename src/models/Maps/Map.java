@@ -458,42 +458,42 @@ public class Map {
                     if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);
                     } else
-                        System.out.print("\uD83E\uDEB4");
+                        System.out.print("\uD83D\uDFEA");
                 }else if (tiles[j][i].getType().equals(TileTypes.BLACKSMITH)) {
                     if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);
                     } else
-                        System.out.print("⚒️");
+                        System.out.print(DARK_BLUE + "⬛" + RESET);
                 }else if (tiles[j][i].getType().equals(TileTypes.FISH_SHOP)) {
                     if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);
                     } else
-                        System.out.print("\uD83C\uDFA3");
+                        System.out.print(DARK_YELLOW + "⬛" + RESET);
                 }else if (tiles[j][i].getType().equals(TileTypes.CARPENTERS_SHOP)) {
                     if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);
                     } else
-                        System.out.print("\uD83D\uDED6");
+                        System.out.print(BRIGHT_CYAN + "⬛" + RESET);
                 }else if (tiles[j][i].getType().equals(TileTypes.JOJOMART)) {
                     if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);
                     } else
-                        System.out.print("\uD83C\uDFEA");
+                        System.out.print(BRIGHT_PURPLE + "⬛" + RESET);
                 }else if (tiles[j][i].getType().equals(TileTypes.MARINES_RANCH)) {
                     if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);
                     } else
-                        System.out.print("\uD83C\uDFDA\uFE0F");
+                        System.out.print(BRIGHT_GREEN + "⬛" + RESET);
                 }else if (tiles[j][i].getType().equals(TileTypes.PIERRES_GENERAL_STORE)) {
                     if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);
                     } else
-                        System.out.print("\uD83D\uDED2");
+                        System.out.print(BRIGHT_RED + "⬛" + RESET);
                 }else if (tiles[j][i].getType().equals(TileTypes.THE_STARDROP_SALOON)) {
                     if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);
                     } else
-                        System.out.print("\uD83C\uDF7A");
+                        System.out.print(DARK_GREEN + "⬛" + RESET);
                 } else if (tiles[j][i].getType().equals(TileTypes.BARN)) {
                     if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);

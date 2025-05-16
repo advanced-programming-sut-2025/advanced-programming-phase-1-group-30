@@ -52,6 +52,11 @@ public class LoginMenu implements AppMenu {
         }
 
 
+        matcher = LoginMenuCommands.USER_LOGOUT.regexMatcher(command);
+        if (matcher.matches()) {
+//             LoginMenuController.logout();
+            return;
+        }
         System.out.println("Invalid command");
     }
 }
