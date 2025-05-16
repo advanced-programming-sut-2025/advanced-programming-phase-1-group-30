@@ -20,6 +20,7 @@ import models.TimeAndDate.Time;
 
 
 public class Game {
+    private int id;
     private GreatMap map;
     private Player currentPlayer;
     private Time currentTime;
@@ -29,7 +30,6 @@ public class Game {
     private ArrayList<Trade> trades = new ArrayList<>();
     private ArrayList<NPC> NPCs = new ArrayList<>();
     private Map currentMap;
-    private int id;
 
     private final Blacksmith blacksmith;
     private final Carpenter carpenter;

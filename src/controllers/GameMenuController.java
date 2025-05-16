@@ -54,6 +54,7 @@ public class GameMenuController {
         player.setMoney(player.getMoney() - 1000);
         wood.setCount(wood.getCount() - 500);
         player.getMap().createGreenHouse();
+        GameMenu.printResult("Congratulations! Your brand-new greenhouse is ready.");
     }
 
     public static void walk(String xStr, String yStr, Scanner scanner) {
@@ -633,7 +634,7 @@ public class GameMenuController {
             return;
         }
         if (item.getCount() > 0) {
-            if (targetTile.getType().equals(TileTypes.PLANTABLE) && targetTile.getItem() == null) {
+            if (targetTile.getItem() == null) {
                 targetTile.setItem(seed);
                 seed.setFertilized(false);
                 item.setCount(item.getCount() - 1);
@@ -688,6 +689,7 @@ public class GameMenuController {
                                     tile.setGiantCrop(true);
                                     tile.setCrop(giantCrop);
                                 }
+                                    GameMenu.printResult("Now you have a giant " + giantCrop.getName() + " !");
 
                                 break; // Stop after finding one
                             }
@@ -1669,6 +1671,7 @@ public class GameMenuController {
     }
 
     public static void showAllProducts() {
+
        Player player = App.getCurrentGame().getCurrentPlayer();
        if (!player.isInCity()) {
            GameMenu.printResult("You are not in the city!");
@@ -1732,6 +1735,7 @@ public class GameMenuController {
         int amount;
         if (count != null) amount = Integer.parseInt(count);
         else amount = 1;
+
         Player player = App.getCurrentGame().getCurrentPlayer();
         
         if (player.getBuilding() == null) {
@@ -2858,7 +2862,6 @@ public class GameMenuController {
         } else {
             GameMenu.printResult("You are already in your farm!");
         }
-
     }
 
     public static void exitGame(){
@@ -2873,4 +2876,5 @@ public class GameMenuController {
         GameMenu.printResult("You exited the game!");
         GameMenu.printResult("Redirecting to Main Menu");
     }
+
 }

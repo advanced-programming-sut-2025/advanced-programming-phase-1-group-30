@@ -6,6 +6,7 @@ import models.Items.Item;
 import models.Items.Products.Crop;
 import models.Items.Products.GiantCrop;
 import models.Items.Products.Tree;
+import models.Maps.GreatMap;
 import models.Maps.Tile;
 import models.Maps.TileTypes;
 import models.Maps.Weather;
@@ -283,7 +284,7 @@ public class DateAndWeatherController {
         Tile[][] tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
         Tile tile = tiles[x1][y1];
 
-        if (tile.isPlanted()) {
+        if (tile.isPlanted() && !tile.getType().equals(TileTypes.GREENHOUSE)) {
             tile.setPlanted(false);
             tile.setItem(new Item(1, "coal", 15));
             tile.setCrop(null);
@@ -310,8 +311,10 @@ public class DateAndWeatherController {
         for(Weather weather1 :Weather.values()){
             if(weather1.name.equals(weather)){
                 App.getCurrentGame().setTomorrowWeather(weather1);
+                GameMenu.printResult("Tomorrow's weather: " + weather);
                 return;
             }
         }
+        GameMenu.printResult("Incorrect weather");
     }
 }

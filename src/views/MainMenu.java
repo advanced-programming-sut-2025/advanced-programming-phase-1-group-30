@@ -38,7 +38,6 @@ public class MainMenu implements AppMenu {
             MainMenuController.logout();
             return;
         }
-
         System.out.println("Invalid command");
     }
 }

@@ -406,6 +406,7 @@ public class Player {
             NewGameController.NextTurn(scanner);
         }
     }
+
     public ArrayList<Item> getShippingBinItems() {
         return shippingBinItems;
     }

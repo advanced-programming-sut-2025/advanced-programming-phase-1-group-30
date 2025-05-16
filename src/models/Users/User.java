@@ -2,10 +2,7 @@ package models.Users;
 
 import controllers.RegisterMenuController;
 import models.App;
-import models.Game;
 import models.Players.Player;
-
-import java.util.ArrayList;
 
 public class User {
     private String username;
@@ -13,7 +10,7 @@ public class User {
     private String nickname;
     private String email;
     private int maxMoney;
-    private int numOfGames;
+    private int  numOfGames;
     private Player player;
     private String gender;
     private int registerQuestionNumber;
@@ -113,5 +110,4 @@ public class User {
 
         return null;
     }
-
 }

@@ -454,7 +454,7 @@ public class Map {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);
                     } else
                         System.out.print("\uD83D\uDFEB");
-                } else if (tiles[j][i].getType().equals(TileTypes.GREENHOUSE)) {
+                }else if (tiles[j][i].getType().equals(TileTypes.GREENHOUSE)) {
                     if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);
                     } else

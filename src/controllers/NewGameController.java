@@ -36,8 +36,8 @@ public class NewGameController {
         Player playerX = new Player(App.getCurrentUser(),App.getCurrentUser().getUsername(), 0);
         User use = User.findUserByUsername(playerX.getUsername());
         use.setPlayer(playerX);
-        use.setNumOfGames(App.getCurrentUser().getNumOfGames() + 1);
         players.add(playerX);
+        use.setNumOfGames(App.getCurrentUser().getNumOfGames() + 1);
         if (username1 == null &&
             username2 == null &&
             username3 == null) {
@@ -168,7 +168,7 @@ public class NewGameController {
         }
         GameMenu.printResult("Game with id " + id + " doesn't exist");
     }
-
+    
     public static void NextTurn(Scanner scanner) {
         List<Player> players = App.getCurrentGame().getPlayers();
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
@@ -277,7 +277,7 @@ public class NewGameController {
 
                         Tile tile = tiles[x][y];
 
-                        if (tile.isPlanted()) {
+                        if (tile.isPlanted() && !tile.getType().equals(TileTypes.GREENHOUSE)) {
                             tile.setPlanted(false);
                             tile.setItem(new Item(1, "coal", 15));
                             tile.setCrop(null);
@@ -324,9 +324,7 @@ public class NewGameController {
                                         tiles[i][j].getCrop().setDaysPassed(tiles[i][j].getCrop().getDaysPassed() - 1);
                                         tiles[i][j].setReadyToHarvest(true);
                                     }
-                                    if ((App.getCurrentGame().getCurrentWeather().equals(Weather.RAIN) ||
-                                            App.getCurrentGame().getCurrentWeather().equals(Weather.STORM)) &&
-                                            !tiles[i][j].getType().equals(TileTypes.GREENHOUSE)) {
+                                    if ((App.getCurrentGame().getCurrentWeather().equals(Weather.RAIN) || App.getCurrentGame().getCurrentWeather().equals(Weather.STORM)) && !tiles[i][j].getType().equals(TileTypes.GREENHOUSE)) {
                                         tiles[i][j].getCrop().setWateredToday(true);
                                     }
                                 }
