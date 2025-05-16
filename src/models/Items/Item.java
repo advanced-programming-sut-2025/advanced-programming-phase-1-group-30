@@ -33,6 +33,7 @@ public class Item implements ItemsInteface {
     public String getName() {
         return name;
     }
+
     public String getQuality() {
         return quality;
     }
@@ -56,6 +57,7 @@ public class Item implements ItemsInteface {
     public void setPrice(double price) {
         this.price = price;
     }
+
 
     public static Item findItemByName(String name, ArrayList<Item> items) {
         for (Item item : items) {

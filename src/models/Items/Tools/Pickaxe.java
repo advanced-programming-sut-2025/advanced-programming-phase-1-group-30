@@ -15,4 +15,16 @@ public class Pickaxe extends Tool{
     public void setType(PickaxeType type) {
         this.type = type;
     }
+
+    public void upgrade() {
+        if(type.name().contains("normal")){
+            this.setType(PickaxeType.COPPER);
+        } else if(type.name().contains("copper")){
+            this.setType(PickaxeType.IRON);
+        } else if(type.name().contains("iron")){
+            this.setType(PickaxeType.GOLD);
+        } else if(type.name().contains("gold")){
+            this.setType(PickaxeType.IRIDIUM);
+        }
+    }
 }

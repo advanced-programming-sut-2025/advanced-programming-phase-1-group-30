@@ -149,6 +149,12 @@ public class GameMenu implements AppMenu {
             GameMenuController.toolUse(direction);
             return;
         }
+        matcher = GameMenuCommands.UPGRADE_TOOL.regexMatcher(command);
+        if (matcher.matches()) {
+            String name = matcher.group("name");
+            GameMenuController.upgradeTools(name);
+            return;
+        }
         matcher = GameMenuCommands.PLANT.regexMatcher(command);
         if (matcher.matches()) {
             String seed = matcher.group("seed");

@@ -15,4 +15,5 @@ public class FishingPole extends Tool {
     public void setType(FishingPoleType type) {
         this.type = type;
     }
+
 }
