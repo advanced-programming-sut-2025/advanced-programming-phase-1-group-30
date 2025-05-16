@@ -402,6 +402,7 @@ public class Player {
             GameMenu.printResult("You used your maximum energy possible for your turn!");
             NewGameController.NextTurn(scanner);
         }
+    }
     public ArrayList<Item> getShippingBinItems() {
         return shippingBinItems;
     }
