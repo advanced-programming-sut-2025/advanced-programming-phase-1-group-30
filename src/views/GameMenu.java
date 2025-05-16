@@ -31,17 +31,16 @@ public class GameMenu implements AppMenu {
             NewGameController.NewGame(username1, username2, username3, scanner);
             return;
         }
-        if (App.getCurrentGame() != null) {
-            Player.checkUsedEnergy(App.getCurrentGame().getCurrentPlayer(), scanner);
-        }
+
         matcher = GameMenuCommands.LOAD_GAME.regexMatcher(command);
         if (matcher.matches()) {
-            NewGameController.LoadGame();
+            NewGameController.LoadGame(matcher.group("id"));
             return;
         }
-        matcher = GameMenuCommands.EXIT_GAME.regexMatcher(command);
-        if (matcher.matches()) {
-            NewGameController.ExitGame();
+        if (App.getCurrentGame() != null) {
+            Player.checkUsedEnergy(App.getCurrentGame().getCurrentPlayer(), scanner);
+        } else {
+            GameMenu.printResult("Invalid command.");
             return;
         }
         matcher = GameMenuCommands.NEXT_TURN.regexMatcher(command);
@@ -422,7 +421,7 @@ public class GameMenu implements AppMenu {
 
         matcher = GameMenuCommands.EXIT_GAME.regexMatcher(command);
         if (matcher.matches()) {
-            // TODO update chiza
+            GameMenuController.exitGame();
             return;
         }
 
