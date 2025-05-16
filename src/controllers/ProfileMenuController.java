@@ -96,6 +96,7 @@ public class ProfileMenuController {
             RegisterMenu.printResult("Invalid menu name");
             return;
         }
+        App.setCurrentMenu(menu);
         RegisterMenu.printResult("Redirecting to " + menuName);
     }
 
