@@ -89,6 +89,7 @@ public class Player {
         this.backPack.addItem(new Basket(1, BasketType.NORMAL));
         this.backPack.addItem(new MilkPail(1, 10));
         this.backPack.addItem(new Scythe(1));
+        this.backPack.addItem(new Item(10,"copper bar",10));
         this.trashCan = new TrashCan(TrashCanType.INITIAL_TRASHCAN);
         this.backPack.addItem(new ForagingSeed(4, ForagingSeedType.ORANGE_SAPLING)); //TODO tile & initial seed
         this.backPack.addItem(new Item(1000, "wood", 10));
@@ -364,6 +365,9 @@ public class Player {
     }
     public ArrayList<IndustrialProductType> getCraftingRecipes() {
         return craftingRecipes;
+    }
+    public void addCraftingRecipe(IndustrialProductType craftingRecipe) {
+        this.craftingRecipes.add(craftingRecipe);
     }
     public Building getBuilding() {
         return building;

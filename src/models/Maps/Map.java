@@ -6,6 +6,7 @@ import models.Buildings.Barn;
 import models.Buildings.Building;
 import models.Buildings.Coop;
 import models.Buildings.GreenHouse;
+import models.Items.Products.ForagingMineral;
 import models.Items.Products.Stone;
 import models.Items.Products.Tree;
 import models.Players.Player;
@@ -329,37 +330,37 @@ public class Map {
                     if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);
                     } else
-                        System.out.print(DARK_BLUE + "⬛" + RESET);
+                        System.out.print("⚒️");
                 }else if (tiles[j][i].getType().equals(TileTypes.FISH_SHOP)) {
                     if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);
                     } else
-                        System.out.print(DARK_YELLOW + "⬛" + RESET);
+                        System.out.print("\uD83C\uDFA3");
                 }else if (tiles[j][i].getType().equals(TileTypes.CARPENTERS_SHOP)) {
                     if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);
                     } else
-                        System.out.print(BRIGHT_CYAN + "⬛" + RESET);
+                        System.out.print("\uD83D\uDED6");
                 }else if (tiles[j][i].getType().equals(TileTypes.JOJOMART)) {
                     if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);
                     } else
-                        System.out.print(BRIGHT_PURPLE + "⬛" + RESET);
+                        System.out.print("\uD83C\uDFEA");
                 }else if (tiles[j][i].getType().equals(TileTypes.MARINES_RANCH)) {
                     if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);
                     } else
-                        System.out.print(BRIGHT_GREEN + "⬛" + RESET);
+                        System.out.print("\uD83C\uDFDA\uFE0F");
                 }else if (tiles[j][i].getType().equals(TileTypes.PIERRES_GENERAL_STORE)) {
                     if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);
                     } else
-                        System.out.print(BRIGHT_RED + "⬛" + RESET);
+                        System.out.print("\uD83D\uDED2");
                 }else if (tiles[j][i].getType().equals(TileTypes.THE_STARDROP_SALOON)) {
                     if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);
                     } else
-                        System.out.print(DARK_GREEN + "⬛" + RESET);
+                        System.out.print("\uD83C\uDF7A");
                 } else if (tiles[j][i].getType().equals(TileTypes.BARN)) {
                     if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);
@@ -450,10 +451,16 @@ public class Map {
                     } else
                         System.out.print("\uD83C\uDFDA\uFE0F");
                 } else if (tiles[j][i].getType().equals(TileTypes.QUARRY)) {
-                    if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
-                        System.out.print(RED + "\uD83D\uDE00" + RESET);
-                    } else
-                        System.out.print("\uD83D\uDFEB");
+                    if (tiles[j][i].getItem() != null) {
+                        if (tiles[j][i].getItem().getClass().equals(ForagingMineral.class)) {
+                            System.out.print("\uD83E\uDEA8");
+                        }
+                    } else {
+                        if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
+                            System.out.print(RED + "\uD83D\uDE00" + RESET);
+                        } else
+                            System.out.print("\uD83D\uDFEB");
+                    }
                 }else if (tiles[j][i].getType().equals(TileTypes.GREENHOUSE)) {
                     if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);

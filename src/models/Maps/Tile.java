@@ -1,10 +1,7 @@
 package models.Maps;
 
 import models.Items.Item;
-import models.Items.Products.Crop;
-import models.Items.Products.Stone;
-import models.Items.Products.Tree;
-import models.Items.Products.TreeType;
+import models.Items.Products.*;
 
 import java.util.Objects;
 import java.util.Random;
@@ -43,7 +40,7 @@ public class Tile {
             case "river":
                 return new Tile(x, y, TileTypes.WATER, false, false, id);
             case "hut":
-                return new Tile(x, y, TileTypes.HUT, false, false, id);
+                return new Tile(x, y, TileTypes.HUT, true, false, id);
             case "greenhouse":
                 return new Tile(x, y, TileTypes.GREENHOUSE, false, false, id);
             case "quarry":
@@ -53,11 +50,11 @@ public class Tile {
             case "carpenters-shop":
                 return new Tile(x, y, TileTypes.CARPENTERS_SHOP, true, true, id);
             case "jojomart":
-                return new Tile(x, y, TileTypes.JOJOMART, false, false, id);
+                return new Tile(x, y, TileTypes.JOJOMART, true, false, id);
             case "pierres-store":
-                return new Tile(x, y, TileTypes.PIERRES_GENERAL_STORE, false, false, id);
+                return new Tile(x, y, TileTypes.PIERRES_GENERAL_STORE, true, false, id);
             case "fish-shop":
-                return new Tile(x, y, TileTypes.FISH_SHOP, false, false, id);
+                return new Tile(x, y, TileTypes.FISH_SHOP, true, false, id);
             case "marnies-ranch":
                 return new Tile(x, y, TileTypes.MARINES_RANCH, true, false, id);
             case "stardrop-saloon":
@@ -120,7 +117,6 @@ public class Tile {
         if (tile.getType().equals(TileTypes.DIRT)) {
             Random random = new Random();
             int randomItem = random.nextInt(75);
-
             if (randomItem <= 35 || 55 <= randomItem) {
                 // Emptygit
             }
@@ -132,6 +128,70 @@ public class Tile {
                 tile.setItem(new Stone(randomItem - 49));
                 tile.changeWalkable();
             }
+        }
+        if(tile.getType().equals(TileTypes.QUARRY)) {
+            Random random = new Random();
+            int randomItem = random.nextInt(67);
+            int randomItem1 = random.nextInt(10);
+
+            if(randomItem1 == 0) {
+                if (randomItem < 2) {
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.QUARTZ));
+                    tile.changeWalkable();
+                } else if (randomItem < 4) {
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.EARTH_CRYSTAL));
+                    tile.changeWalkable();
+                } else if (randomItem < 6) {
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.FROZEN_TEAR));
+                    tile.changeWalkable();
+                } else if (randomItem < 8) {
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.FIRE_QUARTZ));
+                    tile.changeWalkable();
+                } else if (randomItem < 10) {
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.EMERALD));
+                    tile.changeWalkable();
+                } else if (randomItem < 12) {
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.AQUAMARINE));
+                    tile.changeWalkable();
+                } else if (randomItem < 14) {
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.RUBY));
+                    tile.changeWalkable();
+                } else if (randomItem < 16) {
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.AMETHYST));
+                    tile.changeWalkable();
+                } else if (randomItem < 18) {
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.TOPAZ));
+                    tile.changeWalkable();
+                } else if (randomItem < 20) {
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.JADE));
+                    tile.changeWalkable();
+                } else if (randomItem < 21) {
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.DIAMOND));
+                    tile.changeWalkable();
+                } else if (randomItem < 22) {
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.PRISMATIC_SHARED));
+                    tile.changeWalkable();
+                } else if (randomItem < 32) {
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.COPPER));
+                    tile.changeWalkable();
+                } else if (randomItem < 37) {
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.IRON));
+                    tile.changeWalkable();
+                } else if (randomItem < 40) {
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.GOLD));
+                    tile.changeWalkable();
+                } else if (randomItem < 42) {
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.IRIDIUM));
+                    tile.changeWalkable();
+                } else if (randomItem < 47) {
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.COAL));
+                    tile.changeWalkable();
+                } else if (randomItem < 67) {
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.STONE));
+                    tile.changeWalkable();
+                }
+            }
+
         }
     }
 

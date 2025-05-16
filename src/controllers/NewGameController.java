@@ -108,7 +108,7 @@ public class NewGameController {
         App.getMaps().add(new Map(4));
         App.getMaps().add(new Map(-1));
         GameMenu.printResult("Please select your maps...");
-
+        App.getCurrentGame().getGreatMap().setCityMap(App.getMaps().get(4));
         for (Player player : players) {
             boolean mapIsSelected = false;
             while (!mapIsSelected) {
@@ -122,6 +122,7 @@ public class NewGameController {
                     Map map = Map.getMapById(mapNumber);
                     if (map == null) GameMenu.printResult("Please choose between available maps");
                     player.setMap(map);
+                    App.getCurrentGame().getGreatMap().getMaps().add(map);
                     mapIsSelected = true;
                     player.setX(1);
                     player.setY(1);
@@ -265,12 +266,23 @@ public class NewGameController {
 //            }
 //        }
 
+
+        //next day
         int currentTime = App.getCurrentGame().getCurrentTime().getHour();
         if (currentTime == 21) {
             MaintainerController.updateAllShops();
             MaintainerController.emptyShippingBin();
             MaintainerController.crowAttack();
+
             for (Player player : App.getCurrentGame().getPlayers()) {
+                if (player.isInCity()) {
+                    player.setInCity(false);
+                    player.setCityX(-1);
+                    player.setCityY(-1);
+                }
+                player.setX(70);
+                player.setY(8);
+
                 player.setEnergy(player.getMaxEnergy());
                 if (player.isPassedOut()) {
                     player.setEnergy((player.getMaxEnergy() * 3) / 4);

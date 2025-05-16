@@ -30,6 +30,7 @@ import models.TimeAndDate.Season;
 import models.Players.Player;
 import models.Players.Trade;
 import models.Users.User;
+import views.ExitMenu;
 import views.GameMenu;
 import views.RegisterMenu;
 import java.util.*;
@@ -58,7 +59,6 @@ public class GameMenuController {
     }
 
     public static void walk(String xStr, String yStr, Scanner scanner) {
-        // TODO set the building! if in city
         int x = Integer.parseInt(xStr);
         int y = Integer.parseInt(yStr);
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -247,7 +247,74 @@ public class GameMenuController {
         }
     }
     public static void upgradeTools(String name) {
-        // TODO
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if(player.isInCity()){
+            Map citymap = App.getMaps().get(4);
+            if(citymap.getTiles()[player.getCityX()][player.getCityY()].getType().equals(TileTypes.BLACKSMITH)){
+                Item item = Item.findItemByName(name,player.getBackPack().getItems());
+                if(item != null){
+                    if(item instanceof Tool) {
+                        int price;
+                        String need;
+                        if (item.getName().contains("normal")) {
+                            price = 2000;
+                            need = "copper bar";
+                        } else if (item.getName().contains("copper")) {
+                            price = 5000;
+                            need = "iron bar";
+                        } else if (item.getName().contains("iron")) {
+                            price = 10000;
+                            need = "gold bar";
+                        } else if (item.getName().contains("gold")) {
+                            price = 25000;
+                            need = "iridium bar";
+                        } else {
+                            GameMenu.printResult("Tool is not upgradable!");
+                            return;
+                        }
+                        Item found = Item.findItemByName(need, player.getBackPack().getItems());
+                        if(found == null){
+                            GameMenu.printResult("You don't have the ingredient " + need + " in your backpack.");
+                            return;
+                        } else {
+                            if(found.getCount() >= 5){
+                                if(player.getMoney() >= price){
+                                    player.setMoney(player.getMoney() - price);
+                                    if(found.getCount() == 5){
+                                        player.getBackPack().removeItem(found);
+                                    } else {
+                                        found.setCount(found.getCount() - 5);
+                                    }
+
+                                    if(item instanceof Axe){
+                                        ((Axe) item).upgrade();
+                                    } else if(item instanceof Pickaxe){
+                                        ((Pickaxe) item).upgrade();
+                                    } else if(item instanceof Hoe){
+                                        ((Hoe) item).upgrade();
+                                    } else if(item instanceof Basket){
+                                        ((Basket) item).upgrade();
+                                    }
+                                    GameMenu.printResult("Your tool has been upgraded successfully!");
+                                } else {
+                                    GameMenu.printResult("You need " + price + " gold to upgrade!");
+                                }
+                            } else {
+                                GameMenu.printResult("You have need 5 " + found.getName() + " in your backpack.");
+                            }
+                            return;
+                        }
+                    } else {
+                        GameMenu.printResult("item has to be a tool.");
+                        return;
+                    }
+                } else {
+                    GameMenu.printResult("You don't have " + item.getName() + " in your backpack.");
+                    return;
+                }
+            }
+        }
+        GameMenu.printResult("You have to be inside blacksmith to upgrade tools.");
     }
     public static void toolUse(String direction) {
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -383,7 +450,7 @@ public class GameMenuController {
                 if(targetTile.getItem() != null && (targetTile.getItem() instanceof ForagingSeed || targetTile.getItem() instanceof Tree)) {
                     if (targetTile.getItem() instanceof Tree || ((ForagingSeed)targetTile.getItem()).getType().getTreeOrCrop() == 1) {
                         Item wood = new Item(12, "wood", 10);
-                        Item sap = new Item(2, ((ForagingSeed)targetTile.getItem()).getCrop().getType().getName(), 10);
+                        Item sap = new Item(2, "sap", 10);
 
                         Item newWood = Item.findItemByName(wood.getName(), player.getBackPack().getItems());
                         Item newSap = Item.findItemByName(sap.getName(), player.getBackPack().getItems());
@@ -490,6 +557,7 @@ public class GameMenuController {
                             newItem.setCount(newItem.getCount() + targetTile.getCrop().getCount());
                             GameMenu.printResult("You collected " + targetTile.getCrop().getName() + " and added it to your backpack!");
                             targetTile.getCrop().setRegrowthTime(targetTile.getCrop().getRegrowthTime() + 1);
+                            player.increaseFarming(5);
                         } else {
                             if(player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()){
                                 GameMenu.printResult("You don't have enough space in your backpack!");
@@ -519,6 +587,7 @@ public class GameMenuController {
                         if (newItem != null) {
                             newItem.setCount(newItem.getCount() + targetTile.getCrop().getCount());
                             GameMenu.printResult("You harvested " + targetTile.getCrop().getName() + " and added it to your backpack!");
+                            player.increaseFarming(5);
                         } else {
                             if (player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()) {
                                 GameMenu.printResult("You don't have enough space in your backpack!");
@@ -691,7 +760,7 @@ public class GameMenuController {
                 if (item.getCount() == 0) {
                     player.getBackPack().getItems().remove(item);
                 }
-                tiles[newX][newY].setReadyToHarvest(false);
+                tiles[newX][newY].setReadyToHarvest(true);
                 tiles[newX][newY].setCrop(seed.getCrop());
 
                 GameMenu.printResult("Planted " + seed.getName() + " at (" + newX + ", " + newY + ")");
@@ -842,6 +911,18 @@ public class GameMenuController {
             if(items instanceof Basket) {
                 GameMenu.printResult(items.getName() + " Remaining water: " + ((Basket) items).getRemainingWater() + "/" + ((Basket) items).getType().getCapacity());
             }
+        }
+    }
+    public static void craftAddRecipe(String itemName) {
+        IndustrialProductType item = null;
+        for (IndustrialProductType industrialProductType : IndustrialProductType.values()) {
+            if (industrialProductType.getName().equals(itemName)) item = industrialProductType;
+        }
+
+        if (item == null) GameMenu.printResult("No recipe with given name were found!");
+        else {
+            App.getCurrentGame().getCurrentPlayer().addCraftingRecipe(item);
+            GameMenu.printResult(itemName + " added successfully!");
         }
     }
     public static void showCraftingRecipes() {
@@ -1047,7 +1128,7 @@ public class GameMenuController {
         GameMenu.printResult("Recipe added successfully!");
     }
 
-    public static void cooking(String name) {
+    public static void cooking(String name, Scanner scanner) {
         FoodType recipe = FoodType.getrecipeByName(name);
         Player player = App.getCurrentGame().getCurrentPlayer();
         if (recipe == null) {
@@ -1071,7 +1152,10 @@ public class GameMenuController {
             return;
         }
         if (player.getEnergy() <= 3) {
-            GameMenu.printResult("You don't have enough energy to cook!");
+            player.setEnergy(0);
+            player.setPassedOut(true);
+            GameMenu.printResult("You have a carismatic passing out! WHILE COOKING");
+            NewGameController.NextTurn(scanner);
             return;
         }
 
@@ -1176,6 +1260,7 @@ public class GameMenuController {
             player.getBuffs().put("miner's treat", 5);
             player.setMining(player.getMining() + 1);
         }
+
         App.getCurrentGame().getCurrentPlayer().setEnergy(Math.min(player.getEnergy() + food.getType().getEnergy(), App.getCurrentGame().getCurrentPlayer().getMaxEnergy()));
     }
     public static void showCookingRecipe(){}
@@ -1716,7 +1801,7 @@ public class GameMenuController {
             return;
         }
 
-        for (Item ingredient : recipe.getIngredients()) {
+        for (Item ingredient : item.getIngredients()) {
             Item backpackItem = Item.findItemByName(ingredient.getName(), App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
 
             if (backpackItem == null) {
@@ -1731,7 +1816,7 @@ public class GameMenuController {
             }
         }
 
-        for (Item ingredient : recipe.getIngredients()) {
+        for (Item ingredient : item.getIngredients()) {
             Item backpackItem = Item.findItemByName(ingredient.getName(), App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
 
             if (ingredient.getCount() == backpackItem.getCount())
@@ -1763,8 +1848,8 @@ public class GameMenuController {
             GameMenu.printResult("You are not in the city!");
             return;
         }
-        Tile[][] tiles = App.getMaps().get(4).getTiles();
-        switch (tiles[player.getCityX()][player.getCityX()].getType()) {
+        Tile[][] tiles = App.getCurrentGame().getCurrentMap().getTiles();
+        switch (tiles[player.getCityX()][player.getCityY()].getType()) {
             case BLACKSMITH ->
                     GameMenu.printResult(MaintainerController.printingShopProducts("Blacksmith", BlacksmithCosts.values()));
             case CARPENTERS_SHOP ->
@@ -1790,7 +1875,7 @@ public class GameMenuController {
             return;
         }
         Tile[][] tiles = App.getMaps().get(4).getTiles();
-        switch (tiles[player.getCityX()][player.getCityX()].getType()) {
+        switch (tiles[player.getCityX()][player.getCityY()].getType()) {
             case BLACKSMITH ->
                     GameMenu.printResult(MaintainerController.printingShopProducts2("Blacksmith", App.getCurrentGame().getBlacksmith().getItems()));
             case CARPENTERS_SHOP ->
@@ -1928,7 +2013,7 @@ public class GameMenuController {
             if (amount == item.getCount()) player.getBuilding().removeItem(item);
             else item.changeCount(-1  * amount);
             
-            player.getBackPack().addItem(item);
+            player.getBackPack().addItem(new Item(amount, name, item.getCost()));
             item.sold(amount);
             GameMenu.printResult("Item purchased successfully");
             return;
@@ -1976,7 +2061,7 @@ public class GameMenuController {
                 player.setMoney(player.getMoney() - item.getCost() * amount);
             }
             
-            player.getBackPack().addItem(item);
+            player.getBackPack().addItem(new Item(amount, name, item.getCost()));
             item.sold(amount);
             GameMenu.printResult("Item purchased successfully");
             return;
@@ -1996,7 +2081,7 @@ public class GameMenuController {
         else item.changeCount(-1  * amount);
 
         player.setMoney(player.getMoney() - item.getCost() * amount);
-        player.getBackPack().addItem(item);
+        player.getBackPack().addItem(new Item(amount, name, item.getCost()));
         item.sold(amount);
         GameMenu.printResult("Item purchased successfully");
     }
@@ -2875,6 +2960,17 @@ public class GameMenuController {
     }
     public static void printPlayerFullMap(){
         App.getCurrentGame().getCurrentPlayer().getMap().printFullMap();
+    }
+    public static void printGreatMap(){
+        GameMenuController.printCityMap();
+        GameMenu.printResult("");
+        Player temp = App.getCurrentGame().getCurrentPlayer();
+        for(Player player : App.getCurrentGame().getPlayers()){
+            App.getCurrentGame().setCurrentPlayer(player);
+            GameMenuController.printPlayerFullMap();
+            GameMenu.printResult("");
+        }
+        App.getCurrentGame().setCurrentPlayer(temp);
     }
     public static void goToCity(){
         Player player = App.getCurrentGame().getCurrentPlayer();
