@@ -4,7 +4,11 @@ import controllers.DateAndWeatherController;
 import controllers.GameMenuController;
 import controllers.NewGameController;
 import models.App;
+import models.Buildings.FishShopCosts;
+import models.Buildings.GeneralStoreCosts;
 import models.Commands.GameMenuCommands;
+import models.Items.Products.ShopProducts.FishShopProducts;
+import models.Items.Products.ShopProducts.GeneralStoreProducts;
 import models.Players.Player;
 
 import java.util.Scanner;
@@ -27,19 +31,17 @@ public class GameMenu implements AppMenu {
             NewGameController.NewGame(username1, username2, username3, scanner);
             return;
         }
-        if (App.getCurrentGame() != null) {
-            Player.checkUsedEnergy(App.getCurrentGame().getCurrentPlayer(), scanner);
-        }
         matcher = GameMenuCommands.LOAD_GAME.regexMatcher(command);
         if (matcher.matches()) {
-            NewGameController.LoadGame();
+            NewGameController.LoadGame(matcher.group("id"));
             return;
         }
-        matcher = GameMenuCommands.EXIT_GAME.regexMatcher(command);
-        if (matcher.matches()) {
-            NewGameController.ExitGame();
-            return;
+        if (App.getCurrentGame() != null) {
+            Player.checkUsedEnergy(App.getCurrentGame().getCurrentPlayer(), scanner);
+        } else {
+            GameMenu.printResult("Invalid command.");
         }
+
         matcher = GameMenuCommands.NEXT_TURN.regexMatcher(command);
         if (matcher.matches()) {
             NewGameController.NextTurn(scanner);
@@ -88,6 +90,11 @@ public class GameMenu implements AppMenu {
         matcher = GameMenuCommands.WEATHER_FORECAST.regexMatcher(command);
         if (matcher.matches()) {
             DateAndWeatherController.WeatherForecast();
+            return;
+        }
+        matcher = GameMenuCommands.CheatWeather.regexMatcher(command);
+        if (matcher.matches()) {
+            DateAndWeatherController.CheatWeatherSet(matcher.group("type"));
             return;
         }
         matcher = GameMenuCommands.CHEAT_THOR.regexMatcher(command);
@@ -205,7 +212,7 @@ public class GameMenu implements AppMenu {
             if (matcher.group("action").equals("put"))
                 GameMenuController.putRefrigerator(matcher.group("item"));
             else if (matcher.group("action").equals("pick"))
-                GameMenuController.putRefrigerator(matcher.group("item"));
+                GameMenuController.pickRefrigerator(matcher.group("item"));
             else
                 printResult("You should just put or pick!");
             return;
@@ -268,7 +275,6 @@ public class GameMenu implements AppMenu {
             GameMenuController.shepherdAnimals(matcher.group("animalName"), matcher.group("x"), matcher.group("y"));
             return;
         }
-
         matcher = GameMenuCommands.FEED_HAY.regexMatcher(command);
         if (matcher.matches()) {
             GameMenuController.feedHay(matcher.group("animalName"));
@@ -306,8 +312,7 @@ public class GameMenu implements AppMenu {
         }
         matcher = GameMenuCommands.PURCHASE.regexMatcher(command);
         if (matcher.matches()) {
-            // TODO -n is null
-            GameMenuController.purchase(matcher.group("productName"), Integer.parseInt(matcher.group("count")));
+            GameMenuController.purchase(matcher.group("productName"), matcher.group("count"));
             return;
         }
         matcher = GameMenuCommands.CHEAT_ADD_DOLLARS.regexMatcher(command);
@@ -317,8 +322,7 @@ public class GameMenu implements AppMenu {
         }
         matcher = GameMenuCommands.SELL.regexMatcher(command);
         if (matcher.matches()) {
-            // TODO -n is null
-            GameMenuController.sell(matcher.group("productName"), Integer.parseInt(matcher.group("count")));
+            GameMenuController.sell(matcher.group("productName"), matcher.group("count"));
             return;
         }
         matcher = GameMenuCommands.ARTISAN_USE.regexMatcher(command);
@@ -417,10 +421,30 @@ public class GameMenu implements AppMenu {
             GameMenuController.goToFarm();
             return;
         }
+        matcher = GameMenuCommands.BuildGreenhouse.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.greenHouseBuild();
+            return;
+        }
+
 
         matcher = GameMenuCommands.EXIT_GAME.regexMatcher(command);
         if (matcher.matches()) {
-            // TODO update chiza
+            GameMenuController.exitGame();
+            return;
+        }
+
+        //Developer commands
+        if (command.equals("fish")) {
+            App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getFishShop());
+            App.getCurrentGame().getFishShop().addItem(new FishShopProducts(1, FishShopCosts.TRAINING_POLE));
+            System.out.println("CHEAT");
+            return;
+        }
+        if (command.equals("backpack")) {
+            App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getGeneralStore());
+            App.getCurrentGame().getGeneralStore().addItem(new GeneralStoreProducts(1, GeneralStoreCosts.LARGE_PACK));
+            System.out.println("CHEAT");
             return;
         }
 

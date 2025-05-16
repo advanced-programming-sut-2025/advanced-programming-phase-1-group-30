@@ -6,6 +6,7 @@ import models.Items.Item;
 import models.Items.Products.Crop;
 import models.Items.Products.GiantCrop;
 import models.Items.Products.Tree;
+import models.Maps.GreatMap;
 import models.Maps.Tile;
 import models.Maps.TileTypes;
 import models.Maps.Weather;
@@ -45,6 +46,8 @@ public class DateAndWeatherController {
         if (x + App.getCurrentGame().getCurrentTime().getHour() > 22) {
             App.getCurrentGame().setCurrentWeather(App.getCurrentGame().getTomorrowWeather());
             MaintainerController.updateAllShops();
+            MaintainerController.emptyShippingBin();
+            MaintainerController.crowAttack();
             App.getCurrentGame().getCurrentTime().setHour((x - (22 - App.getCurrentGame().getCurrentTime().getHour())) + 9);
             for (Player player : App.getCurrentGame().getPlayers()) {
                 player.setEnergy(player.getMaxEnergy());
@@ -251,6 +254,9 @@ public class DateAndWeatherController {
             App.getCurrentGame().getCurrentTime().setDay(App.getCurrentGame().getCurrentTime().getDay() + x);
         }
         GameMenu.printResult("Cheat code activated: " + x + " days passed");
+        MaintainerController.updateAllShops();
+        MaintainerController.emptyShippingBin();
+        MaintainerController.crowAttack();
     }
 
     static void ChangeSeason() {
@@ -278,7 +284,7 @@ public class DateAndWeatherController {
         Tile[][] tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
         Tile tile = tiles[x1][y1];
 
-        if (tile.isPlanted()) {
+        if (tile.isPlanted() && !tile.getType().equals(TileTypes.GREENHOUSE)) {
             tile.setPlanted(false);
             tile.setItem(new Item(1, "coal", 15));
             tile.setCrop(null);
@@ -305,8 +311,10 @@ public class DateAndWeatherController {
         for(Weather weather1 :Weather.values()){
             if(weather1.name.equals(weather)){
                 App.getCurrentGame().setTomorrowWeather(weather1);
+                GameMenu.printResult("Tomorrow's weather: " + weather);
                 return;
             }
         }
+        GameMenu.printResult("Incorrect weather");
     }
 }

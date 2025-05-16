@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 public enum GameMenuCommands {
     GAME_NEW("^\\s*game\\s+new\\s*(-u\\s+(?<username1>\\S+))?(\\s+(?<username2>\\S+))?(\\s+(?<username3>\\S+))?\\s*$"),
     GAME_MAP("^\\s*game\\s+map\\s+(?<mapNumber>\\d+)\\s+-g(?<gender>.+)\\s*$"),
-    LOAD_GAME("^\\s*load\\s+game\\s*$"),
+    LOAD_GAME("^\\s*load\\s+game\\s+(?<id>\\d+)\\s*$"),
     EXIT_GAME("^\\s*exit\\s+game\\s*$"),
     NEXT_TURN("^\\s*next\\s+turn\\s*$"),
     TIME("^\\s*time\\s*$"),
@@ -18,7 +18,8 @@ public enum GameMenuCommands {
     SEASON("^\\s*season\\s*$"),
     WEATHER("^\\s*weather\\s*$"),
     WEATHER_FORECAST("^\\s*weather\\s+forecast\\s*$"),
-    CHEAT_THOR("^cheat\\s+Thor\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\s*$"),
+    CheatWeather("^\\s*cheat\\s+weather\\s+set\\s+(?<type>\\S*)\\s*$"),
+    CHEAT_THOR("^cheat\\s+Thor\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s*$"),
     PRINT_MAP("^\\s*print\\s+map\\s+-l\\s+(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s+-s\\s+(?<size>\\d+)\\s*$"),
     HELPREADINGMAP("^\\s*help\\s+reading\\s+map\\s*$"),
     ENERGY_SHOW("^\\s*energy\\s+show\\s*$"),
@@ -61,9 +62,9 @@ public enum GameMenuCommands {
     ARTISAN_GET("^\\s*artisan\\s+get\\s+(?<artisanName>.*\\S)\\s*$"),
     SHOW_ALL_PRODUCTS("^\\s*show\\s+all\\s+products\\s*$"),
     SHOW_ALL_AVAILABLE_PRODUCTS("^\\s*show\\s+all\\s+available\\s+products\\s*$"),
-    PURCHASE("^\\s*purchase\\s+(?<productName>.*\\S)\\s+-n\\s+(?<count>\\d+)\\s*$"),
+    PURCHASE("^\\s*purchase\\s+(?<productName>.+?)(?:\\s+-n\\s+(?<count>\\d+))?\\s*$"),
     CHEAT_ADD_DOLLARS("^\\s*cheat\\s+add\\s+(?<count>\\d+)\\s+dollars\\s*$"),
-    SELL("^\\s*sell\\s+(?<productName>.*\\S)\\s+-n\\s+(?<count>\\d+)\\s*$"),
+    SELL("^\\s*sell\\s+(?<productName>.+?)(?:\\s+-n\\s+(?<count>\\d+))?\\s*$"),
     FRIENDSHIPS("^\\s*friendships\\s*$"),
     TALK("^\\s*talk\\s+-u\\s+(?<username>.*\\S)\\s+-m\\s+(?<message>.*\\S)\\s*$"),
     TALK_HISTORY("^\\s*talk\\s+history\\s+-u\\s+(?<username>.*\\S)\\s*$"),
@@ -88,7 +89,9 @@ public enum GameMenuCommands {
     PRINT_CITY_MAP("^\\s*print\\s+city\\s+map\\s*$"),
     PRINT_FULL_MAP("^\\s*print\\s+full\\s+map\\s*$"),
     GoToCity("^\\s*go\\s+to\\s+city\\s*$"),
-    GoToFarm("^\\s*go\\s+to\\s+farm\\s*$"),;
+    GoToFarm("^\\s*go\\s+to\\s+farm\\s*$"),
+    BuildGreenhouse("^\\s*greenhouse\\s+build\\s*$"),
+    Exit("^\\s*exit\\s+game\\s*$");
 
 
 
