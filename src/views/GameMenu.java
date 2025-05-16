@@ -7,6 +7,7 @@ import models.App;
 import models.Buildings.FishShopCosts;
 import models.Buildings.GeneralStoreCosts;
 import models.Commands.GameMenuCommands;
+import models.Invetory.BackPackType;
 import models.Items.Products.ShopProducts.FishShopProducts;
 import models.Items.Products.ShopProducts.GeneralStoreProducts;
 import models.Players.Player;
@@ -198,6 +199,11 @@ public class GameMenu implements AppMenu {
             GameMenuController.showCraftingRecipes();
             return;
         }
+        matcher = GameMenuCommands.CRAFTING_ADD_RECIPE.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.craftAddRecipe(matcher.group("itemName"));
+            return;
+        }
         matcher = GameMenuCommands.CRAFTING_CRAFT.regexMatcher(command);
         if (matcher.matches()) {
             GameMenuController.crafting(matcher.group("itemName"));
@@ -238,7 +244,7 @@ public class GameMenu implements AppMenu {
         }
         matcher = GameMenuCommands.COOKING_PREPARE.regexMatcher(command);
         if (matcher.matches()) {
-            GameMenuController.cooking(matcher.group("recipeName"));
+            GameMenuController.cooking(matcher.group("recipeName"), scanner);
             return;
         }
         matcher = GameMenuCommands.EAT.regexMatcher(command);
@@ -453,8 +459,7 @@ public class GameMenu implements AppMenu {
             return;
         }
         if (command.equals("backpack")) {
-            App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getGeneralStore());
-            App.getCurrentGame().getGeneralStore().addItem(new GeneralStoreProducts(1, GeneralStoreCosts.LARGE_PACK));
+            App.getCurrentGame().getCurrentPlayer().getBackPack().setType(BackPackType.DELUX_BACKPACK);
             System.out.println("CHEAT");
             return;
         }

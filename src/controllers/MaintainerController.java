@@ -125,7 +125,8 @@ public class MaintainerController {
 
     public static void crowAttack() {
         Random random = new Random();
-        
+        Player player = App.getCurrentGame().getCurrentPlayer();
+
         int chance;
         if (App.getCurrentGame().getCurrentPlayer().getMap().hasScareCrow()) chance = 8;
         else chance = 4;
@@ -133,12 +134,22 @@ public class MaintainerController {
         int randomNumber = random.nextInt(chance);
         if (randomNumber == 0) {
             GameMenu.printResult("You are under attack by CROWS!");
-            ArrayList<Item> products = App.getCurrentGame().getCurrentPlayer().getProducts();
-            randomNumber = Math.min(random.nextInt(3) + 1, products.size());
 
-            for (int i = 0; i < randomNumber; i++) {
-                GameMenu.printResult("You loose " + products.get(i).getCount() + " " + products.get(i).getName());
-                products.remove(i);
+            for (int i = 0; i < 80; i++) {
+                for (int j = 0; j < 60; j++) {
+                    Tile tile = player.getMap().getTiles()[i][j];
+                    if (tile.isPlanted()) {
+                        randomNumber = random.nextInt(10);
+                        if (randomNumber == 0) {
+                            GameMenu.printResult("You loose " + tile.getItem().getName());
+                            tile.setPlanted(false);
+                            tile.setReadyToHarvest(false);
+                            tile.setCrop(null);
+                            tile.setItem(null);
+                            tile.setType(TileTypes.DIRT);
+                        }
+                    }
+                }
             }
         }
     }

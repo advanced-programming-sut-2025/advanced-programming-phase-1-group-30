@@ -59,7 +59,6 @@ public class GameMenuController {
     }
 
     public static void walk(String xStr, String yStr, Scanner scanner) {
-        // TODO set the building! if in city
         int x = Integer.parseInt(xStr);
         int y = Integer.parseInt(yStr);
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -877,6 +876,18 @@ public class GameMenuController {
             }
         }
     }
+    public static void craftAddRecipe(String itemName) {
+        IndustrialProductType item = null;
+        for (IndustrialProductType industrialProductType : IndustrialProductType.values()) {
+            if (industrialProductType.getName().equals(itemName)) item = industrialProductType;
+        }
+
+        if (item == null) GameMenu.printResult("No recipe with given name were found!");
+        else {
+            App.getCurrentGame().getCurrentPlayer().addCraftingRecipe(item);
+            GameMenu.printResult(itemName + " added successfully!");
+        }
+    }
     public static void showCraftingRecipes() {
         for(IndustrialProductType recipe :App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()){
             GameMenu.printResult(recipe.getName() + ": " + recipe.getDescription());
@@ -1080,7 +1091,7 @@ public class GameMenuController {
         GameMenu.printResult("Recipe added successfully!");
     }
 
-    public static void cooking(String name) {
+    public static void cooking(String name, Scanner scanner) {
         FoodType recipe = FoodType.getrecipeByName(name);
         Player player = App.getCurrentGame().getCurrentPlayer();
         if (recipe == null) {
@@ -1104,7 +1115,10 @@ public class GameMenuController {
             return;
         }
         if (player.getEnergy() <= 3) {
-            GameMenu.printResult("You don't have enough energy to cook!");
+            player.setEnergy(0);
+            player.setPassedOut(true);
+            GameMenu.printResult("You have a carismatic passing out! WHILE COOKING");
+            NewGameController.NextTurn(scanner);
             return;
         }
 
@@ -1209,6 +1223,7 @@ public class GameMenuController {
             player.getBuffs().put("miner's treat", 5);
             player.setMining(player.getMining() + 1);
         }
+
         App.getCurrentGame().getCurrentPlayer().setEnergy(Math.min(player.getEnergy() + food.getType().getEnergy(), App.getCurrentGame().getCurrentPlayer().getMaxEnergy()));
     }
     public static void showCookingRecipe(){}
@@ -1749,7 +1764,7 @@ public class GameMenuController {
             return;
         }
 
-        for (Item ingredient : recipe.getIngredients()) {
+        for (Item ingredient : item.getIngredients()) {
             Item backpackItem = Item.findItemByName(ingredient.getName(), App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
 
             if (backpackItem == null) {
@@ -1764,7 +1779,7 @@ public class GameMenuController {
             }
         }
 
-        for (Item ingredient : recipe.getIngredients()) {
+        for (Item ingredient : item.getIngredients()) {
             Item backpackItem = Item.findItemByName(ingredient.getName(), App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
 
             if (ingredient.getCount() == backpackItem.getCount())
@@ -1796,8 +1811,8 @@ public class GameMenuController {
             GameMenu.printResult("You are not in the city!");
             return;
         }
-        Tile[][] tiles = App.getMaps().get(4).getTiles();
-        switch (tiles[player.getCityX()][player.getCityX()].getType()) {
+        Tile[][] tiles = App.getCurrentGame().getCurrentMap().getTiles();
+        switch (tiles[player.getCityX()][player.getCityY()].getType()) {
             case BLACKSMITH ->
                     GameMenu.printResult(MaintainerController.printingShopProducts("Blacksmith", BlacksmithCosts.values()));
             case CARPENTERS_SHOP ->
@@ -1823,7 +1838,7 @@ public class GameMenuController {
             return;
         }
         Tile[][] tiles = App.getMaps().get(4).getTiles();
-        switch (tiles[player.getCityX()][player.getCityX()].getType()) {
+        switch (tiles[player.getCityX()][player.getCityY()].getType()) {
             case BLACKSMITH ->
                     GameMenu.printResult(MaintainerController.printingShopProducts2("Blacksmith", App.getCurrentGame().getBlacksmith().getItems()));
             case CARPENTERS_SHOP ->
@@ -1961,7 +1976,7 @@ public class GameMenuController {
             if (amount == item.getCount()) player.getBuilding().removeItem(item);
             else item.changeCount(-1  * amount);
             
-            player.getBackPack().addItem(item);
+            player.getBackPack().addItem(new Item(amount, name, item.getCost()));
             item.sold(amount);
             GameMenu.printResult("Item purchased successfully");
             return;
@@ -2009,7 +2024,7 @@ public class GameMenuController {
                 player.setMoney(player.getMoney() - item.getCost() * amount);
             }
             
-            player.getBackPack().addItem(item);
+            player.getBackPack().addItem(new Item(amount, name, item.getCost()));
             item.sold(amount);
             GameMenu.printResult("Item purchased successfully");
             return;
@@ -2029,7 +2044,7 @@ public class GameMenuController {
         else item.changeCount(-1  * amount);
 
         player.setMoney(player.getMoney() - item.getCost() * amount);
-        player.getBackPack().addItem(item);
+        player.getBackPack().addItem(new Item(amount, name, item.getCost()));
         item.sold(amount);
         GameMenu.printResult("Item purchased successfully");
     }
