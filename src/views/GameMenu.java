@@ -437,7 +437,7 @@ public class GameMenu implements AppMenu {
         //Developer commands
         if (command.equals("fish")) {
             App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getFishShop());
-            App.getCurrentGame().getFishShop().addItem(new FishShopProducts(1, FishShopCosts.TRAINING_POLE));
+            App.getCurrentGame().getFishShop().addItem(new FishShopProducts(1, FishShopCosts.TRAINING_ROD));
             System.out.println("CHEAT");
             return;
         }

@@ -465,7 +465,6 @@ public class Player {
     public void setMining(int mining) {
         this.mining = mining;
     }
-}
     public User getUser() {
         return user;
     }
