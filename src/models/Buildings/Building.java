@@ -10,13 +10,21 @@ public class Building {
     private int width;
     private int startX;
     private int startY;
+
+    private final int startHour;
+    private final int endHour;
+
     private ArrayList<Item> items;
 
-    public Building(int height, int width, int startX, int startY) {
+    public Building(int height, int width, int startX, int startY, int startHour, int endHour) {
         this.height = height;
         this.width = width;
         this.startX = startX;
         this.startY = startY;
+
+        this.startHour = startHour;
+        this.endHour = endHour;
+
         this.items = new ArrayList<>();
     }
   
@@ -50,5 +58,13 @@ public class Building {
     }
     public void removeItems() {
         this.items = new ArrayList<>();
+    }
+
+    public int getStartHour() {
+        return startHour;
+    }
+
+    public int getEndHour() {
+        return endHour;
     }
 }

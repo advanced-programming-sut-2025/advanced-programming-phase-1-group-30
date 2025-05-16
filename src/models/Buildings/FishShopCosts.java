@@ -1,20 +1,26 @@
 package models.Buildings;
 
 import models.Items.ItemsInteface;
+import models.TimeAndDate.Season;
 
 public enum FishShopCosts implements ItemsInteface {
-    FISH_SMOKER_RECIPE("A recipe to make Fish Smoker", "Use this recipe to craft a Fish Smoker.", 10000, -1, 1),
-    TROUT_SOUP("Trout Soup", "Pretty salty.", 250, -1, 1),
-    BAMBOO_POLE("Bamboo Pole", "Use in the water to catch fish.", 500, -1, 1),
-    TRAINING_ROD("Training Rod", "It's a lot easier to use than other rods, but can only catch basic fish.", 25, -1, 1),
-    FIBERGLASS_ROD("Fiberglass Rod", "Use in the water to catch fish.", 1800, 2, 1),
-    IRIDIUM_ROD("Iridium Rod", "Use in the water to catch fish.", 7500, 4, 1);
+    FISH_SMOKER_RECIPE("A recipe to make Fish Smoker", "Use this recipe to craft a Fish Smoker.", 10000, -1, 1, Season.ALL),
+    TROUT_SOUP("Trout Soup", "Pretty salty.", 250, -1, 1, Season.ALL),
+    BAMBOO_POLE("Bamboo Pole", "Use in the water to catch fish.", 500, -1, 1, Season.ALL),
+    TRAINING_ROD("Training Rod", "It's a lot easier to use than other rods, but can only catch basic fish.", 25, -1, 1, Season.ALL),
+    FIBERGLASS_ROD("Fiberglass Rod", "Use in the water to catch fish.", 1800, 2, 1, Season.ALL),
+    IRIDIUM_ROD("Iridium Rod", "Use in the water to catch fish.", 7500, 4, 1, Season.ALL);
 
     private final String name;
-    public final String description;
-    public final int price;
-    public final int fishingSkillRequired; // -1 means no requirement
-    public final int dailyLimit;
+    private final String description;
+    private final int price;
+    private final int fishingSkillRequired; // -1 means no requirement
+    private final int dailyLimit;
+    private final Season season;
+
+    public Season getSeason() {
+        return season;
+    }
 
     public String getName() {
         return name;
@@ -36,11 +42,12 @@ public enum FishShopCosts implements ItemsInteface {
         return dailyLimit;
     }
 
-    FishShopCosts(String name, String description, int price, int fishingSkillRequired, int dailyLimit) {
+    FishShopCosts(String name, String description, int price, int fishingSkillRequired, int dailyLimit, Season season) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.fishingSkillRequired = fishingSkillRequired;
         this.dailyLimit = dailyLimit;
+        this.season = season;
     }
 }

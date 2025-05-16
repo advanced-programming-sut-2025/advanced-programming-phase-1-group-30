@@ -4,20 +4,20 @@ import models.Items.ItemsInteface;
 import models.TimeAndDate.Season;
 
 public enum FruitType implements ItemsInteface {
-    APRICOT("Apricot", 1, 59, true, 38, Season.SPRING),
-    CHERRY("Cherry", 1, 80, true, 38, Season.SPRING),
-    BANANA("Banana", 1, 150, true, 75, Season.SUMMER),
-    MANGO("Mango", 1, 130, true, 100, Season.SUMMER),
-    ORANGE("Orange", 1, 100, true, 38, Season.SUMMER),
-    PEACH("Peach", 1, 140, true, 38, Season.SUMMER),
-    APPLE("Apple", 1, 100, true, 38, Season.FALL),
-    POMEGRANATE("Pomegranate", 1, 140, true, 38, Season.FALL),
-    OAK_RESIN("Oak Resin", 7, 150, false, 0, Season.ALL),
-    MAPLE_SYRUP("Maple Syrup", 9, 200, false, 0, Season.ALL),
-    PINE_TAR("Pine Tar", 5, 100, false, 0, Season.ALL),
-    SAP("Sap", 1, 2, true, -2, Season.ALL),
-    COMMON_MUSHROOM("Common Mushroom", 1, 40, true, 38, Season.ALL),
-    MYSTIC_SYRUP("Mystic Syrup", 7, 1000, true, 500, Season.ALL);
+    APRICOT("apricot", 1, 59, true, 38, Season.SPRING),
+    CHERRY("cherry", 1, 80, true, 38, Season.SPRING),
+    BANANA("banana", 1, 150, true, 75, Season.SUMMER),
+    MANGO("mango", 1, 130, true, 100, Season.SUMMER),
+    ORANGE("orange", 1, 100, true, 38, Season.SUMMER),
+    PEACH("peach", 1, 140, true, 38, Season.SUMMER),
+    APPLE("apple", 1, 100, true, 38, Season.FALL),
+    POMEGRANATE("pomegranate", 1, 140, true, 38, Season.FALL),
+    OAK_RESIN("oak resin", 7, 150, false, 0, Season.ALL),
+    MAPLE_SYRUP("maple syrup", 9, 200, false, 0, Season.ALL),
+    PINE_TAR("pine tar", 5, 100, false, 0, Season.ALL),
+    SAP("sap", 1, 2, true, -2, Season.ALL),
+    COMMON_MUSHROOM("common mushroom", 1, 40, true, 38, Season.ALL),
+    MYSTIC_SYRUP("mystic syrup", 7, 1000, true, 500, Season.ALL);
 
     private final String name;
     private final int harvestCycle;
