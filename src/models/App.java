@@ -13,6 +13,7 @@ public class App {
     private static ArrayList<String> questions = new ArrayList<>();
     private static Menus currentMenu = Menus.RegisterMenu;
     private static Game currentGame;
+    private static ArrayList<Game> games = new ArrayList<>();
   
     public static ArrayList<String> getQuestions() {return questions;}
     
@@ -54,5 +55,9 @@ public class App {
 
     public static void setCurrentGame(Game currentGame) {
         App.currentGame = currentGame;
+    }
+
+    public static ArrayList<Game> getGames() {
+        return games;
     }
 }

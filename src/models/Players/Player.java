@@ -20,6 +20,7 @@ import models.Items.Products.ForagingSeedType;
 import models.Items.Tools.*;
 import models.Maps.Map;
 import models.Players.NPC.NPC;
+import models.Users.User;
 import views.GameMenu;
 
 import java.util.ArrayList;
@@ -66,8 +67,10 @@ public class Player {
     private Map savedMap;
     private int lastEnergy;
     private ArrayList<Item> shippingBinItems = new ArrayList<>();
+    private User user;
 
-    public Player(String username, int selectionNumber) {
+    public Player(User user,String username, int selectionNumber) {
+        this.user = user;
         this.username = username;
         this.map = null;
         this.energy = 200;
@@ -413,5 +416,9 @@ public class Player {
 
     public void addShippingBinItem(Item shippingBinItem) {
         this.shippingBinItems.add(shippingBinItem);
+    }
+
+    public User getUser() {
+        return user;
     }
 }
