@@ -3,6 +3,7 @@ package controllers;
 import models.Animals.*;
 import models.App;
 import models.Buildings.*;
+import models.Commands.Menus;
 import models.Invetory.BackPackType;
 import models.Game;
 import models.Items.Gift;
@@ -2836,6 +2837,19 @@ public class GameMenuController {
         } else {
             GameMenu.printResult("You are already in your farm!");
         }
+    }
+
+    public static void exitGame(){
+        for(Player player : App.getCurrentGame().getPlayers()){
+            if(player.getMoney() > player.getUser().getMaxMoney()){
+                player.getUser().setMaxMoney(player.getMoney());
+            }
+            player.getUser().changeInGame();
+        }
+        App.setCurrentGame(null);
+        App.setCurrentMenu(Menus.MainMenu);
+        GameMenu.printResult("You exited the game!");
+        GameMenu.printResult("Redirecting to Main Menu");
     }
 
 }
