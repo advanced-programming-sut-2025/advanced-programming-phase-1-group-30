@@ -1659,8 +1659,82 @@ public class GameMenuController {
             return;
         }
 
+        if (player.getBuilding().getClass() == FishShop.class) {
+            FishingPole fishingPole = null;
+            for (Item item2 : player.getBackPack().getItems()) {
+                if (item2.getClass() == FishingPole.class) {
+                    fishingPole = (FishingPole) item2;
+                    break;
+                }
+            }
+
+            if (name.equals("Training Pole")) {
+                if (fishingPole == null) {
+                    player.getBackPack().addItem(new FishingPole(1, FishingPoleType.TRAINING_POLE));
+                    player.setMoney(player.getMoney() - item.getCost());
+                    if (amount == item.getCount()) player.getBuilding().removeItem(item);
+                    else item.changeCount(-1  * amount);
+                    item.sold(amount);
+                    GameMenu.printResult("Fishing pole bought successfully");
+                }
+                else
+                    GameMenu.printResult("You can't buy this fishing pole! Becuase you have better one!");
+                return;
+            }
+            else if (name.equals("Bamboo Pole")) {
+                if (fishingPole != null) {
+                    player.getBackPack().removeItem(fishingPole);
+                    player.getBackPack().addItem(new FishingPole(1, FishingPoleType.BAMBOO_POLE));
+                    player.setMoney(player.getMoney() - item.getCost());
+                    if (amount == item.getCount()) player.getBuilding().removeItem(item);
+                    else item.changeCount(-1  * amount);
+                    item.sold(amount);
+                    GameMenu.printResult("Fishing pole bought successfully");
+                }
+                else
+                    GameMenu.printResult("You can't buy this fishing pole! You should first buy training one!");
+                return;
+            }
+            else if (name.equals("Fiberglass Pole")) {
+                if (fishingPole != null && player.getFishing() / 100 >= 2) {
+                    player.getBackPack().removeItem(fishingPole);
+                    player.getBackPack().addItem(new FishingPole(1, FishingPoleType.FIBERGLASS_POLE));
+                    player.setMoney(player.getMoney() - item.getCost());
+                    if (amount == item.getCount()) player.getBuilding().removeItem(item);
+                    else item.changeCount(-1  * amount);
+                    item.sold(amount);
+                    GameMenu.printResult("Fishing pole bought successfully");
+                }
+                else
+                    GameMenu.printResult("You can't buy this fishing pole! Your fishing skill must be at lest 2!");
+                return;
+            }
+            else if (name.equals("Iridium Pole")) {
+                if (fishingPole != null && player.getFishing() / 100 >= 4) {
+                    player.getBackPack().removeItem(fishingPole);
+                    player.getBackPack().addItem(new FishingPole(1, FishingPoleType.IRIDIUM_POLE));
+                    player.setMoney(player.getMoney() - item.getCost());
+                    if (amount == item.getCount()) player.getBuilding().removeItem(item);
+                    else item.changeCount(-1  * amount);
+                    item.sold(amount);
+                    GameMenu.printResult("Fishing pole bought successfully");
+                }
+                else
+                    GameMenu.printResult("You can't buy this fishing pole! Your fishing skill must be at lest 4!");
+                return;
+            }
+            
+            if (amount == item.getCount()) player.getBuilding().removeItem(item);
+            else item.changeCount(-1  * amount);
+            
+            player.getBackPack().addItem(item);
+            item.sold(amount);
+            GameMenu.printResult("Item purchased successfully");
+            return;
+        }
+
         if (player.getBuilding().getClass() == GeneralStore.class) {
-            if (name == "Large pack") {
+            if (name.equals("Large pack")) {
                 if (player.getBackPack().getType().equals(BackPackType.INITIAL_BACKPACK)) {
                     player.getBackPack().setType(BackPackType.BIG_BACKPACK);
                     player.setMoney(player.getMoney() - item.getCost() * amount);
@@ -1671,7 +1745,7 @@ public class GameMenuController {
                     GameMenu.printResult("You can't update your backpack!");
                 return;
             }
-            if (name == "Deluxe pack") {
+            if (name.equals("Deluxe pack")) {
                 if (player.getBackPack().getType().equals(BackPackType.BIG_BACKPACK)) {
                     player.getBackPack().setType(BackPackType.DELUX_BACKPACK);
                     player.setMoney(player.getMoney() - item.getCost() * amount);
