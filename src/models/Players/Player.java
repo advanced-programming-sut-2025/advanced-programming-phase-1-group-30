@@ -365,6 +365,9 @@ public class Player {
     public ArrayList<IndustrialProductType> getCraftingRecipes() {
         return craftingRecipes;
     }
+    public void addCraftingRecipe(IndustrialProductType craftingRecipe) {
+        this.craftingRecipes.add(craftingRecipe);
+    }
     public Building getBuilding() {
         return building;
     }
