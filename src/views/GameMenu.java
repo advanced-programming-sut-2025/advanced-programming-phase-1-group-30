@@ -3,7 +3,9 @@ package views;
 import controllers.DateAndWeatherController;
 import controllers.GameMenuController;
 import controllers.NewGameController;
+import models.App;
 import models.Commands.GameMenuCommands;
+import models.Players.Player;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -16,7 +18,6 @@ public class GameMenu implements AppMenu {
     @Override
     public void check(String command, Scanner scanner) {
         Matcher matcher;
-
         matcher = GameMenuCommands.GAME_NEW.regexMatcher(command);
         if (matcher.matches()) {
             String username1 = matcher.group("username1");
@@ -25,6 +26,9 @@ public class GameMenu implements AppMenu {
 
             NewGameController.NewGame(username1, username2, username3, scanner);
             return;
+        }
+        if (App.getCurrentGame() != null) {
+            Player.checkUsedEnergy(App.getCurrentGame().getCurrentPlayer(), scanner);
         }
         matcher = GameMenuCommands.LOAD_GAME.regexMatcher(command);
         if (matcher.matches()) {
@@ -209,9 +213,9 @@ public class GameMenu implements AppMenu {
         matcher = GameMenuCommands.COOKING_SHOW_RECIPES.regexMatcher(command);
         if (matcher.matches()) {
             if (matcher.group("all") == null)
-                GameMenuController.showCookingRecipe(false);
-            else
                 GameMenuController.showCookingRecipe(true);
+            else
+                GameMenuController.showCookingRecipe(false);
             return;
         }
         matcher = GameMenuCommands.COOKING_ADD_RECIPE.regexMatcher(command);

@@ -3,6 +3,7 @@ package controllers;
 import models.Animals.*;
 import models.App;
 import models.Buildings.*;
+import models.Invetory.BackPackType;
 import models.Game;
 import models.Items.Gift;
 import models.Items.Products.*;
@@ -23,6 +24,7 @@ import models.Maps.Weather;
 import models.Players.Friendship;
 import models.Players.NPC.NPC;
 import models.Players.NPC.NPCDetail;
+import models.TimeAndDate.Season;
 import models.Players.Player;
 import models.Players.Trade;
 import models.Users.User;
@@ -53,6 +55,7 @@ public class GameMenuController {
     }
 
     public static void walk(String xStr, String yStr, Scanner scanner) {
+        // TODO set the building! if in city
         int x = Integer.parseInt(xStr);
         int y = Integer.parseInt(yStr);
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -283,14 +286,18 @@ public class GameMenuController {
                 energyNeeded -= 1;
             }
             if(player.getEnergy() > energyNeeded){
-                if(targetTile.getType().equals(TileTypes.DIRT) || targetTile.getType().equals(TileTypes.GRASS)){
-                    targetTile.setType(TileTypes.PLANTABLE);
-                    GameMenu.printResult("The ground is now soft and ready to plant.");
-                    player.increaseFarming(5);
+                if (targetTile.getItem() == null) {
+                    if (targetTile.getType().equals(TileTypes.DIRT) || targetTile.getType().equals(TileTypes.GRASS)) {
+                        targetTile.setType(TileTypes.PLANTABLE);
+                        GameMenu.printResult("The ground is now soft and ready to plant.");
+                        player.increaseFarming(5);
+                    } else {
+                        GameMenu.printResult("Not possible.");
+                    }
+                    player.setEnergy(player.getEnergy() - (int) rate * energyNeeded);
                 } else {
                     GameMenu.printResult("Not possible.");
                 }
-                player.setEnergy(player.getEnergy() - (int) rate * energyNeeded);
             }else{
                 GameMenu.printResult("You don't have enough energy!");
             }
@@ -361,7 +368,7 @@ public class GameMenuController {
                 if(targetTile.getItem() != null && (targetTile.getItem() instanceof ForagingSeed || targetTile.getItem() instanceof Tree)) {
                     if (targetTile.getItem() instanceof Tree || ((ForagingSeed)targetTile.getItem()).getType().getTreeOrCrop() == 1) {
                         Item wood = new Item(12, "wood", 10);
-                        Item sap = new Item(2, "sap", 10);
+                        Item sap = new Item(2, ((ForagingSeed)targetTile.getItem()).getCrop().getType().getName(), 10);
 
                         Item newWood = Item.findItemByName(wood.getName(), player.getBackPack().getItems());
                         Item newSap = Item.findItemByName(sap.getName(), player.getBackPack().getItems());
@@ -463,10 +470,10 @@ public class GameMenuController {
                 if(targetTile.isReadyToHarvest()){
                     ForagingSeed seed = (ForagingSeed) targetTile.getItem();
                     if (seed.getType().getTreeOrCrop() == 1) {
-                        GameMenu.printResult("You collected " + targetTile.getCrop().getName() + " and added it to your backpack!");
                         Item newItem = Item.findItemByName(targetTile.getCrop().getName(), player.getBackPack().getItems());
                         if(newItem != null){
                             newItem.setCount(newItem.getCount() + targetTile.getCrop().getCount());
+                            GameMenu.printResult("You collected " + targetTile.getCrop().getName() + " and added it to your backpack!");
                         } else {
                             if(player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()){
                                 GameMenu.printResult("You don't have enough space in your backpack!");
@@ -474,18 +481,19 @@ public class GameMenuController {
                             } else{
                                 player.getBackPack().addItem(targetTile.getCrop());
                                 player.increaseFarming(5);
+                                GameMenu.printResult("You collected " + targetTile.getCrop().getName() + " and added it to your backpack!");
                             }
                         }
+
                         targetTile.setReadyToHarvest(false);
                         targetTile.getCrop().setDaysPassed(0);
                         targetTile.getCrop().setCurrentStage(0);
                         targetTile.getCrop().setDaysNotWatered(0);
                     } else {
-                        GameMenu.printResult("You harvested " + targetTile.getCrop().getName() + " and added it to your backpack!");
                         Item newItem = Item.findItemByName(targetTile.getCrop().getName(), player.getBackPack().getItems());
-                        targetTile.setPlanted(false);
                         if (newItem != null) {
                             newItem.setCount(newItem.getCount() + targetTile.getCrop().getCount());
+                            GameMenu.printResult("You harvested " + targetTile.getCrop().getName() + " and added it to your backpack!");
                         } else {
                             if (player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()) {
                                 GameMenu.printResult("You don't have enough space in your backpack!");
@@ -493,6 +501,7 @@ public class GameMenuController {
                             } else {
                                 player.getBackPack().addItem(targetTile.getCrop());
                                 player.increaseFarming(5);
+                                GameMenu.printResult("You harvested " + targetTile.getCrop().getName() + " and added it to your backpack!");
                             }
                         }
                         if (targetTile.getCrop() instanceof GiantCrop) {
@@ -505,11 +514,22 @@ public class GameMenuController {
                                 tile.setPlanted(false);
                             }
                         } else {
-                            targetTile.setReadyToHarvest(false);
-                            targetTile.setCrop(null);
-                            targetTile.setItem(null);
-                            targetTile.setGiantCrop(false);
+                            if (targetTile.getCrop().getRegrowthTime() >= targetTile.getCrop().getType().getRegrowthTime()) {
+                                targetTile.setReadyToHarvest(false);
+                                targetTile.setCrop(null);
+                                targetTile.setItem(null);
+                                targetTile.setGiantCrop(false);
+                                targetTile.setPlanted(false);
+                            } else {
+                                targetTile.setReadyToHarvest(false);
+                                targetTile.getCrop().setDaysPassed(0);
+                                targetTile.getCrop().setCurrentStage(0);
+                                targetTile.getCrop().setDaysNotWatered(0);
+                                targetTile.getCrop().setRegrowthTime(targetTile.getCrop().getRegrowthTime() + 1);
+                            }
+
                         }
+
                     }
 
                 } else if(targetTile.getType().equals(TileTypes.GRASS)){
@@ -559,7 +579,7 @@ public class GameMenuController {
         sb.append(MaintainerController.arrayListToString("Stages", craft.getStages()));
         sb.append("Total Harvest Time: " + craft.getTotalHarvestTime() + "\n");
         sb.append("One Time: " + craft.isOneTime() + "\n");
-        sb.append("Regrowth Time: " + craft.getName() + "\n");
+        sb.append("Regrowth Time: " + craft.getRegrowthTime() + "\n");
         sb.append("Base Sell Price: " + craft.getBaseSellPrice() + "\n");
         sb.append("Is Edible: " + craft.isEdible() + "\n");
         sb.append("Base Energy: " + craft.getEnergy() + "\n");
@@ -611,7 +631,7 @@ public class GameMenuController {
             return;
         }
         if (item.getCount() > 0) {
-            if (targetTile.isHarvestable() && targetTile.getItem() == null) {
+            if (targetTile.getType().equals(TileTypes.PLANTABLE) && targetTile.getItem() == null) {
                 targetTile.setItem(seed);
                 seed.setFertilized(false);
                 item.setCount(item.getCount() - 1);
@@ -701,7 +721,8 @@ public class GameMenuController {
                     "=== Current Stage: " + targetTile.getCrop().getCurrentStage() + " ===\n" +
                     "=== Days Remaining: " + daysRemaining + " ===\n" +
                     "=== Is Fertilized: " + seed.isFertilized() + " ===\n" +
-                    "=== Watered Today: " + targetTile.getCrop().isWateredToday() + " ==="); // TODO
+                    "=== Watered Today: " + targetTile.getCrop().isWateredToday() + " ===\n" +
+                    "=== Total Times Harvestes: " + targetTile.getCrop().getRegrowthTime() + " ==="); // TODO
             if (targetTile.isReadyToHarvest()) {
                 GameMenu.printResult("=== Ready to Harvest! ===");
             }
@@ -827,6 +848,7 @@ public class GameMenuController {
                         player.getBackPack().getItems().add(crafted);
                     }
                     GameMenu.printResult("You have successfully crafted " + recipe.getName() + "!");
+                    player.getMap().changeHasScareCrow();
                 } else{
                     GameMenu.printResult("Sorry! you don't have the recipe for " + recipe.getName());
                 }
@@ -893,16 +915,26 @@ public class GameMenuController {
     }
     
     public static void putRefrigerator(String item) {
-        Item wantedItem = Item.findItemByName(item, App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Item wantedItem = Item.findItemByName(item, player.getBackPack().getItems());
 
-        if (wantedItem == null)
+        if (wantedItem == null) {
             GameMenu.printResult("No Item Found!");
+            return;
+        }
 
-        if (wantedItem.getClass() != Food.class)
+        if (wantedItem.getClass() != Food.class) {
             GameMenu.printResult("Item is not eatable");
+            return;
+        }
 
-        App.getCurrentGame().getCurrentPlayer().getBackPack().removeItem(wantedItem);
-        App.getCurrentGame().getCurrentPlayer().getRefrigerator().addItem(wantedItem);
+        if (player.getRefrigerator().getItems().size() + 1 > player.getRefrigerator().getCAPTIYITY()) {
+            GameMenu.printResult("Refrigerator is full!");
+            return;
+        }
+
+        player.getBackPack().removeItem(wantedItem);
+        player.getRefrigerator().addItem(wantedItem);
     }
 
     public static void pickRefrigerator(String item) {
@@ -963,7 +995,10 @@ public class GameMenuController {
 
         boolean recipeLeared = false;
         for (FoodType foodType : App.getCurrentGame().getCurrentPlayer().getRecipes()) {
-            if (foodType.equals(recipe)) recipeLeared = true;
+            if (foodType.equals(recipe)) {
+                recipeLeared = true;
+                break;
+            }
         }
         if (!recipeLeared) {
             GameMenu.printResult("You didn't learn this recipe!");
@@ -1016,7 +1051,8 @@ public class GameMenuController {
         }
 
         App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(new Food(1, recipe));
-        App.getCurrentGame().getCurrentPlayer().changeEnergy(3);
+        App.getCurrentGame().getCurrentPlayer().changeEnergy(-3);
+        GameMenu.printResult(name + " (x1) added successfully!");
     }
 
     public static void eat(String name) {
@@ -1030,12 +1066,12 @@ public class GameMenuController {
             GameMenu.printResult("No food with given name were found!");
             return;
         }
-            
+        
         food.changeCount(-1);
         if (food.getCount() == 0)
             App.getCurrentGame().getCurrentPlayer().getBackPack().removeItem(food);
         
-        App.getCurrentGame().getCurrentPlayer().changeEnergy(food.getType().getEnergy());
+        App.getCurrentGame().getCurrentPlayer().changeEnergy(Math.max(food.getType().getEnergy(), App.getCurrentGame().getCurrentPlayer().getMaxEnergy()));
         GameMenu.printResult("Food eaten successfully");
     }
     public static void showCookingRecipe(){}
@@ -1494,6 +1530,21 @@ public class GameMenuController {
             return;
         }
 
+        ArtisanGoodType item = null;
+        for (ArtisanGoodType artisanGoodType : ArtisanGoodType.values()) {
+            if (artisanGoodType.getName().equals(itemName)) item = artisanGoodType;
+        }
+
+        if (item == null) {
+            GameMenu.printResult("No item with given name were found!");
+            return;
+        }
+
+        if (!item.getSource().equals(recipe)) {
+            GameMenu.printResult("You can't make " + itemName + " with " + artisanName);
+            return;
+        }
+
         if (player.getBackPack().getItems().size() >= player.getBackPack().getType().getCapacity()) {
             GameMenu.printResult("Your Backpack is full!!");
             return;
@@ -1523,7 +1574,8 @@ public class GameMenuController {
                 backpackItem.changeCount(-1 * ingredient.getCount());
         }
 
-        App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(new IndustrialProduct(1, recipe));
+        App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(new ArtisanGood(1, item));
+        GameMenu.printResult(itemName + " (x1) added to your backpack successfully!");
     }
 
     public static void artisanGet(String name) {
@@ -1540,49 +1592,78 @@ public class GameMenuController {
     }
 
     public static void showAllProducts() {
-        // App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getBlacksmith());
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if (!player.isInCity()) {
+            GameMenu.printResult("You are not in the city!");
+            return;
+        }
+        Tile[][] tiles = App.getMaps().get(4).getTiles();
+        switch (tiles[player.getCityX()][player.getCityX()].getType()) {
+            case BLACKSMITH ->
+        App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getGeneralStore());
         switch (App.getCurrentGame().getCurrentPlayer().getBuilding()) {
             case Blacksmith blacksmith ->
                     GameMenu.printResult(MaintainerController.printingShopProducts("Blacksmith", BlacksmithCosts.values()));
-            case Carpenter carpenter ->
+            case CARPENTERS_SHOP ->
                     GameMenu.printResult(MaintainerController.printingShopProducts("Carpenter", CarpenterCosts.values()));
-            case FishShop fishShop ->
+            case FISH_SHOP ->
                     GameMenu.printResult(MaintainerController.printingShopProducts("FishShop", FishShopCosts.values()));
-            case GeneralStore generalStore ->
+            case PIERRES_GENERAL_STORE ->
                     GameMenu.printResult(MaintainerController.printingShopProducts("GeneralStore", GeneralStoreCosts.values()));
-            case JojaMart jojaMart ->
+            case JOJOMART ->
                     GameMenu.printResult(MaintainerController.printingShopProducts("JojaMart", JojaMartCosts.values()));
-            case Ranch ranch ->
+            case MARINES_RANCH ->
                     GameMenu.printResult(MaintainerController.printingShopProducts("Ranch", RanchCosts.values()));
-            case Saloon saloon ->
+            case THE_STARDROP_SALOON ->
                     GameMenu.printResult(MaintainerController.printingShopProducts("Saloon", SaloonCosts.values()));
             case null, default -> GameMenu.printResult("You are not in a store!");
         }
     }
 
     public static void showAvailableProducts() {
-        // App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getBlacksmith());
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if (!player.isInCity()) {
+            GameMenu.printResult("You are not in the city!");
+            return;
+        }
+        Tile[][] tiles = App.getMaps().get(4).getTiles();
+        switch (tiles[player.getCityX()][player.getCityX()].getType()) {
+            case BLACKSMITH ->
+        App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getGeneralStore());
         switch (App.getCurrentGame().getCurrentPlayer().getBuilding()) {
             case Blacksmith blacksmith ->
                     GameMenu.printResult(MaintainerController.printingShopProducts2("Blacksmith", App.getCurrentGame().getBlacksmith().getItems()));
-            case Carpenter carpenter ->
+            case CARPENTERS_SHOP ->
                     GameMenu.printResult(MaintainerController.printingShopProducts2("Carpenter", App.getCurrentGame().getCarpenter().getItems()));
-            case FishShop fishShop ->
+            case FISH_SHOP ->
                     GameMenu.printResult(MaintainerController.printingShopProducts2("FishShop", App.getCurrentGame().getFishShop().getItems()));
-            case GeneralStore generalStore ->
+            case PIERRES_GENERAL_STORE ->
                     GameMenu.printResult(MaintainerController.printingShopProducts2("GeneralStore", App.getCurrentGame().getGeneralStore().getItems()));
-            case JojaMart jojaMart ->
+            case JOJOMART ->
                     GameMenu.printResult(MaintainerController.printingShopProducts2("JojaMart", App.getCurrentGame().getJojaMart().getItems()));
-            case Ranch ranch ->
+            case MARINES_RANCH ->
                     GameMenu.printResult(MaintainerController.printingShopProducts2("Ranch", App.getCurrentGame().getRanch().getItems()));
-            case Saloon saloon ->
+            case THE_STARDROP_SALOON ->
                     GameMenu.printResult(MaintainerController.printingShopProducts2("Saloon", App.getCurrentGame().getSaloon().getItems()));
             case null, default -> GameMenu.printResult("You are not in a store!");
         }
     }
 
     public static void purchase(String name, int amount){
-        ShopProduct item = (ShopProduct) Item.findItemByName(name, App.getCurrentGame().getCurrentPlayer().getBuilding().getItems());
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        
+        if (player.getBuilding() == null) {
+            GameMenu.printResult("You are not in a store!");
+            return;
+        }
+
+        if (App.getCurrentGame().getCurrentTime().getHour() < player.getBuilding().getStartHour() ||
+            App.getCurrentGame().getCurrentTime().getHour() > player.getBuilding().getEndHour()) {
+                GameMenu.printResult("Store is closed! return sometime else!");
+                return;
+        }
+
+        ShopProduct item = (ShopProduct) Item.findItemByName(name, player.getBuilding().getItems());
 
         if (item == null) {
             GameMenu.printResult("No item with given name found!");
@@ -1598,18 +1679,75 @@ public class GameMenuController {
             GameMenu.printResult("Daily Limit Reached");
             return;
         }
-        // TODO reset daily limit in next day
 
-        if (item.getCost() * amount > App.getCurrentGame().getCurrentPlayer().getMoney()) {
+        if (item.getCost() * amount > player.getMoney()) {
             GameMenu.printResult("You don't have enough money!");
             return;
         }
+
+        if (player.getBuilding().getClass() == GeneralStore.class) {
+            if (name == "Large pack") {
+                if (player.getBackPack().getType().equals(BackPackType.INITIAL_BACKPACK)) {
+                    player.getBackPack().setType(BackPackType.BIG_BACKPACK);
+                    player.setMoney(player.getMoney() - item.getCost() * amount);
+                    item.sold(amount);
+                    GameMenu.printResult("Backpack upgraded to Large Backpack successfully");
+                }
+                else
+                    GameMenu.printResult("You can't update your backpack!");
+                return;
+            }
+            if (name == "Deluxe pack") {
+                if (player.getBackPack().getType().equals(BackPackType.BIG_BACKPACK)) {
+                    player.getBackPack().setType(BackPackType.DELUX_BACKPACK);
+                    player.setMoney(player.getMoney() - item.getCost() * amount);
+                    item.sold(amount);
+                    GameMenu.printResult("Backpack upgraded to Delux Backpack successfully");
+                }
+                else
+                    GameMenu.printResult("You can't update your backpack!");
+                return;
+            }
+
+            if (player.getBackPack().getType().getCapacity() < player.getBackPack().getItems().size() + 1) {
+                GameMenu.printResult("You don't have enough space in your backpack!");
+                return;
+            }
+            
+            if (amount == item.getCount()) player.getBuilding().removeItem(item);
+            else item.changeCount(-1  * amount);
+
+            if (item.getSeason().equals(Season.ALL) || item.getSeason().equals(App.getCurrentGame().getCurrentTime().getSeason())) {
+                GeneralStoreCosts generalItem = null;
+                for (GeneralStoreCosts generalItem2 : GeneralStoreCosts.values()) {
+                    if (generalItem2.getName().equals(item.getName())) generalItem = generalItem2;
+                }
+                player.setMoney(player.getMoney() - generalItem.getSeasonPrice() * amount);
+            } else {
+                player.setMoney(player.getMoney() - item.getCost() * amount);
+            }
+            
+            player.getBackPack().addItem(item);
+            item.sold(amount);
+            GameMenu.printResult("Item purchased successfully");
+            return;
+        }
+
+        if (!item.getSeason().equals(Season.ALL) && !item.getSeason().equals(App.getCurrentGame().getCurrentTime().getSeason())) {
+            GameMenu.printResult("You can buy " + name + " in " + item.getSeason().getName() + ", not in " + App.getCurrentGame().getCurrentTime().getSeason().getName());
+            return;
+        }
+
+        if (player.getBackPack().getType().getCapacity() < player.getBackPack().getItems().size() + 1) {
+            GameMenu.printResult("You don't have enough space in your backpack!");
+            return;
+        }
         
-        if (amount == item.getCount()) App.getCurrentGame().getCurrentPlayer().getBuilding().removeItem(item);
+        if (amount == item.getCount()) player.getBuilding().removeItem(item);
         else item.changeCount(-1  * amount);
 
-        App.getCurrentGame().getCurrentPlayer().setMoney(App.getCurrentGame().getCurrentPlayer().getMoney() - item.getCost() * amount);
-        App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(item);
+        player.setMoney(player.getMoney() - item.getCost() * amount);
+        player.getBackPack().addItem(item);
         item.sold(amount);
         GameMenu.printResult("Item purchased successfully");
     }
@@ -1638,8 +1776,8 @@ public class GameMenuController {
         if (item.getCount() == amount)player.getBackPack().removeItem(item);
         else item.changeCount(-1  * amount);
 
-        player.setMoney(player.getMoney() + (int) player.getShippingBin().getType().calculateNewPrice(item.getPrice() * amount));
-        //TODO money will be got next day
+        player.getShippingBin().addItem(item);
+
         GameMenu.printResult("Item sold successfully!");
     }
 
@@ -1845,6 +1983,7 @@ public class GameMenuController {
         }
         if (player.getGender().equals(otherPlayer.getGender())) {
             GameMenu.printResult("that's gay tbh");
+            return;
         }
         if (player.getFriendships().get(otherPlayer).getLevel() < 4 || (player.getFriendships().get(otherPlayer).getLevel() == 3 &&
                 player.getFriendships().get(player).getXp() < 400)) {
