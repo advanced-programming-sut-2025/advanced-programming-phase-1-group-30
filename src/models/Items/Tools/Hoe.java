@@ -15,4 +15,16 @@ public class Hoe extends Tool {
     public void setType(HoeType type) {
         this.type = type;
     }
+
+    public void upgrade() {
+        if(type.name().contains("normal")){
+            this.setType(HoeType.COPPER);
+        } else if(type.name().contains("copper")){
+            this.setType(HoeType.IRON);
+        } else if(type.name().contains("iron")){
+            this.setType(HoeType.GOLD);
+        } else if(type.name().contains("gold")){
+            this.setType(HoeType.IRIDIUM);
+        }
+    }
 }

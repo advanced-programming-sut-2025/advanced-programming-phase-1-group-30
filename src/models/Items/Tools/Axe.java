@@ -15,4 +15,16 @@ public class Axe extends Tool {
     public void setType(AxeType type) {
         this.type = type;
     }
+
+    public void upgrade() {
+        if(type.name().contains("normal")){
+            this.setType(AxeType.COPPER);
+        } else if(type.name().contains("copper")){
+            this.setType(AxeType.IRON);
+        } else if(type.name().contains("iron")){
+            this.setType(AxeType.GOLD);
+        } else if(type.name().contains("gold")){
+            this.setType(AxeType.IRIDIUM);
+        }
+    }
 }

@@ -30,6 +30,7 @@ import models.TimeAndDate.Season;
 import models.Players.Player;
 import models.Players.Trade;
 import models.Users.User;
+import views.ExitMenu;
 import views.GameMenu;
 import views.RegisterMenu;
 import java.util.*;
@@ -247,7 +248,74 @@ public class GameMenuController {
         }
     }
     public static void upgradeTools(String name) {
-        // TODO
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        if(player.isInCity()){
+            Map citymap = App.getMaps().get(4);
+            if(citymap.getTiles()[player.getCityX()][player.getCityY()].getType().equals(TileTypes.BLACKSMITH)){
+                Item item = Item.findItemByName(name,player.getBackPack().getItems());
+                if(item != null){
+                    if(item instanceof Tool) {
+                        int price;
+                        String need;
+                        if (item.getName().contains("normal")) {
+                            price = 2000;
+                            need = "copper bar";
+                        } else if (item.getName().contains("copper")) {
+                            price = 5000;
+                            need = "iron bar";
+                        } else if (item.getName().contains("iron")) {
+                            price = 10000;
+                            need = "gold bar";
+                        } else if (item.getName().contains("gold")) {
+                            price = 25000;
+                            need = "iridium bar";
+                        } else {
+                            GameMenu.printResult("Tool is not upgradable!");
+                            return;
+                        }
+                        Item found = Item.findItemByName(need, player.getBackPack().getItems());
+                        if(found == null){
+                            GameMenu.printResult("You don't have the ingredient " + need + " in your backpack.");
+                            return;
+                        } else {
+                            if(found.getCount() >= 5){
+                                if(player.getMoney() >= price){
+                                    player.setMoney(player.getMoney() - price);
+                                    if(found.getCount() == 5){
+                                        player.getBackPack().removeItem(found);
+                                    } else {
+                                        found.setCount(found.getCount() - 5);
+                                    }
+
+                                    if(item instanceof Axe){
+                                        ((Axe) item).upgrade();
+                                    } else if(item instanceof Pickaxe){
+                                        ((Pickaxe) item).upgrade();
+                                    } else if(item instanceof Hoe){
+                                        ((Hoe) item).upgrade();
+                                    } else if(item instanceof Basket){
+                                        ((Basket) item).upgrade();
+                                    }
+                                    GameMenu.printResult("Your tool has been upgraded successfully!");
+                                } else {
+                                    GameMenu.printResult("You need " + price + " gold to upgrade!");
+                                }
+                            } else {
+                                GameMenu.printResult("You have need 5 " + found.getName() + " in your backpack.");
+                            }
+                            return;
+                        }
+                    } else {
+                        GameMenu.printResult("item has to be a tool.");
+                        return;
+                    }
+                } else {
+                    GameMenu.printResult("You don't have " + item.getName() + " in your backpack.");
+                    return;
+                }
+            }
+        }
+        GameMenu.printResult("You have to be inside blacksmith to upgrade tools.");
     }
     public static void toolUse(String direction) {
         Player player = App.getCurrentGame().getCurrentPlayer();
