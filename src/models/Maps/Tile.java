@@ -119,16 +119,16 @@ public class Tile {
     public static void putItemInTile(Tile tile) {
         if (tile.getType().equals(TileTypes.DIRT)) {
             Random random = new Random();
-            int randomItem = random.nextInt(55);
+            int randomItem = random.nextInt(75);
 
-            if (0 <= randomItem && randomItem <= 35) {
+            if (randomItem <= 35 || 55 <= randomItem) {
                 // Emptygit
             }
-            else if (36 <= randomItem && randomItem <= 49) {
+            else if (randomItem <= 49) {
                 tile.setItem(new Tree(1, TreeType.getRandomTreeType(randomItem - 36)));
                 tile.changeWalkable();
             }
-            else if (50 <= randomItem && randomItem <= 54) {
+            else {
                 tile.setItem(new Stone(randomItem - 49));
                 tile.changeWalkable();
             }
