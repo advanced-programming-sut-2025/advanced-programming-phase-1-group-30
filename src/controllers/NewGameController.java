@@ -31,11 +31,13 @@ public class NewGameController {
         User user3 = null;
         Game game = new Game();
         App.setCurrentGame(game);
+        App.getGames().add(game);
         ArrayList<Player> players = new ArrayList<>();
         Player playerX = new Player(App.getCurrentUser(),App.getCurrentUser().getUsername(), 0);
         User use = User.findUserByUsername(playerX.getUsername());
         use.setPlayer(playerX);
         players.add(playerX);
+        use.setNumOfGames(App.getCurrentUser().getNumOfGames() + 1);
         if (username1 == null &&
             username2 == null &&
             username3 == null) {
@@ -56,6 +58,7 @@ public class NewGameController {
             
             Player player1 = new Player(user1,user1.getUsername(), 1);
             user1.setPlayer(player1);
+            user1.setNumOfGames(user1.getNumOfGames() + 1);
             players.add(player1);
         }
 
@@ -72,6 +75,7 @@ public class NewGameController {
 
             Player player2 = new Player(user2,user2.getUsername(), 2);
             user2.setPlayer(player2);
+            user2.setNumOfGames(user2.getNumOfGames() + 1);
             players.add(player2);
         }
 
@@ -88,6 +92,7 @@ public class NewGameController {
 
             Player player3 = new Player(user3,user3.getUsername(), 3);
             user3.setPlayer(player3);
+            user3.setNumOfGames(user3.getNumOfGames() + 1);
             players.add(player3);
         }
         if(user1 != null) {

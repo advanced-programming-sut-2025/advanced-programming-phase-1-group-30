@@ -116,7 +116,7 @@ public class ProfileMenuController {
 
     public static void UserInfo() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Current user:\nName " + App.getCurrentUser().getUsername() + "\n");
+        sb.append("Current user:\nName: " + App.getCurrentUser().getUsername() + "\n");
         sb.append("Nickname: " + App.getCurrentUser().getNickname() + "\n");
         sb.append("Email: " + App.getCurrentUser().getEmail() + "\n");
         sb.append("Max money in a Game: " + App.getCurrentUser().getMaxMoney() + "\n"); // TODO barresi shavad!
