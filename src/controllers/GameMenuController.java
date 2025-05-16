@@ -18,11 +18,8 @@ import models.Items.Foods.FoodType;
 import models.Items.IndustrialProducts.IndustrialProductType;
 import models.Items.IndustrialProducts.IndustrialProduct;
 import models.Items.Tools.*;
+import models.Maps.*;
 import models.Maps.Map;
-import models.Maps.PathFinder;
-import models.Maps.Tile;
-import models.Maps.TileTypes;
-import models.Maps.Weather;
 import models.Players.Friendship;
 import models.Players.NPC.NPC;
 import models.Players.NPC.NPCDetail;
@@ -427,8 +424,19 @@ public class GameMenuController {
                             energyNeeded -= 1;
                         }
                     }
-                } else if(targetTile.isWalkable() && targetTile.getItem() != (null)){ // Change TODO
-                    GameMenu.printResult("Poof! " + targetTile.getItem().getName() + " crumbled into nothing.");
+                } else if(targetTile.getType().equals(TileTypes.HUT) && targetTile.getItem() != (null)){
+                    Item newItem = Item.findItemByName(targetTile.getItem().getName(), player.getBackPack().getItems());
+                    if (newItem != null) {
+                        newItem.setCount(newItem.getCount() + 1);
+                    } else {
+                        if (player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()) {
+                            GameMenu.printResult("You don't have enough space in your backpack!");
+                            return;
+                        } else {
+                            player.getBackPack().addItem(targetTile.getItem());
+                        }
+                    }
+                    GameMenu.printResult(targetTile.getItem().getName() + " successfully added to your backpack");
                     targetTile.setItem(null);
                 } else {
                     GameMenu.printResult("You swing your pickaxe, but nothing happens.");
@@ -926,21 +934,37 @@ public class GameMenuController {
         }
     }
     public static void showCraftingRecipes() {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Tile tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles()[player.getX()][player.getY()];
+
+        if(!tiles.getType().equals(TileTypes.HUT)){
+            GameMenu.printResult("Crafting doesn't work outside of your home!");
+            return;
+        }
+
         for(IndustrialProductType recipe :App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()){
             GameMenu.printResult(recipe.getName() + ": " + recipe.getDescription());
             StringBuilder ingredients = new StringBuilder();
-            ingredients.append("ingredients :");
+            ingredients.append("    ingredients :");
             for (Item items : recipe.getIngredients()){
+                ingredients.append(" ");
                 ingredients.append(items.getCount());
                 ingredients.append(" ");
                 ingredients.append(items.getName());
-                ingredients.append(" ");
             }
             GameMenu.printResult(ingredients.toString());
+            return;
         }
+        GameMenu.printResult("You dont have any crafting recipes!");
     }
     public static void crafting(String name) {
         Player player = App.getCurrentGame().getCurrentPlayer();
+        Tile tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles()[player.getX()][player.getY()];
+
+        if(!tiles.getType().equals(TileTypes.HUT)){
+            GameMenu.printResult("Crafting doesn't work outside of your home!");
+            return;
+        }
 
         for(IndustrialProductType recipe : IndustrialProductType.values()){
             if(recipe.getName().equals(name)){
@@ -982,6 +1006,7 @@ public class GameMenuController {
                         player.getBackPack().getItems().add(crafted);
                     }
                     GameMenu.printResult("You have successfully crafted " + recipe.getName() + "!");
+                    player.setEnergy(player.getEnergy() - 2);
                     player.getMap().changeHasScareCrow();
                 } else{
                     GameMenu.printResult("Sorry! you don't have the recipe for " + recipe.getName());
@@ -994,10 +1019,10 @@ public class GameMenuController {
     public static void placeItem(String name, String direction) {
         Player player = App.getCurrentGame().getCurrentPlayer();
         Tile[][] tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
+        Tile tile1 = App.getCurrentGame().getCurrentPlayer().getMap().getTiles()[player.getX()][player.getY()];
 
-
-        if(player.isInCity()){
-            GameMenu.printResult("You cant place item in city!");
+        if(!tile1.getType().equals(TileTypes.HUT)){
+            GameMenu.printResult("Crafting doesn't work outside of your home!");
             return;
         }
 
@@ -1036,8 +1061,7 @@ public class GameMenuController {
             return;
         }
 
-        if((targetTile.getType().equals(TileTypes.GRASS) || targetTile.getType().equals(TileTypes.DIRT))
-                && targetTile.getItem() == null){
+        if(targetTile.getItem() == null){
             targetTile.setItem(item);
             GameMenu.printResult("You have successfully placed " + item.getName() + " on x: " + newX + " y: " + newY + "!");
         } else{
@@ -2733,8 +2757,8 @@ public class GameMenuController {
         Player player = App.getCurrentGame().getCurrentPlayer();
         for(NPC npc : App.getCurrentGame().getNPCs()){
             if(npc.getName().equals(name)){
-                if(npc.getTile().getX() - 1 <= player.getX() && player.getX() <= npc.getTile().getX() + 1 &&
-                        npc.getTile().getX() - 1 <= player.getY() && player.getX() <= npc.getTile().getY() + 1){
+                if(npc.getTile().getX() - 1 <= player.getCityX() && player.getCityX() <= npc.getTile().getX() + 1 &&
+                        npc.getTile().getX() - 1 <= player.getCityY() && player.getCityY() <= npc.getTile().getY() + 1){
                     npc.talk();
                     if(!player.getNPCMeetToday().get(npc)){
                         player.getNPCMeetToday().put(npc, true);
@@ -2755,8 +2779,8 @@ public class GameMenuController {
         Player player = App.getCurrentGame().getCurrentPlayer();
         for(NPC npc : App.getCurrentGame().getNPCs()){
             if(npc.getName().equals(name)){
-                if(npc.getTile().getX() - 1 <= player.getX() && player.getX() <= npc.getTile().getX() + 1 &&
-                        npc.getTile().getX() - 1 <= player.getY() && player.getX() <= npc.getTile().getY() + 1){
+                if(npc.getTile().getX() - 1 <= player.getCityX() && player.getCityX() <= npc.getTile().getX() + 1 &&
+                        npc.getTile().getX() - 1 <= player.getCityY() && player.getCityY() <= npc.getTile().getY() + 1){
                     Item gift = Item.findItemByName(item, player.getBackPack().getItems());
                     if(gift == null){
                         GameMenu.printResult("You don't have this gift!");
@@ -2783,7 +2807,7 @@ public class GameMenuController {
                                 player.getActivatedQuestNPC().get(npc).add(2);
                             }
                         }
-                        GameMenu.printResult("Gift has been removed!");
+                        GameMenu.printResult("You gave " + item + " to " + npc.getName());
                     }
                 } else {
                     GameMenu.printResult("You are too far!");
@@ -2795,154 +2819,154 @@ public class GameMenuController {
     }
     public static void friendshipNPCList() {
         for(NPC npc : App.getCurrentGame().getNPCs()){
-            GameMenu.printResult("Friendship level with " + npc.getName() + " : " + App.getCurrentGame().getCurrentPlayer().getFriendshipsNPC().get(npc));
+            GameMenu.printResult("Friendship rate with " + npc.getName() + " : " + App.getCurrentGame().getCurrentPlayer().getFriendshipsNPC().get(npc) + " leve: " + App.getCurrentGame().getCurrentPlayer().getFriendshipsNPC().get(npc) /200);
         }
     }
     public static void questList() {
         Player player = App.getCurrentGame().getCurrentPlayer();
-        int counter = 0;
+        int counter = 1;
         for(NPC npc : App.getCurrentGame().getNPCs()){
             GameMenu.printResult(npc.getName() + " quests :");
             StringBuilder message = new StringBuilder();
             for(Integer active : player.getActivatedQuestNPC().get(npc)){
                 if(npc.getName().equals("Sebastian")){
-                    if (active == 1) {
-                        message.append(counter++);
-                        message.append("Request :");
+                    if (active.equals(1)) {
+                        message.append(counter++ + "- ");
+                        message.append("Reward :");
                         message.append("50 iron ore");
                         message.append("\n");
-                        message.append("Reward :");
+                        message.append("    Reward :");
                         message.append("2 diamond");
-                    } else if (active == 2) {
-                        message.append(counter++);
-                        message.append("Request :");
+                    } else if (active.equals(2)) {
+                        message.append(counter++ + "- ");
+                        message.append("Reward :");
                         message.append("pumpkin pie");
                         message.append("\n");
-                        message.append("Reward :");
+                        message.append("    Reward :");
                         message.append("5000 coin");
-                    } else if (active == 3) {
-                        message.append(counter++);
-                        message.append("Request :");
+                    } else if (active.equals(3)) {
+                        message.append(counter++ + "- ");
+                        message.append("Reward :");
                         message.append("150 stones");
                         message.append("\n");
-                        message.append("Reward :");
+                        message.append("    Reward :");
                         message.append("50 quartz");
                     }
                 } else if(npc.getName().equals("Abigail")){
-                    if (active == 1) {
-                        message.append(counter++);
-                        message.append("Request :");
+                    if (active.equals(1)) {
+                        message.append(counter++ + "- ");
+                        message.append("Reward :");
                         message.append("1 gold bar");
                         message.append("\n");
-                        message.append("Reward :");
+                        message.append("    Reward :");
                         message.append("1 friendship level");
-                    } else if (active == 2) {
-                        message.append(counter++);
-                        message.append("Request :");
+                    } else if (active.equals(2)) {
+                        message.append(counter++ + "- ");
+                        message.append("Reward :");
                         message.append("1 pumpkin");
                         message.append("\n");
-                        message.append("Reward :");
+                        message.append("    Reward :");
                         message.append("500 coin");
-                    } else if (active == 3) {
-                        message.append(counter++);
-                        message.append("Request :");
+                    } else if (active.equals(3)) {
+                        message.append(counter++ + "- ");
+                        message.append("Reward :");
                         message.append("50 wheat");
                         message.append("\n");
-                        message.append("Reward :");
+                        message.append("    Reward :");
                         message.append("1 Iridium Sprinkler");
                     }
                 } else if (npc.getName().equals("Harvey")){
-                    if (active == 1) {
-                        message.append(counter++);
-                        message.append("Request :");
+                    if (active.equals(1)) {
+                        message.append(counter++ + "- ");
+                        message.append("Reward :");
                         message.append("12 of any plant");
                         message.append("\n");
-                        message.append("Reward :");
+                        message.append("    Reward :");
                         message.append("750 coin");
-                    } else if (active == 2) {
-                        message.append(counter++);
-                        message.append("Request :");
+                    } else if (active.equals(2)) {
+                        message.append(counter++ + "- ");
+                        message.append("Reward :");
                         message.append("1 salmon");
                         message.append("\n");
-                        message.append("Reward :");
+                        message.append("    Reward :");
                         message.append("1 friendship level");
-                    } else if (active == 3) {
-                        message.append(counter++);
-                        message.append("Request :");
+                    } else if (active.equals(3)) {
+                        message.append(counter++ + "- ");
+                        message.append("Reward :");
                         message.append("1 bottle of wine");
                         message.append("\n");
-                        message.append("Reward :");
+                        message.append("    Reward :");
                         message.append("5 salad");
                     }
                 } else if (npc.getName().equals("Leah")){
-                    if (active == 1) {
-                        message.append(counter++);
-                        message.append("Request :");
+                    if (active.equals(1)) {
+                        message.append(counter++ + "- ");
+                        message.append("Reward :");
                         message.append("10 wood");
                         message.append("\n");
-                        message.append("Reward :");
+                        message.append("    Reward :");
                         message.append("500 coin");
-                    } else if (active == 2) {
-                        message.append(counter++);
-                        message.append("Request :");
+                    } else if (active.equals(2)) {
+                        message.append(counter++ + "- ");
+                        message.append("Reward :");
                         message.append("1 salmon");
                         message.append("\n");
-                        message.append("Reward :");
+                        message.append("    Reward :");
                         message.append("1 cooking recipe (dinner salmon)");
-                    } else if (active == 3) {
-                        message.append(counter++);
-                        message.append("Request :");
+                    } else if (active.equals(3)) {
+                        message.append(counter++ + "- ");
+                        message.append("Reward :");
                         message.append("200 wood");
                         message.append("\n");
-                        message.append("Reward :");
+                        message.append("    Reward :");
                         message.append("3 deluxe scarecrows");
                     }
                 } else if (npc.getName().equals("Robin")){
-                    if (active == 1) {
-                        message.append(counter++);
-                        message.append("Request :");
+                    if (active.equals(1)) {
+                        message.append(counter++ + "- ");
+                        message.append("Reward :");
                         message.append("80 wood");
                         message.append("\n");
-                        message.append("Reward :");
+                        message.append("    Reward :");
                         message.append("1000 coin");
-                    } else if (active == 2) {
-                        message.append(counter++);
-                        message.append("Request :");
+                    } else if (active.equals(2)) {
+                        message.append(counter++ + "- ");
+                        message.append("Reward :");
                         message.append("10 iron bar");
                         message.append("\n");
-                        message.append("Reward :");
+                        message.append("    Reward :");
                         message.append("3 beehives");
-                    } else if (active == 3) {
-                        message.append(counter++);
-                        message.append("Request :");
+                    } else if (active.equals(3)) {
+                        message.append(counter++ + "- ");
+                        message.append("Reward :");
                         message.append("1000 wood");
                         message.append("\n");
-                        message.append("Reward :");
+                        message.append("    Reward :");
                         message.append("25000 coin");
                     }
                 }
-
-                GameMenu.printResult(message.toString());
+                message.append("\n");
             }
+            GameMenu.printResult(message.toString());
         }
     }
     public static void questFinish(String indexString) {
         int index = Integer.parseInt(indexString);
         Player player = App.getCurrentGame().getCurrentPlayer();
         for(NPC npc : App.getCurrentGame().getNPCs()){
-            int counter = 1;
-            if(npc.getTile().getX() - 1 <= player.getX() && player.getX() <= npc.getTile().getX() + 1 &&
-                    npc.getTile().getX() - 1 <= player.getY() && player.getX() <= npc.getTile().getY() + 1) {
+            int counter = 0;
+            if(npc.getTile().getX() - 1 <= player.getCityX() && player.getCityX() <= npc.getTile().getX() + 1 &&
+                    npc.getTile().getX() - 1 <= player.getCityY() && player.getCityY() <= npc.getTile().getY() + 1) {
                 for(NPC npcQuest : App.getCurrentGame().getNPCs()){
                     for (Integer questCounter : player.getActivatedQuestNPC().get(npcQuest)){
                         counter++;
                         if(counter == index){
                             if(questCounter == 1){
-                                npc.quest1();
+                                npcQuest.quest1();
                             } else if(questCounter == 2){
-                                npc.quest2();
+                                npcQuest.quest2();
                             } else if(questCounter == 3){
-                                npc.quest3();
+                                npcQuest.quest3();
                             }
                             return;
                         }

@@ -1,32 +1,33 @@
 package models.Players.NPC;
 
+import models.App;
 import models.Maps.Tile;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public enum NPCDetail {
-    SEBASTIAN("Sebastian", 0, 0, 10, new ArrayList<>(List.of(
+    SEBASTIAN("Sebastian", 43, 8, 10, new ArrayList<>(List.of(
             "wool",
             "pumpkin pie",
             "pizza"
     ))),
-    ABIGAIL("Abigail", 0, 1, 15, new ArrayList<>(List.of(
+    ABIGAIL("Abigail", 65, 3, 15, new ArrayList<>(List.of(
             "stone",
             "iron ore",
             "coffee"
     ))),
-    HARVEY("Harvey", 0, 2, 5, new ArrayList<>(List.of(
+    HARVEY("Harvey", 20, 55, 5, new ArrayList<>(List.of(
             "coffee",
             "pickle",
             "wine"
     ))),
-    LEAH("Leah", 0, 3, 20,new ArrayList<>(List.of(
+    LEAH("Leah", 20, 20, 20,new ArrayList<>(List.of(
             "salad",
             "grape",
             "wine"
     ))),
-    ROBIN("Robin", 0, 4, 25, new ArrayList<>(List.of(
+    ROBIN("Robin", 72, 38, 25, new ArrayList<>(List.of(
             "spaghetti",
             "wood",
             "iron bar"
@@ -40,7 +41,7 @@ public enum NPCDetail {
 
     NPCDetail(String name, int x , int y, int quest3Days, ArrayList<String> favoriteGifts) {
         this.name = name;
-        this.tile = null;
+        this.tile = App.getMaps().get(4).getTiles()[x][y];
         this.quest3Days = quest3Days;
         this.favoriteGiftsName.addAll(favoriteGifts);
     }
