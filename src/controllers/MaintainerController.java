@@ -143,13 +143,13 @@ public class MaintainerController {
         }
     }
 
-    public static <T> String printingShopProducts(String name, T[] list) {
+    public static <T extends ItemsInteface> String printingShopProducts(String name, T[] list) {
         StringBuilder sb = new StringBuilder();
 
         sb.append(name + " Products:\n");
         
         for (int i = 0; i < list.length; i++) {
-            sb.append(list[i] + "\n");
+            sb.append(list[i].getName() + "\n");
         }
 
         return sb.toString();

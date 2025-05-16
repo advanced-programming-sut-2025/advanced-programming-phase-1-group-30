@@ -7,6 +7,7 @@ import models.Invetory.BackPackType;
 import models.Game;
 import models.Items.Gift;
 import models.Items.Products.*;
+import models.Items.Products.ShopProducts.FishShopProducts;
 import models.Items.Products.ShopProducts.ShopProduct;
 import models.Items.Item;
 import models.Items.ArtisanGoods.ArtisanGood;
@@ -935,16 +936,23 @@ public class GameMenuController {
 
         player.getBackPack().removeItem(wantedItem);
         player.getRefrigerator().addItem(wantedItem);
+        GameMenu.printResult("Item moved successfully!");
     }
 
     public static void pickRefrigerator(String item) {
-        Item wantedItem = Item.findItemByName(item, App.getCurrentGame().getCurrentPlayer().getRefrigerator().getItems());
+        Player player = App.getCurrentGame().getCurrentPlayer();
+        Item wantedItem = Item.findItemByName(item, player.getRefrigerator().getItems());
 
         if (wantedItem == null)
             GameMenu.printResult("No Item Found!");
 
-        App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(wantedItem);
-        App.getCurrentGame().getCurrentPlayer().getRefrigerator().removeItem(wantedItem);
+        if (player.getBackPack().getItems().size() + 1 > player.getBackPack().getType().getCapacity()) {
+            GameMenu.printResult("Backpack is full!");
+            return;
+        }
+        player.getBackPack().addItem(wantedItem);
+        player.getRefrigerator().removeItem(wantedItem);
+        GameMenu.printResult("Item moved successfully!");
     }
 
     public static void showCookingRecipe(boolean isAll) {
@@ -990,8 +998,10 @@ public class GameMenuController {
     public static void cooking(String name) {
         FoodType recipe = FoodType.getrecipeByName(name);
         Player player = App.getCurrentGame().getCurrentPlayer();
-        if (recipe == null)
+        if (recipe == null) {
             GameMenu.printResult("No recipe with given name were found!");
+            return;
+        }
 
         boolean recipeLeared = false;
         for (FoodType foodType : App.getCurrentGame().getCurrentPlayer().getRecipes()) {
@@ -1006,6 +1016,10 @@ public class GameMenuController {
         }
         if (player.getBackPack().getItems().size() >= player.getBackPack().getType().getCapacity()) {
             GameMenu.printResult("Your Backpack is full!!");
+            return;
+        }
+        if (player.getEnergy() <= 3) {
+            GameMenu.printResult("You don't have enough energy to cook!");
             return;
         }
 
@@ -1501,22 +1515,28 @@ public class GameMenuController {
             return;
         }
 
+        if (!fishingPole2.getName().equals(fishingPole)) {
+            GameMenu.printResult("You don't have THIS fishing pole");
+            return;
+        }
+
         if(App.getCurrentGame().getCurrentPlayer().isInCity()){
             GameMenu.printResult("You can't fish in city!");
             return;
         }
-        Tile[][] tiles = App.getCurrentGame().getCurrentMap().getTiles();
-        if (!tiles[player.getX() + 1][player.getY() + 1].getType().equals(TileTypes.WATER) &&
-            !tiles[player.getX() + 1][player.getY()].getType().equals(TileTypes.WATER) &&
-            !tiles[player.getX() + 1][player.getY() - 1].getType().equals(TileTypes.WATER) &&
-            !tiles[player.getX()][player.getY() + 1].getType().equals(TileTypes.WATER) &&
-            !tiles[player.getX()][player.getY() - 1].getType().equals(TileTypes.WATER) &&
-            !tiles[player.getX() - 1][player.getY() + 1].getType().equals(TileTypes.WATER) &&
-            !tiles[player.getX() - 1][player.getY()].getType().equals(TileTypes.WATER) &&
-            !tiles[player.getX() - 1][player.getY() - 1].getType().equals(TileTypes.WATER)) {
-            GameMenu.printResult("You are not near water!");
-            return;
-        }
+
+        // Tile[][] tiles = App.getCurrentGame().getCurrentMap().getTiles();
+        // if (!tiles[player.getX() + 1][player.getY() + 1].getType().equals(TileTypes.WATER) &&
+        //     !tiles[player.getX() + 1][player.getY()].getType().equals(TileTypes.WATER) &&
+        //     !tiles[player.getX() + 1][player.getY() - 1].getType().equals(TileTypes.WATER) &&
+        //     !tiles[player.getX()][player.getY() + 1].getType().equals(TileTypes.WATER) &&
+        //     !tiles[player.getX()][player.getY() - 1].getType().equals(TileTypes.WATER) &&
+        //     !tiles[player.getX() - 1][player.getY() + 1].getType().equals(TileTypes.WATER) &&
+        //     !tiles[player.getX() - 1][player.getY()].getType().equals(TileTypes.WATER) &&
+        //     !tiles[player.getX() - 1][player.getY() - 1].getType().equals(TileTypes.WATER)) {
+        //     GameMenu.printResult("You are not near water!");
+        //     return;
+        // }
 
         ArrayList<FishType> fishTypes = new ArrayList<>();
         for (FishType fishType : FishType.values()) {
@@ -1564,6 +1584,10 @@ public class GameMenuController {
             quality = "Iridium";
         }
 
+        if (player.getBackPack().getItems().size() + 1 >player.getBackPack().getType().getCapacity()) {
+            GameMenu.printResult("Opps! Your backpack is full!");
+            return;
+        }
         App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(fish);
         App.getCurrentGame().getCurrentPlayer().changeEnergy(-1 * fishingPole2.getType().getEnergyUsed());
         App.getCurrentGame().getCurrentPlayer().increaseFishing(5);
@@ -1644,63 +1668,63 @@ public class GameMenuController {
     }
 
     public static void showAllProducts() {
-        Player player = App.getCurrentGame().getCurrentPlayer();
-        if (!player.isInCity()) {
-            GameMenu.printResult("You are not in the city!");
-            return;
-        }
-        Tile[][] tiles = App.getMaps().get(4).getTiles();
-        switch (tiles[player.getCityX()][player.getCityX()].getType()) {
-            case BLACKSMITH ->
-                    App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getGeneralStore());
-            switch (App.getCurrentGame().getCurrentPlayer().getBuilding()) {
-                case Blacksmith blacksmith ->
-                        GameMenu.printResult(MaintainerController.printingShopProducts("Blacksmith", BlacksmithCosts.values()));
-                case CARPENTERS_SHOP ->
-                        GameMenu.printResult(MaintainerController.printingShopProducts("Carpenter", CarpenterCosts.values()));
-                case FISH_SHOP ->
-                        GameMenu.printResult(MaintainerController.printingShopProducts("FishShop", FishShopCosts.values()));
-                case PIERRES_GENERAL_STORE ->
-                        GameMenu.printResult(MaintainerController.printingShopProducts("GeneralStore", GeneralStoreCosts.values()));
-                case JOJOMART ->
-                        GameMenu.printResult(MaintainerController.printingShopProducts("JojaMart", JojaMartCosts.values()));
-                case MARINES_RANCH ->
-                        GameMenu.printResult(MaintainerController.printingShopProducts("Ranch", RanchCosts.values()));
-                case THE_STARDROP_SALOON ->
-                        GameMenu.printResult(MaintainerController.printingShopProducts("Saloon", SaloonCosts.values()));
-                case null, default -> GameMenu.printResult("You are not in a store!");
-            }
-        }
+       Player player = App.getCurrentGame().getCurrentPlayer();
+       if (!player.isInCity()) {
+           GameMenu.printResult("You are not in the city!");
+           return;
+       }
+       Tile[][] tiles = App.getMaps().get(4).getTiles();
+       switch (tiles[player.getCityX()][player.getCityX()].getType()) {
+           case BLACKSMITH ->
+                   App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getGeneralStore());
+           switch (App.getCurrentGame().getCurrentPlayer().getBuilding()) {
+               case Blacksmith blacksmith ->
+                       GameMenu.printResult(MaintainerController.printingShopProducts("Blacksmith", BlacksmithCosts.values()));
+               case CARPENTERS_SHOP ->
+                       GameMenu.printResult(MaintainerController.printingShopProducts("Carpenter", CarpenterCosts.values()));
+               case FISH_SHOP ->
+                       GameMenu.printResult(MaintainerController.printingShopProducts("FishShop", FishShopCosts.values()));
+               case PIERRES_GENERAL_STORE ->
+                       GameMenu.printResult(MaintainerController.printingShopProducts("GeneralStore", GeneralStoreCosts.values()));
+               case JOJOMART ->
+                       GameMenu.printResult(MaintainerController.printingShopProducts("JojaMart", JojaMartCosts.values()));
+               case MARINES_RANCH ->
+                       GameMenu.printResult(MaintainerController.printingShopProducts("Ranch", RanchCosts.values()));
+               case THE_STARDROP_SALOON ->
+                       GameMenu.printResult(MaintainerController.printingShopProducts("Saloon", SaloonCosts.values()));
+               case null, default -> GameMenu.printResult("You are not in a store!");
+           }
+       }
     }
 
     public static void showAvailableProducts() {
-        Player player = App.getCurrentGame().getCurrentPlayer();
-        if (!player.isInCity()) {
-            GameMenu.printResult("You are not in the city!");
-            return;
-        }
-        Tile[][] tiles = App.getMaps().get(4).getTiles();
-        switch (tiles[player.getCityX()][player.getCityX()].getType()) {
-            case BLACKSMITH ->
-                    App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getGeneralStore());
-            switch (App.getCurrentGame().getCurrentPlayer().getBuilding()) {
-                case Blacksmith blacksmith ->
-                        GameMenu.printResult(MaintainerController.printingShopProducts2("Blacksmith", App.getCurrentGame().getBlacksmith().getItems()));
-                case CARPENTERS_SHOP ->
-                        GameMenu.printResult(MaintainerController.printingShopProducts2("Carpenter", App.getCurrentGame().getCarpenter().getItems()));
-                case FISH_SHOP ->
-                        GameMenu.printResult(MaintainerController.printingShopProducts2("FishShop", App.getCurrentGame().getFishShop().getItems()));
-                case PIERRES_GENERAL_STORE ->
-                        GameMenu.printResult(MaintainerController.printingShopProducts2("GeneralStore", App.getCurrentGame().getGeneralStore().getItems()));
-                case JOJOMART ->
-                        GameMenu.printResult(MaintainerController.printingShopProducts2("JojaMart", App.getCurrentGame().getJojaMart().getItems()));
-                case MARINES_RANCH ->
-                        GameMenu.printResult(MaintainerController.printingShopProducts2("Ranch", App.getCurrentGame().getRanch().getItems()));
-                case THE_STARDROP_SALOON ->
-                        GameMenu.printResult(MaintainerController.printingShopProducts2("Saloon", App.getCurrentGame().getSaloon().getItems()));
-                case null, default -> GameMenu.printResult("You are not in a store!");
-            }
-        }
+       Player player = App.getCurrentGame().getCurrentPlayer();
+       if (!player.isInCity()) {
+           GameMenu.printResult("You are not in the city!");
+           return;
+       }
+       Tile[][] tiles = App.getMaps().get(4).getTiles();
+       switch (tiles[player.getCityX()][player.getCityX()].getType()) {
+           case BLACKSMITH ->
+                   App.getCurrentGame().getCurrentPlayer().setBuilding(App.getCurrentGame().getGeneralStore());
+           switch (App.getCurrentGame().getCurrentPlayer().getBuilding()) {
+               case Blacksmith blacksmith ->
+                       GameMenu.printResult(MaintainerController.printingShopProducts2("Blacksmith", App.getCurrentGame().getBlacksmith().getItems()));
+               case CARPENTERS_SHOP ->
+                       GameMenu.printResult(MaintainerController.printingShopProducts2("Carpenter", App.getCurrentGame().getCarpenter().getItems()));
+               case FISH_SHOP ->
+                       GameMenu.printResult(MaintainerController.printingShopProducts2("FishShop", App.getCurrentGame().getFishShop().getItems()));
+               case PIERRES_GENERAL_STORE ->
+                       GameMenu.printResult(MaintainerController.printingShopProducts2("GeneralStore", App.getCurrentGame().getGeneralStore().getItems()));
+               case JOJOMART ->
+                       GameMenu.printResult(MaintainerController.printingShopProducts2("JojaMart", App.getCurrentGame().getJojaMart().getItems()));
+               case MARINES_RANCH ->
+                       GameMenu.printResult(MaintainerController.printingShopProducts2("Ranch", App.getCurrentGame().getRanch().getItems()));
+               case THE_STARDROP_SALOON ->
+                       GameMenu.printResult(MaintainerController.printingShopProducts2("Saloon", App.getCurrentGame().getSaloon().getItems()));
+               case null, default -> GameMenu.printResult("You are not in a store!");
+           }
+       }
     }
 
     public static void purchase(String name, String count){
