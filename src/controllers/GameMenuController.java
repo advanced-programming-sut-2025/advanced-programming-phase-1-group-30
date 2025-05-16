@@ -1688,6 +1688,18 @@ public class GameMenuController {
             return;
         }
 
+        if (item.getClass() == Axe.class ||
+            item.getClass() == Basket.class ||
+            item.getClass() == FishingPole.class ||
+            item.getClass() == Hoe.class ||
+            item.getClass() == MilkPail.class ||
+            item.getClass() == Pickaxe.class ||
+            item.getClass() == Scythe.class ||
+            item.getClass() == Shear.class) {
+            GameMenu.printResult("You can't sell any tool!!!");
+            return;
+        }
+
         int amount;
         if (count != null) amount = Integer.parseInt(count);
         else amount = item.getCount();
