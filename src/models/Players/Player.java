@@ -89,13 +89,14 @@ public class Player {
         this.backPack.addItem(new Basket(1, BasketType.NORMAL));
         this.backPack.addItem(new MilkPail(1, 10));
         this.backPack.addItem(new Scythe(1));
-        this.backPack.addItem(new Item(10,"copper bar",10));
         this.trashCan = new TrashCan(TrashCanType.INITIAL_TRASHCAN);
         this.backPack.addItem(new ForagingSeed(4, ForagingSeedType.ORANGE_SAPLING)); //TODO tile & initial seed
         this.backPack.addItem(new Item(1000, "wood", 10));
         this.backPack.addItem(new Item(1000, "stone", 20));
-        this.backPack.addItem(new Item(50, "hay", 50));
+//        this.backPack.addItem(new Item(50, "hay", 50));
         this.backPack.addItem(new Food(2, FoodType.TRIPLE_SHOT_ESPRESSO));
+        this.craftingRecipes.add(IndustrialProductType.MAYONNAISE_MACHINE);
+        this.backPack.addItem(new Item(1000, "copper bar", 20));
         this.money = 20000;
         this.selectionNumber = selectionNumber;
         this.maxEnergy = 200;

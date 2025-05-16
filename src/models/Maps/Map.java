@@ -142,8 +142,9 @@ public class Map {
                         } else {
                             if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
                                 System.out.print(RED + "\uD83D\uDE00" + RESET);
-                            } else
+                            } else {
                                 System.out.print("\uD83D\uDFE8");
+                            }
                         }
                     } else if (tiles[j][i].getType().equals(TileTypes.GRASS)) {
                         if (tiles[j][i].getItem() != null) {
@@ -302,6 +303,16 @@ public class Map {
                     } else {
                         if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
                             System.out.print(RED + "\uD83D\uDE00" + RESET);
+                        } else if (j == 43 && i == 8) {
+                            System.out.print("\uD83D\uDE4B\u200D♂\uFE0F");
+                        } else if (j == 65 && i == 3) {
+                            System.out.print("\uD83D\uDE4E\u200D♀\uFE0F");
+                        } else if (j == 20 && i == 55) {
+                            System.out.print("\uD83D\uDC68\u200D\uD83C\uDF3E");
+                        } else if (j == 20 && i == 20) {
+                            System.out.print("\uD83E\uDDD1\u200D\uD83C\uDFA8");
+                        } else if (j == 72 && i == 38) {
+                            System.out.print("\uD83D\uDC83");
                         } else{
                             System.out.print("\uD83D\uDFE9");
                         }

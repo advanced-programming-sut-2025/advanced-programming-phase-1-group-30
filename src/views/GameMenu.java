@@ -9,6 +9,7 @@ import models.Buildings.GeneralStoreCosts;
 import models.Commands.GameMenuCommands;
 import models.Items.Products.ShopProducts.FishShopProducts;
 import models.Items.Products.ShopProducts.GeneralStoreProducts;
+import models.Players.NPC.NPC;
 import models.Players.Player;
 
 import java.util.Scanner;
