@@ -1442,8 +1442,11 @@ public class GameMenuController {
 
         ArrayList<FishType> fishTypes = new ArrayList<>();
         for (FishType fishType : FishType.values()) {
-            if (fishType.getSeason().equals(App.getCurrentGame().getCurrentTime().getSeason()))
-                fishTypes.add(fishType);
+            if (fishType.getSeason().equals(App.getCurrentGame().getCurrentTime().getSeason())) {
+                if (fishType.isLegendary()) {
+                    if (player.getFishing() == 450) fishTypes.add(fishType);
+                } else fishTypes.add(fishType);
+            }
         }
 
         Random random = new Random();
@@ -1455,7 +1458,7 @@ public class GameMenuController {
         else if (App.getCurrentGame().getCurrentWeather().equals(Weather.RAIN)) M = 1.2;
         else if (App.getCurrentGame().getCurrentWeather().equals(Weather.STORM)) M = 0.5;
         else M = 1.0;
-        int skill = player.getFishing();
+        int skill = player.getFishing() / 100;
         double pole = fishingPole2.getType().getPole();
 
         int count = (int) Math.floor(R * M * (skill + 2)) + 1;
@@ -1485,6 +1488,7 @@ public class GameMenuController {
 
         App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(fish);
         App.getCurrentGame().getCurrentPlayer().changeEnergy(-1 * fishingPole2.getType().getEnergyUsed());
+        App.getCurrentGame().getCurrentPlayer().increaseFishing(5);
         GameMenu.printResult("Wow! You got " + count + " " + quality + " " + fishType.getDisplayName());
     }
    
