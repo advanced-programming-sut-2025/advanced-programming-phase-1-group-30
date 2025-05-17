@@ -477,6 +477,11 @@ public class GameMenu implements AppMenu {
             }
             return;
         }
+        matcher = GameMenuCommands.SHOW_MONEY.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.showMoney();
+            return;
+        }
 
         matcher = GameMenuCommands.EXIT_GAME.regexMatcher(command);
         if (matcher.matches()) {

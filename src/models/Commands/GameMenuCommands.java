@@ -94,6 +94,7 @@ public enum GameMenuCommands {
     GoToCity("^\\s*go\\s+to\\s+city\\s*$"),
     GoToFarm("^\\s*go\\s+to\\s+farm\\s*$"),
     BuildGreenhouse("^\\s*greenhouse\\s+build\\s*$"),
+    SHOW_MONEY("^\\s*show\\s+money\\s*$"),
     Exit("^\\s*exit\\s+game\\s*$");
 
 
