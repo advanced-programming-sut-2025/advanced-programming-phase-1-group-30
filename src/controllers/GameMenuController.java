@@ -686,6 +686,47 @@ public class GameMenuController {
         sb.append("Can Become Giant: " + craft.isCanBecomeGiant());
         RegisterMenu.printResult(sb.toString());
     }
+    public static void foragingCropInfo(String name) {
+        boolean isCraftAvailable = false;
+        ForagingCropType craft = null;
+        for (ForagingCropType cropType : ForagingCropType.values()) {
+            if (cropType.getName().toLowerCase().equals(name)) {
+                craft = cropType;
+                isCraftAvailable = true;
+            }
+        }
+        if (!isCraftAvailable) {
+            GameMenu.printResult("No craft with given name were found!");
+            return;
+        }
+        
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Name: " + craft.getName() + "\n");
+        sb.append("Base sell price: " + craft.getBaseSellPrice() + "\n");
+        sb.append("Energy: " + craft.getEnergy());
+        RegisterMenu.printResult(sb.toString());
+    }
+    public static void foragingTreeInfo(String name) {
+        boolean isCraftAvailable = false;
+        ForagingTreeType craft = null;
+        for (ForagingTreeType cropType : ForagingTreeType.values()) {
+            if (cropType.getName().toLowerCase().equals(name)) {
+                craft = cropType;
+                isCraftAvailable = true;
+            }
+        }
+        if (!isCraftAvailable) {
+            GameMenu.printResult("No craft with given name were found!");
+            return;
+        }
+        
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Name: " + craft.getName() + "\n");
+        sb.append("Base sell price: " + craft.getSeason());
+        RegisterMenu.printResult(sb.toString());
+    }
     public static void plant(String seed1, String direction) {
         ForagingSeed seed;
         Player player = App.getCurrentGame().getCurrentPlayer();

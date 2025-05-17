@@ -186,6 +186,16 @@ public class GameMenu implements AppMenu {
             GameMenuController.craftInfo(matcher.group("craftName"));
             return;
         }
+        matcher = GameMenuCommands.FORAGING_CROP_INFO.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.foragingCropInfo(matcher.group("craftName"));
+            return;
+        }
+        matcher = GameMenuCommands.FORAGING_TREE_INFO.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.foragingTreeInfo(matcher.group("craftName"));
+            return;
+        }
 
         matcher = GameMenuCommands.HOWMUCH_WATER.regexMatcher(command);
         if (matcher.matches()) {
