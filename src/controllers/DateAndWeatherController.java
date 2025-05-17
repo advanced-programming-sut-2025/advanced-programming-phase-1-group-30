@@ -3,10 +3,8 @@ package controllers;
 import models.Animals.Animal;
 import models.App;
 import models.Items.Item;
-import models.Items.Products.Crop;
 import models.Items.Products.GiantCrop;
 import models.Items.Products.Tree;
-import models.Maps.GreatMap;
 import models.Maps.Tile;
 import models.Maps.TileTypes;
 import models.Maps.Weather;
@@ -43,6 +41,7 @@ public class DateAndWeatherController {
             GameMenu.printResult("You can't cheat more than 13 hours");
             return;
         }
+        MaintainerController.artisanProssesTimeChanger(x);
         if (x + App.getCurrentGame().getCurrentTime().getHour() > 22) {
             App.getCurrentGame().setCurrentWeather(App.getCurrentGame().getTomorrowWeather());
             MaintainerController.updateAllShops();
@@ -268,6 +267,7 @@ public class DateAndWeatherController {
             return;
         }
 
+        MaintainerController.artisanProssesTimeChanger(x * 13);
         if (x + App.getCurrentGame().getCurrentTime().getDay() > 28) {
             App.getCurrentGame().getCurrentTime().setDay(x - (28 - App.getCurrentGame().getCurrentTime().getDay()));
             ChangeSeason();

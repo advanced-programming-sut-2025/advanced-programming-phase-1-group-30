@@ -11,9 +11,9 @@ import models.Invetory.ShippingBin;
 import models.Invetory.ShippingBinType;
 import models.Invetory.TrashCan;
 import models.Invetory.TrashCanType;
-import models.Items.Foods.Food;
 import models.Items.Gift;
 import models.Items.Item;
+import models.Items.ArtisanGoods.ArtisanItemProsses;
 import models.Items.Foods.FoodType;
 import models.Items.IndustrialProducts.IndustrialProductType;
 import models.Items.Products.ForagingSeed;
@@ -24,7 +24,6 @@ import models.Players.NPC.NPC;
 import models.Users.User;
 import views.GameMenu;
 
-import java.sql.SQLData;
 import java.util.*;
 
 public class Player {
@@ -74,6 +73,7 @@ public class Player {
     private Player hamsar = null;
     private boolean gotRejected = false;
     private int daysGotRejected = -1;
+    private ArrayList<ArtisanItemProsses> artisanItemsProsses = new ArrayList<>();
 
     public Player(User user,String username, int selectionNumber) {
         this.user = user;
@@ -553,5 +553,17 @@ public class Player {
 
     public void setHamsar(Player hamsar) {
         this.hamsar = hamsar;
+    }
+
+    public ArrayList<ArtisanItemProsses> getArtisanItemsProsses() {
+        return artisanItemsProsses;
+    }
+
+    public void addArtisanItemProsses(ArtisanItemProsses artisanItemProsses) {
+        this.artisanItemsProsses.add(artisanItemProsses);
+    }
+
+    public void removeArtisanItemProsses(ArtisanItemProsses artisanItemProsses) {
+        this.artisanItemsProsses.remove(artisanItemProsses);
     }
 }

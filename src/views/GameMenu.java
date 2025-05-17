@@ -5,12 +5,9 @@ import controllers.GameMenuController;
 import controllers.NewGameController;
 import models.App;
 import models.Buildings.FishShopCosts;
-import models.Buildings.GeneralStoreCosts;
 import models.Commands.GameMenuCommands;
 import models.Invetory.BackPackType;
 import models.Items.Products.ShopProducts.FishShopProducts;
-import models.Items.Products.ShopProducts.GeneralStoreProducts;
-import models.Players.NPC.NPC;
 import models.Players.Player;
 
 import java.util.Scanner;
