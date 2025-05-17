@@ -445,6 +445,41 @@ public class GameMenu implements AppMenu {
             return;
         }
 
+        matcher = GameMenuCommands.START_TRADE.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.startTrade();
+            return;
+        }
+
+        matcher = GameMenuCommands.TRADE_LIST.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.tradeList();
+            return;
+        }
+
+        matcher = GameMenuCommands.TRADE_HISTORY.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.tradeHistory();
+            return;
+        }
+
+        matcher = GameMenuCommands.TRADE_RESPONSE.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.tradeResponse(matcher.group("id"), matcher.group("answer"));
+            return;
+        }
+
+        matcher = GameMenuCommands.TRADE.regexMatcher(command);
+        if (matcher.matches()) {
+            if (matcher.group("price") != null) {
+                GameMenuController.trade(matcher.group("username"), matcher.group("type"), matcher.group("item"),
+                        matcher.group("amount"), matcher.group("price"));
+            } else {
+                GameMenuController.tradeProducts(matcher.group("username"), matcher.group("type"),
+                        matcher.group("item"), matcher.group("amount"), matcher.group("targetItem"), matcher.group("targetAmount"));
+            }
+            return;
+        }
 
         matcher = GameMenuCommands.EXIT_GAME.regexMatcher(command);
         if (matcher.matches()) {

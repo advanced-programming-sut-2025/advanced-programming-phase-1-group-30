@@ -28,13 +28,16 @@ public class NewGameController {
         User user1 = null;
         User user2 = null;
         User user3 = null;
+        if (App.getCurrentUser() == null) {
+            GameMenu.printResult("You are not logged in!");
+            return;
+        }
 
         App.getMaps().add(new Map(1));
         App.getMaps().add(new Map(2));
         App.getMaps().add(new Map(3));
         App.getMaps().add(new Map(4));
         App.getMaps().add(new Map(-1));
-
         Game game = new Game();
         App.setCurrentGame(game);
         App.getGames().add(game);
