@@ -6,7 +6,7 @@ public class IndustrialProduct extends Item {
     private IndustrialProductType type;
 
     public IndustrialProduct(int count, IndustrialProductType type) {
-        super(count, type.name(), type.getSellPrice());
+        super(count, type.getName() , type.getSellPrice());
         this.type = type;
     }
 

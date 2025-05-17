@@ -10,6 +10,7 @@ import models.Commands.GameMenuCommands;
 import models.Invetory.BackPackType;
 import models.Items.Products.ShopProducts.FishShopProducts;
 import models.Items.Products.ShopProducts.GeneralStoreProducts;
+import models.Players.NPC.NPC;
 import models.Players.Player;
 
 import java.util.Scanner;

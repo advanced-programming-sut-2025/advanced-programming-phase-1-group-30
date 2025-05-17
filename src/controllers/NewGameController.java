@@ -10,6 +10,7 @@ import models.Commands.Menus;
 import models.Game;
 import models.Commands.GameMenuCommands;
 import models.Items.Gift;
+import models.Items.IndustrialProducts.IndustrialProductType;
 import models.Items.Item;
 import models.Items.Products.GiantCrop;
 import models.Maps.Map;
@@ -31,6 +32,12 @@ public class NewGameController {
             GameMenu.printResult("You are not logged in!");
             return;
         }
+
+        App.getMaps().add(new Map(1));
+        App.getMaps().add(new Map(2));
+        App.getMaps().add(new Map(3));
+        App.getMaps().add(new Map(4));
+        App.getMaps().add(new Map(-1));
         Game game = new Game();
         App.setCurrentGame(game);
         App.getGames().add(game);
@@ -57,7 +64,7 @@ public class NewGameController {
                 GameMenu.printResult("User1 already in Game");
                 return;
             }
-            
+
             Player player1 = new Player(user1,user1.getUsername(), 1);
             user1.setPlayer(player1);
             user1.setNumOfGames(user1.getNumOfGames() + 1);
@@ -106,11 +113,6 @@ public class NewGameController {
         if(user3 != null) {
             user3.changeInGame();
         }
-        App.getMaps().add(new Map(1));
-        App.getMaps().add(new Map(2));
-        App.getMaps().add(new Map(3));
-        App.getMaps().add(new Map(4));
-        App.getMaps().add(new Map(-1));
         GameMenu.printResult("Please select your maps...");
         App.getCurrentGame().getGreatMap().setCityMap(App.getMaps().get(4));
         for (Player player : players) {
@@ -263,6 +265,56 @@ public class NewGameController {
         }
         Player.updateBuffs(players);
 
+        for(Player player : players) {
+            if(player.getFarming() >= 150){
+                if(!player.getCraftingRecipes().contains(IndustrialProductType.BEE_HOUSE)){
+                    player.getCraftingRecipes().add(IndustrialProductType.BEE_HOUSE);
+                } else if(!player.getCraftingRecipes().contains(IndustrialProductType.SPRINKLER)){
+                    player.getCraftingRecipes().add(IndustrialProductType.SPRINKLER);
+                }
+            } else if(player.getFarming() >= 250){
+                if(!player.getCraftingRecipes().contains(IndustrialProductType.DELUXE_SCARECROW)){
+                    player.getCraftingRecipes().add(IndustrialProductType.DELUXE_SCARECROW);
+                } else if(!player.getCraftingRecipes().contains(IndustrialProductType.QUALITY_SPRINKLER)){
+                    player.getCraftingRecipes().add(IndustrialProductType.QUALITY_SPRINKLER);
+                }if(!player.getCraftingRecipes().contains(IndustrialProductType.CHEESE_PRESS)){
+                    player.getCraftingRecipes().add(IndustrialProductType.CHEESE_PRESS);
+                } else if(!player.getCraftingRecipes().contains(IndustrialProductType.PRESERVES_JAR)){
+                    player.getCraftingRecipes().add(IndustrialProductType.PRESERVES_JAR);
+                }
+
+            } else if(player.getFarming() >= 350){
+                if(!player.getCraftingRecipes().contains(IndustrialProductType.OIL_MAKER)){
+                    player.getCraftingRecipes().add(IndustrialProductType.OIL_MAKER);
+                } else if(!player.getCraftingRecipes().contains(IndustrialProductType.LOOM)){
+                    player.getCraftingRecipes().add(IndustrialProductType.LOOM);
+                }if(!player.getCraftingRecipes().contains(IndustrialProductType.KEG)){
+                    player.getCraftingRecipes().add(IndustrialProductType.KEG);
+                }
+            } else if(player.getForaging() >= 150){
+                if(!player.getCraftingRecipes().contains(IndustrialProductType.CHARCOAL_KILN)){
+                    player.getCraftingRecipes().add(IndustrialProductType.CHARCOAL_KILN);
+                }
+            } else if(player.getForaging() >= 450){
+                if(!player.getCraftingRecipes().contains(IndustrialProductType.MYSTIC_TREE_SEED)){
+                    player.getCraftingRecipes().add(IndustrialProductType.MYSTIC_TREE_SEED);
+                }
+            } else if(player.getMining() >= 150){
+                if(!player.getCraftingRecipes().contains(IndustrialProductType.CHERRY_BOMB)){
+                    player.getCraftingRecipes().add(IndustrialProductType.CHERRY_BOMB);
+                }
+            } else if(player.getMining() >= 250){
+                if(!player.getCraftingRecipes().contains(IndustrialProductType.BOMB)){
+                    player.getCraftingRecipes().add(IndustrialProductType.BOMB);
+                }
+            } else if(player.getMining() >= 350){
+                if(!player.getCraftingRecipes().contains(IndustrialProductType.MEGA_BOMB)){
+                    player.getCraftingRecipes().add(IndustrialProductType.MEGA_BOMB);
+                }
+            }
+        }
+
+
 //        for (Player player : players) {
 //            if (!player.isPassedOut()) {
 //                App.getCurrentGame().setCurrentPlayer(player);
@@ -286,6 +338,27 @@ public class NewGameController {
                 }
                 player.setX(70);
                 player.setY(8);
+
+                for(NPC npc :App.getCurrentGame().getNPCs()) {
+                    if(player.getFriendshipsNPC().get(npc) >= 600){
+                        Random random = new Random();
+                        int random1 = random.nextInt(2);
+
+                        if(random1 == 0){
+                            int random2 = random.nextInt(3);
+                            String gift = "";
+                            if(random2 == 0){
+                                gift = npc.getFavoriteGifts().get(0);
+                            } else if(random2 == 1){
+                                gift = npc.getFavoriteGifts().get(1);
+                            } else if(random2 == 2){
+                                gift = npc.getFavoriteGifts().get(2);
+                            }
+                            Item gifts = new Item(1,gift,15);
+                            player.getBackPack().addItem(gifts);
+                        }
+                    }
+                }
 
                 player.setEnergy(player.getMaxEnergy());
                 if (player.isPassedOut()) {
