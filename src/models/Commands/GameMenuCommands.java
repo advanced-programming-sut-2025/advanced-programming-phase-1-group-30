@@ -79,7 +79,7 @@ public enum GameMenuCommands {
     ASK_MARRIAGE("^\\s*ask\\s+marriage\\s+-u\\s+(?<username>.*\\S)\\s+-r\\s+(?<ring>.*\\S)\\s*$"),
     RESPOND("^\\s*respond\\s+(?<answer>(-accept|-reject))\\s+-u\\s+(?<username>.*\\S)\\s*$"),
     START_TRADE("^\\s*start\\s+trade\\s*$"),
-    TRADE("^\\s*trade\\s+-u\\s+(?<username>.*\\S)\\s+-t\\s+(?<type>.*\\S)\\s+-i\\s+(?<item>.*\\S)\\s+-a\\s+(?<amount>.*\\S)(\\s+-p\\s+(?<price>.*\\S))?(\\s*-ti\\s+(?<targetItem>.*\\S)\\s+-ta\\s+(?<targetAmount>.*\\S))?\\s*$"),
+    TRADE("^\\s*trade\\s+-u\\s+(?<username>\\S+)\\s+-t\\s+(?<type>\\S+)\\s+-i\\s+(?<item>\\S+)\\s+-a\\s+(?<amount>\\d+)(\\s+-p\\s+(?<price>\\d+))?(\\s+-ti\\s+(?<targetItem>\\S+)\\s+-ta\\s+(?<targetAmount>\\d+))?\\s*$"),
     TRADE_LIST("^\\s*trade\\s+list\\s*$"),
     TRADE_RESPONSE("^\\s*trade\\s+response\\s+(?<answer>(-accept|-reject))\\s+-i\\s+(?<id>.*\\S)\\s*$"),
     TRADE_HISTORY("^\\s*trade\\s+history\\s*$"),

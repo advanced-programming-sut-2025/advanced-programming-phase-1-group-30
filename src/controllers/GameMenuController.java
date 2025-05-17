@@ -2407,13 +2407,13 @@ public class GameMenuController {
 //                }
 //            }
 //            if (check == 0 && check2 == 0) {
-//                GameMenu.printResult(trade.getGetter().getUsername() + " wants " + trade.getRequestedItem().getName() + " in exchange for " + trade.getOfferedItem());
+//                GameMenu.printResult(trade.getGetter().getUsername() + " wants " + trade.getRequestedItem() + " in exchange for " + trade.getOfferedItem());
 //            } else if (check == 1 && check2 == 0) {
-//                GameMenu.printResult(trade.getGiver().getUsername() + " offers " + trade.getOfferedItem().getName() + " in exchange for " + trade.getRequestedItem());
+//                GameMenu.printResult(trade.getGiver().getUsername() + " offers " + trade.getOfferedItem() + " in exchange for " + trade.getRequestedItem());
 //            } else if (check == 1 && check2 == 1) {
-//                GameMenu.printResult(trade.getGiver().getUsername() + " offers " + trade.getOfferedItem().getName() + " in exchange for " + trade.getMoney());
+//                GameMenu.printResult(trade.getGiver().getUsername() + " offers " + trade.getOfferedItem() + " in exchange for " + trade.getMoney());
 //            } else if (check == 0 && check2 == 1) {
-//                GameMenu.printResult(trade.getGetter().getUsername() + " wants " + trade.getRequestedItem().getName() + " in exchange for " + trade.getMoneyOrItem());
+//                GameMenu.printResult(trade.getGetter().getUsername() + " wants " + trade.getRequestedItem() + " in exchange for " + trade.getMoneyOrItem());
 //            }
 //        }
         for (Player player : players) {
@@ -2456,7 +2456,8 @@ public class GameMenuController {
                 }
                 App.getCurrentGame().getTrades().add(new Trade(
                         me,           // giver
-                        other,        // getter
+                        other,// getter
+                        "offer",
                         item,         // offeredItem
                         itemCount,    // offerAmount
                         true,         // getsMoney (yes, this trade involves money)
@@ -2475,7 +2476,8 @@ public class GameMenuController {
                 }
                 App.getCurrentGame().getTrades().add(new Trade(
                         other,        // giver (they must have the items)
-                        me,           // getter
+                        me,
+                        "request",
                         null,         // offeredItem
                         0,            // offerAmount
                         true,         // getsMoney
@@ -2528,7 +2530,8 @@ public class GameMenuController {
                 }
                 App.getCurrentGame().getTrades().add(new Trade(
                         me,              // giver
-                        other,           // getter
+                        other,
+                        "offer",
                         item,            // offeredItem
                         offerCount,      // offerAmount
                         false,           // getsMoney (no money involved)
@@ -2549,7 +2552,8 @@ public class GameMenuController {
                 }
                 App.getCurrentGame().getTrades().add(new Trade(
                         other,           // giver
-                        me,              // getter
+                        me,
+                        "request",
                         item,            // offeredItem (from other)
                         offerCount,      // offerAmount
                         false,           // getsMoney
@@ -2573,23 +2577,23 @@ public class GameMenuController {
 
     public static void tradeList(){
         Player player = App.getCurrentGame().getCurrentPlayer();
-        int i = 0;
+        int i = 1;
         for (Trade trade : App.getCurrentGame().getTrades()) {
-            if (trade.getType().equals("offer") && trade.getMoneyOrItem().equals("item")) {
+            if (trade.getType().equals("offer") && !trade.isGetsMoney()) {
                 if (trade.getGetter().equals(player)) {
-                    GameMenu.printResult(i++ + ". " + trade.getGiver().getUsername() + " offered you " + trade.getOfferAmount() + " " + trade.getOfferedItem() + " with id of: " + trade.getId());
+                    GameMenu.printResult(i++ + ". " + trade.getGiver().getUsername() + " offered " + trade.getOfferAmount() + " " + trade.getGetter().getUsername() + " " + trade.getOfferedItem() + " with id of: " + trade.getId());
                 }
-            } else if (trade.getType().equals("request") && trade.getMoneyOrItem().equals("item")) {
+            } else if (trade.getType().equals("request") && !trade.isGetsMoney()) {
                 if (trade.getGiver().equals(player)) {
-                    GameMenu.printResult(i++ + ". " + trade.getGetter().getUsername() + " requests " + trade.getRequestAmount() + " " + trade.getRequestedItem() + " from you" + " with id of: " + trade.getId());
+                    GameMenu.printResult(i++ + ". " + trade.getGetter().getUsername() + " requests " + trade.getRequestAmount() + " " + trade.getRequestedItem() + " from " + trade.getGiver().getUsername() + " with id of: " + trade.getId());
                 }
-            } else if (trade.getType().equals("offer") && trade.getMoneyOrItem().equals("money")) {
+            } else if (trade.getType().equals("offer") && trade.isGetsMoney()) {
                 if (trade.getGiver().equals(player)) {
-                    GameMenu.printResult(i++ + ". " + trade.getGiver().getUsername() + " offered you " + trade.getOfferedItem() + " for " + trade.getMoney() + " with id of: " + trade.getId());
+                    GameMenu.printResult(i++ + ". " + trade.getGiver().getUsername() + " offered " + trade.getOfferedItem() + " " + trade.getGetter().getUsername() + " for " + trade.getMoney() + " with id of: " + trade.getId());
                 }
-            } else if (trade.getType().equals("request") && trade.getMoneyOrItem().equals("money")) {
+            } else if (trade.getType().equals("request") && trade.isGetsMoney()) {
                 if (trade.getGiver().equals(player)) {
-                    GameMenu.printResult(i++ + ". " + trade.getGetter().getUsername() + " requests " + trade.getRequestedItem() + " for " + trade.getMoney() + " from you" + " with id of: " + trade.getId());
+                    GameMenu.printResult(i++ + ". " + trade.getGetter().getUsername() + " requests " + trade.getRequestedItem() + " for " + trade.getMoney() + " from " + trade.getGiver().getUsername() + " with id of: " + trade.getId());
                 }
             }
         }
