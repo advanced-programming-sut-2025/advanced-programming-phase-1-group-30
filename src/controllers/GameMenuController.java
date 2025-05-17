@@ -2567,6 +2567,7 @@ public class GameMenuController {
             default:
                 GameMenu.printResult("Invalid trade type: " + type);
         }
+        GameMenu.printResult("Trade #" + nextId + " created.");
     }
 
     // Helper to check item availability
@@ -2580,7 +2581,7 @@ public class GameMenuController {
         int i = 1;
         for (Trade trade : App.getCurrentGame().getTrades()) {
             if (trade.getType().equals("offer") && !trade.isGetsMoney()) {
-                if (trade.getGetter().equals(player)) {
+                if (trade.getGiver().equals(player)) {
                     GameMenu.printResult(i++ + ". " + trade.getGiver().getUsername() + " offered " + trade.getOfferAmount() + " " + trade.getGetter().getUsername() + " " + trade.getOfferedItem() + " with id of: " + trade.getId());
                 }
             } else if (trade.getType().equals("request") && !trade.isGetsMoney()) {
@@ -2604,6 +2605,7 @@ public class GameMenuController {
     public static void tradeResponse(String id, String answer) {
         Player me = App.getCurrentGame().getCurrentPlayer();
         int tradeId = Integer.parseInt(id);
+        ArrayList<Trade> trades = App.getCurrentGame().getAllTrades();
 
         switch (answer) {
             case "-accept":
@@ -2655,7 +2657,8 @@ public class GameMenuController {
                                 "Trade #" + tradeId + " has invalid configuration"
                         );
                     }
-
+                    t.setAccepted(true);
+                    trades.add(t);
                     it.remove();
                     GameMenu.printResult("Trade #" + tradeId + " completed.");
                     break;
@@ -2668,6 +2671,8 @@ public class GameMenuController {
                     if (t.getId() == tradeId
                             && (t.getGiver().equals(me) || t.getGetter().equals(me)))
                     {
+                        t.setAccepted(false);
+                        trades.add(t);
                         it.remove();
                         GameMenu.printResult("Trade #" + tradeId + " rejected.");
                         break;
@@ -2699,10 +2704,10 @@ public class GameMenuController {
     }
     public static void tradeHistory() {
         Player me = App.getCurrentGame().getCurrentPlayer();
-        List<Trade> trades = App.getCurrentGame().getTrades();
+        List<Trade> trades = App.getCurrentGame().getAllTrades();
 
         if (trades.isEmpty()) {
-            GameMenu.printResult("No pending trades right now.");
+            GameMenu.printResult("No trades has been submitted.");
             return;
         }
 

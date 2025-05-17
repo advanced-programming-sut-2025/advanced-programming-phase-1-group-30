@@ -12,6 +12,7 @@ public class Trade {
     private int offerAmount;
     private int requestAmount;
     private int id;
+    private boolean accepted;
 
     public Trade(Player giver, Player getter, String type, String offeredItem, int offerAmount, boolean getsMoney, int money, String requestedItem, int requestAmount, int id) {
         this.giver = giver;
@@ -90,5 +91,13 @@ public class Trade {
 
     public int getId() {
         return id;
+    }
+
+    public boolean isAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(boolean accepted) {
+        this.accepted = accepted;
     }
 }
