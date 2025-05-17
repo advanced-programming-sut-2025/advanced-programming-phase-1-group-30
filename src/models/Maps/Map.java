@@ -424,6 +424,11 @@ public class Map {
         Player player = App.getCurrentGame().getCurrentPlayer();
         for (int i = 0; i < 60; i++) {
             for (int j = 0; j < 80; j++) {
+                if(i == 10 && j == 70){
+                    System.out.print("\uD83D\uDDD1\uFE0F");
+                    continue;
+                }
+
                 if (tiles[j][i].getType().equals(TileTypes.DIRT)) {
                     if (tiles[j][i].getItem() != null) {
                         if (tiles[j][i].getItem().getClass().equals(Stone.class)) {
