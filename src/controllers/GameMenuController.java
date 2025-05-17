@@ -686,6 +686,13 @@ public class GameMenuController {
         sb.append("Can Become Giant: " + craft.isCanBecomeGiant());
         RegisterMenu.printResult(sb.toString());
     }
+
+    public static void treeInfo(String name) {
+        boolean isCraftAvailable = false;
+        TreeType craft = null;
+        for (TreeType treeType : TreeType.values()) {
+            if (treeType.getName().toLowerCase().equals(name)) {
+                craft = treeType;
     public static void foragingCropInfo(String name) {
         boolean isCraftAvailable = false;
         ForagingCropType craft = null;
@@ -696,6 +703,20 @@ public class GameMenuController {
             }
         }
         if (!isCraftAvailable) {
+
+            GameMenu.printResult("No Tree with given name were found!");
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Name: " + craft.getName() + "\n");
+        sb.append(MaintainerController.arrayListToString("Stages", craft.getStages()));
+        sb.append("Source: " + craft.getSource() + "\n");
+        sb.append("Total Harvest Time: " + craft.getTotalHarvestTime() + "\n");
+        sb.append("Fruit: " + craft.getFruit() + "\n");
+        RegisterMenu.printResult(sb.toString());
+    }
             GameMenu.printResult("No craft with given name were found!");
             return;
         }
@@ -727,6 +748,7 @@ public class GameMenuController {
         sb.append("Base sell price: " + craft.getSeason());
         RegisterMenu.printResult(sb.toString());
     }
+
     public static void plant(String seed1, String direction) {
         ForagingSeed seed;
         Player player = App.getCurrentGame().getCurrentPlayer();
