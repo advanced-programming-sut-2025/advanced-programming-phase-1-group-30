@@ -129,8 +129,8 @@ public class NewGameController {
                     player.setMap(map);
                     App.getCurrentGame().getGreatMap().getMaps().add(map);
                     mapIsSelected = true;
-                    player.setX(70);
-                    player.setY(16);
+                    player.setX(1);
+                    player.setY(1);
                     player.setCityY(-1);
                     player.setCityX(-1);
                 }
