@@ -80,7 +80,7 @@ public class Player {
         this.username = username;
         this.map = null;
         this.energy = 200;
-        this.shippingBin = new ShippingBin(ShippingBinType.REGULAR);
+        this.shippingBin = new ShippingBin(ShippingBinType.REGULAR, 70, 10);
         this.refrigerator = new Refrigerator();
         this.backPack = new BackPack(BackPackType.INITIAL_BACKPACK);
         this.backPack.addItem(new Axe(1, AxeType.NORMAL));
@@ -95,6 +95,9 @@ public class Player {
         this.backPack.addItem(new Item(1000, "stone", 20));
         this.backPack.addItem(new Item(50, "hay", 50));
         this.backPack.addItem(new ForagingSeed(1, ForagingSeedType.BEAN_STARTER));
+        this.backPack.addItem(new Item(50, "speed-gro", 50));
+        this.backPack.addItem(new Item(50, "deluxe retaining soil", 50));
+        this.backPack.addItem(new Item(50, "copper bar", 50));
         this.money = 20000;
         this.selectionNumber = selectionNumber;
         this.maxEnergy = 200;

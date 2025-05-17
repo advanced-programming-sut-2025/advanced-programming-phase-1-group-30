@@ -1,7 +1,7 @@
 package models.Invetory;
 
 public enum BackPackType {
-    INITIAL_BACKPACK(12),
+    INITIAL_BACKPACK(15),
     BIG_BACKPACK(24),
     DELUX_BACKPACK(Integer.MAX_VALUE);
 

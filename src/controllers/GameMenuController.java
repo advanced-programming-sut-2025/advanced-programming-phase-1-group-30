@@ -860,6 +860,7 @@ public class GameMenuController {
         Item item = Item.findItemByName(fetilizer, App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
         if (item == null) {
             GameMenu.printResult("No item with this name found in your backpack!");
+            return;
         }
         Player player = App.getCurrentGame().getCurrentPlayer();
         Tile[][] tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
@@ -2147,7 +2148,12 @@ public class GameMenuController {
             return;
         }
 
-        //TODO be near shippingbin
+        int dx = Math.abs(player.getX() - player.getShippingBin().getX());
+        int dy = Math.abs(player.getY() - player.getShippingBin().getY());
+        if (!((dx <= 1 && dy <= 1) && !(dx == 0 && dy == 0))) {
+            GameMenu.printResult("You should be near the shipping bin!");
+            return;
+        }
 
         if (item.getCount() == amount) player.getBackPack().removeItem(item);
         else item.changeCount(-1  * amount);

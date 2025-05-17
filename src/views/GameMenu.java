@@ -466,6 +466,12 @@ public class GameMenu implements AppMenu {
             return;
         }
 
+        matcher = GameMenuCommands.FERTILIZE.regexMatcher(command);
+        if (matcher.matches()) {
+            GameMenuController.fertilize(matcher.group("fertilizer"), matcher.group("direction"));
+            return;
+        }
+
         matcher = GameMenuCommands.TRADE.regexMatcher(command);
         if (matcher.matches()) {
             if (matcher.group("price") != null) {
