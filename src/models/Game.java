@@ -71,7 +71,6 @@ public class Game {
         this.id = App.getGames().size() + 1;
         this.currentTime = new Time();
         this.currentWeather = Weather.SUNNY;
-        this.trades = null;
         this.NPCs.add(new Sebastian());
         this.NPCs.add(new Abigail());
         this.NPCs.add(new Harvey());

@@ -13,9 +13,10 @@ public class Trade {
     private int requestAmount;
     private int id;
 
-    public Trade(Player giver, Player getter, String offeredItem, int offerAmount, boolean getsMoney, int money, String requestedItem, int requestAmount, int id) {
+    public Trade(Player giver, Player getter, String type, String offeredItem, int offerAmount, boolean getsMoney, int money, String requestedItem, int requestAmount, int id) {
         this.giver = giver;
         this.getter = getter;
+        this.type = type;
         this.offeredItem = offeredItem;
         this.getsMoney = getsMoney;
         this.money = money;
