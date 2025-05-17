@@ -28,6 +28,7 @@ public class Game {
     private Weather tomorrowWeather;
     private ArrayList<Player> players;
     private ArrayList<Trade> trades = new ArrayList<>();
+    private ArrayList<Trade> allTrades = new ArrayList<>();
     private ArrayList<NPC> NPCs = new ArrayList<>();
     private Map currentMap;
 
@@ -142,5 +143,9 @@ public class Game {
 
     public int getId() {
         return id;
+    }
+
+    public ArrayList<Trade> getAllTrades() {
+        return allTrades;
     }
 }
