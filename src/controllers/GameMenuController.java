@@ -3085,6 +3085,11 @@ public class GameMenuController {
         }
     }
 
+    public static void showMoney(){
+        GameMenu.printResult("You money:");
+        GameMenu.printResult("=== " + App.getCurrentGame().getCurrentPlayer().getMoney() + "g ===");
+    }
+
     public static void exitGame(){
         for(Player player : App.getCurrentGame().getPlayers()){
             if(player.getMoney() > player.getUser().getMaxMoney()){
