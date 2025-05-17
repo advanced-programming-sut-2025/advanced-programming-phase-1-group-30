@@ -1,6 +1,5 @@
 package controllers;
 
-import java.security.PKCS12Attribute;
 import java.util.*;
 import java.util.regex.Matcher;
 
@@ -152,8 +151,6 @@ public class NewGameController {
         game.setCurrentPlayer(playerX);
         GameMenu.printResult("Starting new game...");
         MaintainerController.updateAllShops();
-        MaintainerController.emptyShippingBin();
-        MaintainerController.crowAttack();
     }
 
     public static void LoadGame(String idString) {
@@ -175,6 +172,8 @@ public class NewGameController {
     }
     
     public static void NextTurn(Scanner scanner) {
+        MaintainerController.artisanProssesTimeChanger(1);
+
         List<Player> players = App.getCurrentGame().getPlayers();
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();
         int totalPlayers = players.size();

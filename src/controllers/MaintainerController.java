@@ -29,6 +29,7 @@ import models.Items.ItemFactory;
 import models.Items.ItemsInteface;
 import models.Items.ArtisanGoods.ArtisanGood;
 import models.Items.ArtisanGoods.ArtisanGoodType;
+import models.Items.ArtisanGoods.ArtisanItemProsses;
 import models.Items.Foods.Food;
 import models.Items.Foods.FoodType;
 import models.Items.IndustrialProducts.IndustrialProduct;
@@ -342,5 +343,15 @@ public class MaintainerController {
             player.getShippingBin().setItems(new ArrayList<>());
         }
         GameMenu.printResult("Shipping Bins were emptied!");
+    }
+
+    public static void artisanProssesTimeChanger(int amount) {
+        for (Player player : App.getCurrentGame().getPlayers()) {
+            for (ArtisanItemProsses artisanItemProsses : player.getArtisanItemsProsses()) {
+                artisanItemProsses.changeRemainingTime(amount);
+                if (artisanItemProsses.getRemainingTime() == 0) 
+                    GameMenu.printResult(player.getUsername() + "! Your " + artisanItemProsses.getArtisanGood().getName() + " is ready!");
+            }
+        }
     }
 }

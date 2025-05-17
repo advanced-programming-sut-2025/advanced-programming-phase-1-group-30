@@ -5,14 +5,13 @@ import models.App;
 import models.Buildings.*;
 import models.Commands.Menus;
 import models.Invetory.BackPackType;
-import models.Game;
 import models.Items.Gift;
 import models.Items.Products.*;
-import models.Items.Products.ShopProducts.FishShopProducts;
 import models.Items.Products.ShopProducts.ShopProduct;
 import models.Items.Item;
 import models.Items.ArtisanGoods.ArtisanGood;
 import models.Items.ArtisanGoods.ArtisanGoodType;
+import models.Items.ArtisanGoods.ArtisanItemProsses;
 import models.Items.Foods.Food;
 import models.Items.Foods.FoodType;
 import models.Items.IndustrialProducts.IndustrialProductType;
@@ -22,17 +21,13 @@ import models.Maps.*;
 import models.Maps.Map;
 import models.Players.Friendship;
 import models.Players.NPC.NPC;
-import models.Players.NPC.NPCDetail;
 import models.TimeAndDate.Season;
 import models.Players.Player;
 import models.Players.Trade;
 import models.Users.User;
-import views.ExitMenu;
 import views.GameMenu;
 import views.RegisterMenu;
 import java.util.*;
-
-import static models.Maps.PathFinder.countTurns;
 
 public class GameMenuController {
     public static void greenHouseBuild() {
@@ -1849,20 +1844,27 @@ public class GameMenuController {
                 backpackItem.changeCount(-1 * ingredient.getCount());
         }
 
-        App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(new ArtisanGood(1, item));
-        GameMenu.printResult(itemName + " (x1) added to your backpack successfully!");
+        App.getCurrentGame().getCurrentPlayer().addArtisanItemProsses(new ArtisanItemProsses(new ArtisanGood(1, item)));
+        GameMenu.printResult(itemName + " (x1) start making successfully!");
     }
 
     public static void artisanGet(String name) {
-        //TODO need prossesing time??!
-
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Item item = Item.findItemByName(name, player.getBackPack().getItems());
+        ArtisanItemProsses item = null;
+        for (ArtisanItemProsses item2 : player.getArtisanItemsProsses()) {
+            if (item2.getArtisanGood().getName().equals(name)) item = item2;
+        }
 
         if (item == null) {
             GameMenu.printResult("No item with given name found!");
             return;
         }
+
+        if (item.getRemainingTime() != 0) {
+            GameMenu.printResult(item.getRemainingTime() + " hours still left to be prossesed");
+            return;
+        }
+        App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(item.getArtisanGood());
         GameMenu.printResult("You got (x1)" + name);
     }
 

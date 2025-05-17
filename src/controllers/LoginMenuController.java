@@ -4,8 +4,6 @@ import models.App;
 import models.Commands.Menus;
 import models.Users.RegisterQuestions;
 import models.Users.User;
-import views.GameMenu;
-import views.LoginMenu;
 import views.RegisterMenu;
 
 import java.util.Scanner;
