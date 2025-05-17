@@ -49,7 +49,7 @@ public enum ArtisanGoodType implements ItemsInteface {
         new Item(1, "salmon", 0),
         new Item(1, "coal", 0)
     )), 2 * FishType.SALMON.getBasePrice(), IndustrialProductType.FISH_SMOKER),
-    METAL_BAR("Any metal bar", "Turns ore and coal into metal bars.", 0, 4, new ArrayList<>(List.of(
+    METAL_BAR("any metal bar", "Turns ore and coal into metal bars.", 0, 4, new ArrayList<>(List.of(
         new Item(5, "stone", 0),
         new Item(1, "coal", 0)
     )), 25, IndustrialProductType.FURNACE);

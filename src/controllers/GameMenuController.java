@@ -686,16 +686,24 @@ public class GameMenuController {
         sb.append("Can Become Giant: " + craft.isCanBecomeGiant());
         RegisterMenu.printResult(sb.toString());
     }
+
     public static void treeInfo(String name) {
         boolean isCraftAvailable = false;
         TreeType craft = null;
         for (TreeType treeType : TreeType.values()) {
             if (treeType.getName().toLowerCase().equals(name)) {
                 craft = treeType;
+    public static void foragingCropInfo(String name) {
+        boolean isCraftAvailable = false;
+        ForagingCropType craft = null;
+        for (ForagingCropType cropType : ForagingCropType.values()) {
+            if (cropType.getName().toLowerCase().equals(name)) {
+                craft = cropType;
                 isCraftAvailable = true;
             }
         }
         if (!isCraftAvailable) {
+
             GameMenu.printResult("No Tree with given name were found!");
             return;
         }
@@ -707,6 +715,37 @@ public class GameMenuController {
         sb.append("Source: " + craft.getSource() + "\n");
         sb.append("Total Harvest Time: " + craft.getTotalHarvestTime() + "\n");
         sb.append("Fruit: " + craft.getFruit() + "\n");
+        RegisterMenu.printResult(sb.toString());
+    }
+            GameMenu.printResult("No craft with given name were found!");
+            return;
+        }
+        
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Name: " + craft.getName() + "\n");
+        sb.append("Base sell price: " + craft.getBaseSellPrice() + "\n");
+        sb.append("Energy: " + craft.getEnergy());
+        RegisterMenu.printResult(sb.toString());
+    }
+    public static void foragingTreeInfo(String name) {
+        boolean isCraftAvailable = false;
+        ForagingTreeType craft = null;
+        for (ForagingTreeType cropType : ForagingTreeType.values()) {
+            if (cropType.getName().toLowerCase().equals(name)) {
+                craft = cropType;
+                isCraftAvailable = true;
+            }
+        }
+        if (!isCraftAvailable) {
+            GameMenu.printResult("No craft with given name were found!");
+            return;
+        }
+        
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Name: " + craft.getName() + "\n");
+        sb.append("Base sell price: " + craft.getSeason());
         RegisterMenu.printResult(sb.toString());
     }
 
@@ -2695,7 +2734,6 @@ public class GameMenuController {
             throw new IllegalStateException(from.getUsername() + " lacks " + count + "x " + itemName);
         }
         src.setCount(src.getCount() - count);
-        System.out.println("kam shod");
         if (src.getCount() == 0) {
             from.getBackPack().getItems().remove(src);
         }
@@ -2707,7 +2745,6 @@ public class GameMenuController {
             to.getBackPack().getItems().add(new Item(count, itemName, src.getPrice()));
         } else {
             dst.setCount(dst.getCount() + count);
-            System.out.println("ziad shod");
         }
     }
     public static void tradeHistory() {

@@ -3,28 +3,28 @@ package models.Animals;
 import models.TimeAndDate.Season;
 
 public enum FishType {
-    SALMON("Salmon", 75, Season.FALL, false),
-    SARDINE("Sardine", 40, Season.FALL, false),
-    SHAD("Shad", 60, Season.FALL, false),
-    BLUE_DISCUS("Blue Discus", 120, Season.FALL, false),
-    MIDNIGHT_CARP("Midnight Carp", 150, Season.WINTER, false),
-    SQUID("Squid", 80, Season.WINTER, false),
-    TUNA("Tuna", 100, Season.WINTER, false),
-    PERCH("Perch", 55, Season.WINTER, false),
-    FLOUNDER("Flounder", 100, Season.SPRING, false),
-    LIONFISH("Lionfish", 100, Season.SPRING, false),
-    HERRING("Herring", 30, Season.SPRING, false),
-    GHOSTFISH("Ghostfish", 45, Season.SPRING, false),
-    TILAPIA("Tilapia", 75, Season.SUMMER, false),
-    DORADO("Dorado", 100, Season.SUMMER, false),
-    SUNFISH("Sunfish", 30, Season.SUMMER, false),
-    RAINBOW_TROUT("Rainbow Trout", 65, Season.SUMMER, false),
+    SALMON("salmon", 75, Season.FALL, false),
+    SARDINE("sardine", 40, Season.FALL, false),
+    SHAD("shad", 60, Season.FALL, false),
+    BLUE_DISCUS("blue discus", 120, Season.FALL, false),
+    MIDNIGHT_CARP("midnight carp", 150, Season.WINTER, false),
+    SQUID("squid", 80, Season.WINTER, false),
+    TUNA("tuna", 100, Season.WINTER, false),
+    PERCH("perch", 55, Season.WINTER, false),
+    FLOUNDER("flounder", 100, Season.SPRING, false),
+    LIONFISH("lionfish", 100, Season.SPRING, false),
+    HERRING("herring", 30, Season.SPRING, false),
+    GHOSTFISH("ghostfish", 45, Season.SPRING, false),
+    TILAPIA("tilapia", 75, Season.SUMMER, false),
+    DORADO("dorado", 100, Season.SUMMER, false),
+    SUNFISH("sunfish", 30, Season.SUMMER, false),
+    RAINBOW_TROUT("rainbow trout", 65, Season.SUMMER, false),
 
     // Legendary Fish
-    LEGEND("Legend", 5000, Season.SPRING, true),
-    GLACIERFISH("Glacierfish", 1000, Season.WINTER, true),
-    ANGLER("Angler", 900, Season.FALL, true),
-    CRIMSONFISH("Crimsonfish", 1500, Season.SUMMER, true);
+    LEGEND("legend", 5000, Season.SPRING, true),
+    GLACIERFISH("glacierfish", 1000, Season.WINTER, true),
+    ANGLER("angler", 900, Season.FALL, true),
+    CRIMSONFISH("crimsonfish", 1500, Season.SUMMER, true);
 
     private final String displayName;
     private final int basePrice;
