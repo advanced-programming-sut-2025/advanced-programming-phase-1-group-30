@@ -2044,7 +2044,7 @@ public class GameMenuController {
                 }
             }
 
-            if (name.equals("Training Pole")) {
+            if (name.equals("training rod")) {
                 if (fishingPole == null) {
                     player.getBackPack().addItem(new FishingPole(1, FishingPoleType.TRAINING_POLE));
                     player.setMoney(player.getMoney() - item.getCost());
@@ -2057,7 +2057,7 @@ public class GameMenuController {
                     GameMenu.printResult("You can't buy this fishing pole! Becuase you have better one!");
                 return;
             }
-            else if (name.equals("Bamboo Pole")) {
+            else if (name.equals("bamboo rod")) {
                 if (fishingPole != null) {
                     player.getBackPack().removeItem(fishingPole);
                     player.getBackPack().addItem(new FishingPole(1, FishingPoleType.BAMBOO_POLE));
@@ -2071,7 +2071,7 @@ public class GameMenuController {
                     GameMenu.printResult("You can't buy this fishing pole! You should first buy training one!");
                 return;
             }
-            else if (name.equals("Fiberglass Pole")) {
+            else if (name.equals("fiberglass rod")) {
                 if (fishingPole != null && player.getFishing() / 100 >= 2) {
                     player.getBackPack().removeItem(fishingPole);
                     player.getBackPack().addItem(new FishingPole(1, FishingPoleType.FIBERGLASS_POLE));
@@ -2085,7 +2085,7 @@ public class GameMenuController {
                     GameMenu.printResult("You can't buy this fishing pole! Your fishing skill must be at lest 2!");
                 return;
             }
-            else if (name.equals("Iridium Pole")) {
+            else if (name.equals("iridium rod")) {
                 if (fishingPole != null && player.getFishing() / 100 >= 4) {
                     player.getBackPack().removeItem(fishingPole);
                     player.getBackPack().addItem(new FishingPole(1, FishingPoleType.IRIDIUM_POLE));

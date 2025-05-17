@@ -1,10 +1,10 @@
 package models.Items.Tools;
 
 public enum FishingPoleType {
-    TRAINING_POLE("Training Pole", 8, 0.1),
-    BAMBOO_POLE("Bamboo Pole", 8, 0.5),
-    FIBERGLASS_POLE("Fiberglass Pole", 6, 0.9),
-    IRIDIUM_POLE("Iridium Pole", 4, 1.2);
+    TRAINING_POLE("training rod", 8, 0.1),
+    BAMBOO_POLE("bamboo rod", 8, 0.5),
+    FIBERGLASS_POLE("fiberglass rod", 6, 0.9),
+    IRIDIUM_POLE("iridium rod", 4, 1.2);
 
     private final String name;
     private final int energyUsed;
