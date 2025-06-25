@@ -90,7 +90,9 @@ public class Player {
         this.backPack.addItem(new MilkPail(1, 10));
         this.backPack.addItem(new Scythe(1));
         this.trashCan = new TrashCan(TrashCanType.INITIAL_TRASHCAN);
-        this.backPack.addItem(new ForagingSeed(4, ForagingSeedType.ORANGE_SAPLING)); //TODO tile & initial seed
+        this.backPack.addItem(new ForagingSeed(10, ForagingSeedType.MELON_SEEDS)); //TODO tile & initial seed
+        this.backPack.addItem(new Item(1, "bouquet", 10));
+        this.backPack.addItem(new Item(1, "wedding ring", 10));
         this.backPack.addItem(new Item(1000, "wood", 10));
         this.backPack.addItem(new Item(1000, "stone", 20));
         this.backPack.addItem(new Item(50, "hay", 50));

@@ -219,6 +219,7 @@ public class NewGameController {
                     currentPlayer.getFriendships().get(currentPlayer.getAskedMarriage()).addXp(0, false, true);
                     currentPlayer.getAskedMarriage().getFriendships().get(currentPlayer).addXp(0, false, true);
                     GameMenu.printResult("Jingo jinge saz miad o az baloy Shiraz miad!");
+
                     currentPlayer.setHamsar(currentPlayer.getAskedMarriage());
                     currentPlayer.getAskedMarriage().setHamsar(currentPlayer);
                 } else if (answer.equals("-reject")) {
@@ -226,10 +227,10 @@ public class NewGameController {
                     currentPlayer.getAskedMarriage().getFriendships().get(currentPlayer).setXp(0);
                     currentPlayer.getFriendships().get(currentPlayer.getAskedMarriage()).setLevel(0);
                     currentPlayer.getFriendships().get(currentPlayer.getAskedMarriage()).setXp(0);
-                    currentPlayer.setAskedMarriage(null);
-                    GameMenu.printResult("Rejected. That was sad :(");
                     currentPlayer.getAskedMarriage().setGotRejected(true);
+                    GameMenu.printResult("Rejected. That was sad :(");
                     currentPlayer.getAskedMarriage().setDaysGotRejected(7);
+                    currentPlayer.setAskedMarriage(null);
                 }
             }
         }

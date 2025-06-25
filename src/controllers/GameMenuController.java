@@ -79,7 +79,6 @@ public class GameMenuController {
             }
         }
 
-// Walk step-by-step and deduct energy along the way
         Tile current = start;
         int dx1 = 0, dy1 = 0;
         double energy = player.getEnergy();
@@ -90,12 +89,11 @@ public class GameMenuController {
             int dy2 = next.getY() - current.getY();
 
             boolean isTurn = (i > 0) && (dx1 != dx2 || dy1 != dy2);
-            double stepCost = isTurn ? 11 : 1; // same logic: 1 + 10 if turning
+            double stepCost = isTurn ? 11 : 1;
 
             energy -= stepCost / 20;
 
             if (energy <= 0) {
-                // Player passes out at `current` tile (not the next one)
                 if (!player.isInCity()) {
                     player.setX(current.getX());
                     player.setY(current.getY());
@@ -827,7 +825,7 @@ public class GameMenuController {
                 if (item.getCount() == 0) {
                     player.getBackPack().getItems().remove(item);
                 }
-                tiles[newX][newY].setReadyToHarvest(true);
+                tiles[newX][newY].setReadyToHarvest(false);
                 tiles[newX][newY].setCrop(seed.getCrop());
 
                 GameMenu.printResult("Planted " + seed.getName() + " at (" + newX + ", " + newY + ")");
@@ -2448,8 +2446,8 @@ public class GameMenuController {
             GameMenu.printResult("that's gay tbh");
             return;
         }
-        if (player.getFriendships().get(otherPlayer).getLevel() < 4 || (player.getFriendships().get(otherPlayer).getLevel() == 3 &&
-                player.getFriendships().get(player).getXp() < 400)) {
+        if (player.getFriendships().get(otherPlayer).getLevel() < 3 &&
+                player.getFriendships().get(player).getXp() < 400) {
             GameMenu.printResult("Hanooz zoode!");
             return;
         }

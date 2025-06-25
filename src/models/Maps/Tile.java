@@ -26,7 +26,7 @@ public class Tile {
         this.y = y;
         this.walkable = walkable;
         if (id != -1){
-            Tile.putItemInTile(this);
+//            Tile.putItemInTile(this);
         }
         this.isHarvestable = isHarvestable;
         this.isPlanted = false;
