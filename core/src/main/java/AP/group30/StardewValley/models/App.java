@@ -1,6 +1,6 @@
 package AP.group30.StardewValley.models;
 
-import AP.group30.StardewValley.models.Commands.Menus;
+//import AP.group30.StardewValley.models.Commands.Menus;
 import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Users.User;
 
@@ -11,7 +11,7 @@ public class App {
     private static ArrayList<User> appUsers = new ArrayList<>();
     private static ArrayList<Map> maps = new ArrayList<>();
     private static ArrayList<String> questions = new ArrayList<>();
-    private static Menus currentMenu = Menus.RegisterMenu;
+//    private static Menus currentMenu = Menus.RegisterMenu;
     private static Game currentGame;
     private static ArrayList<Game> games = new ArrayList<>();
 
@@ -33,9 +33,9 @@ public class App {
         App.appUsers = appUsers;
     }
 
-    public static Menus getCurrentMenu() {
-        return currentMenu;
-    }
+//    public static Menus getCurrentMenu() {
+//        return currentMenu;
+//    }
 
     public static ArrayList<Map> getMaps() {
         return maps;
@@ -45,9 +45,9 @@ public class App {
         App.maps = maps;
     }
 
-    public static void setCurrentMenu(Menus currentMenu) {
-        App.currentMenu = currentMenu;
-    }
+//    public static void setCurrentMenu(Menus currentMenu) {
+//        App.currentMenu = currentMenu;
+//    }
 
     public static Game getCurrentGame() {
         return currentGame;

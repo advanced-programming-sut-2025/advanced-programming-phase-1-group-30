@@ -1,7 +1,6 @@
 package AP.group30.StardewValley.controllers;
 
 import AP.group30.StardewValley.models.App;
-import AP.group30.StardewValley.models.Commands.Menus;
 import AP.group30.StardewValley.models.Users.RegisterQuestions;
 import AP.group30.StardewValley.models.Users.User;
 import AP.group30.StardewValley.views.RegisterMenu;
@@ -26,7 +25,7 @@ public class LoginMenuController {
             return;
         }
         App.setCurrentUser(user);    // TODO flag stay logged in ro ok kon!
-        App.setCurrentMenu(Menus.MainMenu);
+//        App.setCurrentMenu(Menus.MainMenu);
         RegisterMenu.printResult("User logged in");
         RegisterMenu.printResult("Redirecting to main menu");
     }
@@ -40,12 +39,12 @@ public class LoginMenuController {
 
         int counter = 1;
         String registerQ = "";
-        for(RegisterQuestions questions : RegisterQuestions.values()){
-            if(counter == user.getRegisterQuestionNumber()){
-                registerQ = questions.question;
-            }
-            counter++;
-        }
+//        for(RegisterQuestions questions : RegisterQuestions.values()){
+//            if(counter == user.getRegisterQuestionNumber()){
+//                registerQ = questions.question;
+//            }
+//            counter++;
+//        }
 
         RegisterMenu.printResult("Enter the answer of the security question: \n" + registerQ);
         Matcher matcher;
@@ -94,29 +93,6 @@ public class LoginMenuController {
         } else {
             RegisterMenu.printResult("Invalid input format. Please use: answer -a <your_answer>");
         }
-    }
-
-    public static void ChangeMenu(String menuName) {
-        String nameMenu = App.getCurrentMenu().getName();
-        Menus menu = ProfileMenuController.FindMenu(menuName);
-        if ((menu.equals(Menus.ProfileMenu) || menu.equals(Menus.MainMenu)) && App.getCurrentUser() == null) {
-            RegisterMenu.printResult("You should login first");
-            return;
-        }
-        if (nameMenu.equals(menuName)) {
-            RegisterMenu.printResult("Invalid menu name");
-            return;
-        }
-        RegisterMenu.printResult("Redirecting to " + menuName);
-        App.setCurrentMenu(menu);
-    }
-
-    public static void ShowCurrentMenu() {
-        RegisterMenu.printResult("Current menu: " + App.getCurrentMenu().getName());
-    }
-
-    public static void Exit() {
-        App.setCurrentMenu(Menus.ExitMenu);
     }
 
     private static User getUserByUsername(String username) {

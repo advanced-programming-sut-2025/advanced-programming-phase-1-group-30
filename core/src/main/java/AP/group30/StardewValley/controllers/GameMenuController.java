@@ -3,7 +3,7 @@ package AP.group30.StardewValley.controllers;
 import AP.group30.StardewValley.models.Animals.*;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Buildings.*;
-import AP.group30.StardewValley.models.Commands.Menus;
+//import AP.group30.StardewValley.models.Commands.Menus;
 import AP.group30.StardewValley.models.Invetory.BackPackType;
 import AP.group30.StardewValley.models.Items.Gift;
 import AP.group30.StardewValley.models.Items.Products.*;
@@ -3095,7 +3095,7 @@ public class GameMenuController {
             player.getUser().changeInGame();
         }
         App.setCurrentGame(null);
-        App.setCurrentMenu(Menus.MainMenu);
+//        App.setCurrentMenu(Menus.MainMenu);
         GameMenu.printResult("You exited the game!");
         GameMenu.printResult("Redirecting to AP.group30.StardewValley.Main Menu");
     }

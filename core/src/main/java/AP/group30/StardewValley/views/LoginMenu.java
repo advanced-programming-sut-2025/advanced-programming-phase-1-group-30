@@ -5,53 +5,46 @@ import java.util.regex.Matcher;
 
 import AP.group30.StardewValley.controllers.LoginMenuController;
 import AP.group30.StardewValley.models.Commands.LoginMenuCommands;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-public class LoginMenu implements AppMenu {
+public class LoginMenu implements Screen {
+    public LoginMenu(Skin skin) {
+
+    }
+
     @Override
-    public void check(String command, Scanner scanner) {
-        Matcher matcher;
+    public void show() {
 
-        matcher = LoginMenuCommands.MENU_ENTER.regexMatcher(command);
-        if (matcher.matches()) {
-            String menuName = matcher.group("menuName");
+    }
 
-            LoginMenuController.ChangeMenu(menuName);
-            return;
-        }
+    @Override
+    public void render(float delta) {
 
-        matcher = LoginMenuCommands.MENU_EXIT.regexMatcher(command);
-        if (matcher.matches()) {
-            LoginMenuController.Exit();
-            return;
-        }
+    }
 
-        matcher = LoginMenuCommands.SHOW_CURRENT_MENU.regexMatcher(command);
-        if (matcher.matches()) {
-            LoginMenuController.ShowCurrentMenu();
-            return;
-        }
+    @Override
+    public void resize(int width, int height) {
 
-        matcher = LoginMenuCommands.LOGIN.regexMatcher(command);
-        if (matcher.matches()) {
-            String username = matcher.group("username");
-            String password = matcher.group("password");
-            String stayLoggedIn = matcher.group("stayLoggedIn");
-            boolean stayLoggedInBoolean;
-            if (stayLoggedIn == null) stayLoggedInBoolean = false;
-            else stayLoggedInBoolean = true;
+    }
 
-            LoginMenuController.Login(username, password, stayLoggedInBoolean);
-            return;
-        }
+    @Override
+    public void pause() {
 
-        matcher = LoginMenuCommands.FORGET_PASSWORD.regexMatcher(command);
-        if (matcher.matches()) {
-            String username = matcher.group("username");
-            LoginMenuController.ForgotPassword(username, scanner);
-            return;
-        }
+    }
 
+    @Override
+    public void resume() {
 
-        System.out.println("Invalid command");
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }

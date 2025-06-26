@@ -1,7 +1,6 @@
 package AP.group30.StardewValley.controllers;
 
 import AP.group30.StardewValley.models.App;
-import AP.group30.StardewValley.models.Commands.Menus;
 import AP.group30.StardewValley.models.Users.User;
 import AP.group30.StardewValley.views.RegisterMenu;
 
@@ -89,32 +88,6 @@ public class ProfileMenuController {
         RegisterMenu.printResult("Password changed successfully");
     }
 
-    public static void ChangeMenu(String menuName) {
-        String nameMenu = App.getCurrentMenu().getName();
-        Menus menu = FindMenu(menuName);
-        if (menu == null ||nameMenu.equals(menuName)) {
-            RegisterMenu.printResult("Invalid menu name");
-            return;
-        }
-        App.setCurrentMenu(menu);
-        RegisterMenu.printResult("Redirecting to " + menuName);
-    }
-
-    public static Menus FindMenu(String menuName) {
-        switch (menuName) {
-            case "Register Menu" : return Menus.RegisterMenu;
-            case "Login Menu" : return Menus.LoginMenu;
-            case "Game Menu" : return Menus.GameMenu;
-            case "Profile Menu" : return Menus.ProfileMenu;
-            case "AP.group30.StardewValley.Main Menu" : return Menus.MainMenu;
-            default : return null;
-        }
-    }
-
-    public static void ShowCurrentMenu() {
-        RegisterMenu.printResult("Current menu: " + App.getCurrentMenu().getName());
-    }
-
     public static void UserInfo() {
         StringBuilder sb = new StringBuilder();
         sb.append("Current user:\nName: " + App.getCurrentUser().getUsername() + "\n");
@@ -125,7 +98,4 @@ public class ProfileMenuController {
         RegisterMenu.printResult(sb.toString());
     }
 
-    public static void Exit() {
-        App.setCurrentMenu(Menus.ExitMenu);
-    }
 }

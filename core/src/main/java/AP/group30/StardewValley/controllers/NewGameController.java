@@ -5,7 +5,6 @@ import java.util.regex.Matcher;
 
 import AP.group30.StardewValley.models.Animals.Animal;
 import AP.group30.StardewValley.models.App;
-import AP.group30.StardewValley.models.Commands.Menus;
 import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.Commands.GameMenuCommands;
 import AP.group30.StardewValley.models.Items.Gift;
@@ -161,7 +160,6 @@ public class NewGameController {
                 for(Player player : game.getPlayers()) {
                     player.getUser().changeInGame();
                 }
-                App.setCurrentMenu(Menus.GameMenu);
                 App.setCurrentGame(game);
                 GameMenu.printResult("Loading game with id " + id + "...");
                 GameMenu.printResult("It's " + game.getCurrentPlayer().getUsername() + "'s turn");
