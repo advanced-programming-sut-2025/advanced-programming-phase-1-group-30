@@ -10,11 +10,11 @@ dependencies {
   api "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
   api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
   api "com.badlogicgames.gdx:gdx:$gdxVersion"
-  api "com.github.MrStahlfelge.gdx-websockets:core:$websocketVersion"
-  api "com.github.crykn:kryonet:$kryoNetVersion"
-  api "com.github.tommyettinger:crux:$cruxVersion"
-  api "com.github.tommyettinger:gand:$gandVersion"
-  api "com.github.tommyettinger:gdcrux:$gdcruxVersion"
+//  api "com.github.MrStahlfelge.gdx-websockets:core:$websocketVersion"
+//  api "com.github.crykn:kryonet:$kryoNetVersion"
+//  api "com.github.tommyettinger:crux:$cruxVersion"
+//  api "com.github.tommyettinger:gand:$gandVersion"
+//  api "com.github.tommyettinger:gdcrux:$gdcruxVersion"
   api "io.github.libktx:ktx-ai:$ktxVersion"
   implementation fileTree(dir: 'libs', include: ['*.jar'])
   implementation 'org.json:json:20240303'
