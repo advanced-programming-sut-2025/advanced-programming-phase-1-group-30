@@ -3,6 +3,7 @@ package AP.group30.StardewValley.controllers;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Users.RegisterQuestions;
 import AP.group30.StardewValley.models.Users.User;
+import AP.group30.StardewValley.views.LoginMenu;
 import AP.group30.StardewValley.views.RegisterMenu;
 
 import java.util.Scanner;
@@ -10,24 +11,29 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LoginMenuController {
-    public static void Login(String username, String password, boolean stayLoggedInBoolean) {
+    public static boolean Login(String username, String password, boolean stayLoggedInBoolean) {
         User user = getUserByUsername(username);
         if (App.getCurrentUser() != null) {
-            RegisterMenu.printResult("You are logged in as " + App.getCurrentUser().getUsername());
-            return;
+//            RegisterMenu.printResult("You are logged in as " + App.getCurrentUser().getUsername());
+            LoginMenu.printResult("You are already logged in!");
+            return false;
         }
         if (user == null) {
-            RegisterMenu.printResult("User not found");
-            return;
+//            RegisterMenu.printResult("User not found");
+            LoginMenu.printResult("User not found!");
+            return false;
         }
         if (!user.getPassword().equals(RegisterMenuController.HashPassword(password))) {
-            RegisterMenu.printResult("Wrong password");
-            return;
+//            RegisterMenu.printResult("Wrong password");
+            LoginMenu.printResult("Wrong password!");
+            return false;
         }
         App.setCurrentUser(user);    // TODO flag stay logged in ro ok kon!
 //        App.setCurrentMenu(Menus.MainMenu);
-        RegisterMenu.printResult("User logged in");
-        RegisterMenu.printResult("Redirecting to main menu");
+//        RegisterMenu.printResult("User logged in");
+//        RegisterMenu.printResult("Redirecting to main menu");
+        LoginMenu.printResult("User logged in successfully!\nRedirecting to main menu");
+        return true;
     }
 
     public static void ForgotPassword(String username, Scanner scanner) {  // TODO aval oon question taeed piade sazi shavad
