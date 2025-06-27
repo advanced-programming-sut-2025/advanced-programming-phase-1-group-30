@@ -203,7 +203,7 @@ public class Player {
     public void setPassedOut(boolean passedOut) {
         isPassedOut = passedOut;
     }
-    
+
     public ArrayList<Skills> getSkills() {
         return skills;
     }
