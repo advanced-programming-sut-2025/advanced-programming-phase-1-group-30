@@ -79,7 +79,6 @@ public class GameMenuController {
             }
         }
 
-// Walk step-by-step and deduct energy along the way
         Tile current = start;
         int dx1 = 0, dy1 = 0;
         double energy = player.getEnergy();
@@ -90,12 +89,11 @@ public class GameMenuController {
             int dy2 = next.getY() - current.getY();
 
             boolean isTurn = (i > 0) && (dx1 != dx2 || dy1 != dy2);
-            double stepCost = isTurn ? 11 : 1; // same logic: 1 + 10 if turning
+            double stepCost = isTurn ? 11 : 1;
 
             energy -= stepCost / 20;
 
             if (energy <= 0) {
-                // Player passes out at `current` tile (not the next one)
                 if (!player.isInCity()) {
                     player.setX(current.getX());
                     player.setY(current.getY());
@@ -827,7 +825,7 @@ public class GameMenuController {
                 if (item.getCount() == 0) {
                     player.getBackPack().getItems().remove(item);
                 }
-                tiles[newX][newY].setReadyToHarvest(true);
+                tiles[newX][newY].setReadyToHarvest(false);
                 tiles[newX][newY].setCrop(seed.getCrop());
 
                 GameMenu.printResult("Planted " + seed.getName() + " at (" + newX + ", " + newY + ")");
@@ -2045,7 +2043,7 @@ public class GameMenuController {
                 }
             }
 
-            if (name.equals("Training Pole")) {
+            if (name.equals("training rod")) {
                 if (fishingPole == null) {
                     player.getBackPack().addItem(new FishingPole(1, FishingPoleType.TRAINING_POLE));
                     player.setMoney(player.getMoney() - item.getCost());
@@ -2058,7 +2056,7 @@ public class GameMenuController {
                     GameMenu.printResult("You can't buy this fishing pole! Becuase you have better one!");
                 return;
             }
-            else if (name.equals("Bamboo Pole")) {
+            else if (name.equals("bamboo rod")) {
                 if (fishingPole != null) {
                     player.getBackPack().removeItem(fishingPole);
                     player.getBackPack().addItem(new FishingPole(1, FishingPoleType.BAMBOO_POLE));
@@ -2072,7 +2070,7 @@ public class GameMenuController {
                     GameMenu.printResult("You can't buy this fishing pole! You should first buy training one!");
                 return;
             }
-            else if (name.equals("Fiberglass Pole")) {
+            else if (name.equals("fiberglass rod")) {
                 if (fishingPole != null && player.getFishing() / 100 >= 2) {
                     player.getBackPack().removeItem(fishingPole);
                     player.getBackPack().addItem(new FishingPole(1, FishingPoleType.FIBERGLASS_POLE));
@@ -2086,7 +2084,7 @@ public class GameMenuController {
                     GameMenu.printResult("You can't buy this fishing pole! Your fishing skill must be at lest 2!");
                 return;
             }
-            else if (name.equals("Iridium Pole")) {
+            else if (name.equals("iridium rod")) {
                 if (fishingPole != null && player.getFishing() / 100 >= 4) {
                     player.getBackPack().removeItem(fishingPole);
                     player.getBackPack().addItem(new FishingPole(1, FishingPoleType.IRIDIUM_POLE));
@@ -2448,8 +2446,8 @@ public class GameMenuController {
             GameMenu.printResult("that's gay tbh");
             return;
         }
-        if (player.getFriendships().get(otherPlayer).getLevel() < 4 || (player.getFriendships().get(otherPlayer).getLevel() == 3 &&
-                player.getFriendships().get(player).getXp() < 400)) {
+        if (player.getFriendships().get(otherPlayer).getLevel() < 3 &&
+                player.getFriendships().get(player).getXp() < 400) {
             GameMenu.printResult("Hanooz zoode!");
             return;
         }
