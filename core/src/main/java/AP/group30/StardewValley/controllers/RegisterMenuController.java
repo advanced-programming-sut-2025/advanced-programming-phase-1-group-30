@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 
 public class RegisterMenuController {
 
-    public static int register(Button button, TextField usernameF, TextField passwordF, TextField confirmPass, TextField emailField, TextField nicknameF, Label errorLabel, String selectedGender, TextField answerField) {
+    public static int register(Button button, TextField usernameF, TextField passwordF, TextField confirmPass, TextField emailField, TextField nicknameF, Label errorLabel, String selectedGender, TextField answerField, String question) {
         String username = usernameF.getText();
         String password = passwordF.getText();
         String passwordConfirm = confirmPass.getText();
@@ -87,7 +87,7 @@ public class RegisterMenuController {
 //            return 0;
 //        }
 
-        User newUser = new User(username, password, nickname, email, RegisterQuestions.Your_Pet , answer, gender);
+        User newUser = new User(username, password, nickname, email, RegisterQuestions.getQuestion(question) , answer, gender);
         App.getAppUsers().add(newUser);
         errorLabel.setText("User created successfully!");
         errorLabel.setVisible(true);

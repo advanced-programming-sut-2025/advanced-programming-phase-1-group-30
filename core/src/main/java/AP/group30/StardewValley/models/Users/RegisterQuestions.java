@@ -1,5 +1,9 @@
 package AP.group30.StardewValley.models.Users;
 
+import com.badlogic.gdx.utils.Array;
+
+import java.util.ArrayList;
+
 public enum RegisterQuestions {
     Your_Best_Friend("What is your best friend's name?"),
     Your_Pet("What is your pet's name?"),
@@ -14,4 +18,22 @@ public enum RegisterQuestions {
     }
 
     public String getQuestion() {return question;}
+
+    public static Array<String> getQuestions() {
+        Array<String> questions = new Array<String>();
+        for (RegisterQuestions question : RegisterQuestions.values()) {
+            questions.add(question.getQuestion());
+        }
+        return questions;
+    }
+
+    public static RegisterQuestions getQuestion(String question) {
+        for (RegisterQuestions questions : RegisterQuestions.values()) {
+            if (question.equals(questions.getQuestion())) {
+                return questions;
+            }
+        }
+
+        return null;
+    }
 }

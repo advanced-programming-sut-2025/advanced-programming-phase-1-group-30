@@ -15,24 +15,18 @@ public class LoginMenuController {
     public static boolean Login(String username, String password, boolean stayLoggedInBoolean) {
         User user = getUserByUsername(username);
         if (App.getCurrentUser() != null) {
-//            RegisterMenu.printResult("You are logged in as " + App.getCurrentUser().getUsername());
             LoginMenu.printResult("You are already logged in!");
             return false;
         }
         if (user == null) {
-//            RegisterMenu.printResult("User not found");
             LoginMenu.printResult("User not found!");
             return false;
         }
         if (!user.getPassword().equals(RegisterMenuController.HashPassword(password))) {
-//            RegisterMenu.printResult("Wrong password");
             LoginMenu.printResult("Wrong password!");
             return false;
         }
-        App.setCurrentUser(user);    // TODO flag stay logged in ro ok kon!
-//        App.setCurrentMenu(Menus.MainMenu);
-//        RegisterMenu.printResult("User logged in");
-//        RegisterMenu.printResult("Redirecting to main menu");
+        App.setCurrentUser(user);
         LoginMenu.printResult("User logged in successfully!\nRedirecting to main menu");
         return true;
     }

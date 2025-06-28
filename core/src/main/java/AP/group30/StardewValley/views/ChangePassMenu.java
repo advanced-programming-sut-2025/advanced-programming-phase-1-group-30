@@ -21,7 +21,7 @@ public class ChangePassMenu implements Screen {
     private Stage stage;
     private final Table table;
     private final TextField usernameField;
-    private final Label questionLable;
+    private final Label questionLabel;
     private final TextField answerField;
     private final TextButton verifyButton;
     private final TextButton changePassButton;
@@ -33,8 +33,8 @@ public class ChangePassMenu implements Screen {
     public ChangePassMenu(Skin skin) {
         table = new Table(skin);
         usernameField = new TextField("username", skin);
-        questionLable = new Label("", skin);
-        questionLable.setVisible(false);
+        questionLabel = new Label("", skin);
+        questionLabel.setVisible(false);
         answerField = new TextField("answer", skin);
         answerField.setVisible(false);
         titleLabel = new Label("Verify Menu", skin);
@@ -58,20 +58,28 @@ public class ChangePassMenu implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         table.setFillParent(true);
+
+        errorLabel.setColor(Color.RED);
+        errorLabel.setVisible(false);
+
         table.add(titleLabel);
         table.row().pad(15);
         table.add(usernameField).width(300);
         table.row().pad(15);
-        table.add(questionLable).width(300);
+        table.add(questionLabel).width(300);
+        table.row().pad(15);
         table.add(answerField).width(300);
+        table.row().pad(15);
         table.add(passField).width(300);
+        table.row().pad(15);
         table.add(confirmPassField).width(300);
-        errorLabel.setColor(Color.RED);
-        errorLabel.setVisible(false);
-        table.row().pad(10);
-        table.add(errorLabel);
+        table.row().pad(15);
         table.add(verifyButton);
+        table.row().pad(15);
         table.add(changePassButton);
+        table.row().pad(15);
+        table.add(errorLabel);
+
         table.center();
         stage.addActor(table);
     }
@@ -81,13 +89,11 @@ public class ChangePassMenu implements Screen {
         ScreenUtils.clear(0, 0, 0, 1);
         Gdx.gl.glClearColor(0, 0, 0, 1);
 
-        int width = Gdx.graphics.getWidth();
-        int height = Gdx.graphics.getHeight();
-
         final boolean[] userVerified = {false};
 
         Main.batch.begin();
-        Main.batch.draw(GameAssetManager.assetManager.get("menu assets/loading screen.png", Texture.class), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        Main.batch.draw(GameAssetManager.assetManager.get("menu assets/loading screen.png", Texture.class),
+            0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Main.batch.end();
 
         usernameField.addListener(new ClickListener() {
@@ -183,10 +189,10 @@ public class ChangePassMenu implements Screen {
                     User user = LoginMenuController.userVerify(usernameField.getText());
                     if (user != null) {
                         usernameField.setVisible(false);
-                        questionLable.setVisible(true);
+                        questionLabel.setVisible(true);
                         answerField.setVisible(true);
 
-                        questionLable.setText(user.getQuestion().getQuestion());
+                        questionLabel.setText(user.getQuestion().getQuestion());
                         verifyButton.setText("Verify");
 
                         userVerified[0] = true;
@@ -194,7 +200,7 @@ public class ChangePassMenu implements Screen {
                 }
                 else {
                     if (LoginMenuController.answerQuestion(usernameField.getText(), answerField.getText())) {
-                        questionLable.setVisible(false);
+                        questionLabel.setVisible(false);
                         answerField.setVisible(false);
                         verifyButton.setVisible(false);
 
@@ -212,7 +218,8 @@ public class ChangePassMenu implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 if (LoginMenuController.changePassword(usernameField.getText(), passField.getText(),
                     confirmPassField.getText()))
-                    Main.getMain().setScreen(new MainMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
+                    Main.getMain().setScreen(new
+                        MainMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
             }
         });
 

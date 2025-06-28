@@ -1,6 +1,7 @@
 package AP.group30.StardewValley.views;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
@@ -9,6 +10,7 @@ import AP.group30.StardewValley.controllers.MaintainerController;
 import AP.group30.StardewValley.controllers.RegisterMenuController;
 import AP.group30.StardewValley.models.Commands.RegisterMenuCommands;
 import AP.group30.StardewValley.models.GameAssetManager;
+import AP.group30.StardewValley.models.Users.RegisterQuestions;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -20,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -30,7 +33,7 @@ public class RegisterMenu implements Screen {
     private TextField passField;
     private TextField confirmPassField;
     private Label label;
-    private Label question;
+    private SelectBox<String> questionBox;
     private TextField answerField;
     private TextButton button;
     private Label errorLabel;
@@ -56,8 +59,8 @@ public class RegisterMenu implements Screen {
         genderBox = new SelectBox<>(skin);
         genderBox.setItems("Male", "Female");
         randomPassBox = new CheckBox("Random Password", skin);
-        question = new Label("What is your favorite farm animal?", skin);
-        question.setColor(Color.BLACK);
+        questionBox = new SelectBox<>(skin);
+        questionBox.setItems(RegisterQuestions.getQuestions());
         answerField = new TextField("answer", skin);
         errorLabel = new Label("", skin);
     }
@@ -85,7 +88,7 @@ public class RegisterMenu implements Screen {
         table.row().pad(15);
         table.add(nicknameField).width(300);
         table.row().pad(15);
-        table.add(question);
+        table.add(questionBox).width(300);
         table.row().pad(15);
         table.add(answerField).width(300);
         table.row().pad(15);
@@ -257,7 +260,7 @@ public class RegisterMenu implements Screen {
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                int result = RegisterMenuController.register(button, usernameField, passField, confirmPassField, emailField, nicknameField, errorLabel, genderBox.getSelected(), answerField);
+                int result = RegisterMenuController.register(button, usernameField, passField, confirmPassField, emailField, nicknameField, errorLabel, genderBox.getSelected(), answerField, questionBox.getSelected());
                 if (result == 1) {
                     Main.getMain().setScreen(new LoginMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
                 }

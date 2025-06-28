@@ -25,6 +25,7 @@ public class LoginMenu implements Screen {
     private final TextButton forgotPassButton;
     private static Label errorLabel;
     private final Label titleLabel;
+    private final CheckBox stayLoggedInBox;
 
     public LoginMenu(Skin skin) {
         table = new Table(skin);
@@ -35,6 +36,7 @@ public class LoginMenu implements Screen {
         loginButton = new TextButton("Login", skin);
         forgotPassButton = new TextButton("Forgot My Password", skin);
         errorLabel = new Label("", skin);
+        stayLoggedInBox = new CheckBox("Stay Logged in", skin);
     }
 
     public static void printResult(String message) {
@@ -47,17 +49,24 @@ public class LoginMenu implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         table.setFillParent(true);
+
+        errorLabel.setColor(Color.RED);
+        errorLabel.setVisible(false);
+
         table.add(titleLabel);
         table.row().pad(15);
         table.add(usernameField).width(300);
         table.row().pad(15);
         table.add(passField).width(300);
-        errorLabel.setColor(Color.RED);
-        errorLabel.setVisible(false);
-        table.row().pad(10);
-        table.add(errorLabel);
+        table.row().pad(15);
         table.add(loginButton);
+        table.row().pad(15);
         table.add(forgotPassButton);
+        table.row().pad(15);
+        table.add(stayLoggedInBox).width(300);
+        table.row().pad(15);
+        table.add(errorLabel);
+
         table.center();
         stage.addActor(table);
     }
@@ -71,7 +80,8 @@ public class LoginMenu implements Screen {
         int height = Gdx.graphics.getHeight();
 
         Main.batch.begin();
-        Main.batch.draw(GameAssetManager.assetManager.get("menu assets/loading screen.png", Texture.class), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        Main.batch.draw(GameAssetManager.assetManager.get("menu assets/loading screen.png", Texture.class),
+                0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Main.batch.end();
 
         usernameField.addListener(new ClickListener() {
@@ -121,9 +131,12 @@ public class LoginMenu implements Screen {
         loginButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                boolean result = LoginMenuController.Login(usernameField.getText(), passField.getText(), true);
+                boolean result = LoginMenuController.Login(usernameField.getText(), passField.getText(),
+                        stayLoggedInBox.isChecked());
                 if (result) {
-                    Main.getMain().setScreen(new MainMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
+                    Main.getMain().setScreen(new
+                            MainMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json",
+                            Skin.class)));
                 }
             }
         });
@@ -131,7 +144,9 @@ public class LoginMenu implements Screen {
         forgotPassButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Main.getMain().setScreen(new ChangePassMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
+                Main.getMain().setScreen(new
+                        ChangePassMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json",
+                        Skin.class)));
             }
         });
 
