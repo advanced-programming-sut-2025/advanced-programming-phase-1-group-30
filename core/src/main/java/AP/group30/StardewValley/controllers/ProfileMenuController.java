@@ -5,7 +5,9 @@ import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Users.User;
 import AP.group30.StardewValley.views.MainMenu;
 import AP.group30.StardewValley.views.RegisterMenu;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
@@ -17,7 +19,7 @@ public class ProfileMenuController {
                                    TextField confirmPassField, TextField usernameField, TextField emailField,
                                    TextField nicknameField) {
         if(backButton.isPressed()){
-            Main.getMain().setScreen(new MainMenu());
+            Main.getMain().setScreen(new MainMenu(new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"))));
             return;
         }
 
