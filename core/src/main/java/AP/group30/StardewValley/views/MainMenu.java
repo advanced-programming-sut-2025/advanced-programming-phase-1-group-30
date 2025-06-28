@@ -1,38 +1,32 @@
 package AP.group30.StardewValley.views;
 
 import AP.group30.StardewValley.Main;
-import AP.group30.StardewValley.controllers.LoginMenuController;
+import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class MainMenu implements Screen {
     private Stage stage;
     private final Table table;
-    private final TextField usernameField;
-    private final TextField passField;
-    private final TextButton loginButton;
-    private final Label errorLabel;
     private final Label titleLabel;
+    private final TextButton startGameButton;
+    private final TextButton profileButton;
+    private final TextButton logoutButton;
 
     public MainMenu(Skin skin) {
         table = new Table(skin);
-        usernameField = new TextField("username", skin);
-        passField = new TextField("password", skin);
-        passField.setPasswordCharacter('*');
-        titleLabel = new Label("Login Menu", skin);
-        loginButton = new TextButton("Login", skin);
-        errorLabel = new Label("", skin);
+        titleLabel = new Label("Main Menu", skin);
+        startGameButton = new TextButton("Start Game", skin);
+        profileButton = new TextButton("Profile", skin);
+        logoutButton = new TextButton("Logout", skin);
     }
 
     @Override
@@ -40,17 +34,15 @@ public class MainMenu implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         table.setFillParent(true);
+
         table.add(titleLabel);
         table.row().pad(15);
-        table.add(usernameField).width(300);
+        table.add(startGameButton);
         table.row().pad(15);
-        table.add(passField).width(300);
-        table.add(loginButton);
-        errorLabel.setColor(Color.RED);
-        errorLabel.setVisible(false);
-        table.row().pad(10);
-        table.add(errorLabel);
-        table.setDebug(true);
+        table.add(profileButton);
+        table.row().pad(15);
+        table.add(logoutButton);
+
         table.center();
         stage.addActor(table);
     }
@@ -60,68 +52,29 @@ public class MainMenu implements Screen {
         ScreenUtils.clear(0, 0, 0, 1);
         Gdx.gl.glClearColor(0, 0, 0, 1);
 
-        int width = Gdx.graphics.getWidth();
-        int height = Gdx.graphics.getHeight();
-
         Main.batch.begin();
         Main.batch.draw(GameAssetManager.assetManager.get("menu assets/loading screen.png", Texture.class), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Main.batch.end();
 
-        usernameField.addListener(new ClickListener() {
-            boolean cleared = false;
-
+        startGameButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (!cleared) {
-                    usernameField.setText("");
-                    cleared = true;
-                }
+//                Main.getMain().setScreen(new GameMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
             }
         });
 
-        usernameField.addListener(new FocusListener() {
-            @Override
-            public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
-                if (!focused && usernameField.getText().isEmpty()) {
-                    usernameField.setColor(Color.GRAY);
-                    usernameField.setText("username");
-                    usernameField.setColor(Color.BLACK);
-                }
-            }
-        });
-
-        passField.addListener(new ClickListener() {
-            boolean cleared = false;
-
+        profileButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (!cleared) {
-                    passField.setText("");
-                    passField.setPasswordMode(true);
-                    cleared = true;
-                }
+//                Main.getMain().setScreen(new ProfileMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
             }
         });
 
-        passField.addListener(new FocusListener() {
-            @Override
-            public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
-                if (!focused && passField.getText().isEmpty()) {
-                    usernameField.setColor(Color.GRAY);
-                    usernameField.setText("password");
-                    usernameField.setColor(Color.BLACK);
-                    passField.setPasswordMode(false);
-                }
-            }
-        });
-
-        loginButton.addListener(new ClickListener() {
+        logoutButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                boolean result = LoginMenuController.Login(usernameField.getText(), passField.getText(), true);
-                if (result) {
-                    Main.getMain().setScreen(new MainMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
-                }
+                App.setCurrentUser(null);
+                Main.getMain().setScreen(new LoginMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
             }
         });
 
