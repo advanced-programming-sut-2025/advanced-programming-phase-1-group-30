@@ -201,7 +201,7 @@ public class GameMenuController {
                 item.changeCount(-1 * numberInt);
                 GameMenu.printResult(numberInt + " numbers of " + item.getName() + " successfully removed from your backpack");
             }
-            
+
         }
         else {
             App.getCurrentGame().getCurrentPlayer().getBackPack().removeItem(item);
@@ -668,7 +668,7 @@ public class GameMenuController {
             GameMenu.printResult("No craft with given name were found!");
             return;
         }
-        
+
         StringBuilder sb = new StringBuilder();
 
         sb.append("Name: " + craft.getName() + "\n");
@@ -720,7 +720,7 @@ public class GameMenuController {
             GameMenu.printResult("No craft with given name were found!");
             return;
         }
-        
+
         StringBuilder sb = new StringBuilder();
 
         sb.append("Name: " + craft.getName() + "\n");
@@ -741,7 +741,7 @@ public class GameMenuController {
             GameMenu.printResult("No craft with given name were found!");
             return;
         }
-        
+
         StringBuilder sb = new StringBuilder();
 
         sb.append("Name: " + craft.getName() + "\n");
@@ -872,7 +872,7 @@ public class GameMenuController {
                                     tile.setGiantCrop(true);
                                     tile.setCrop(giantCrop);
                                 }
-                                    GameMenu.printResult("Now you have a giant " + giantCrop.getName() + " !");
+                                GameMenu.printResult("Now you have a giant " + giantCrop.getName() + " !");
 
                                 break; // Stop after finding one
                             }
@@ -1129,7 +1129,7 @@ public class GameMenuController {
     public static void cheatAddItem(String name, String count) {
         MaintainerController.cheatAddItem(name, Integer.parseInt(count));
     }
-    
+
     public static void putRefrigerator(String item) {
         Player player = App.getCurrentGame().getCurrentPlayer();
         Item wantedItem = Item.findItemByName(item, player.getBackPack().getItems());
@@ -1435,7 +1435,7 @@ public class GameMenuController {
             System.out.println("Invalid item: " + name);
         }
     }
-//    public int animalX(ArrayList<Coop> coops) {
+    //    public int animalX(ArrayList<Coop> coops) {
 //        int x = 0;
 //        for (Coop coop : coops) {
 //            for (Animal animal : coop.getAnimals()) {
@@ -1782,18 +1782,18 @@ public class GameMenuController {
             return;
         }
 
-         Tile[][] tiles = App.getCurrentGame().getCurrentMap().getTiles();
-         if (!tiles[player.getX() + 1][player.getY() + 1].getType().equals(TileTypes.WATER) &&
-             !tiles[player.getX() + 1][player.getY()].getType().equals(TileTypes.WATER) &&
-             !tiles[player.getX() + 1][player.getY() - 1].getType().equals(TileTypes.WATER) &&
-             !tiles[player.getX()][player.getY() + 1].getType().equals(TileTypes.WATER) &&
-             !tiles[player.getX()][player.getY() - 1].getType().equals(TileTypes.WATER) &&
-             !tiles[player.getX() - 1][player.getY() + 1].getType().equals(TileTypes.WATER) &&
-             !tiles[player.getX() - 1][player.getY()].getType().equals(TileTypes.WATER) &&
-             !tiles[player.getX() - 1][player.getY() - 1].getType().equals(TileTypes.WATER)) {
-             GameMenu.printResult("You are not near water!");
-             return;
-         }
+        Tile[][] tiles = App.getCurrentGame().getCurrentMap().getTiles();
+        if (!tiles[player.getX() + 1][player.getY() + 1].getType().equals(TileTypes.WATER) &&
+                !tiles[player.getX() + 1][player.getY()].getType().equals(TileTypes.WATER) &&
+                !tiles[player.getX() + 1][player.getY() - 1].getType().equals(TileTypes.WATER) &&
+                !tiles[player.getX()][player.getY() + 1].getType().equals(TileTypes.WATER) &&
+                !tiles[player.getX()][player.getY() - 1].getType().equals(TileTypes.WATER) &&
+                !tiles[player.getX() - 1][player.getY() + 1].getType().equals(TileTypes.WATER) &&
+                !tiles[player.getX() - 1][player.getY()].getType().equals(TileTypes.WATER) &&
+                !tiles[player.getX() - 1][player.getY() - 1].getType().equals(TileTypes.WATER)) {
+            GameMenu.printResult("You are not near water!");
+            return;
+        }
 
         ArrayList<FishType> fishTypes = new ArrayList<>();
         for (FishType fishType : FishType.values()) {
@@ -1822,7 +1822,7 @@ public class GameMenuController {
         double fishQuality = Math.floor((R * (skill + 2) * pole) / (7 - M));
 
         Item fish = new Fish(count, fishType);
-        
+
         String quality;
         if (fishQuality <= 0.5) {
             fish.setCof(1);
@@ -1850,7 +1850,7 @@ public class GameMenuController {
         App.getCurrentGame().getCurrentPlayer().increaseFishing(5);
         GameMenu.printResult("Wow! You got " + count + " " + quality + " " + fishType.getDisplayName());
     }
-   
+
     public static void artisanUse(String artisanName, String itemName) {
         IndustrialProductType recipe = null;
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -1982,13 +1982,13 @@ public class GameMenuController {
             case null, default -> GameMenu.printResult("You are not in a store!");
         }
     }
- 
+
     public static void purchase(String name, String count){
         int amount;
         if (count != null) amount = Integer.parseInt(count);
         else amount = 1;
         Player player = App.getCurrentGame().getCurrentPlayer();
-        
+
         if (player.getBuilding() == null) {
             GameMenu.printResult("You are not in a store!");
             return;
@@ -2006,10 +2006,10 @@ public class GameMenuController {
         }
 
         if (App.getCurrentGame().getCurrentTime().getHour() < player.getBuilding().getStartHour() ||
-            App.getCurrentGame().getCurrentTime().getHour() > player.getBuilding().getEndHour()) {
+                App.getCurrentGame().getCurrentTime().getHour() > player.getBuilding().getEndHour()) {
 
-                GameMenu.printResult("Store is closed! The working our is from " + player.getBuilding().getStartHour() + " to " + player.getBuilding().getEndHour());
-                return;
+            GameMenu.printResult("Store is closed! The working our is from " + player.getBuilding().getStartHour() + " to " + player.getBuilding().getEndHour());
+            return;
         }
 
         ShopProduct item = (ShopProduct) Item.findItemByName(name, player.getBuilding().getItems());
@@ -2098,10 +2098,10 @@ public class GameMenuController {
                     GameMenu.printResult("You can't buy this fishing pole! Your fishing skill must be at lest 4!");
                 return;
             }
-            
+
             if (amount == item.getCount()) player.getBuilding().removeItem(item);
             else item.changeCount(-1  * amount);
-            
+
             player.getBackPack().addItem(new Item(amount, name, item.getCost()));
             item.sold(amount);
             GameMenu.printResult("Item purchased successfully");
@@ -2136,7 +2136,7 @@ public class GameMenuController {
                 GameMenu.printResult("You don't have enough space in your backpack!");
                 return;
             }
-            
+
             if (amount == item.getCount()) player.getBuilding().removeItem(item);
             else item.changeCount(-1  * amount);
 
@@ -2149,7 +2149,7 @@ public class GameMenuController {
             } else {
                 player.setMoney(player.getMoney() - item.getCost() * amount);
             }
-            
+
             player.getBackPack().addItem(new Item(amount, name, item.getCost()));
             item.sold(amount);
             GameMenu.printResult("Item purchased successfully");
@@ -2165,7 +2165,7 @@ public class GameMenuController {
             GameMenu.printResult("You don't have enough space in your backpack!");
             return;
         }
-        
+
         if (amount == item.getCount()) player.getBuilding().removeItem(item);
         else item.changeCount(-1  * amount);
 
@@ -2190,13 +2190,13 @@ public class GameMenuController {
         }
 
         if (item.getClass() == Axe.class ||
-            item.getClass() == Basket.class ||
-            item.getClass() == FishingPole.class ||
-            item.getClass() == Hoe.class ||
-            item.getClass() == MilkPail.class ||
-            item.getClass() == Pickaxe.class ||
-            item.getClass() == Scythe.class ||
-            item.getClass() == Shear.class) {
+                item.getClass() == Basket.class ||
+                item.getClass() == FishingPole.class ||
+                item.getClass() == Hoe.class ||
+                item.getClass() == MilkPail.class ||
+                item.getClass() == Pickaxe.class ||
+                item.getClass() == Scythe.class ||
+                item.getClass() == Shear.class) {
             GameMenu.printResult("You can't sell any tool!!!");
             return;
         }

@@ -68,7 +68,6 @@ public class RegisterMenuController {
 
         User newUser = new User(username, password, nickname, email, RegisterQuestions.getQuestion(question) , answer, gender);
         App.getAppUsers().add(newUser);
-
         return 1;
     }
 

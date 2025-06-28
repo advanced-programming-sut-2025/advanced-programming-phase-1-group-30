@@ -1,5 +1,6 @@
 package AP.group30.StardewValley.views;
 
+
 import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameAssetManager;
@@ -106,4 +107,15 @@ public class MainMenu implements Screen {
     public void dispose() {
 
     }
+//    @Override
+//    public void check(String command, Scanner scanner) {
+//        Matcher matcher;
+//
+//        matcher = LoginMenuCommands.USER_LOGOUT.regexMatcher(command);
+//        if (matcher.matches()) {
+//            MainMenuController.logout();
+//            return;
+//        }
+//        System.out.println("Invalid command");
+//    }
 }
