@@ -3,6 +3,7 @@ package AP.group30.StardewValley.controllers;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Users.RegisterQuestions;
 import AP.group30.StardewValley.models.Users.User;
+import AP.group30.StardewValley.views.ChangePassMenu;
 import AP.group30.StardewValley.views.LoginMenu;
 import AP.group30.StardewValley.views.RegisterMenu;
 
@@ -36,69 +37,63 @@ public class LoginMenuController {
         return true;
     }
 
-    public static void ForgotPassword(String username, Scanner scanner) {  // TODO aval oon question taeed piade sazi shavad
+    public static User userVerify(String username){
         User user = getUserByUsername(username);
         if (user == null) {
-            RegisterMenu.printResult("User not found");
-            return;
+            ChangePassMenu.printResult("User not found");
+            return null;
         }
 
-        int counter = 1;
-        String registerQ = "";
-//        for(RegisterQuestions questions : RegisterQuestions.values()){
-//            if(counter == user.getRegisterQuestionNumber()){
-//                registerQ = questions.question;
-//            }
-//            counter++;
-//        }
+        return user;
+    }
 
-        RegisterMenu.printResult("Enter the answer of the security question: \n" + registerQ);
-        Matcher matcher;
-        if ((matcher = Pattern.compile("answer\\s+-a\\s+(?<answer>.+?)\\s*").matcher(scanner.nextLine())).matches()) {
-            if (matcher.group("answer").equals(user.getAnswer())) {
-                RegisterMenu.printResult("choose a new password");
-                while(true) {
-                    String password = scanner.nextLine();
+    public static boolean answerQuestion(String username, String answer) {
+        User user = getUserByUsername(username);
 
-                    if (!Pattern.compile("[A-Za-z0-9?><,\"';\\\\:\\/|\\]\\[}{+=)(*&^%$#!]*").matcher(password).matches()) {
-                        RegisterMenu.printResult("Password is invalid!");
-                        continue;
-                    }
+        assert user != null;
+        if (answer.equals(user.getAnswer()))
+            return true;
 
-                    if (!Pattern.compile("[A-Za-z0-9?><,\"';\\\\:\\/|\\]\\[}{+=)(*&^%$#!]{9,}").matcher(password).matches()) {
-                        RegisterMenu.printResult("Password has to be at least 9 characters!");
-                        continue;
-                    }
+        ChangePassMenu.printResult("Wrong answer!");
+        return false;
+    }
 
-                    if (!Pattern.compile("(?=.*[A-Z]).*").matcher(password).matches()) {
-                        RegisterMenu.printResult("Password has to have at least one Uppercase letter!");
-                        continue;
-                    }
+    public static boolean changePassword(String username, String password, String confirmPassword) {
+        User user = LoginMenuController.getUserByUsername(username);
 
-                    if (!Pattern.compile("(?=.*[a-z]).*").matcher(password).matches()) {
-                        RegisterMenu.printResult("Password has to have at least one Lowercase letter!");
-                        continue;
-                    }
-
-                    if (!Pattern.compile("(?=.*[0-9]).*").matcher(password).matches()) {
-                        RegisterMenu.printResult("Password has to have at least one digit!");
-                        continue;
-                    }
-
-                    if (!Pattern.compile("(?=.*[?><,\"';\\\\:\\/|\\]\\[}{+=)(*&^%$#!]).*").matcher(password).matches()) {
-                        RegisterMenu.printResult("Password has to have at least one special character!");
-                        continue;
-                    }
-                    user.setPassword(password);
-                    RegisterMenu.printResult("Successfully changed password");
-                    return;
-                }
-            } else {
-                RegisterMenu.printResult("Wrong answer");
-            }
-        } else {
-            RegisterMenu.printResult("Invalid input format. Please use: answer -a <your_answer>");
+        if (!Pattern.compile("[A-Za-z0-9?><,\"';\\\\:\\/|\\]\\[}{+=)(*&^%$#!]*").matcher(password).matches()) {
+            ChangePassMenu.printResult("Password is invalid!");
+            return false;
         }
+
+        if (!Pattern.compile("[A-Za-z0-9?><,\"';\\\\:\\/|\\]\\[}{+=)(*&^%$#!]{9,}").matcher(password).matches()) {
+            ChangePassMenu.printResult("Password has to be at least 9 characters!");
+            return false;
+        }
+
+        if (!Pattern.compile("(?=.*[A-Z]).*").matcher(password).matches()) {
+            ChangePassMenu.printResult("Password has to have at least one Uppercase letter!");
+            return false;
+        }
+
+        if (!Pattern.compile("(?=.*[a-z]).*").matcher(password).matches()) {
+            ChangePassMenu.printResult("Password has to have at least one Lowercase letter!");
+            return false;
+        }
+
+        if (!Pattern.compile("(?=.*[0-9]).*").matcher(password).matches()) {
+            ChangePassMenu.printResult("Password has to have at least one digit!");
+            return false;
+        }
+
+        if (!Pattern.compile("(?=.*[?><,\"';\\\\:\\/|\\]\\[}{+=)(*&^%$#!]).*").matcher(password).matches()) {
+            ChangePassMenu.printResult("Password has to have at least one special character!");
+            return false;
+        }
+
+        assert user != null;
+        user.setPassword(password);
+        return true;
     }
 
     private static User getUserByUsername(String username) {

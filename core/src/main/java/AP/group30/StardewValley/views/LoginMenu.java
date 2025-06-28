@@ -16,14 +16,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import javax.swing.*;
-
 public class LoginMenu implements Screen {
     private Stage stage;
     private final Table table;
     private final TextField usernameField;
     private final TextField passField;
     private final TextButton loginButton;
+    private final TextButton forgotPassButton;
     private static Label errorLabel;
     private final Label titleLabel;
 
@@ -34,6 +33,7 @@ public class LoginMenu implements Screen {
         passField.setPasswordCharacter('*');
         titleLabel = new Label("Login Menu", skin);
         loginButton = new TextButton("Login", skin);
+        forgotPassButton = new TextButton("Forgot My Password", skin);
         errorLabel = new Label("", skin);
     }
 
@@ -52,12 +52,12 @@ public class LoginMenu implements Screen {
         table.add(usernameField).width(300);
         table.row().pad(15);
         table.add(passField).width(300);
-        table.add(loginButton);
         errorLabel.setColor(Color.RED);
         errorLabel.setVisible(false);
         table.row().pad(10);
         table.add(errorLabel);
-        table.setDebug(true);
+        table.add(loginButton);
+        table.add(forgotPassButton);
         table.center();
         stage.addActor(table);
     }
@@ -73,6 +73,27 @@ public class LoginMenu implements Screen {
         Main.batch.begin();
         Main.batch.draw(GameAssetManager.assetManager.get("menu assets/loading screen.png", Texture.class), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Main.batch.end();
+
+        usernameField.addListener(new ClickListener() {
+            boolean cleared = false;
+
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (!cleared) {
+                    usernameField.setText("");
+                    cleared = true;
+                }
+            }
+        });
+
+        usernameField.addListener(new FocusListener() {
+            @Override
+            public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
+                if (!focused && usernameField.getText().isEmpty()) {
+                    usernameField.setText("username");
+                }
+            }
+        });
 
         passField.addListener(new ClickListener() {
             boolean cleared = false;
@@ -97,27 +118,6 @@ public class LoginMenu implements Screen {
             }
         });
 
-        usernameField.addListener(new ClickListener() {
-            boolean cleared = false;
-
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (!cleared) {
-                    usernameField.setText("");
-                    cleared = true;
-                }
-            }
-        });
-
-        usernameField.addListener(new FocusListener() {
-            @Override
-            public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
-                if (!focused && usernameField.getText().isEmpty()) {
-                    usernameField.setText("username");
-                }
-            }
-        });
-
         loginButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -125,6 +125,13 @@ public class LoginMenu implements Screen {
                 if (result) {
                     Main.getMain().setScreen(new MainMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
                 }
+            }
+        });
+
+        forgotPassButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Main.getMain().setScreen(new ChangePassMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
             }
         });
 

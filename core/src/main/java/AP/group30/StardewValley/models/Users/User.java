@@ -12,18 +12,21 @@ public class User {
     private int maxMoney;
     private int  numOfGames;
     private Player player;
-    private String gender;
-    private String Answer;
+    private final String gender;
+    private final RegisterQuestions question;
+    private final String answer;
     private boolean isInGame = false;
 
-    public User(String username, String password, String nickname, String email, String answer, String gender) {
+    public User(String username, String password, String nickname, String email, RegisterQuestions registerQuestion,
+                String answer, String gender) {
         this.username = username;
         this.password = RegisterMenuController.HashPassword(password);
         this.nickname = nickname;
         this.email = email;
         this.numOfGames = 0;
         this.gender = gender;
-        this.Answer = answer;
+        this.answer = answer;
+        this.question = registerQuestion;
     }
 
     public String getUsername() {
@@ -86,8 +89,12 @@ public class User {
         return gender;
     }
 
+    public RegisterQuestions getQuestion() {
+        return question;
+    }
+
     public String getAnswer() {
-        return Answer;
+        return answer;
     }
 
     public boolean isInGame() {
