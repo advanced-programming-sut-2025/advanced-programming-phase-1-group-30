@@ -257,9 +257,10 @@ public class RegisterMenu implements Screen {
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                int result = RegisterMenuController.register(button, usernameField, passField, confirmPassField, emailField, nicknameField, errorLabel, genderBox.getSelected(), answerField);
+                int result = RegisterMenuController.register(button, usernameField, passField, confirmPassField,
+                    emailField, nicknameField, errorLabel, genderBox.getSelected(), answerField);
                 if (result == 1) {
-                    Main.getMain().setScreen(new LoginMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
+                    Main.getMain().setScreen(new LoginMenu(skin));
                 }
             }
         });

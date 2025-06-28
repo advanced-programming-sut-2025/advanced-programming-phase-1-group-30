@@ -93,6 +93,7 @@ public class RegisterMenuController {
 
         User newUser = new User(username, password, nickname, email, answer, gender);
         App.getAppUsers().add(newUser);
+        App.setCurrentUser(newUser);
         errorLabel.setText("User created successfully!");
         errorLabel.setVisible(true);
 

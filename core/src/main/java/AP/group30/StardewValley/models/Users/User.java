@@ -2,7 +2,10 @@ package AP.group30.StardewValley.models.Users;
 
 import AP.group30.StardewValley.controllers.RegisterMenuController;
 import AP.group30.StardewValley.models.App;
+import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.Players.Player;
+
+import java.util.ArrayList;
 
 public class User {
     private String username;
