@@ -1,6 +1,5 @@
 package AP.group30.StardewValley;
 
-import AP.group30.StardewValley.views.AppView;
 import AP.group30.StardewValley.views.LoadingScreen;
 
 import AP.group30.StardewValley.views.RegisterMenu;

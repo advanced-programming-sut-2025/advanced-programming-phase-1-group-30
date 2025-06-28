@@ -1,14 +1,9 @@
 package AP.group30.StardewValley.views;
 
-import java.io.IOException;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-
 import AP.group30.StardewValley.Main;
-import AP.group30.StardewValley.controllers.MaintainerController;
 import AP.group30.StardewValley.controllers.RegisterMenuController;
-import AP.group30.StardewValley.models.Commands.RegisterMenuCommands;
 import AP.group30.StardewValley.models.GameAssetManager;
+import AP.group30.StardewValley.models.Users.RegisterQuestions;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -19,51 +14,50 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class RegisterMenu implements Screen {
     private Stage stage;
-    private Table table;
-    private TextField usernameField;
-    private TextField passField;
-    private TextField confirmPassField;
-    private Label label;
-    private Label question;
-    private TextField answerField;
-    private TextButton button;
-    private Label errorLabel;
-    private TextField emailField;
-    private TextField nicknameField;
-    private SelectBox<String> genderBox;
-    private CheckBox randomPassBox;
-    private String randomPass = null;
+    private final Table table;
+    private final TextField usernameField;
+    private final TextField passField;
+    private final TextField confirmPassField;
+    private final Label titlelabel;
+    private final SelectBox<String> questionBox;
+    private final TextField answerField;
+    private final TextButton button;
+    private static Label errorLabel;
+    private final TextField emailField;
+    private final TextField nicknameField;
+    private final SelectBox<String> genderBox;
+    private final CheckBox randomPassBox;
     private boolean randomPassIsChecked = false;
-    private Skin skin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
 
     public RegisterMenu() {
+        Skin skin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
         table = new Table(skin);
         usernameField = new TextField("username", skin);
         passField = new TextField("password", skin);
         confirmPassField = new TextField("confirm password", skin);
         passField.setPasswordCharacter('*');
         confirmPassField.setPasswordCharacter('*');
-        label = new Label("Register Menu", skin);
+        titlelabel = new Label("Register Menu", skin);
         button = new TextButton("Sign Up", skin);
         emailField = new TextField("email", skin);
         nicknameField = new TextField("nickname", skin);
         genderBox = new SelectBox<>(skin);
         genderBox.setItems("Male", "Female");
         randomPassBox = new CheckBox("Random Password", skin);
-        question = new Label("What is your favorite farm animal?", skin);
-        question.setColor(Color.BLACK);
+        questionBox = new SelectBox<>(skin);
+        questionBox.setItems(RegisterQuestions.getQuestions());
         answerField = new TextField("answer", skin);
         errorLabel = new Label("", skin);
     }
 
-    public static void printResult(String result) {
-        System.out.println(result);
+    public static void printResult(String message) {
+        errorLabel.setVisible(true);
+        errorLabel.setText(message);
     }
 
     @Override
@@ -71,7 +65,11 @@ public class RegisterMenu implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         table.setFillParent(true);
-        table.add(label);
+
+        errorLabel.setColor(Color.RED);
+        errorLabel.setVisible(false);
+
+        table.add(titlelabel);
         table.row().pad(15);
         table.add(usernameField).width(300);
         table.row().pad(15);
@@ -85,18 +83,16 @@ public class RegisterMenu implements Screen {
         table.row().pad(15);
         table.add(nicknameField).width(300);
         table.row().pad(15);
-        table.add(question);
+        table.add(questionBox).width(300);
         table.row().pad(15);
         table.add(answerField).width(300);
         table.row().pad(15);
         table.add(genderBox).width(300);
         table.row().pad(15);
         table.add(button);
-        errorLabel.setColor(Color.RED);
-        errorLabel.setVisible(false);
         table.row().pad(10);
         table.add(errorLabel);
-        table.setDebug(true);
+
         table.center();
         stage.addActor(table);
     }
@@ -105,9 +101,6 @@ public class RegisterMenu implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
         Gdx.gl.glClearColor(0, 0, 0, 1);
-
-        int width = Gdx.graphics.getWidth();
-        int height = Gdx.graphics.getHeight();
 
         Main.batch.begin();
         Main.batch.draw(GameAssetManager.assetManager.get("menu assets/loading screen.png", Texture.class), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -257,9 +250,13 @@ public class RegisterMenu implements Screen {
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                int result = RegisterMenuController.register(button, usernameField, passField, confirmPassField, emailField, nicknameField, errorLabel, genderBox.getSelected(), answerField);
+                int result = RegisterMenuController.register(usernameField.getText(), passField.getText(),
+                        confirmPassField.getText(), emailField.getText(), nicknameField.getText(),
+                        genderBox.getSelected(), answerField.getText(), questionBox.getSelected());
                 if (result == 1) {
-                    Main.getMain().setScreen(new LoginMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
+                    Main.getMain().setScreen(new
+                            LoginMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json",
+                            Skin.class)));
                 }
             }
         });
