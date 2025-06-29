@@ -76,9 +76,6 @@ public class LoginMenu implements Screen {
         ScreenUtils.clear(0, 0, 0, 1);
         Gdx.gl.glClearColor(0, 0, 0, 1);
 
-        int width = Gdx.graphics.getWidth();
-        int height = Gdx.graphics.getHeight();
-
         Main.batch.begin();
         Main.batch.draw(GameAssetManager.assetManager.get("menu assets/loading screen.png", Texture.class),
                 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

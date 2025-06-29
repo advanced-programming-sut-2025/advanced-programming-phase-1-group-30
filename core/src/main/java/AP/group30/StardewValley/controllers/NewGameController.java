@@ -20,88 +20,103 @@ import AP.group30.StardewValley.models.Players.NPC.NPC;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.models.Users.User;
 import AP.group30.StardewValley.views.GameMenu;
+import AP.group30.StardewValley.views.PreGameMenu;
 
 public class NewGameController {
-    public static void NewGame(String username1, String username2, String username3, Scanner scanner) {
+    public static boolean NewGame(int numberOfPlayers, String username1, String username2, String username3,
+                                  int mapNumber1, int mapNumber2, int mapNumber3, int mapNumber4) {
         User user1 = null;
         User user2 = null;
         User user3 = null;
-        if (App.getCurrentUser() == null) {
-            GameMenu.printResult("You are not logged in!");
-            return;
-        }
 
         App.getMaps().add(new Map(1));
         App.getMaps().add(new Map(2));
         App.getMaps().add(new Map(3));
         App.getMaps().add(new Map(4));
         App.getMaps().add(new Map(-1));
+
         Game game = new Game();
         App.setCurrentGame(game);
         App.getGames().add(game);
-        ArrayList<Player> players = new ArrayList<>();
-        Player playerX = new Player(App.getCurrentUser(),App.getCurrentUser().getUsername(), 0);
-        User use = User.findUserByUsername(playerX.getUsername());
-        use.setPlayer(playerX);
-        players.add(playerX);
-        use.setNumOfGames(App.getCurrentUser().getNumOfGames() + 1);
-        if (username1 == null &&
-            username2 == null &&
-            username3 == null) {
-            GameMenu.printResult("You should at least enter one user");
-            return;
-        }
 
-        if (username1 != null) {
+        ArrayList<Player> players = new ArrayList<>();
+        Player currentPlayer = new Player(App.getCurrentUser(), App.getCurrentUser().getUsername(), 0,
+            App.getCurrentUser().getGender(), Map.getMapById(mapNumber1));
+        App.getCurrentUser().setPlayer(currentPlayer);
+        App.getCurrentUser().setNumOfGames(App.getCurrentUser().getNumOfGames() + 1);
+
+        players.add(currentPlayer);
+
+        if (numberOfPlayers >= 2) {
+            if (username1.equals("username 1")) {
+                PreGameMenu.printResult("Please enter username 1");
+                return false;
+            }
+
             user1 = User.findUserByUsername(username1);
             if (user1 == null) {
-                GameMenu.printResult("Invalid User1");
-                return;
+                PreGameMenu.printResult("Invalid User1");
+                return false;
             }
             if (user1.isInGame()) {
-                GameMenu.printResult("User1 already in Game");
-                return;
+                PreGameMenu.printResult("User1 already in Game");
+                return false;
             }
 
-            Player player1 = new Player(user1,user1.getUsername(), 1);
+            Player player1 = new Player(user1,user1.getUsername(), 1, user1.getGender(),
+                Map.getMapById(mapNumber2));
             user1.setPlayer(player1);
             user1.setNumOfGames(user1.getNumOfGames() + 1);
             players.add(player1);
         }
 
-        if (username2 != null) {
-            user2 = User.findUserByUsername(username2);
-            if (user2 == null) {
-                GameMenu.printResult("Invalid User2");
-                return;
-            }
-            if (user2.isInGame()) {
-                GameMenu.printResult("User2 already in Game");
-                return;
+        if (numberOfPlayers >= 3) {
+            if (username2.equals("username 2")) {
+                PreGameMenu.printResult("Please enter username 2");
+                return false;
             }
 
-            Player player2 = new Player(user2,user2.getUsername(), 2);
+            user2 = User.findUserByUsername(username2);
+            if (user2 == null) {
+                PreGameMenu.printResult("Invalid User2");
+                return false;
+            }
+            if (user2.isInGame()) {
+                PreGameMenu.printResult("User2 already in Game");
+                return false;
+            }
+
+            Player player2 = new Player(user2,user2.getUsername(), 2, user2.getGender(),
+                Map.getMapById(mapNumber3));
             user2.setPlayer(player2);
             user2.setNumOfGames(user2.getNumOfGames() + 1);
             players.add(player2);
         }
 
-        if (username3 != null) {
-            user3 = User.findUserByUsername(username3);
-            if (user3 == null) {
-                GameMenu.printResult("Invalid User3");
-                return;
-            }
-            if (user3.isInGame()) {
-                GameMenu.printResult("User3 already in Game");
-                return;
+        if (numberOfPlayers >= 4) {
+            if (username3.equals("username 3")) {
+                PreGameMenu.printResult("Please enter username 3");
+                return false;
             }
 
-            Player player3 = new Player(user3,user3.getUsername(), 3);
+            user3 = User.findUserByUsername(username3);
+            if (user3 == null) {
+                PreGameMenu.printResult("Invalid User3");
+                return false;
+            }
+            if (user3.isInGame()) {
+                PreGameMenu.printResult("User3 already in Game");
+                return false;
+            }
+
+            Player player3 = new Player(user3,user3.getUsername(), 3, user3.getGender(),
+                Map.getMapById(mapNumber4));
             user3.setPlayer(player3);
             user3.setNumOfGames(user3.getNumOfGames() + 1);
             players.add(player3);
         }
+
+        App.getCurrentUser().changeInGame();
         if(user1 != null) {
             user1.changeInGame();
         }
@@ -111,33 +126,17 @@ public class NewGameController {
         if(user3 != null) {
             user3.changeInGame();
         }
-        GameMenu.printResult("Please select your maps...");
+
         App.getCurrentGame().getGreatMap().setCityMap(App.getMaps().get(4));
+
         for (Player player : players) {
-            boolean mapIsSelected = false;
-            while (!mapIsSelected) {
-                GameMenu.printResult("Choosing map and gender for " + player.getUsername());
-                String command = scanner.nextLine();
-                Matcher matcher = GameMenuCommands.GAME_MAP.regexMatcher(command);
-                if (matcher.matches()) {
-                    int mapNumber = Integer.parseInt(matcher.group("mapNumber"));
-                    String gender = matcher.group("gender");
-                    player.setGender(gender);
-                    Map map = Map.getMapById(mapNumber);
-                    if (map == null) GameMenu.printResult("Please choose between available maps");
-                    player.setMap(map);
-                    App.getCurrentGame().getGreatMap().getMaps().add(map);
-                    mapIsSelected = true;
-                    player.setX(70);
-                    player.setY(16);
-                    player.setCityY(-1);
-                    player.setCityX(-1);
-                }
-                else {
-                    GameMenu.printResult("Invalid command");
-                }
-            }
+            App.getCurrentGame().getGreatMap().getMaps().add(player.getMap());
+            player.setX(70);
+            player.setY(16);
+            player.setCityY(-1);
+            player.setCityX(-1);
         }
+
         for (Player player : players) {
             for (Player p : players) {
                 if (!player.equals(p)) {
@@ -145,11 +144,12 @@ public class NewGameController {
                 }
             }
         }
+
         game.setPlayers(players);
         game.setTomorrowWeather(Weather.SUNNY);
-        game.setCurrentPlayer(playerX);
-        GameMenu.printResult("Starting new game...");
+        game.setCurrentPlayer(currentPlayer);
         MaintainerController.updateAllShops();
+        return true;
     }
 
     public static void LoadGame(String idString) {

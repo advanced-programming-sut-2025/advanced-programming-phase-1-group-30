@@ -60,7 +60,7 @@ public class MainMenu implements Screen {
         startGameButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-//                Main.getMain().setScreen(new GameMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
+                Main.getMain().setScreen(new PreGameMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
             }
         });
 
