@@ -251,7 +251,7 @@ public class RegisterMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 int result = RegisterMenuController.register(usernameField.getText(), passField.getText(),
-                        confirmPassField.getText(), emailField.getText(), nicknameField.getText(),
+                        confirmPassField.getText(), nicknameField.getText(), emailField.getText(),
                         genderBox.getSelected(), answerField.getText(), questionBox.getSelected());
                 if (result == 1) {
                     Main.getMain().setScreen(new

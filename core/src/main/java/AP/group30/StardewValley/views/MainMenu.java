@@ -67,7 +67,7 @@ public class MainMenu implements Screen {
         profileButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-//                Main.getMain().setScreen(new ProfileMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
+                Main.getMain().setScreen(new ProfileMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
             }
         });
 
