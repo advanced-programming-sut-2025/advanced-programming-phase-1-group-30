@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
 
 public class RegisterMenuController {
 
-    public static int register(String username, String password, String passwordConfirm, String nickname,
-                               String email, String gender, String answer, String question) {
+    public static int register(String username, String password, String passwordConfirm, String email,
+                               String nickname, String gender, String answer, String question) {
         for(User users : App.getAppUsers()){
             if(users.getUsername().equals(username)){
                 RegisterMenu.printResult("Username is already in use!");
