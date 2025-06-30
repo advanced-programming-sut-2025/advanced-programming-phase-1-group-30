@@ -75,10 +75,11 @@ public class Player {
     private int daysGotRejected = -1;
     private ArrayList<ArtisanItemProsses> artisanItemsProsses = new ArrayList<>();
 
-    public Player(User user,String username, int selectionNumber) {
+    public Player(User user,String username, int selectionNumber, String gender, Map map) {
         this.user = user;
         this.username = username;
-        this.map = null;
+        this.map = map;
+        this.gender = gender;
         this.energy = 200;
         this.shippingBin = new ShippingBin(ShippingBinType.REGULAR, 70, 10);
         this.refrigerator = new Refrigerator();

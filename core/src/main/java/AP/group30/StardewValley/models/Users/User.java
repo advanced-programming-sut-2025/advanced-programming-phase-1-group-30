@@ -18,7 +18,7 @@ public class User {
     private final String gender;
     private final RegisterQuestions question;
     private final String answer;
-    private boolean isInGame = false;
+    private boolean isInGame;
 
     public User(String username, String password, String nickname, String email, RegisterQuestions registerQuestion,
                 String answer, String gender) {
@@ -30,6 +30,7 @@ public class User {
         this.gender = gender;
         this.answer = answer;
         this.question = registerQuestion;
+        this.isInGame = false;
     }
 
     public String getUsername() {

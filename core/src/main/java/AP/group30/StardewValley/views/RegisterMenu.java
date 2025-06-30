@@ -23,10 +23,11 @@ public class RegisterMenu implements Screen {
     private final TextField usernameField;
     private final TextField passField;
     private final TextField confirmPassField;
-    private final Label titlelabel;
+    private final Label titleLabel;
     private final SelectBox<String> questionBox;
     private final TextField answerField;
-    private final TextButton button;
+    private final TextButton signupButton;
+    private final TextButton goToLoginButton;
     private static Label errorLabel;
     private final TextField emailField;
     private final TextField nicknameField;
@@ -42,8 +43,9 @@ public class RegisterMenu implements Screen {
         confirmPassField = new TextField("confirm password", skin);
         passField.setPasswordCharacter('*');
         confirmPassField.setPasswordCharacter('*');
-        titlelabel = new Label("Register Menu", skin);
-        button = new TextButton("Sign Up", skin);
+        titleLabel = new Label("Register Menu", skin);
+        signupButton = new TextButton("Sign Up", skin);
+        goToLoginButton = new TextButton("Goto Login Menu", skin);
         emailField = new TextField("email", skin);
         nicknameField = new TextField("nickname", skin);
         genderBox = new SelectBox<>(skin);
@@ -69,27 +71,31 @@ public class RegisterMenu implements Screen {
         errorLabel.setColor(Color.RED);
         errorLabel.setVisible(false);
 
-        table.add(titlelabel);
-        table.row().pad(15);
+        titleLabel.setColor(Color.BLACK);
+
+        table.add(titleLabel);
+        table.row().pad(10);
         table.add(usernameField).width(300);
-        table.row().pad(15);
+        table.row().pad(10);
         table.add(passField).width(300);
         table.add(randomPassBox).left().padLeft(10);
         stage.addActor(randomPassBox);
-        table.row().pad(15);
+        table.row().pad(10);
         table.add(confirmPassField).width(300);
-        table.row().pad(15);
+        table.row().pad(10);
         table.add(emailField).width(300);
-        table.row().pad(15);
+        table.row().pad(10);
         table.add(nicknameField).width(300);
-        table.row().pad(15);
+        table.row().pad(10);
         table.add(questionBox).width(300);
-        table.row().pad(15);
+        table.row().pad(10);
         table.add(answerField).width(300);
-        table.row().pad(15);
+        table.row().pad(10);
         table.add(genderBox).width(300);
-        table.row().pad(15);
-        table.add(button);
+        table.row().pad(10);
+        table.add(signupButton);
+        table.row().pad(10);
+        table.add(goToLoginButton);
         table.row().pad(10);
         table.add(errorLabel);
 
@@ -247,17 +253,26 @@ public class RegisterMenu implements Screen {
             randomPassIsChecked = false;
         }
 
-        button.addListener(new ClickListener() {
+        signupButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 int result = RegisterMenuController.register(usernameField.getText(), passField.getText(),
-                        confirmPassField.getText(), emailField.getText(), nicknameField.getText(),
+                        confirmPassField.getText(), nicknameField.getText(), emailField.getText(),
                         genderBox.getSelected(), answerField.getText(), questionBox.getSelected());
                 if (result == 1) {
                     Main.getMain().setScreen(new
                             LoginMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json",
                             Skin.class)));
                 }
+            }
+        });
+
+        goToLoginButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Main.getMain().setScreen(new
+                    LoginMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json",
+                    Skin.class)));
             }
         });
 
