@@ -21,7 +21,12 @@ public class PreGameMenu implements Screen {
     private Stage stage;
     private final Table table;
     private final Label titleLabel;
+    private final Label numberOfPlayersLabel;
     private final SelectBox<String> numberOfPlayersBox;
+    private final Label mapPlayer1Label;
+    private final Label mapPlayer2Label;
+    private final Label mapPlayer3Label;
+    private final Label mapPlayer4Label;
     private final SelectBox<String> mapPlayer1Box;
     private final SelectBox<String> mapPlayer2Box;
     private final SelectBox<String> mapPlayer3Box;
@@ -35,8 +40,13 @@ public class PreGameMenu implements Screen {
     public PreGameMenu(Skin skin) {
         table = new Table(skin);
         titleLabel = new Label("PreGame Menu", skin);
+        numberOfPlayersLabel = new Label("Number Of Players", skin);
         numberOfPlayersBox = new SelectBox<>(skin);
         numberOfPlayersBox.setItems("2", "3", "4");
+        mapPlayer1Label = new Label("Your Map ->", skin);
+        mapPlayer2Label = new Label("Player1 Map ->", skin);
+        mapPlayer3Label = new Label("Player2 Map ->", skin);
+        mapPlayer4Label = new Label("Player3 Map ->", skin);
         mapPlayer1Box = new SelectBox<>(skin);
         mapPlayer1Box.setItems("1", "2", "3", "4");
         mapPlayer2Box = new SelectBox<>(skin);
@@ -70,19 +80,34 @@ public class PreGameMenu implements Screen {
         username3Field.setVisible(false);
         mapPlayer3Box.setVisible(false);
         mapPlayer4Box.setVisible(false);
+        mapPlayer3Label.setVisible(false);
+        mapPlayer4Label.setVisible(false);
+
+        titleLabel.setColor(Color.BLACK);
+        numberOfPlayersLabel.setColor(Color.BLACK);
+        mapPlayer1Label.setColor(Color.BLACK);
+        mapPlayer2Label.setColor(Color.BLACK);
+        mapPlayer3Label.setColor(Color.BLACK);
+        mapPlayer4Label.setColor(Color.BLACK);
 
         table.add(titleLabel);
         table.row().pad(15);
-        table.add(numberOfPlayersBox).width(300);
+        table.add(numberOfPlayersLabel).width(200);
+        table.add(numberOfPlayersBox).width(100);
+        table.row().pad(15);
+        table.add(mapPlayer1Label).width(200);
         table.add(mapPlayer1Box).width(100);
         table.row().pad(15);
         table.add(username1Field).width(300);
+        table.add(mapPlayer2Label).width(200);
         table.add(mapPlayer2Box).width(100);
         table.row().pad(15);
         table.add(username2Field).width(300);
+        table.add(mapPlayer3Label).width(200);
         table.add(mapPlayer3Box).width(100);
         table.row().pad(15);
         table.add(username3Field).width(300);
+        table.add(mapPlayer4Label).width(200);
         table.add(mapPlayer4Box).width(100);
         table.row().pad(15);
         table.add(searchButton);
@@ -113,6 +138,9 @@ public class PreGameMenu implements Screen {
                     mapPlayer2Box.setVisible(true);
                     mapPlayer3Box.setVisible(false);
                     mapPlayer4Box.setVisible(false);
+                    mapPlayer2Label.setVisible(true);
+                    mapPlayer3Label.setVisible(false);
+                    mapPlayer4Label.setVisible(false);
                 } else if (numberOfPlayersBox.getSelected().equals("3")) {
                     username1Field.setVisible(true);
                     username2Field.setVisible(true);
@@ -120,6 +148,9 @@ public class PreGameMenu implements Screen {
                     mapPlayer2Box.setVisible(true);
                     mapPlayer3Box.setVisible(true);
                     mapPlayer4Box.setVisible(false);
+                    mapPlayer2Label.setVisible(true);
+                    mapPlayer3Label.setVisible(true);
+                    mapPlayer4Label.setVisible(false);
                 } else if (numberOfPlayersBox.getSelected().equals("4")) {
                     username1Field.setVisible(true);
                     username2Field.setVisible(true);
@@ -127,6 +158,9 @@ public class PreGameMenu implements Screen {
                     mapPlayer2Box.setVisible(true);
                     mapPlayer3Box.setVisible(true);
                     mapPlayer4Box.setVisible(true);
+                    mapPlayer2Label.setVisible(true);
+                    mapPlayer3Label.setVisible(true);
+                    mapPlayer4Label.setVisible(true);
                 }
             }
         });
@@ -204,10 +238,9 @@ public class PreGameMenu implements Screen {
                     Integer.parseInt(mapPlayer4Box.getSelected()));
 
                 if (result) {
-                    printResult("Stating New Game");
-//                    Main.getMain().setScreen(new
-//                        GameMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json",
-//                        Skin.class)));
+                    Main.getMain().setScreen(new
+                        MainMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json",
+                        Skin.class)));
                 }
             }
         });

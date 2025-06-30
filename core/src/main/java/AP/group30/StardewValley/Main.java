@@ -13,8 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public class Main extends Game {
     private static Main main;
     public static SpriteBatch batch;
-    AssetDescriptor<Texture> background = new AssetDescriptor<>("menu assets/loading screen.png", Texture.class);
-    AssetDescriptor<Skin> menuSkin = new AssetDescriptor<>("skin/pixthulhu-ui.json", Skin.class);
+    private static final AssetDescriptor<Texture> background = new AssetDescriptor<>("menu assets/loading screen.png", Texture.class);
+    private static final AssetDescriptor<Skin> menuSkin = new AssetDescriptor<>("skin/pixthulhu-ui.json", Skin.class);
 
 
     @Override
@@ -26,5 +26,11 @@ public class Main extends Game {
 
     public static Main getMain() {
         return main;
+    }
+    public static AssetDescriptor<Texture> getBackground() {
+        return background;
+    }
+    public static AssetDescriptor<Skin> getMenuSkin() {
+        return menuSkin;
     }
 }

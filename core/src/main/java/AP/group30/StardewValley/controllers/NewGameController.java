@@ -48,6 +48,11 @@ public class NewGameController {
         players.add(currentPlayer);
 
         if (numberOfPlayers >= 2) {
+            if (username1.equals(App.getCurrentUser().getUsername())) {
+                PreGameMenu.printResult("You Can't Choose Yourself!");
+                return false;
+            }
+
             if (username1.equals("username 1")) {
                 PreGameMenu.printResult("Please enter username 1");
                 return false;
@@ -58,6 +63,7 @@ public class NewGameController {
                 PreGameMenu.printResult("Invalid User1");
                 return false;
             }
+
             if (user1.isInGame()) {
                 PreGameMenu.printResult("User1 already in Game");
                 return false;
@@ -71,6 +77,16 @@ public class NewGameController {
         }
 
         if (numberOfPlayers >= 3) {
+            if (username2.equals(App.getCurrentUser().getUsername())) {
+                PreGameMenu.printResult("You Can't Choose Yourself!");
+                return false;
+            }
+
+            if (username2.equals(username1)) {
+                PreGameMenu.printResult("Please enter another username 2");
+                return false;
+            }
+
             if (username2.equals("username 2")) {
                 PreGameMenu.printResult("Please enter username 2");
                 return false;
@@ -94,6 +110,21 @@ public class NewGameController {
         }
 
         if (numberOfPlayers >= 4) {
+            if (username3.equals(App.getCurrentUser().getUsername())) {
+                PreGameMenu.printResult("You Can't Choose Yourself!");
+                return false;
+            }
+
+            if (username3.equals(username1)) {
+                PreGameMenu.printResult("Please enter another username 3");
+                return false;
+            }
+
+            if (username3.equals(username2)) {
+                PreGameMenu.printResult("Please enter another username 3");
+                return false;
+            }
+
             if (username3.equals("username 3")) {
                 PreGameMenu.printResult("Please enter username 3");
                 return false;

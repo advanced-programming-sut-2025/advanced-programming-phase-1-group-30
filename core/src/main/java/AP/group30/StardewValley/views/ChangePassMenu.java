@@ -20,13 +20,13 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 public class ChangePassMenu implements Screen {
     private Stage stage;
     private final Table table;
+    private final Label titleLabel;
     private final TextField usernameField;
     private final Label questionLabel;
     private final TextField answerField;
     private final TextButton verifyButton;
     private final TextButton changePassButton;
     private static Label errorLabel;
-    private final Label titleLabel;
     private final TextField passField;
     private final TextField confirmPassField;
 
@@ -61,6 +61,9 @@ public class ChangePassMenu implements Screen {
 
         errorLabel.setColor(Color.RED);
         errorLabel.setVisible(false);
+
+        titleLabel.setColor(Color.BLACK);
+        questionLabel.setColor(Color.BLACK);
 
         table.add(titleLabel);
         table.row().pad(15);
