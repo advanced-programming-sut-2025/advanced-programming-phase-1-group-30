@@ -27,7 +27,7 @@ public class GameMenu implements AppMenu {
             String username2 = matcher.group("username2");
             String username3 = matcher.group("username3");
 
-            NewGameController.NewGame(username1, username2, username3, scanner);
+            //NewGameController.NewGame(username1, username2, username3, scanner);
             return;
         }
         matcher = GameMenuCommands.LOAD_GAME.regexMatcher(command);

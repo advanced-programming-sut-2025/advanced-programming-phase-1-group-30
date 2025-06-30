@@ -5,6 +5,7 @@ import AP.group30.StardewValley.controllers.LoginMenuController;
 import AP.group30.StardewValley.models.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -19,12 +20,13 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 public class LoginMenu implements Screen {
     private Stage stage;
     private final Table table;
+    private final Label titleLabel;
     private final TextField usernameField;
     private final TextField passField;
     private final TextButton loginButton;
+    private final TextButton gotoRegisterMenuButton;
     private final TextButton forgotPassButton;
     private static Label errorLabel;
-    private final Label titleLabel;
     private final CheckBox stayLoggedInBox;
 
     public LoginMenu(Skin skin) {
@@ -34,6 +36,7 @@ public class LoginMenu implements Screen {
         passField.setPasswordCharacter('*');
         titleLabel = new Label("Login Menu", skin);
         loginButton = new TextButton("Login", skin);
+        gotoRegisterMenuButton = new TextButton("Goto Register Menu", skin);
         forgotPassButton = new TextButton("Forgot My Password", skin);
         errorLabel = new Label("", skin);
         stayLoggedInBox = new CheckBox("Stay Logged in", skin);
@@ -53,6 +56,8 @@ public class LoginMenu implements Screen {
         errorLabel.setColor(Color.RED);
         errorLabel.setVisible(false);
 
+        titleLabel.setColor(Color.BLACK);
+
         table.add(titleLabel);
         table.row().pad(15);
         table.add(usernameField).width(300);
@@ -63,7 +68,9 @@ public class LoginMenu implements Screen {
         table.row().pad(15);
         table.add(forgotPassButton);
         table.row().pad(15);
-        table.add(stayLoggedInBox).width(300);
+        table.add(gotoRegisterMenuButton);
+        table.row().pad(15);
+        table.add(stayLoggedInBox);
         table.row().pad(15);
         table.add(errorLabel);
 
@@ -75,9 +82,6 @@ public class LoginMenu implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
         Gdx.gl.glClearColor(0, 0, 0, 1);
-
-        int width = Gdx.graphics.getWidth();
-        int height = Gdx.graphics.getHeight();
 
         Main.batch.begin();
         Main.batch.draw(GameAssetManager.assetManager.get("menu assets/loading screen.png", Texture.class),
@@ -138,6 +142,13 @@ public class LoginMenu implements Screen {
                             MainMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json",
                             Skin.class)));
                 }
+            }
+        });
+
+        gotoRegisterMenuButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Main.getMain().setScreen(new LoadingScreen(new RegisterMenu(), Main.getBackground(), Main.getMenuSkin()));
             }
         });
 

@@ -6,6 +6,7 @@ import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -36,6 +37,8 @@ public class MainMenu implements Screen {
         Gdx.input.setInputProcessor(stage);
         table.setFillParent(true);
 
+        titleLabel.setColor(Color.BLACK);
+
         table.add(titleLabel);
         table.row().pad(15);
         table.add(startGameButton);
@@ -60,14 +63,14 @@ public class MainMenu implements Screen {
         startGameButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-//                Main.getMain().setScreen(new GameMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
+                Main.getMain().setScreen(new PreGameMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
             }
         });
 
         profileButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-//                Main.getMain().setScreen(new ProfileMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
+                Main.getMain().setScreen(new ProfileMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
             }
         });
 

@@ -1,47 +1,26 @@
 package AP.group30.StardewValley.controllers;
 
-import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Users.User;
-import AP.group30.StardewValley.views.MainMenu;
-import AP.group30.StardewValley.views.RegisterMenu;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import AP.group30.StardewValley.views.ProfileMenu;
 
 import java.util.regex.Pattern;
 
 public class ProfileMenuController {
-    public static void checkButton(TextButton button, TextButton backButton, TextButton changePassButton,
-                                   Label errorPassword, Label errorLabel, TextField passField, TextField oldPass,
-                                   TextField confirmPassField, TextField usernameField, TextField emailField,
-                                   TextField nicknameField) {
-        if(backButton.isPressed()){
-            Main.getMain().setScreen(new MainMenu(new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"))));
-            return;
-        }
+    public static void changeInfo(String username, String email, String nickname) {
+        if(!username.equals(App.getCurrentUser().getUsername()))
+            ProfileMenu.printResultInfo(ChangeUsername(username));
+        if(!email.equals(App.getCurrentUser().getEmail()))
+            ProfileMenu.printResultInfo(ChangeEmail(email));
+        if(!nickname.equals(App.getCurrentUser().getNickname()))
+            ProfileMenu.printResultInfo(ChangeNickname(nickname));
+    }
 
-        if(changePassButton.isPressed()){
-            errorPassword.setText(ChangePassword(passField.getText(), oldPass.getText()));
-            errorPassword.setVisible(true);
-        }
-
-        if(button.isPressed()){
-            if(!usernameField.getText().equals(App.getCurrentUser().getUsername())){
-                errorLabel.setText(ChangeUsername(usernameField.getText()));
-                errorLabel.setVisible(true);
-            }
-            if(!emailField.getText().equals(App.getCurrentUser().getEmail())){
-                errorLabel.setText(ChangeEmail(emailField.getText()));
-                errorLabel.setVisible(true);
-            }
-            if(!nicknameField.getText().equals(App.getCurrentUser().getNickname())){
-                errorLabel.setText(ChangeNickname(nicknameField.getText()));
-                errorLabel.setVisible(true);
-            }
-        }
+    public static void changePass(String oldPass, String newPass, String confirmNewPass) {
+        if(newPass.equals(confirmNewPass))
+            ProfileMenu.printResultPassword(ChangePassword(newPass, oldPass));
+        else
+            ProfileMenu.printResultPassword("Confirm Password is incorrect");
     }
 
     public static String ChangeUsername(String username) {
@@ -54,7 +33,7 @@ public class ProfileMenuController {
             return "Username is invalid!";
         }
         App.getCurrentUser().setUsername(username);
-        return "Changed username to " + username;
+        return "";
     }
 
     public static String ChangeNickname(String nickname) {
@@ -62,7 +41,7 @@ public class ProfileMenuController {
             return "Pick a different nickname";
         }
         App.getCurrentUser().setNickname(nickname);
-        return "Changed nickname to " + nickname;
+        return "";
     }
 
     public static String ChangeEmail(String email) {
@@ -75,7 +54,7 @@ public class ProfileMenuController {
             return "Email is invalid!";
         }
         App.getCurrentUser().setEmail(email);
-        return "Changed email to " + email;
+        return "";
     }
 
     public static String ChangePassword(String password, String oldPassword) {
@@ -109,7 +88,7 @@ public class ProfileMenuController {
             return "Password has to have at least one special character!";
         }
         App.getCurrentUser().setPassword(password);
-        return "Password changed successfully!";
+        return "";
     }
 
 
