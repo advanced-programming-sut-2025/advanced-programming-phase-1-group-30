@@ -45,7 +45,7 @@ public class RegisterMenu implements Screen {
         confirmPassField.setPasswordCharacter('*');
         titleLabel = new Label("Register Menu", skin);
         signupButton = new TextButton("Sign Up", skin);
-        goToLoginButton = new TextButton("Goto Login Menu", skin);
+        goToLoginButton = new TextButton("Go to Login Menu", skin);
         emailField = new TextField("email", skin);
         nicknameField = new TextField("nickname", skin);
         genderBox = new SelectBox<>(skin);
@@ -257,7 +257,7 @@ public class RegisterMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 int result = RegisterMenuController.register(usernameField.getText(), passField.getText(),
-                        confirmPassField.getText(), nicknameField.getText(), emailField.getText(),
+                        confirmPassField.getText(), emailField.getText(), nicknameField.getText(),
                         genderBox.getSelected(), answerField.getText(), questionBox.getSelected());
                 if (result == 1) {
                     Main.getMain().setScreen(new

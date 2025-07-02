@@ -1,5 +1,6 @@
 package AP.group30.StardewValley;
 
+import AP.group30.StardewValley.views.GameScreen;
 import AP.group30.StardewValley.views.LoadingScreen;
 
 import AP.group30.StardewValley.views.RegisterMenu;
@@ -21,7 +22,7 @@ public class Main extends Game {
     public void create() {
         main = this;
         batch = new SpriteBatch();
-        main.setScreen(new LoadingScreen(new RegisterMenu(), background, menuSkin));
+        main.setScreen(new LoadingScreen(new GameScreen(), background, menuSkin));
     }
 
     public static Main getMain() {
