@@ -36,7 +36,7 @@ public class LoginMenu implements Screen {
         passField.setPasswordCharacter('*');
         titleLabel = new Label("Login Menu", skin);
         loginButton = new TextButton("Login", skin);
-        gotoRegisterMenuButton = new TextButton("Goto Register Menu", skin);
+        gotoRegisterMenuButton = new TextButton("Go to Register Menu", skin);
         forgotPassButton = new TextButton("Forgot My Password", skin);
         errorLabel = new Label("", skin);
         stayLoggedInBox = new CheckBox("Stay Logged in", skin);
