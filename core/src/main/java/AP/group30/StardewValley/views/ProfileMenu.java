@@ -44,6 +44,7 @@ public class ProfileMenu implements Screen {
     private final Label currentGenderLabel;
     private final Label currentMoneyLabel;
     private final Label currentGamesPlayedLabel;
+    private Texture background;
 
     public ProfileMenu(Skin skin) {
         table = new Table(skin);
@@ -96,6 +97,11 @@ public class ProfileMenu implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         stage.addActor(infoImage);
+        if (LoadingScreen.time.getHour() <= 11) {
+            background = GameAssetManager.assetManager.get(GameAssetManager.background);
+        } else {
+            background = GameAssetManager.assetManager.get(GameAssetManager.nightBackground);
+        }
 
         infoTable.setFillParent(true);
         tablePassword.setFillParent(true);
@@ -157,7 +163,7 @@ public class ProfileMenu implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
 
         Main.batch.begin();
-        Main.batch.draw(GameAssetManager.assetManager.get("menu assets/loading screen.png", Texture.class), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        Main.batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Main.batch.end();
 
         newPassField.addListener(new ClickListener() {

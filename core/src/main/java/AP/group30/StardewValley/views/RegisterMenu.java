@@ -5,6 +5,7 @@ import AP.group30.StardewValley.controllers.RegisterMenuController;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Users.RegisterQuestions;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -34,9 +35,9 @@ public class RegisterMenu implements Screen {
     private final SelectBox<String> genderBox;
     private final CheckBox randomPassBox;
     private boolean randomPassIsChecked = false;
+    Texture background;
 
-    public RegisterMenu() {
-        Skin skin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
+    public RegisterMenu(Skin skin) {
         table = new Table(skin);
         usernameField = new TextField("username", skin);
         passField = new TextField("password", skin);
@@ -67,6 +68,11 @@ public class RegisterMenu implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         table.setFillParent(true);
+        if (LoadingScreen.time.getHour() <= 11) {
+            background = GameAssetManager.assetManager.get(GameAssetManager.background);
+        } else {
+            background = GameAssetManager.assetManager.get(GameAssetManager.nightBackground);
+        }
 
         errorLabel.setColor(Color.RED);
         errorLabel.setVisible(false);
@@ -109,7 +115,7 @@ public class RegisterMenu implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
 
         Main.batch.begin();
-        Main.batch.draw(GameAssetManager.assetManager.get("menu assets/loading screen.png", Texture.class), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        Main.batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Main.batch.end();
 
         passField.addListener(new ClickListener() {
@@ -275,6 +281,11 @@ public class RegisterMenu implements Screen {
                     Skin.class)));
             }
         });
+
+        // TODO maintainer code block!
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            Main.getMain().setScreen(new LoadingScreen(new GameScreen()));
+        }
 
         stage.act(delta);
         stage.draw();

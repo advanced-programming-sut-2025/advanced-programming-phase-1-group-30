@@ -15,11 +15,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import java.time.LocalTime;
+
 public class LoadingScreen implements Screen {
     private final Screen nextScreen;
     private final AssetDescriptor<?>[] assetsToLoad;
+    public static LocalTime time = LocalTime.now();
+    private Texture background;
 
-    private Texture background = new Texture(Gdx.files.internal("menu assets/loading screen.png"));
     private Texture logo = new Texture(Gdx.files.internal("menu assets/PC Computer - Stardew Valley - Logo No Background.png"));
     private Stage stage;
     private Skin skin;
@@ -36,6 +39,11 @@ public class LoadingScreen implements Screen {
     public void show() {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
+        if (time.getHour() <= 11) {
+            background = new Texture(Gdx.files.internal("menu assets/loading screen.png"));
+        } else {
+            background = new Texture(Gdx.files.internal("menu assets/sebastianRideTiles.png"));
+        }
 
         // Load UI skin first to show progress
         if (!GameAssetManager.assetManager.isLoaded("skin/pixthulhu-ui.json")) {
