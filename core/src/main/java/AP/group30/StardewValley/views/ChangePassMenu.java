@@ -29,6 +29,7 @@ public class ChangePassMenu implements Screen {
     private static Label errorLabel;
     private final TextField passField;
     private final TextField confirmPassField;
+    private Texture background;
 
     public ChangePassMenu(Skin skin) {
         table = new Table(skin);
@@ -61,6 +62,11 @@ public class ChangePassMenu implements Screen {
 
         errorLabel.setColor(Color.RED);
         errorLabel.setVisible(false);
+        if (LoadingScreen.time.getHour() <= 11) {
+            background = GameAssetManager.assetManager.get(GameAssetManager.background);
+        } else {
+            background = GameAssetManager.assetManager.get(GameAssetManager.nightBackground);
+        }
 
         titleLabel.setColor(Color.BLACK);
         questionLabel.setColor(Color.BLACK);
@@ -95,7 +101,7 @@ public class ChangePassMenu implements Screen {
         final boolean[] userVerified = {false};
 
         Main.batch.begin();
-        Main.batch.draw(GameAssetManager.assetManager.get("menu assets/loading screen.png", Texture.class),
+        Main.batch.draw(background,
             0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Main.batch.end();
 

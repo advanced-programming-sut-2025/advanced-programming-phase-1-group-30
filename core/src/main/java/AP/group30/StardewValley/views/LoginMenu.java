@@ -28,6 +28,7 @@ public class LoginMenu implements Screen {
     private final TextButton forgotPassButton;
     private static Label errorLabel;
     private final CheckBox stayLoggedInBox;
+    private Texture background;
 
     public LoginMenu(Skin skin) {
         table = new Table(skin);
@@ -52,6 +53,11 @@ public class LoginMenu implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
         table.setFillParent(true);
+        if (LoadingScreen.time.getHour() <= 11) {
+            background = GameAssetManager.assetManager.get(GameAssetManager.background);
+        } else {
+            background = GameAssetManager.assetManager.get(GameAssetManager.nightBackground);
+        }
 
         errorLabel.setColor(Color.RED);
         errorLabel.setVisible(false);
@@ -84,7 +90,7 @@ public class LoginMenu implements Screen {
         Gdx.gl.glClearColor(0, 0, 0, 1);
 
         Main.batch.begin();
-        Main.batch.draw(GameAssetManager.assetManager.get("menu assets/loading screen.png", Texture.class),
+        Main.batch.draw(background,
                 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Main.batch.end();
 
@@ -148,7 +154,7 @@ public class LoginMenu implements Screen {
         gotoRegisterMenuButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Main.getMain().setScreen(new LoadingScreen(new RegisterMenu(), Main.getBackground(), Main.getMenuSkin()));
+                Main.getMain().setScreen(new RegisterMenu(GameAssetManager.assetManager.get(GameAssetManager.menuSkin)));
             }
         });
 

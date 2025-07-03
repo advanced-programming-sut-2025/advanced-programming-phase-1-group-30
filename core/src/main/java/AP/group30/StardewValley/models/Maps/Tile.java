@@ -117,10 +117,10 @@ public class Tile {
         if (tile.getType().equals(TileTypes.DIRT)) {
             Random random = new Random();
             int randomItem = random.nextInt(75);
-            if (randomItem <= 35 || 55 <= randomItem) {
+            if (randomItem <= 44 || 47 <= randomItem) {
                 // Emptygit
             }
-            else if (randomItem <= 49) {
+            else if (randomItem <= 45) {
                 tile.setItem(new Tree(1, TreeType.getRandomTreeType(randomItem - 36)));
                 tile.changeWalkable();
             }
