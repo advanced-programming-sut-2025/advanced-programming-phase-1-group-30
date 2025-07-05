@@ -5,6 +5,7 @@ import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Maps.Tile;
+import AP.group30.StardewValley.models.Maps.TileTexture;
 import AP.group30.StardewValley.models.Maps.TileTypes;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.models.Users.RegisterQuestions;
@@ -22,6 +23,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
+import java.util.Random;
+
 public class GameScreen implements Screen {
     private SpriteBatch batch;
     private OrthographicCamera camera;
@@ -30,13 +33,15 @@ public class GameScreen implements Screen {
     private Texture house;
     private TextureRegion playerRegion;
 
-    private Map map;
-    private Tile[][] tiles;
+    private final Map map;
+    private final Tile[][] tiles;
     private Tile currentTile;
+
+    private int[][] grassMap;
+    private final Random random = new Random();
 
     private float x;
     private float y;
-    private float speed = 150f * 10;
     private boolean facingLeft = false;
 
     public GameScreen() {
@@ -59,6 +64,7 @@ public class GameScreen implements Screen {
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         Gdx.input.setInputProcessor(null);
+        generateGrassMap();
     }
 
     @Override
@@ -74,7 +80,9 @@ public class GameScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
+        renderBackground();
         renderMap();
+        renderWallsAroundMap();
         renderItems();
         renderHut();
         renderPlayer();
@@ -83,8 +91,64 @@ public class GameScreen implements Screen {
         currentTile = getTileUnderPlayer(x, y);
     }
 
+    private void generateGrassMap() {
+        int w = tiles.length + 100;
+        int h = tiles[0].length + 100;
+        grassMap = new int[w][h];
+
+        for (int i = 0; i < w; i++) {
+            for (int j = 0; j < h; j++) {
+                grassMap[i][j] = random.nextInt(4);
+            }
+        }
+    }
+
+    private void renderBackground() {
+        int tileSize = 32;
+        int offset = 50;
+
+        int minX = (int)(camera.position.x - camera.viewportWidth / 2) / tileSize - 1;
+        int maxX = (int)(camera.position.x + camera.viewportWidth / 2) / tileSize + 1;
+        int minY = (int)(camera.position.y - camera.viewportHeight / 2) / tileSize - 1;
+        int maxY = (int)(camera.position.y + camera.viewportHeight / 2) / tileSize + 1;
+
+        for (int i = minX; i < maxX; i++) {
+            for (int j = minY; j < maxY; j++) {
+                int ix = i + offset;
+                int jy = j + offset;
+
+                Texture tex = switch (grassMap[ix][jy]) {
+                    case 0 -> TileTexture.OUTDOOR_GRASS1.getTexture();
+                    case 1 -> TileTexture.OUTDOOR_GRASS2.getTexture();
+                    case 2 -> TileTexture.OUTDOOR_GRASS3.getTexture();
+                    default -> TileTexture.OUTDOOR_GRASS4.getTexture();
+                };
+                batch.draw(tex, i * tileSize, j * tileSize, tileSize, tileSize);
+            }
+        }
+    }
+
     private void renderPlayer() {
         batch.draw(playerRegion, x, y);
+    }
+
+    private void renderWallsAroundMap() {
+        int tileSize = 32;
+        int mapWidth = tiles.length;
+        int mapHeight = tiles[0].length;
+
+        for (int i = 0; i < mapWidth; i++) {
+            batch.draw(TileTexture.DOWN_WALL.getTexture(), i * tileSize, 0, tileSize, tileSize);
+            batch.draw(TileTexture.UP_WALL.getTexture(), i * tileSize, (mapHeight + 1) * tileSize, tileSize, (tileSize * 3));
+        }
+
+        for (int j = 1; j < mapHeight + 3; j++) {
+            batch.draw(TileTexture.LEFT_WALL.getTexture(), -1 * tileSize, j * tileSize, tileSize, tileSize);
+            batch.draw(TileTexture.RIGHT_WALL.getTexture(), mapWidth * tileSize, j * tileSize, tileSize, tileSize);
+        }
+
+        batch.draw(TileTexture.CORNER1_WALL.getTexture(), -1 * tileSize, 63 * tileSize, tileSize, tileSize);
+        batch.draw(TileTexture.CORNER1_WALL.getTexture(), 80 * tileSize, 63 * tileSize, tileSize, tileSize);
     }
 
     private void renderHut() {
@@ -123,9 +187,8 @@ public class GameScreen implements Screen {
 
     private void renderMap() {
         Tile[][] tiles = map.getTiles();
-        for (int i = 0; i < tiles.length; i++) {
-            for (int j = 0; j < tiles[i].length; j++) {
-                Tile tile = tiles[i][j];
+        for (Tile[] value : tiles) {
+            for (Tile tile : value) {
                 if (tile != null) tile.render(batch);
             }
         }
@@ -133,12 +196,10 @@ public class GameScreen implements Screen {
 
     private void renderItems() {
         Tile[][] tiles = map.getTiles();
-        for (int i = 0; i < tiles.length; i++) {
-            for (int j = 0; j < tiles[i].length; j++) {
-                Tile tile = tiles[i][j];
+        for (Tile[] value : tiles) {
+            for (Tile tile : value) {
                 if (tile.getItem() != null)
-                    tile.getItem().renderItem(batch, tile.getX() * 32, (60 - tile.getY()) * 32, 32,
-                        32);
+                    tile.getItem().renderItem(batch, tile.getX() * 32, (60 - tile.getY()) * 32);
             }
         }
     }
@@ -162,6 +223,7 @@ public class GameScreen implements Screen {
     private void handleInput(float delta) {
         float nextX = x;
         float nextY = y;
+        float speed = 150f;
         float moveAmount = speed * delta;
         float changeX = 0f;
         float changeY = 0f;
@@ -205,9 +267,7 @@ public class GameScreen implements Screen {
             tileY >= 0 && tileY < map.getTiles()[0].length) {
 
             Tile destinationTile = map.getTiles()[tileX][tileY];
-            if (destinationTile.isWalkable()) {
-                return true;
-            }
+            return destinationTile.isWalkable();
         }
 
         return false;

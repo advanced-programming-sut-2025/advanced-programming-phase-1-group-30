@@ -80,7 +80,7 @@ public class Item implements ItemsInteface {
         return null;
     }
 
-    public void renderItem(SpriteBatch batch, float x, float y, float tileWidth, float tileHeight) {
-        batch.draw(texture, x, y, tileWidth, tileHeight);
+    public void renderItem(SpriteBatch batch, float x, float y) {
+        batch.draw(texture, x, y);
     }
 }
