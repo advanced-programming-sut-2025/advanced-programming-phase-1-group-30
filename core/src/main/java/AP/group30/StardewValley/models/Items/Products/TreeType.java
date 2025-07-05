@@ -8,21 +8,22 @@ import AP.group30.StardewValley.models.Items.ItemsInteface;
 import com.badlogic.gdx.graphics.Texture;
 
 public enum TreeType implements ItemsInteface {
-    APRICOT_TREE("apricot tree", ForagingSeedType.APRICOT_SAPLING, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.APRICOT, ItemTexture.WOOD.getTexture()),
-    CHERRY_TREE("cherry tree", ForagingSeedType.CHERRY_SAPLING, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.CHERRY, ItemTexture.WOOD.getTexture()),
-    BANANA_TREE("banana tree", ForagingSeedType.BANANA_SAPLING, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.BANANA, ItemTexture.WOOD.getTexture()),
-    MANGO_TREE("mango tree", ForagingSeedType.MANGO_SAPLING, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.MANGO, ItemTexture.WOOD.getTexture()),
-    ORANGE_TREE("orange tree", ForagingSeedType.ORANGE_SAPLING, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.ORANGE, ItemTexture.WOOD.getTexture()),
-    PEACH_TREE("peach tree", ForagingSeedType.PEACH_SAPLING, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.PEACH, ItemTexture.WOOD.getTexture()),
-    APPLE_TREE("apple tree", ForagingSeedType.APPLE_SAPLING, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.APPLE, ItemTexture.WOOD.getTexture()),
-    POMEGRANATE_TREE("pomegranate tree", ForagingSeedType.POMEGRANATE_SAPLING, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.POMEGRANATE, ItemTexture.WOOD.getTexture()),
-    OAK_TREE("oak tree", ForagingSeedType.OAK_TREE, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.OAK_RESIN, ItemTexture.WOOD.getTexture()),
-    MAPLE_TREE("maple tree", ForagingSeedType.MAPLE_SEEDS, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.MAPLE_SYRUP, ItemTexture.WOOD.getTexture()),
-    PINE_TREE("pine tree", ForagingSeedType.PINE_CONES, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.PINE_TAR, ItemTexture.WOOD.getTexture()),
-    MAHOGANY_TREE("mahogany tree", ForagingSeedType.MAHOGANY_SEEDS, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.SAP, ItemTexture.WOOD.getTexture()),
-    MUSHROOM_TREE("mushroom tree", ForagingSeedType.MUSHROOM_TREE_SEEDS, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.COMMON_MUSHROOM, ItemTexture.WOOD.getTexture()),
-    MYSTIC_TREE("mystic tree", ForagingSeedType.MYSTIC_TREE_SEEDS, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.MYSTIC_SYRUP, ItemTexture.WOOD.getTexture()),
-    STUMP("stump", null, null, 0, null, ItemTexture.WOOD.getTexture());
+    APRICOT_TREE("apricot tree", ForagingSeedType.APRICOT_SAPLING, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.APRICOT, ItemTexture.APRICOT_TREE.getTexture()),
+    CHERRY_TREE("cherry tree", ForagingSeedType.CHERRY_SAPLING, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.CHERRY, ItemTexture.CHERRY_TREE.getTexture()),
+    BANANA_TREE("banana tree", ForagingSeedType.BANANA_SAPLING, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.BANANA, ItemTexture.BANANA_TREE.getTexture()),
+    MANGO_TREE("mango tree", ForagingSeedType.MANGO_SAPLING, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.MANGO, ItemTexture.MANGO_TREE.getTexture()),
+    ORANGE_TREE("orange tree", ForagingSeedType.ORANGE_SAPLING, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.ORANGE, ItemTexture.ORANGE_TREE.getTexture()),
+    PEACH_TREE("peach tree", ForagingSeedType.PEACH_SAPLING, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.PEACH, ItemTexture.PEACH_TREE.getTexture()),
+    APPLE_TREE("apple tree", ForagingSeedType.APPLE_SAPLING, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.APPLE, ItemTexture.APPLE_TREE.getTexture()),
+    POMEGRANATE_TREE("pomegranate tree", ForagingSeedType.POMEGRANATE_SAPLING, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.POMEGRANATE, ItemTexture.POMEGRANATE_TREE.getTexture()),
+    OAK_TREE("oak tree", ForagingSeedType.OAK_TREE, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.OAK_RESIN, ItemTexture.OAK_TREE.getTexture()),
+    MAPLE_TREE("maple tree", ForagingSeedType.MAPLE_SEEDS, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.MAPLE_SYRUP, ItemTexture.MAPLE_TREE.getTexture()),
+    PINE_TREE("pine tree", ForagingSeedType.PINE_CONES, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.PINE_TAR, ItemTexture.PINE_TREE.getTexture()),
+    MAHOGANY_TREE("mahogany tree", ForagingSeedType.MAHOGANY_SEEDS, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.SAP, ItemTexture.MAHOGANY_TREE.getTexture()),
+    MUSHROOM_TREE("mushroom tree", ForagingSeedType.MUSHROOM_TREE_SEEDS, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.COMMON_MUSHROOM, ItemTexture.MUSHROOM_TREE.getTexture()),
+    MYSTIC_TREE("mystic tree", ForagingSeedType.MYSTIC_TREE_SEEDS, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.MYSTIC_SYRUP, ItemTexture.MYSTIC_TREE.getTexture()),
+    WILD_TREE("wild tree", null, null, -1, null, ItemTexture.WILD_TREE.getTexture()),
+    STUMP("stump", null, null, 0, null, ItemTexture.WILD_TREE.getTexture());
 
     private final String name;
 	private final ForagingSeedType source;
@@ -79,8 +80,6 @@ public enum TreeType implements ItemsInteface {
         if (id == 10) return PINE_TREE;
         if (id == 11) return MAHOGANY_TREE;
         if (id == 12) return MUSHROOM_TREE;
-        if (id == 13) return MYSTIC_TREE;
-
-        return APRICOT_TREE;
+        else return WILD_TREE;
     }
 }

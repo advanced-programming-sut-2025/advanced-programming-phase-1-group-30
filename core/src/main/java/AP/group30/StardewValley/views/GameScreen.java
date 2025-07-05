@@ -148,7 +148,7 @@ public class GameScreen implements Screen {
         }
 
         batch.draw(TileTexture.CORNER1_WALL.getTexture(), -1 * tileSize, 63 * tileSize, tileSize, tileSize);
-        batch.draw(TileTexture.CORNER1_WALL.getTexture(), 80 * tileSize, 63 * tileSize, tileSize, tileSize);
+        batch.draw(TileTexture.CORNER2_WALL.getTexture(), 80 * tileSize, 63 * tileSize, tileSize, tileSize);
     }
 
     private void renderHut() {
@@ -196,8 +196,9 @@ public class GameScreen implements Screen {
 
     private void renderItems() {
         Tile[][] tiles = map.getTiles();
-        for (Tile[] value : tiles) {
-            for (Tile tile : value) {
+        for (int i = tiles.length - 1; i >= 0; i--) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                Tile tile = tiles[i][j];
                 if (tile.getItem() != null)
                     tile.getItem().renderItem(batch, tile.getX() * 32, (60 - tile.getY()) * 32);
             }
