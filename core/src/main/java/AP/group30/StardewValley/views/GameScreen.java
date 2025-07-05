@@ -2,6 +2,7 @@ package AP.group30.StardewValley.views;
 
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Game;
+import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Maps.Tile;
 import AP.group30.StardewValley.models.Maps.TileTypes;
@@ -74,6 +75,7 @@ public class GameScreen implements Screen {
 
         batch.begin();
         renderMap();
+        renderItems();
         renderHut();
         renderPlayer();
         batch.end();
@@ -125,6 +127,18 @@ public class GameScreen implements Screen {
             for (int j = 0; j < tiles[i].length; j++) {
                 Tile tile = tiles[i][j];
                 if (tile != null) tile.render(batch);
+            }
+        }
+    }
+
+    private void renderItems() {
+        Tile[][] tiles = map.getTiles();
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                Tile tile = tiles[i][j];
+                if (tile.getItem() != null)
+                    tile.getItem().renderItem(batch, tile.getX() * 32, (60 - tile.getY()) * 32, 32,
+                        32);
             }
         }
     }

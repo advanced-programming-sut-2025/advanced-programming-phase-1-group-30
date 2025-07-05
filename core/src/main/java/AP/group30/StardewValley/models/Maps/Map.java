@@ -80,6 +80,7 @@ public class Map {
 
                      // You need to create the right Tile object based on the type
                      mapInstance.tiles[x][y] = Tile.createTileFromType(x, y, tileType, id);
+                     Tile.putItemInTile(mapInstance.tiles[x][y]);
                  }
              }
          } catch (Exception e) {

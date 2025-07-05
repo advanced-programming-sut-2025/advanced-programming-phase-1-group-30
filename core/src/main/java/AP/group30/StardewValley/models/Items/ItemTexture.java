@@ -4,7 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 
 public enum ItemTexture {
-    WOOD(new Texture(Gdx.files.internal("/items/wood.png")));
+    WOOD(new Texture(Gdx.files.internal("item/resource/Wood.png"))),
+    STONE(new Texture(Gdx.files.internal("item/resource/Stone.png"))),;
 
     private final Texture TEXTURE;
 

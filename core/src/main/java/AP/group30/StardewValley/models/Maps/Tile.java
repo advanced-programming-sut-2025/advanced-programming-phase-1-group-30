@@ -128,7 +128,7 @@ public class Tile {
             Random random = new Random();
             int randomItem = random.nextInt(75);
             if (randomItem <= 35 || 55 <= randomItem) {
-                // Emptygit
+                // Empty
             }
             else if (randomItem <= 49) {
                 tile.setItem(new Tree(1, TreeType.getRandomTreeType(randomItem - 36)));

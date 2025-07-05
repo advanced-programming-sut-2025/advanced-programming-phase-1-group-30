@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import AP.group30.StardewValley.models.Items.Products.ShopProducts.ShopProduct;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Item implements ItemsInteface {
     private final String name;
@@ -77,5 +78,9 @@ public class Item implements ItemsInteface {
             if (item.getName().matches(name)) return item;
         }
         return null;
+    }
+
+    public void renderItem(SpriteBatch batch, float x, float y, float tileWidth, float tileHeight) {
+        batch.draw(texture, x, y, tileWidth, tileHeight);
     }
 }
