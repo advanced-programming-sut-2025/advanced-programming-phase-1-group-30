@@ -10,6 +10,7 @@ import AP.group30.StardewValley.models.Commands.GameMenuCommands;
 import AP.group30.StardewValley.models.Items.Gift;
 import AP.group30.StardewValley.models.Items.IndustrialProducts.IndustrialProductType;
 import AP.group30.StardewValley.models.Items.Item;
+import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Items.Products.GiantCrop;
 import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Maps.Tile;
@@ -243,7 +244,7 @@ public class NewGameController {
                         currentPlayer.getAskedMarriage().getBackPack().getItems().remove(weddingRing);
                     } else {
                         weddingRing.setCount(weddingRing.getCount() - 1);
-                        currentPlayer.getBackPack().addItem(new Item(1, "wedding ring", weddingRing.getPrice()));
+                        currentPlayer.getBackPack().addItem(new Item(1, "wedding ring", weddingRing.getPrice(), ItemTexture.WOOD.getTexture()));
                     }
                     currentPlayer.getFriendships().get(currentPlayer.getAskedMarriage()).addXp(0, false, true);
                     currentPlayer.getAskedMarriage().getFriendships().get(currentPlayer).addXp(0, false, true);
@@ -383,7 +384,7 @@ public class NewGameController {
                             } else if(random2 == 2){
                                 gift = npc.getFavoriteGifts().get(2);
                             }
-                            Item gifts = new Item(1,gift,15);
+                            Item gifts = new Item(1,gift,15, ItemTexture.WOOD.getTexture());
                             player.getBackPack().addItem(gifts);
                         }
                     }
@@ -406,7 +407,7 @@ public class NewGameController {
 
                         if (tile.isPlanted() && !tile.getType().equals(TileTypes.GREENHOUSE)) {
                             tile.setPlanted(false);
-                            tile.setItem(new Item(1, "coal", 15));
+                            tile.setItem(new Item(1, "coal", 15, ItemTexture.WOOD.getTexture()));
                             tile.setCrop(null);
                             tile.setType(TileTypes.DIRT);
                         }

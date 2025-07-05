@@ -4,7 +4,7 @@ public class Pickaxe extends Tool{
     private PickaxeType type;
 
     public Pickaxe(int count, PickaxeType type) {
-        super(count, type.getName());
+        super(count, type.getName(), type.getTexture());
         this.type = type;
     }
 

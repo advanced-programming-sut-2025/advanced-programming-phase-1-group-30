@@ -6,6 +6,7 @@ import AP.group30.StardewValley.models.Buildings.*;
 //import AP.group30.StardewValley.models.Commands.Menus;
 import AP.group30.StardewValley.models.Invetory.BackPackType;
 import AP.group30.StardewValley.models.Items.Gift;
+import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Items.Products.*;
 import AP.group30.StardewValley.models.Items.Products.ShopProducts.ShopProduct;
 import AP.group30.StardewValley.models.Items.Item;
@@ -450,8 +451,8 @@ public class GameMenuController {
 
                 if(targetTile.getItem() != null && (targetTile.getItem() instanceof ForagingSeed || targetTile.getItem() instanceof Tree)) {
                     if (targetTile.getItem() instanceof Tree || ((ForagingSeed)targetTile.getItem()).getType().getTreeOrCrop() == 1) {
-                        Item wood = new Item(12, "wood", 10);
-                        Item sap = new Item(2, "sap", 10);
+                        Item wood = new Item(12, "wood", 10, ItemTexture.WOOD.getTexture());
+                        Item sap = new Item(2, "sap", 10, ItemTexture.WOOD.getTexture());
 
                         Item newWood = Item.findItemByName(wood.getName(), player.getBackPack().getItems());
                         Item newSap = Item.findItemByName(sap.getName(), player.getBackPack().getItems());
@@ -493,7 +494,7 @@ public class GameMenuController {
                         targetTile.setItem(null);
                         GameMenu.printResult("You chop down the tree and collect 12 wood and 2 sap.");
                         player.increaseForaging(10);
-                    } else if (targetTile.getItem().equals(new Item(1, "Wood", 10))) {
+                    } else if (targetTile.getItem().equals(new Item(1, "Wood", 10, ItemTexture.WOOD.getTexture()))) {
                         targetTile.setItem(null);
                         GameMenu.printResult("You clear the branch from the ground.");
                     } else {
@@ -2038,7 +2039,7 @@ public class GameMenuController {
             if (amount == item.getCount()) player.getBuilding().removeItem(item);
             else item.changeCount(-1  * amount);
 
-            player.getBackPack().addItem(new Item(amount, name, item.getCost()));
+            player.getBackPack().addItem(new Item(amount, name, item.getCost(), ItemTexture.WOOD.getTexture()));
             item.sold(amount);
             GameMenu.printResult("Item purchased successfully");
             return;
@@ -2086,7 +2087,7 @@ public class GameMenuController {
                 player.setMoney(player.getMoney() - item.getCost() * amount);
             }
 
-            player.getBackPack().addItem(new Item(amount, name, item.getCost()));
+            player.getBackPack().addItem(new Item(amount, name, item.getCost(), ItemTexture.WOOD.getTexture()));
             item.sold(amount);
             GameMenu.printResult("Item purchased successfully");
             return;
@@ -2106,7 +2107,7 @@ public class GameMenuController {
         else item.changeCount(-1  * amount);
 
         player.setMoney(player.getMoney() - item.getCost() * amount);
-        player.getBackPack().addItem(new Item(amount, name, item.getCost()));
+        player.getBackPack().addItem(new Item(amount, name, item.getCost(), ItemTexture.WOOD.getTexture()));
         item.sold(amount);
         GameMenu.printResult("Item purchased successfully");
     }
@@ -2250,7 +2251,7 @@ public class GameMenuController {
             }
         }
         if (x == 0) {
-            otherPlayer.getBackPack().addItem(new Item(amount, item, gift.getPrice()));
+            otherPlayer.getBackPack().addItem(new Item(amount, item, gift.getPrice(), ItemTexture.WOOD.getTexture()));
             GameMenu.printResult("Gift sent to " + username + " successfully!");
         }
         if (otherPlayer.equals(player.getHamsar())) {
@@ -2351,7 +2352,7 @@ public class GameMenuController {
         }
         Item otherBouquet = Item.findItemByName("bouquet", otherPlayer.getBackPack().getItems());
         if (otherBouquet == null) {
-            otherPlayer.getBackPack().addItem(new Item(1, "bouquet", GeneralStoreCosts.BOUQUET.getPrice()));
+            otherPlayer.getBackPack().addItem(new Item(1, "bouquet", GeneralStoreCosts.BOUQUET.getPrice(), ItemTexture.WOOD.getTexture()));
         } else {
             otherBouquet.setCount(otherBouquet.getCount() + 1);
         }
@@ -2683,7 +2684,7 @@ public class GameMenuController {
         Item dst = Item.findItemByName(itemName, to.getBackPack().getItems());
         if (dst == null) {
             // assume constructor: Item(count, name, price)
-            to.getBackPack().getItems().add(new Item(count, itemName, src.getPrice()));
+            to.getBackPack().getItems().add(new Item(count, itemName, src.getPrice(), ItemTexture.WOOD.getTexture()));
         } else {
             dst.setCount(dst.getCount() + count);
         }

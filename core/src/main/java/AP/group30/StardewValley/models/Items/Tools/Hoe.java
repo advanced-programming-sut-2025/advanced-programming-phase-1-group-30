@@ -4,7 +4,7 @@ public class Hoe extends Tool {
     private HoeType type;
 
     public Hoe(int count, HoeType type) {
-        super(count, type.getName());
+        super(count, type.getName(), type.getTexture());
         this.type = type;
     }
 

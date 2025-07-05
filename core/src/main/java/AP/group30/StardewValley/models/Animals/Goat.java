@@ -3,6 +3,7 @@ package AP.group30.StardewValley.models.Animals;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Buildings.RanchCosts;
 import AP.group30.StardewValley.models.Items.Item;
+import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Items.Products.AnimalProductType;
 import AP.group30.StardewValley.models.Items.Tools.MilkPail;
 import AP.group30.StardewValley.models.Players.Player;
@@ -31,7 +32,7 @@ public class Goat extends Animal {
                 qualityAssign(quality);
             } else {
                 if (rand < chance) {
-                    this.bigGoatMilk = new Item(1, "big goat goatMilk", AnimalProductType.GOAT_BIG_MILK.getPrice());
+                    this.bigGoatMilk = new Item(1, "big goat goatMilk", AnimalProductType.GOAT_BIG_MILK.getPrice(), ItemTexture.WOOD.getTexture());
                     if (quality >= 0 && quality < 0.5) {
                         this.bigGoatMilk.setQuality("regular");
                         this.bigGoatMilk.setCof(1);
@@ -55,7 +56,7 @@ public class Goat extends Animal {
     }
 
     private void qualityAssign(double quality) {
-        this.goatMilk = new Item(1, "goat goatMilk", AnimalProductType.GOAT_MILK.getPrice());
+        this.goatMilk = new Item(1, "goat goatMilk", AnimalProductType.GOAT_MILK.getPrice(), ItemTexture.WOOD.getTexture());
         if (quality >= 0 && quality < 0.5) {
             this.goatMilk.setQuality("regular");
             this.goatMilk.setCof(1);

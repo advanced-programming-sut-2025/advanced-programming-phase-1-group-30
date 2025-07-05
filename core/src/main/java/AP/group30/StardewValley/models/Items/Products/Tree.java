@@ -5,7 +5,7 @@ public class Tree extends Product {
     private boolean isHitByThunder;
 
     public Tree(int count, TreeType type) {
-        super(count, type.getName(), 0);
+        super(count, type.getName(), 0, type.getTexture());
         this.type = type;
         this.isHitByThunder = false;
     }

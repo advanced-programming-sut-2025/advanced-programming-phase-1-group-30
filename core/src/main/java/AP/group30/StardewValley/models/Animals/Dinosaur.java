@@ -3,6 +3,7 @@ package AP.group30.StardewValley.models.Animals;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Buildings.RanchCosts;
 import AP.group30.StardewValley.models.Items.Item;
+import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Items.Products.AnimalProductType;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.views.GameMenu;
@@ -28,7 +29,7 @@ public class Dinosaur extends Animal {
         }
     }
     private void qualityAssign(double quality) {
-        this.dinosaurEgg = new Item(1, "dinosaur egg", AnimalProductType.DINASOUR_EGG.getPrice());
+        this.dinosaurEgg = new Item(1, "dinosaur egg", AnimalProductType.DINASOUR_EGG.getPrice(), ItemTexture.WOOD.getTexture());
         if (quality >= 0 && quality < 0.5) {
             this.dinosaurEgg.setQuality("regular");
             this.dinosaurEgg.setCof(1);

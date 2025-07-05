@@ -3,6 +3,7 @@ package AP.group30.StardewValley.controllers;
 import AP.group30.StardewValley.models.Animals.Animal;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Items.Item;
+import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Items.Products.GiantCrop;
 import AP.group30.StardewValley.models.Items.Products.Tree;
 import AP.group30.StardewValley.models.Maps.Tile;
@@ -74,7 +75,7 @@ public class DateAndWeatherController {
 
                         if (tile.isPlanted()) {
                             tile.setPlanted(false);
-                            tile.setItem(new Item(1, "coal", 15));
+                            tile.setItem(new Item(1, "coal", 15, ItemTexture.WOOD.getTexture()));
                             tile.setCrop(null);
                             tile.setType(TileTypes.DIRT);
                         }
@@ -295,13 +296,13 @@ public class DateAndWeatherController {
 
         if (tile.isPlanted() && !tile.getType().equals(TileTypes.GREENHOUSE)) {
             tile.setPlanted(false);
-            tile.setItem(new Item(1, "coal", 15));
+            tile.setItem(new Item(1, "coal", 15, ItemTexture.WOOD.getTexture()));
             tile.setCrop(null);
             tile.setType(TileTypes.DIRT);
             GameMenu.printResult("Your crop turned into coal by the power of odin's son!");
         }
         else if (tile.getItem() instanceof Tree) {
-            tile.setItem(new Item(1, "coal", 15));
+            tile.setItem(new Item(1, "coal", 15, ItemTexture.WOOD.getTexture()));
             tile.setType(TileTypes.DIRT);
         }
         GameMenu.printResult("Cheat code activated: Thor hits you with a lightning bolt!");

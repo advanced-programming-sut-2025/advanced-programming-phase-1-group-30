@@ -3,6 +3,7 @@ package AP.group30.StardewValley.models.Animals;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Buildings.RanchCosts;
 import AP.group30.StardewValley.models.Items.Item;
+import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Items.Products.AnimalProductType;
 import AP.group30.StardewValley.models.Items.Tools.MilkPail;
 import AP.group30.StardewValley.models.Players.Player;
@@ -28,7 +29,7 @@ public class Cow extends Animal {
             qualityAssign(quality);
         } else {
             if (rand < chance) {
-                this.bigMilk = new Item(1, "big milk", AnimalProductType.BIG_MILK.getPrice());
+                this.bigMilk = new Item(1, "big milk", AnimalProductType.BIG_MILK.getPrice(), ItemTexture.WOOD.getTexture());
                 if (quality >= 0 && quality < 0.5) {
                     this.bigMilk.setQuality("regular");
                     this.bigMilk.setCof(1);
@@ -50,7 +51,7 @@ public class Cow extends Animal {
     }
 
     private void qualityAssign(double quality) {
-        this.milk = new Item(1, "milk", AnimalProductType.MILK.getPrice());
+        this.milk = new Item(1, "milk", AnimalProductType.MILK.getPrice(), ItemTexture.WOOD.getTexture());
         if (quality >= 0 && quality < 0.5) {
             this.milk.setQuality("regular");
             this.milk.setCof(1);

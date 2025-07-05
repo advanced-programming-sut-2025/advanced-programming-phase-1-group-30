@@ -12,7 +12,7 @@ public class Crop extends Product{
     private int regrowthTime = 0;
 
     public Crop(int count, CropType type) {
-        super(count, type.getName(), type.getBaseSellPrice());
+        super(count, type.getName(), type.getBaseSellPrice(), type.getTexture());
         this.type = type;
         stages = type.getStages();
     }

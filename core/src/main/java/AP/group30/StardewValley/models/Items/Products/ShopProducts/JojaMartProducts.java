@@ -6,7 +6,7 @@ public class JojaMartProducts extends ShopProduct {
     private final JojaMartCosts type;
 
     public JojaMartProducts(int count, JojaMartCosts type) {
-        super(count, type.getName(), type.getDailyLimit(), type.getCost(), type.getSeason());
+        super(count, type.getName(), type.getDailyLimit(), type.getCost(), type.getSeason(), type.getTexture());
         this.type = type;
     }
 

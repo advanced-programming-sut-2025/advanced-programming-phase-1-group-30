@@ -5,7 +5,7 @@ public class AnimalProduct extends Product{
     private final AnimalProductType type;
 
     public AnimalProduct(int count, AnimalProductType type) {
-        super(count, type.getName(), type.getPrice());
+        super(count, type.getName(), type.getPrice(), type.getTexture());
         this.type = type;
     }
 
