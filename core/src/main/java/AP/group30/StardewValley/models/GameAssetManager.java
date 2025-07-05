@@ -19,4 +19,5 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> tree = new AssetDescriptor<>("tree.png", Texture.class);
     public static final AssetDescriptor<Texture> kaj = new AssetDescriptor<>("tree_kaj.png", Texture.class);
     public static final AssetDescriptor<Texture> stone = new AssetDescriptor<>("stone.png", Texture.class);
+    public static final AssetDescriptor<Texture> ruinedGreenhouse = new AssetDescriptor<>("ruined_greenhouse.png", Texture.class);
 }

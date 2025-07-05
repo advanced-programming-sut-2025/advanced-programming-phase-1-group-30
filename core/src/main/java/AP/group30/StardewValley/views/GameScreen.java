@@ -18,7 +18,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-import java.util.Random;
+import java.util.ArrayList;
 
 
 public class GameScreen implements Screen {
@@ -29,6 +29,7 @@ public class GameScreen implements Screen {
     Texture house = GameAssetManager.assetManager.get(GameAssetManager.house);
     Texture tree = GameAssetManager.assetManager.get(GameAssetManager.tree);
     Texture stone = GameAssetManager.assetManager.get(GameAssetManager.stone);
+    Texture ruinedGreenhouse = GameAssetManager.assetManager.get(GameAssetManager.ruinedGreenhouse);
     float playerDx = 0, playerDy = 0;
     Map map = new Map(2);
     float x = Gdx.graphics.getWidth() / 2f;
@@ -38,8 +39,26 @@ public class GameScreen implements Screen {
     OrthographicCamera camera;
 
 
-    public GameScreen() {
+    // *** Game entities ***
+    private ArrayList<Tree> trees = new ArrayList<>();
+    private ArrayList<Stone> stones = new ArrayList<>();
 
+
+    public GameScreen() {
+        for (int i = 0; i < map.getTiles().length; i++) {
+            for (int j = 0; j < map.getTiles()[i].length; j++) {
+                Tile tile = map.getTiles()[i][j];
+                if (tile.getItem() != null) {
+                    if (tile.getItem().getClass().equals(Tree.class)) {
+                        Tree tree = (Tree) tile.getItem();
+                        trees.add(tree);
+                    } else if (tile.getItem().getClass().equals(Stone.class)) {
+                        Stone stone = (Stone) tile.getItem();
+                        stones.add(stone);
+                    }
+                }
+            }
+        }
     }
 
 
@@ -77,22 +96,29 @@ public class GameScreen implements Screen {
                 }
             }
         }
-        for (int i = 0; i < map.getTiles().length; i++) {
-            for (int j = 0; j < map.getTiles()[i].length; j++) {
-                Tile tile = map.getTiles()[i][j];
-                if (tile.getItem() != null) {
-                    if (tile.getItem().getClass().equals(Tree.class)) {
+        batch.draw(house, map.getTiles()[60][40].getX() * 32, map.getTiles()[60][40].getY() * 32, house.getWidth() * 3f, house.getHeight() * 3f);
+        batch.draw(ruinedGreenhouse, map.getTiles()[30][45].getX() * 32, map.getTiles()[30][45].getY() * 32, ruinedGreenhouse.getWidth() * 3f, ruinedGreenhouse.getHeight() * 3f);
 //                        Random random = new Random();
 //                        int x = random.nextInt(2);
 //                        tree = (x == 1) ? GameAssetManager.assetManager.get(GameAssetManager.tree) : GameAssetManager.assetManager.get(GameAssetManager.kaj);
-                        batch.draw(tree, tile.getX() * 32, (60 - tile.getY()) * 32, tree.getWidth() * 2f, tree.getHeight() * 2f);
-                    } else if (tile.getItem().getClass().equals(Stone.class)) {
-                        batch.draw(stone, tile.getX() * 32, (60 - tile.getY()) * 32, stone.getWidth() * 2f, stone.getHeight() * 2f);
-                    }
-                }
-            }
+//                        batch.draw(tree, tile.getX() * 32 - 32, (60 - tile.getY()) * 32, tree.getWidth() * 2f, tree.getHeight() * 2f);
+//                    } else if (tile.getItem().getClass().equals(Stone.class)) {
+//                        batch.draw(stone, tile.getX() * 32, (60 - tile.getY()) * 32, stone.getWidth() * 2f, stone.getHeight() * 2f);
+//                    }
+//                }
+//            }
+//        }
+
+        for (Tree tree : trees) {
+            batch.draw(tree.getTexture(), tree.getX(), tree.getY(), tree.getWidth(), tree.getHeight());
+            tree.moveRelativeToPlayer(playerDx, playerDy);
         }
-        batch.draw(house, map.getTiles()[60][40].getX() * 32, map.getTiles()[60][40].getY() * 32, house.getWidth() * 3f, house.getHeight() * 3f);
+
+        for (Stone stone : stones) {
+            batch.draw(stone.getTexture(), stone.getX(), stone.getY(), stone.getWidth(), stone.getHeight());
+            stone.moveRelativeToPlayer(playerDx, playerDy);
+        }
+
         batch.draw(playerRegion, x, y, playerRegion.getRegionWidth() / 1.5f, playerRegion.getRegionHeight() / 1.5f);
         batch.end();
 

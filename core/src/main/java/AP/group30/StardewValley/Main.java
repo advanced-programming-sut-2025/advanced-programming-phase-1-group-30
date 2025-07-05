@@ -1,6 +1,7 @@
 package AP.group30.StardewValley;
 
 import AP.group30.StardewValley.models.GameAssetManager;
+import AP.group30.StardewValley.views.GameMenu;
 import AP.group30.StardewValley.views.GameScreen;
 import AP.group30.StardewValley.views.LoadingScreen;
 
@@ -28,7 +29,7 @@ public class Main extends Game {
         main.setScreen(new LoadingScreen(new RegisterMenu(skin), GameAssetManager.background, GameAssetManager.menuSkin
             , GameAssetManager.grass, GameAssetManager.dirt,
             GameAssetManager.player, GameAssetManager.house, GameAssetManager.water, GameAssetManager.nightBackground,
-            GameAssetManager.tree, GameAssetManager.kaj, GameAssetManager.stone));
+            GameAssetManager.tree, GameAssetManager.kaj, GameAssetManager.stone, GameAssetManager.ruinedGreenhouse));
     }
 
     public static Main getMain() {
