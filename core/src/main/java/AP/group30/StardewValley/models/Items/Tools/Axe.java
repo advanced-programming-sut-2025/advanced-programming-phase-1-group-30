@@ -4,7 +4,7 @@ public class Axe extends Tool {
     private AxeType type;
 
     public Axe(int count, AxeType type) {
-        super(count, type.getName());
+        super(count, type.getName(), type.getTexture());
         this.type = type;
     }
 

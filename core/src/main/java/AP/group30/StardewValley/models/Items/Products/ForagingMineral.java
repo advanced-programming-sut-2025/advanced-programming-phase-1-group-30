@@ -5,7 +5,7 @@ public class ForagingMineral extends Product {
     private final ForagingMineralType type;
 
     public ForagingMineral(int count, ForagingMineralType type) {
-        super(count, type.getName(), type.getBaseSellPrice());
+        super(count, type.getName(), type.getBaseSellPrice(), type.getTexture());
         this.type = type;
     }
 

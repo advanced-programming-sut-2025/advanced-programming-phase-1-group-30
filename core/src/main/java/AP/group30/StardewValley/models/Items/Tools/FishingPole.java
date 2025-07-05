@@ -4,7 +4,7 @@ public class FishingPole extends Tool {
     private FishingPoleType type;
 
     public FishingPole(int count, FishingPoleType type) {
-        super(count, type.getName());
+        super(count, type.getName(), type.getTexture());
         this.type = type;
     }
 

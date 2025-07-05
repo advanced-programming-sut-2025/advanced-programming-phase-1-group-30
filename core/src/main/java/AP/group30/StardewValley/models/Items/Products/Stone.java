@@ -9,7 +9,7 @@ public class Stone extends Item {
     private final Texture texture = GameAssetManager.assetManager.get(GameAssetManager.stone);
     private final float width = texture.getWidth() * 2f, height = texture.getHeight() * 2f;
     public Stone(int count, int x, int y) {
-        super(count, "Stone", 10);
+        super(count, "Stone", 10, ItemTexture.STONE.getTexture());
         this.x = x;
         this.y = y;
     }

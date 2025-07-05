@@ -6,7 +6,7 @@ public class BlacksmithProducts extends ShopProduct {
     private final BlacksmithCosts type;
 
     public BlacksmithProducts(int count, BlacksmithCosts type) {
-        super(count, type.getName(), type.getDailyLimit(), type.getCost(), type.getSeason());
+        super(count, type.getName(), type.getDailyLimit(), type.getCost(), type.getSeason(), type.getTexture());
         this.type = type;
     }
 

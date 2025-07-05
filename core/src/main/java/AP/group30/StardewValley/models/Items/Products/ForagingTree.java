@@ -5,7 +5,7 @@ public class ForagingTree extends Product {
     private final ForagingTreeType type;
 
     public ForagingTree(int count, ForagingTreeType type) {
-        super(count, type.getName(), 0);
+        super(count, type.getName(), 0, type.getTexture());
         this.type = type;
     }
 

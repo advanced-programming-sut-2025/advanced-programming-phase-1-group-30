@@ -11,7 +11,7 @@ public class Tree extends Product {
     private final float width = texture.getWidth() * 2f, height = texture.getHeight() * 2f;
 
     public Tree(int count, TreeType type, int x, int y) {
-        super(count, type.getName(), 0);
+        super(count, type.getName(), 0, type.getTexture());
         this.type = type;
         this.isHitByThunder = false;
         this.x = x;

@@ -7,7 +7,7 @@ public class Gift extends Item {
     private boolean isRated = false;
     private Player sentPlayer;
     public Gift(int count, String name, Player sentPlayer, int price) {
-        super(count, name, price);
+        super(count, name, price, ItemTexture.WOOD.getTexture());
         this.sentPlayer = sentPlayer;
     }
     public boolean isRated() {

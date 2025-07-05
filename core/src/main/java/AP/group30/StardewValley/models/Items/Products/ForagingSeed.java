@@ -7,7 +7,7 @@ public class ForagingSeed extends Product {
     private boolean isWatered;
 
     public ForagingSeed(int count, ForagingSeedType type) {
-        super(count, type.getName(), 0);
+        super(count, type.getName(), 0, type.getTexture());
         this.type = type;
         this.crop = new Crop(1, type.getCrop());
     }
