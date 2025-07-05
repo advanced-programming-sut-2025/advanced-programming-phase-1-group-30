@@ -1,8 +1,13 @@
 package AP.group30.StardewValley.views;
 
+import AP.group30.StardewValley.models.App;
+import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Maps.Tile;
 import AP.group30.StardewValley.models.Maps.TileTypes;
+import AP.group30.StardewValley.models.Players.Player;
+import AP.group30.StardewValley.models.Users.RegisterQuestions;
+import AP.group30.StardewValley.models.Users.User;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -17,114 +22,192 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 public class GameScreen implements Screen {
-    private Stage stage;
     private SpriteBatch batch;
-    private InputProcessor gameInputProcessor;
-    Texture grass = new Texture(Gdx.files.internal("grass.png"));
-    Texture dirt = new Texture(Gdx.files.internal("dirt.png"));
-    Texture player = new Texture(Gdx.files.internal("Horse_rider.png"));
-    Texture house = new Texture(Gdx.files.internal("Hut.png"));
-    TextureRegion playerRegion = new TextureRegion(player);
-    float playerDx = 0, playerDy = 0;
-    Map map = new Map(1);
-    float x = Gdx.graphics.getWidth() / 2f;
-    float y = Gdx.graphics.getHeight() / 2f;
-    float speed = 150f;
-    boolean facingLeft = false;
-    OrthographicCamera camera;
+    private OrthographicCamera camera;
 
+    private Texture player;
+    private Texture house;
+    private TextureRegion playerRegion;
+
+    private Map map;
+    private Tile[][] tiles;
+    private Tile currentTile;
+
+    private float x;
+    private float y;
+    private float speed = 150f * 10;
+    private boolean facingLeft = false;
 
     public GameScreen() {
+        player = new Texture(Gdx.files.internal("Horse_rider.png"));
+        house = new Texture(Gdx.files.internal("Hut.png"));
+        playerRegion = new TextureRegion(player);
 
+        map = new Map(1);
+        tiles = map.getTiles();
+
+        x = Gdx.graphics.getWidth() / 2f;
+        y = Gdx.graphics.getHeight() / 2f;
     }
-
 
     @Override
     public void show() {
         batch = new SpriteBatch();
-        gameInputProcessor = Gdx.input.getInputProcessor();
-        Gdx.input.setInputProcessor(gameInputProcessor);
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+        Gdx.input.setInputProcessor(null);
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         handleInput(delta);
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) camera.position.y -= speed * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
 
-
-        batch.begin();
+        camera.position.set(x + playerRegion.getRegionWidth() / 2f, y + playerRegion.getRegionHeight() / 2f, 0);
         camera.update();
+
         batch.setProjectionMatrix(camera.combined);
 
-        for (int i = 0; i < map.getTiles().length; i++) {
-            for (int j = 0; j < map.getTiles()[i].length; j++) {
-                Tile tile = map.getTiles()[i][j];
-                batch.draw(tile.getType().equals(TileTypes.DIRT) ? dirt : grass, tile.getX() * 32, (60 - tile.getY()) * 32, 32, 32);
-            }
-        }
-        batch.draw(house, map.getTiles()[60][40].getX() * 32, map.getTiles()[60][40].getY() * 32, house.getWidth() * 3.5f, house.getHeight() * 3.5f);
-        batch.draw(playerRegion, x, y);
+        batch.begin();
+        renderMap();
+        renderHut();
+        renderPlayer();
         batch.end();
 
+        currentTile = getTileUnderPlayer(x, y);
+    }
+
+    private void renderPlayer() {
+        batch.draw(playerRegion, x, y);
+    }
+
+    private void renderHut() {
+        int startTIleX = 60;
+        int endTIleX = 65;
+        int startTIleY = 40;
+        int endTIleY = 45;
+
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                Tile tile = tiles[i][j];
+                if (tile.getType() == TileTypes.HUT) {
+                    if (tiles[i-1][j].getType() != TileTypes.HUT) {
+                        if (tiles[i][j+1].getType() != TileTypes.HUT) {
+                            startTIleX = i;
+                            startTIleY = 60 - j;
+                        }
+                    }
+                    if (tiles[i+1][j].getType() != TileTypes.HUT) {
+                        if (tiles[i][j-1].getType() != TileTypes.HUT) {
+                            endTIleX = i;
+                            endTIleY = 60 - j;
+                        }
+                    }
+                }
+            }
+        }
+
+        batch.draw(house,
+            map.getTiles()[startTIleX][startTIleY].getX() * 32,
+            map.getTiles()[startTIleX][startTIleY].getY() * 32,
+            (endTIleX - startTIleX + 2) * 32,
+            (endTIleY - startTIleY + 3) * 32
+        );
+    }
+
+    private void renderMap() {
+        Tile[][] tiles = map.getTiles();
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                Tile tile = tiles[i][j];
+                if (tile != null) tile.render(batch);
+            }
+        }
     }
 
     @Override
     public void resize(int width, int height) {
-
+        camera.setToOrtho(false, width, height);
     }
 
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
+    @Override public void pause() {}
+    @Override public void resume() {}
+    @Override public void hide() {}
 
     @Override
     public void dispose() {
-
+        batch.dispose();
+        player.dispose();
+        house.dispose();
     }
 
     private void handleInput(float delta) {
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            y += speed * delta;
+        float nextX = x;
+        float nextY = y;
+        float moveAmount = speed * delta;
+        float changeX = 0f;
+        float changeY = 0f;
 
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            nextY += moveAmount;
+            changeY = player.getHeight();
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            y -= speed * delta;
+            nextY -= moveAmount;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             if (!facingLeft) {
                 flipTexture(true);
                 facingLeft = true;
             }
-            x -= speed * delta;
+            nextX -= moveAmount;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             if (facingLeft) {
                 flipTexture(false);
                 facingLeft = false;
             }
-            x += speed * delta;
+            nextX += moveAmount;
+            changeX = player.getWidth();
+        }
+
+        if (isWalkableTile(nextX, nextY, changeX, changeY)) {
+            x = nextX;
+            y = nextY;
         }
     }
 
+    private boolean isWalkableTile(float nextX, float nextY, float changeX, float changeY) {
+        int tileSize = 32;
+
+        int tileX = (int)((nextX + changeX) / tileSize);
+        int tileY = map.getTiles()[0].length - (int)((nextY + changeY) / tileSize);
+
+        if (tileX >= 0 && tileX < map.getTiles().length &&
+            tileY >= 0 && tileY < map.getTiles()[0].length) {
+
+            Tile destinationTile = map.getTiles()[tileX][tileY];
+            if (destinationTile.isWalkable()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private void flipTexture(boolean flipX) {
-        if (playerRegion.isFlipX() != flipX) playerRegion.flip(true, false);
+        if (playerRegion.isFlipX() != flipX) {
+            playerRegion.flip(true, false);
+        }
+    }
+
+    private Tile getTileUnderPlayer(float playerX, float playerY) {
+        int tileX = (int)(playerX / 32);
+        int tileY = (int)(playerY / 32);
+        return tiles[tileX][tileY];
     }
 }

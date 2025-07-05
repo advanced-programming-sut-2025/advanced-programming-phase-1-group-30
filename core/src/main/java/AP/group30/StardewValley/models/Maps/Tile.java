@@ -2,6 +2,10 @@ package AP.group30.StardewValley.models.Maps;
 
 import AP.group30.StardewValley.models.Items.Item;
 import AP.group30.StardewValley.models.Items.Products.*;
+import AP.group30.StardewValley.views.GameScreen;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.util.Objects;
 import java.util.Random;
@@ -19,8 +23,13 @@ public class Tile {
     private boolean isGiantCrop = false;
     private boolean giantCropCheck = false;
     private Crop crop;
+    private final Texture texture;
 
-    public Tile(int x, int y, TileTypes type, boolean walkable, boolean isHarvestable, int id) {
+    private static Texture grass = new Texture(Gdx.files.internal("grass.png"));
+    private static Texture dirt = new Texture(Gdx.files.internal("dirt.png"));
+    private static Texture river = new Texture(Gdx.files.internal("river.png"));
+
+    public Tile(int x, int y, TileTypes type, boolean walkable, boolean isHarvestable, int id, Texture texture) {
         this.type = type;
         this.x = x;
         this.y = y;
@@ -30,35 +39,36 @@ public class Tile {
         }
         this.isHarvestable = isHarvestable;
         this.isPlanted = false;
+        this.texture = texture;
     }
     public static Tile createTileFromType(int x, int y, String tileType, int id) {
         switch (tileType.toLowerCase()) {
             case "dirt":
-                return new Tile(x, y, TileTypes.DIRT, true, true, id);
+                return new Tile(x, y, TileTypes.DIRT, true, true, id, dirt);
             case "grass":
-                return new Tile(x, y, TileTypes.GRASS, true, true, id);
+                return new Tile(x, y, TileTypes.GRASS, true, true, id, grass);
             case "river":
-                return new Tile(x, y, TileTypes.WATER, false, false, id);
+                return new Tile(x, y, TileTypes.WATER, false, false, id, river);
             case "hut":
-                return new Tile(x, y, TileTypes.HUT, true, false, id);
+                return new Tile(x, y, TileTypes.HUT, false, false, id, dirt);
             case "greenhouse":
-                return new Tile(x, y, TileTypes.GREENHOUSE, false, false, id);
+                return new Tile(x, y, TileTypes.GREENHOUSE, false, false, id, dirt);
             case "quarry":
-                return new Tile(x, y, TileTypes.QUARRY, true, false, id);
+                return new Tile(x, y, TileTypes.QUARRY, true, false, id, dirt);
             case "blacksmith":
-                return new Tile(x, y, TileTypes.BLACKSMITH, true, true, id);
+                return new Tile(x, y, TileTypes.BLACKSMITH, true, true, id, dirt);
             case "carpenters-shop":
-                return new Tile(x, y, TileTypes.CARPENTERS_SHOP, true, true, id);
+                return new Tile(x, y, TileTypes.CARPENTERS_SHOP, true, true, id, dirt);
             case "jojomart":
-                return new Tile(x, y, TileTypes.JOJOMART, true, false, id);
+                return new Tile(x, y, TileTypes.JOJOMART, true, false, id, dirt);
             case "pierres-store":
-                return new Tile(x, y, TileTypes.PIERRES_GENERAL_STORE, true, false, id);
+                return new Tile(x, y, TileTypes.PIERRES_GENERAL_STORE, true, false, id, dirt);
             case "fish-shop":
-                return new Tile(x, y, TileTypes.FISH_SHOP, true, false, id);
+                return new Tile(x, y, TileTypes.FISH_SHOP, true, false, id, dirt);
             case "marnies-ranch":
-                return new Tile(x, y, TileTypes.MARINES_RANCH, true, false, id);
+                return new Tile(x, y, TileTypes.MARINES_RANCH, true, false, id, dirt);
             case "stardrop-saloon":
-                return new Tile(x, y, TileTypes.THE_STARDROP_SALOON, true, false, id);
+                return new Tile(x, y, TileTypes.THE_STARDROP_SALOON, true, false, id, dirt);
             default:
                 throw new IllegalArgumentException("Unknown tile type: " + tileType);
         }
@@ -241,5 +251,9 @@ public class Tile {
 
     public void setGiantCrops(Tile[] giantCrop) {
         this.giantCrop = giantCrop;
+    }
+
+    public void render(SpriteBatch batch) {
+        batch.draw(this.texture, x * 32, (60 - y) * 32, 32, 32);
     }
 }
