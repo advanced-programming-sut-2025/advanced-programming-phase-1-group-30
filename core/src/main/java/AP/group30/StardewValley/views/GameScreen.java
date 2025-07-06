@@ -2,6 +2,7 @@ package AP.group30.StardewValley.views;
 
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Game;
+import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Maps.Tile;
@@ -14,24 +15,30 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import java.util.Random;
 
 public class GameScreen implements Screen {
     private SpriteBatch batch;
     private OrthographicCamera camera;
+    private Game game;
 
     private Texture player;
     private Texture house;
+    private Texture clock;
     private TextureRegion playerRegion;
+
 
     private final Map map;
     private final Tile[][] tiles;
@@ -45,8 +52,10 @@ public class GameScreen implements Screen {
     private boolean facingLeft = false;
 
     public GameScreen() {
+        game = new Game();
         player = new Texture(Gdx.files.internal("Horse_rider.png"));
         house = new Texture(Gdx.files.internal("Hut.png"));
+        clock = new Texture(Gdx.files.internal("Stardew_Valley_Images/Clock/Clock.png"));
         playerRegion = new TextureRegion(player);
 
         map = new Map(1);
@@ -86,6 +95,7 @@ public class GameScreen implements Screen {
         renderItems();
         renderHut();
         renderPlayer();
+        renderTime();
         batch.end();
 
         currentTile = getTileUnderPlayer(x, y);
@@ -203,6 +213,16 @@ public class GameScreen implements Screen {
                     tile.getItem().renderItem(batch, tile.getX() * 32, (60 - tile.getY()) * 32);
             }
         }
+    }
+
+    private void renderTime(){
+        batch.draw(clock,camera.position.x + 650, camera.position.y + 300);
+        BitmapFont font = (new Skin(Gdx.files.internal("skin/pixthulhu-ui.json")).getFont("font"));
+        font.setColor(Color.BLACK);
+        font.draw(batch, String.format("%s %d",game.getCurrentTime().getDayOfWeek(),game.getCurrentTime().getDay()),camera.position.x + 760,camera.position.y + 510);
+        font.draw(batch, String.format("%02d : %02d",game.getCurrentTime().getHour(),game.getCurrentTime().getMinute()),camera.position.x +800, camera.position.y + 420);
+        //TODO
+        font.draw(batch, String.format("5 0 0"),camera.position.x + 720, camera.position.y + 340);
     }
 
     @Override
