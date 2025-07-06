@@ -11,8 +11,8 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> background = new AssetDescriptor<>("menu assets/loading screen.png", Texture.class);
     public static final AssetDescriptor<Texture> nightBackground = new AssetDescriptor<>("menu assets/sebastianRideTiles.png", Texture.class);
     public static final AssetDescriptor<Skin> menuSkin = new AssetDescriptor<>("skin/pixthulhu-ui.json", Skin.class);
-    public static final AssetDescriptor<Texture> grass = new AssetDescriptor<>("grass.png", Texture.class);
-    public static final AssetDescriptor<Texture> dirt = new AssetDescriptor<>("dirt.png", Texture.class);
+    public static final AssetDescriptor<Texture> grass = new AssetDescriptor<>("tile/grass.png", Texture.class);
+    public static final AssetDescriptor<Texture> dirt = new AssetDescriptor<>("tile/dirt.png", Texture.class);
     public static final AssetDescriptor<Texture> player = new AssetDescriptor<>("Horse_rider.png", Texture.class);
     public static final AssetDescriptor<Texture> house = new AssetDescriptor<>("Hut.png", Texture.class);
     public static final AssetDescriptor<Texture> water = new AssetDescriptor<>("water.png", Texture.class);

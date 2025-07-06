@@ -3,6 +3,8 @@ package AP.group30.StardewValley.models.Items;
 import java.util.ArrayList;
 
 import AP.group30.StardewValley.models.Items.Products.ShopProducts.ShopProduct;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Item implements ItemsInteface {
     private final String name;
@@ -10,12 +12,14 @@ public class Item implements ItemsInteface {
     private String quality;
     private double cof;
     private double price;
+    private final Texture texture;
 
-    public Item(int count, String name, double price) {
+    public Item(int count, String name, double price, Texture texture) {
         this.name = name;
         this.count = count;
         this.cof = 1;
         this.price = price;
+        this.texture = texture;
     }
 
     public int getCount() {
@@ -58,6 +62,9 @@ public class Item implements ItemsInteface {
         this.price = price;
     }
 
+    public Texture getTexture() {
+        return texture;
+    }
 
     public static Item findItemByName(String name, ArrayList<Item> items) {
         for (Item item : items) {
@@ -71,5 +78,9 @@ public class Item implements ItemsInteface {
             if (item.getName().matches(name)) return item;
         }
         return null;
+    }
+
+    public void renderItem(SpriteBatch batch, float x, float y) {
+        batch.draw(texture, x, y);
     }
 }

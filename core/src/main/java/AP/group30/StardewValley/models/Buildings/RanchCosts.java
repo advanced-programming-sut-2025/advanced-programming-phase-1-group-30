@@ -1,20 +1,22 @@
 package AP.group30.StardewValley.models.Buildings;
 
+import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Items.ItemsInteface;
 import AP.group30.StardewValley.models.TimeAndDate.Season;
+import com.badlogic.gdx.graphics.Texture;
 
 public enum RanchCosts implements ItemsInteface {
-    HAY("hay", 50, 999999, null, 0, Season.ALL),
-    MILK_PAIL("milk pail", 1000, 1, null, 0, Season.ALL),
-    SHEARS("shears", 1000, 1, null, 0, Season.ALL),
-    CHICKEN("chicken", 800, 2, BuildingsInfo.Coop, 1, Season.ALL),
-    COW("cow", 1500, 2, BuildingsInfo.Barn, 1, Season.ALL),
-    GOAT("goat", 4000, 2, BuildingsInfo.Barn, 2, Season.ALL),
-    DUCK("duck", 1200, 2, BuildingsInfo.Coop, 2, Season.ALL),
-    SHEEP("sheep", 8000, 2, BuildingsInfo.Barn, 3, Season.ALL),
-    RABBIT("rabbit", 8000, 2, BuildingsInfo.Coop, 3, Season.ALL),
-    DINOSAUR("dinosaur", 14000, 2, BuildingsInfo.Coop, 2, Season.ALL),
-    PIG("pig", 16000, 2, BuildingsInfo.Barn, 3, Season.ALL);
+    HAY("hay", 50, 999999, null, 0, Season.ALL, ItemTexture.WOOD.getTexture()),
+    MILK_PAIL("milk pail", 1000, 1, null, 0, Season.ALL, ItemTexture.WOOD.getTexture()),
+    SHEARS("shears", 1000, 1, null, 0, Season.ALL, ItemTexture.WOOD.getTexture()),
+    CHICKEN("chicken", 800, 2, BuildingsInfo.Coop, 1, Season.ALL, ItemTexture.WOOD.getTexture()),
+    COW("cow", 1500, 2, BuildingsInfo.Barn, 1, Season.ALL, ItemTexture.WOOD.getTexture()),
+    GOAT("goat", 4000, 2, BuildingsInfo.Barn, 2, Season.ALL, ItemTexture.WOOD.getTexture()),
+    DUCK("duck", 1200, 2, BuildingsInfo.Coop, 2, Season.ALL, ItemTexture.WOOD.getTexture()),
+    SHEEP("sheep", 8000, 2, BuildingsInfo.Barn, 3, Season.ALL, ItemTexture.WOOD.getTexture()),
+    RABBIT("rabbit", 8000, 2, BuildingsInfo.Coop, 3, Season.ALL, ItemTexture.WOOD.getTexture()),
+    DINOSAUR("dinosaur", 14000, 2, BuildingsInfo.Coop, 2, Season.ALL, ItemTexture.WOOD.getTexture()),
+    PIG("pig", 16000, 2, BuildingsInfo.Barn, 3, Season.ALL, ItemTexture.WOOD.getTexture());
 
 
     private final String name;
@@ -23,14 +25,16 @@ public enum RanchCosts implements ItemsInteface {
     private final BuildingsInfo requiredBuilding;
     private final int requiredBuildingLevel;
     private final Season season;
+    private final Texture texture;
 
-    private RanchCosts(String name, int cost, int dailyLimit, BuildingsInfo requiredBuilding, int requiredBuildingLevel, Season season) {
+    private RanchCosts(String name, int cost, int dailyLimit, BuildingsInfo requiredBuilding, int requiredBuildingLevel, Season season, Texture texture) {
         this.name = name;
         this.cost = cost;
         this.dailyLimit = dailyLimit;
         this.requiredBuilding = requiredBuilding;
         this.requiredBuildingLevel = requiredBuildingLevel;
         this.season = season;
+        this.texture = texture;
     }
 
     public String getName() {
@@ -55,5 +59,9 @@ public enum RanchCosts implements ItemsInteface {
 
     public Season getSeason() {
         return season;
+    }
+
+    public Texture getTexture() {
+        return texture;
     }
 }

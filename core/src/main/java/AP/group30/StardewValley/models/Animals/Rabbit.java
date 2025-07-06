@@ -3,6 +3,7 @@ package AP.group30.StardewValley.models.Animals;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Buildings.RanchCosts;
 import AP.group30.StardewValley.models.Items.Item;
+import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Items.Products.AnimalProductType;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.views.GameMenu;
@@ -30,7 +31,7 @@ public class Rabbit extends Animal {
                 qualityAssign(quality);
             } else {
                 if (rand < chance) {
-                    this.rabbitFoot = new Item(1, "rabbit foot", AnimalProductType.RABBIT_LEG.getPrice());
+                    this.rabbitFoot = new Item(1, "rabbit foot", AnimalProductType.RABBIT_LEG.getPrice(), ItemTexture.WOOD.getTexture());
                     if (quality >= 0 && quality < 0.5) {
                         this.rabbitFoot.setQuality("regular");
                         this.rabbitFoot.setCof(1);
@@ -54,7 +55,7 @@ public class Rabbit extends Animal {
     }
 
     private void qualityAssign(double quality) {
-        this.rabbitWool = new Item(1, "rabbit wool", AnimalProductType.RABBIT_WOOL.getPrice());
+        this.rabbitWool = new Item(1, "rabbit wool", AnimalProductType.RABBIT_WOOL.getPrice(), ItemTexture.WOOD.getTexture());
         if (quality >= 0 && quality < 0.5) {
             this.rabbitWool.setQuality("regular");
             this.rabbitWool.setCof(1);

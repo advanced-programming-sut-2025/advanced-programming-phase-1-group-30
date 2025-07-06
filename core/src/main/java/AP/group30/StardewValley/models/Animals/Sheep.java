@@ -3,6 +3,7 @@ package AP.group30.StardewValley.models.Animals;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Buildings.RanchCosts;
 import AP.group30.StardewValley.models.Items.Item;
+import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Items.Products.AnimalProductType;
 import AP.group30.StardewValley.models.Items.Tools.Shear;
 import AP.group30.StardewValley.models.Players.Player;
@@ -29,7 +30,7 @@ public class Sheep extends Animal {
         }
     }
     private void qualityAssign(double quality) {
-        this.wool = new Item(1, "wool", AnimalProductType.WOOL.getPrice());
+        this.wool = new Item(1, "wool", AnimalProductType.WOOL.getPrice(), ItemTexture.WOOD.getTexture());
         if (quality >= 0 && quality < 0.5) {
             this.wool.setQuality("regular");
             this.wool.setCof(1);

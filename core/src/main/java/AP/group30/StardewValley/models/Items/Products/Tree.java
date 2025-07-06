@@ -8,13 +8,12 @@ import java.awt.*;
 public class Tree extends Product {
     private final TreeType type;
     private boolean isHitByThunder;
-    private int x, y;
     private final Texture texture = GameAssetManager.assetManager.get(GameAssetManager.tree);
     private final float width = texture.getWidth() * 2f, height = texture.getHeight() * 2f;
     private Rectangle rect = new Rectangle();
 
-    public Tree(int count, TreeType type, int x, int y) {
-        super(count, type.getName(), 0);
+    public Tree(int count, TreeType type) {
+        super(count, type.getName(), 0, type.getTexture());
         this.type = type;
         this.isHitByThunder = false;
         this.x = x;
@@ -23,6 +22,7 @@ public class Tree extends Product {
         rect.y = y;
         rect.width = (int)width;
         rect.height = (int)height;
+
     }
 
     public TreeType getType() {
@@ -35,19 +35,6 @@ public class Tree extends Product {
 
     public void HitByThunder() {
         this.isHitByThunder = true;
-    }
-
-    public void moveRelativeToPlayer(float playerDx, float playerDy) {
-        this.x -= playerDx;
-        this.y -= playerDy;
-    }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
     }
 
     public Texture getTexture() {
