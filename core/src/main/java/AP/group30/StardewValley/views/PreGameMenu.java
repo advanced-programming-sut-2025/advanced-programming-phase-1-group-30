@@ -244,9 +244,7 @@ public class PreGameMenu implements Screen {
                     Integer.parseInt(mapPlayer4Box.getSelected()));
 
                 if (result) {
-                    Main.getMain().setScreen(new
-                        MainMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json",
-                        Skin.class)));
+                    Main.getMain().setScreen(new GameScreen());
                 }
             }
         });

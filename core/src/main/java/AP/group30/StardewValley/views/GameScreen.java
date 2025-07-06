@@ -1,10 +1,8 @@
 package AP.group30.StardewValley.views;
+
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.Items.ItemTexture;
-import AP.group30.StardewValley.models.GameAssetManager;
-import AP.group30.StardewValley.models.Items.Products.Stone;
-import AP.group30.StardewValley.models.Items.Products.Tree;
 import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Maps.Tile;
 import AP.group30.StardewValley.models.Maps.TileTexture;
@@ -19,12 +17,11 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-
-import java.util.ArrayList;
-
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
 import java.util.Random;
 
@@ -43,20 +40,6 @@ public class GameScreen implements Screen {
     private int[][] grassMap;
     private final Random random = new Random();
 
-    private InputProcessor gameInputProcessor;
-    TextureRegion playerRegion = new TextureRegion(GameAssetManager.assetManager.get("Horse_rider.png", Texture.class));
-    Texture house = GameAssetManager.assetManager.get(GameAssetManager.house);
-    Texture tree = GameAssetManager.assetManager.get(GameAssetManager.tree);
-    Texture stone = GameAssetManager.assetManager.get(GameAssetManager.stone);
-    Texture ruinedGreenhouse = GameAssetManager.assetManager.get(GameAssetManager.ruinedGreenhouse);
-    float playerDx = 0, playerDy = 0;
-    Map map = new Map(2);
-    float x = Gdx.graphics.getWidth() / 2f;
-    float y = Gdx.graphics.getHeight() / 2f;
-    float speed = 150f;
-    boolean facingLeft = false;
-    OrthographicCamera camera;
-
     private float x;
     private float y;
     private boolean facingLeft = false;
@@ -68,27 +51,7 @@ public class GameScreen implements Screen {
 
         map = new Map(1);
         tiles = map.getTiles();
-    // *** Game entities ***
-    private ArrayList<Tree> trees = new ArrayList<>();
-    private ArrayList<Stone> stones = new ArrayList<>();
 
-
-    public GameScreen() {
-        for (int i = 0; i < map.getTiles().length; i++) {
-            for (int j = 0; j < map.getTiles()[i].length; j++) {
-                Tile tile = map.getTiles()[i][j];
-                if (tile.getItem() != null) {
-                    if (tile.getItem().getClass().equals(Tree.class)) {
-                        Tree tree = (Tree) tile.getItem();
-                        trees.add(tree);
-                    } else if (tile.getItem().getClass().equals(Stone.class)) {
-                        Stone stone = (Stone) tile.getItem();
-                        stones.add(stone);
-                    }
-                }
-            }
-        }
-    }
         x = Gdx.graphics.getWidth() / 2f;
         y = Gdx.graphics.getHeight() / 2f;
     }
@@ -108,11 +71,6 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        handleInput(delta);
-        if (Gdx.input.isKeyPressed(Input.Keys.W) && y >= 18 * 32 && y <= 48 * 32) camera.position.y += speed * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.S) && y < 48 * 32 && y >= 18 * 32) camera.position.y -= speed * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.A) && (x >= 26 * 32 && x <= 54 * 32)) camera.position.x -= speed * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.D) && x < 54 * 32 && x >= 26 * 32) camera.position.x += speed * delta;
 
         handleInput(delta);
 
@@ -278,14 +236,14 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             nextY -= moveAmount;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.A) && x >= 0) {
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             if (!facingLeft) {
                 flipTexture(true);
                 facingLeft = true;
             }
             nextX -= moveAmount;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.D) && x < (map.getTiles().length - 1) * 32) {
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             if (facingLeft) {
                 flipTexture(false);
                 facingLeft = false;

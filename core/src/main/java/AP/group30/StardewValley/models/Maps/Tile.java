@@ -128,11 +128,11 @@ public class Tile {
                 // Emptygit
             }
             else if (randomItem <= 45) {
-                tile.setItem(new Tree(1, TreeType.getRandomTreeType(randomItem - 36), tile.getX() * 32 - 32, tile.getY() * 32));
+                tile.setItem(new Tree(1, TreeType.getRandomTreeType(randomItem - 36)));
                 tile.changeWalkable();
             }
             else {
-                tile.setItem(new Stone(randomItem - 49, tile.getX() * 32 - 32, tile.getY() * 32));
+                tile.setItem(new Stone(randomItem - 49));
                 tile.changeWalkable();
             }
         }
