@@ -41,8 +41,6 @@ public class GameScreen implements Screen {
 //     Map map = new Map(2);
 //     float x = Gdx.graphics.getWidth() / 2f;
 //     float y = Gdx.graphics.getHeight() / 2f;
-     float speed = 150f;
-//     boolean facingLeft = false;
 //     OrthographicCamera camera;
 
 
@@ -69,6 +67,7 @@ public class GameScreen implements Screen {
 
     private float x;
     private float y;
+    float speed = 150f;
     private boolean facingLeft = false;
 
     public GameScreen() {
