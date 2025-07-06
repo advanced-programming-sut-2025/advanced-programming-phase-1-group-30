@@ -123,7 +123,7 @@ public class Tile {
         if (tile.getType().equals(TileTypes.DIRT)) {
             Random random = new Random();
             int randomItem = random.nextInt(75);
-            if (randomItem <= 35 || 55 <= randomItem) {
+            if (randomItem <= 43 || randomItem >= 47) {
                 // Empty
             }
             else if (randomItem <= 45) {

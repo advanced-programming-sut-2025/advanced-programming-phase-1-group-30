@@ -1,9 +1,13 @@
 package AP.group30.StardewValley.views;
 
 import AP.group30.StardewValley.Main;
+import AP.group30.StardewValley.controllers.NewGameController;
 import AP.group30.StardewValley.controllers.RegisterMenuController;
+import AP.group30.StardewValley.models.App;
+import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Users.RegisterQuestions;
+import AP.group30.StardewValley.models.Users.User;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -284,7 +288,13 @@ public class RegisterMenu implements Screen {
 
         // TODO maintainer code block!
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            Main.getMain().setScreen(new LoadingScreen(new GameScreen()));
+            User user1 = new User("1", "1", "1", "1", RegisterQuestions.Your_Best_Friend, "1", "male");
+            User user2 = new User("2", "2", "2", "2", RegisterQuestions.Your_Best_Friend, "2", "male");
+            App.getAppUsers().add(user1);
+            App.getAppUsers().add(user2);
+            App.setCurrentUser(user1);
+            Game game = NewGameController.NewGame(2, "2", "", "", 2, 3, 2, 3);
+            Main.getMain().setScreen(new LoadingScreen(new GameScreen(game)));
         }
 
         stage.act(delta);

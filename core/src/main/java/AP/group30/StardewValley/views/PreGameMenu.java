@@ -2,6 +2,7 @@ package AP.group30.StardewValley.views;
 
 import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.controllers.NewGameController;
+import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -237,14 +238,13 @@ public class PreGameMenu implements Screen {
         searchButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                boolean result = NewGameController.NewGame(Integer.parseInt(numberOfPlayersBox.getSelected()),
+                Game result = NewGameController.NewGame(Integer.parseInt(numberOfPlayersBox.getSelected()),
                     username1Field.getText(), username2Field.getText(),
                     username3Field.getText(), Integer.parseInt(mapPlayer1Box.getSelected()),
                     Integer.parseInt(mapPlayer2Box.getSelected()), Integer.parseInt(mapPlayer3Box.getSelected()),
                     Integer.parseInt(mapPlayer4Box.getSelected()));
-
-                if (result) {
-                    Main.getMain().setScreen(new GameScreen());
+                if (result != null) {
+                    Main.getMain().setScreen(new GameScreen(result));
                 }
             }
         });
