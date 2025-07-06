@@ -123,17 +123,16 @@ public class Tile {
         if (tile.getType().equals(TileTypes.DIRT)) {
             Random random = new Random();
             int randomItem = random.nextInt(75);
-
-            if (randomItem <= 44 || 47 <= randomItem) {
-                // Emptygit
+            if (randomItem <= 35 || 55 <= randomItem) {
+                // Empty
             }
-            else if (randomItem <= 45) {
+            else if (randomItem <= 49) {
                 tile.setItem(new Tree(1, TreeType.getRandomTreeType(randomItem - 36)));
-                tile.changeWalkable();
+                //tile.changeWalkable();
             }
             else {
                 tile.setItem(new Stone(randomItem - 49));
-                tile.changeWalkable();
+                //tile.changeWalkable();
             }
         }
         if(tile.getType().equals(TileTypes.QUARRY)) {
