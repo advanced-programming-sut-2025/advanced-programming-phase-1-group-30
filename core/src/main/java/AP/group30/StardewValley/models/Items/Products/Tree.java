@@ -3,12 +3,15 @@ package AP.group30.StardewValley.models.Items.Products;
 import AP.group30.StardewValley.models.GameAssetManager;
 import com.badlogic.gdx.graphics.Texture;
 
+import java.awt.*;
+
 public class Tree extends Product {
     private final TreeType type;
     private boolean isHitByThunder;
     private int x, y;
     private final Texture texture = GameAssetManager.assetManager.get(GameAssetManager.tree);
     private final float width = texture.getWidth() * 2f, height = texture.getHeight() * 2f;
+    private Rectangle rect = new Rectangle();
 
     public Tree(int count, TreeType type, int x, int y) {
         super(count, type.getName(), 0);
@@ -16,6 +19,10 @@ public class Tree extends Product {
         this.isHitByThunder = false;
         this.x = x;
         this.y = y;
+        rect.x = x;
+        rect.y = y;
+        rect.width = (int)width;
+        rect.height = (int)height;
     }
 
     public TreeType getType() {

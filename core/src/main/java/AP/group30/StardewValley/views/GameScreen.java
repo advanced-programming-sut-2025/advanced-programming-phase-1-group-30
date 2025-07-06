@@ -7,6 +7,7 @@ import AP.group30.StardewValley.models.Items.Products.Tree;
 import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Maps.Tile;
 import AP.group30.StardewValley.models.Maps.TileTypes;
+import AP.group30.StardewValley.models.Players.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
@@ -25,10 +26,9 @@ public class GameScreen implements Screen {
     private Stage stage;
     private SpriteBatch batch;
     private InputProcessor gameInputProcessor;
+    Player player;
     TextureRegion playerRegion = new TextureRegion(GameAssetManager.assetManager.get("Horse_rider.png", Texture.class));
     Texture house = GameAssetManager.assetManager.get(GameAssetManager.house);
-    Texture tree = GameAssetManager.assetManager.get(GameAssetManager.tree);
-    Texture stone = GameAssetManager.assetManager.get(GameAssetManager.stone);
     Texture ruinedGreenhouse = GameAssetManager.assetManager.get(GameAssetManager.ruinedGreenhouse);
     float playerDx = 0, playerDy = 0;
     Map map = new Map(2);
@@ -59,6 +59,8 @@ public class GameScreen implements Screen {
                 }
             }
         }
+        player.setX((int)(Gdx.graphics.getWidth() / 2f));
+        player.setY((int)(Gdx.graphics.getHeight() / 2f));
     }
 
 
@@ -78,8 +80,8 @@ public class GameScreen implements Screen {
         handleInput(delta);
         if (Gdx.input.isKeyPressed(Input.Keys.W) && y >= 18 * 32 && y <= 48 * 32) camera.position.y += speed * delta;
         if (Gdx.input.isKeyPressed(Input.Keys.S) && y < 48 * 32 && y >= 18 * 32) camera.position.y -= speed * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.A) && (x >= 26 * 32 && x <= 54 * 32)) camera.position.x -= speed * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.D) && x < 54 * 32 && x >= 26 * 32) camera.position.x += speed * delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.A) && (player.getX() >= 26 * 32 && player.getX() <= 54 * 32)) camera.position.x -= speed * delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.D) && player.getX() < 54 * 32 && player.getX() >= 26 * 32) camera.position.x += speed * delta;
 
 
         batch.begin();
@@ -119,7 +121,7 @@ public class GameScreen implements Screen {
             stone.moveRelativeToPlayer(playerDx, playerDy);
         }
 
-        batch.draw(playerRegion, x, y, playerRegion.getRegionWidth() / 1.5f, playerRegion.getRegionHeight() / 1.5f);
+        batch.draw(playerRegion, player.getX(), y, playerRegion.getRegionWidth() / 1.5f, playerRegion.getRegionHeight() / 1.5f);
         batch.end();
 
     }
@@ -157,23 +159,40 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.S) && y >= 0) {
             y -= speed * delta;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.A) && x >= 0) {
+        if (Gdx.input.isKeyPressed(Input.Keys.A) && player.getX() >= 0) {
             if (!facingLeft) {
                 flipTexture(true);
                 facingLeft = true;
             }
-            x -= speed * delta;
+            player.setX((int)(player.getX() - speed * delta));
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D) && x < (map.getTiles().length - 1) * 32) {
             if (facingLeft) {
                 flipTexture(false);
                 facingLeft = false;
             }
-            x += speed * delta;
+            player.setX((int)(player.getX() + speed * delta));
         }
     }
 
     private void flipTexture(boolean flipX) {
         if (playerRegion.isFlipX() != flipX) playerRegion.flip(true, false);
     }
+
+//    private void resolvePlayerCollision(Rectangle player, Rectangle obstacle) {
+//        if (player.x < obstacle.x) {
+//            // player is to the left of obstacle
+//            player.x = obstacle.x - player.width;
+//        } else if (player.x > obstacle.x) {
+//            // player is to the right of obstacle
+//            player.x = obstacle.x + obstacle.width;
+//        }
+//
+//        if (player.y < obstacle.y) {
+//            player.y = obstacle.y - player.height;
+//        } else if (player.y > obstacle.y) {
+//            player.y = obstacle.y + obstacle.height;
+//        }
+//    }
+
 }
