@@ -70,8 +70,8 @@ public class GameScreen implements Screen {
     float speed = 150f;
     private boolean facingLeft = false;
 
-    public GameScreen() {
-
+    public GameScreen(Game game) {
+        this.game = game;
 //         for (int i = 0; i < map.getTiles().length; i++) {
 //             for (int j = 0; j < map.getTiles()[i].length; j++) {
 //                 Tile tile = map.getTiles()[i][j];
@@ -90,14 +90,13 @@ public class GameScreen implements Screen {
 //         player.setY((int)(Gdx.graphics.getHeight() / 2f));
 //     }
 
-        game = new Game();
         player = new Texture(Gdx.files.internal("Horse_rider.png"));
         house = new Texture(Gdx.files.internal("Hut.png"));
         clock = new Texture(Gdx.files.internal("Stardew_Valley_Images/Clock/Clock.png"));
         playerRegion = new TextureRegion(player);
 
 
-        map = new Map(1);
+        map = game.getCurrentPlayer().getMap();
         tiles = map.getTiles();
 
         x = Gdx.graphics.getWidth() / 2f;
