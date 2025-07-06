@@ -11,8 +11,9 @@ public class Tree extends Product {
     private final Texture texture = GameAssetManager.assetManager.get(GameAssetManager.tree);
     private final float width = texture.getWidth() * 2f, height = texture.getHeight() * 2f;
     private Rectangle rect = new Rectangle();
+    private int x, y;
 
-    public Tree(int count, TreeType type) {
+    public Tree(int count, TreeType type, int x, int y) {
         super(count, type.getName(), 0, type.getTexture());
         this.type = type;
         this.isHitByThunder = false;

@@ -132,7 +132,6 @@ public class Tile {
             }
             else {
                 tile.setItem(new Stone(randomItem - 49, tile.getX() * 32 - 32, (60 - tile.getY()) * 32));
-                System.out.println(tile.getType().name());
                 tile.changeWalkable();
             }
         }

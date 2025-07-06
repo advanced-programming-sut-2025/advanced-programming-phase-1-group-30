@@ -1,8 +1,10 @@
 package AP.group30.StardewValley.models.Items.Products;
 
+import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.Item;
 import AP.group30.StardewValley.models.Items.ItemTexture;
+import AP.group30.StardewValley.models.Maps.TileTexture;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -10,8 +12,10 @@ public class Stone extends Item {
     private final Texture texture = GameAssetManager.assetManager.get(GameAssetManager.stone);
     private final float width = texture.getWidth() * 2f, height = texture.getHeight() * 2f;
     private Rectangle rect = new Rectangle();
+    private int x, y;
+
     public Stone(int count, int x, int y) {
-        super(count, "Stone", 10);
+        super(count, "Stone", 10, GameAssetManager.assetManager.get(GameAssetManager.stone));
         this.x = x;
         this.y = y;
         rect.x = x;

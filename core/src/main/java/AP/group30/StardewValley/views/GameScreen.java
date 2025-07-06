@@ -41,7 +41,7 @@ public class GameScreen implements Screen {
 //     Map map = new Map(2);
 //     float x = Gdx.graphics.getWidth() / 2f;
 //     float y = Gdx.graphics.getHeight() / 2f;
-//     float speed = 150f;
+     float speed = 150f;
 //     boolean facingLeft = false;
 //     OrthographicCamera camera;
 
@@ -124,8 +124,8 @@ public class GameScreen implements Screen {
         handleInput(delta);
         if (Gdx.input.isKeyPressed(Input.Keys.W) && y >= 18 * 32 && y <= 48 * 32) camera.position.y += speed * delta;
         if (Gdx.input.isKeyPressed(Input.Keys.S) && y < 48 * 32 && y >= 18 * 32) camera.position.y -= speed * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.A) && (player.getX() >= 26 * 32 && player.getX() <= 54 * 32)) camera.position.x -= speed * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.D) && player.getX() < 54 * 32 && player.getX() >= 26 * 32) camera.position.x += speed * delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.A) && (x >= 26 * 32 && x <= 54 * 32)) camera.position.x -= speed * delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.D) && x < 54 * 32 && x >= 26 * 32) camera.position.x += speed * delta;
 
 
         handleInput(delta);
