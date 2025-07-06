@@ -31,12 +31,30 @@ import java.util.Random;
 
 public class GameScreen implements Screen {
     private SpriteBatch batch;
+
+//     private InputProcessor gameInputProcessor;
+//     Player player;
+//     TextureRegion playerRegion = new TextureRegion(GameAssetManager.assetManager.get("Horse_rider.png", Texture.class));
+//     Texture house = GameAssetManager.assetManager.get(GameAssetManager.house);
+//     Texture ruinedGreenhouse = GameAssetManager.assetManager.get(GameAssetManager.ruinedGreenhouse);
+//     float playerDx = 0, playerDy = 0;
+//     Map map = new Map(2);
+//     float x = Gdx.graphics.getWidth() / 2f;
+//     float y = Gdx.graphics.getHeight() / 2f;
+//     float speed = 150f;
+//     boolean facingLeft = false;
+//     OrthographicCamera camera;
+
+
+//     // *** Game entities ***
+//     private ArrayList<Tree> trees = new ArrayList<>();
+//     private ArrayList<Stone> stones = new ArrayList<>();
+
     private OrthographicCamera camera;
     private Game game;
 
     private Texture player;
     private Texture house;
-    private Texture greenhouse;
     private Texture clock;
     private TextureRegion playerRegion;
 
@@ -44,6 +62,7 @@ public class GameScreen implements Screen {
     private final Map map;
     private final Tile[][] tiles;
     private Tile currentTile;
+
 
     private int[][] grassMap;
     private final Random random = new Random();
@@ -53,12 +72,31 @@ public class GameScreen implements Screen {
     private boolean facingLeft = false;
 
     public GameScreen() {
+
+//         for (int i = 0; i < map.getTiles().length; i++) {
+//             for (int j = 0; j < map.getTiles()[i].length; j++) {
+//                 Tile tile = map.getTiles()[i][j];
+//                 if (tile.getItem() != null) {
+//                     if (tile.getItem().getClass().equals(Tree.class)) {
+//                         Tree tree = (Tree) tile.getItem();
+//                         trees.add(tree);
+//                     } else if (tile.getItem().getClass().equals(Stone.class)) {
+//                         Stone stone = (Stone) tile.getItem();
+//                         stones.add(stone);
+//                     }
+//                 }
+//             }
+//         }
+//         player.setX((int)(Gdx.graphics.getWidth() / 2f));
+//         player.setY((int)(Gdx.graphics.getHeight() / 2f));
+//     }
+
         game = new Game();
         player = new Texture(Gdx.files.internal("Horse_rider.png"));
         house = new Texture(Gdx.files.internal("Hut.png"));
-        greenhouse = new Texture(Gdx.files.internal("ruined_greenhouse.png"));
         clock = new Texture(Gdx.files.internal("Stardew_Valley_Images/Clock/Clock.png"));
         playerRegion = new TextureRegion(player);
+
 
         map = new Map(1);
         tiles = map.getTiles();
@@ -84,6 +122,13 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         handleInput(delta);
+        if (Gdx.input.isKeyPressed(Input.Keys.W) && y >= 18 * 32 && y <= 48 * 32) camera.position.y += speed * delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.S) && y < 48 * 32 && y >= 18 * 32) camera.position.y -= speed * delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.A) && (player.getX() >= 26 * 32 && player.getX() <= 54 * 32)) camera.position.x -= speed * delta;
+        if (Gdx.input.isKeyPressed(Input.Keys.D) && player.getX() < 54 * 32 && player.getX() >= 26 * 32) camera.position.x += speed * delta;
+
+
+        handleInput(delta);
 
         camera.position.set(x + playerRegion.getRegionWidth() / 2f, y + playerRegion.getRegionHeight() / 2f, 0);
         camera.update();
@@ -94,9 +139,8 @@ public class GameScreen implements Screen {
         renderBackground();
         renderMap();
         renderWallsAroundMap();
-        renderHut();
-        renderGreenhouse();
         renderItems();
+        renderHut();
         renderPlayer();
         renderTime();
         batch.end();
@@ -155,6 +199,9 @@ public class GameScreen implements Screen {
             batch.draw(TileTexture.UP_WALL.getTexture(), i * tileSize, (mapHeight + 1) * tileSize, tileSize, (tileSize * 3));
         }
 
+//         batch.draw(playerRegion, player.getX(), y, playerRegion.getRegionWidth() / 1.5f, playerRegion.getRegionHeight() / 1.5f);
+//         batch.end();
+
         for (int j = 1; j < mapHeight + 3; j++) {
             batch.draw(TileTexture.LEFT_WALL.getTexture(), -1 * tileSize, j * tileSize, tileSize, tileSize);
             batch.draw(TileTexture.RIGHT_WALL.getTexture(), mapWidth * tileSize, j * tileSize, tileSize, tileSize);
@@ -191,40 +238,6 @@ public class GameScreen implements Screen {
         }
 
         batch.draw(house,
-            map.getTiles()[startTIleX][startTIleY].getX() * 32,
-            map.getTiles()[startTIleX][startTIleY].getY() * 32,
-            (endTIleX - startTIleX + 2) * 32,
-            (endTIleY - startTIleY + 3) * 32
-        );
-    }
-
-    private void renderGreenhouse() {
-        int startTIleX = 60;
-        int endTIleX = 65;
-        int startTIleY = 40;
-        int endTIleY = 45;
-
-        for (int i = 0; i < tiles.length; i++) {
-            for (int j = 0; j < tiles[i].length; j++) {
-                Tile tile = tiles[i][j];
-                if (tile.getType() == TileTypes.GREENHOUSE) {
-                    if (tiles[i-1][j].getType() != TileTypes.GREENHOUSE) {
-                        if (tiles[i][j+1].getType() != TileTypes.GREENHOUSE) {
-                            startTIleX = i;
-                            startTIleY = 60 - j;
-                        }
-                    }
-                    if (tiles[i+1][j].getType() != TileTypes.GREENHOUSE) {
-                        if (tiles[i][j-1].getType() != TileTypes.GREENHOUSE) {
-                            endTIleX = i;
-                            endTIleY = 60 - j;
-                        }
-                    }
-                }
-            }
-        }
-
-        batch.draw(greenhouse,
             map.getTiles()[startTIleX][startTIleY].getX() * 32,
             map.getTiles()[startTIleX][startTIleY].getY() * 32,
             (endTIleX - startTIleX + 2) * 32,
@@ -293,18 +306,24 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             nextY -= moveAmount;
         }
+//         if (Gdx.input.isKeyPressed(Input.Keys.A) && player.getX() >= 0) {
+
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+
             if (!facingLeft) {
                 flipTexture(true);
                 facingLeft = true;
             }
+//             player.setX((int)(player.getX() - speed * delta));
             nextX -= moveAmount;
+
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             if (facingLeft) {
                 flipTexture(false);
                 facingLeft = false;
             }
+//             player.setX((int)(player.getX() + speed * delta));
             nextX += moveAmount;
             changeX = player.getWidth();
         }
@@ -342,4 +361,21 @@ public class GameScreen implements Screen {
         int tileY = (int)(playerY / 32);
         return tiles[tileX][tileY];
     }
+
+//    private void resolvePlayerCollision(Rectangle player, Rectangle obstacle) {
+//        if (player.x < obstacle.x) {
+//            // player is to the left of obstacle
+//            player.x = obstacle.x - player.width;
+//        } else if (player.x > obstacle.x) {
+//            // player is to the right of obstacle
+//            player.x = obstacle.x + obstacle.width;
+//        }
+//
+//        if (player.y < obstacle.y) {
+//            player.y = obstacle.y - player.height;
+//        } else if (player.y > obstacle.y) {
+//            player.y = obstacle.y + obstacle.height;
+//        }
+//    }
+
 }

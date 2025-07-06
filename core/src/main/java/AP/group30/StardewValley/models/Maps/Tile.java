@@ -126,13 +126,14 @@ public class Tile {
             if (randomItem <= 35 || 55 <= randomItem) {
                 // Empty
             }
-            else if (randomItem <= 49) {
-                tile.setItem(new Tree(1, TreeType.getRandomTreeType(randomItem - 36)));
-                //tile.changeWalkable();
+            else if (randomItem <= 45) {
+                tile.setItem(new Tree(1, TreeType.getRandomTreeType(randomItem - 36), tile.getX() * 32 - 32, (60 - tile.getY()) * 32));
+                tile.changeWalkable();
             }
             else {
-                tile.setItem(new Stone(randomItem - 49));
-                //tile.changeWalkable();
+                tile.setItem(new Stone(randomItem - 49, tile.getX() * 32 - 32, (60 - tile.getY()) * 32));
+                System.out.println(tile.getType().name());
+                tile.changeWalkable();
             }
         }
         if(tile.getType().equals(TileTypes.QUARRY)) {
