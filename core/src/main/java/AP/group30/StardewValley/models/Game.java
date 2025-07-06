@@ -73,11 +73,11 @@ public class Game {
         this.id = App.getGames().size() + 1;
         this.currentTime = new Time();
         this.currentWeather = Weather.SUNNY;
-//        this.NPCs.add(new Sebastian());
-//        this.NPCs.add(new Abigail());
-//        this.NPCs.add(new Harvey());
-//        this.NPCs.add(new Leah());
-//        this.NPCs.add(new Robin());
+        this.NPCs.add(new Sebastian());
+        this.NPCs.add(new Abigail());
+        this.NPCs.add(new Harvey());
+        this.NPCs.add(new Leah());
+        this.NPCs.add(new Robin());
         this.blacksmith = new Blacksmith(0, 0, 0, 0);
         this.carpenter = new Carpenter(0, 0, 0, 0);
         this.fishShop = new FishShop(0, 0, 0, 0);

@@ -36,6 +36,7 @@ public class GameScreen implements Screen {
 
     private Texture player;
     private Texture house;
+    private Texture greenhouse;
     private Texture clock;
     private TextureRegion playerRegion;
 
@@ -55,6 +56,7 @@ public class GameScreen implements Screen {
         game = new Game();
         player = new Texture(Gdx.files.internal("Horse_rider.png"));
         house = new Texture(Gdx.files.internal("Hut.png"));
+        greenhouse = new Texture(Gdx.files.internal("ruined_greenhouse.png"));
         clock = new Texture(Gdx.files.internal("Stardew_Valley_Images/Clock/Clock.png"));
         playerRegion = new TextureRegion(player);
 
@@ -92,8 +94,9 @@ public class GameScreen implements Screen {
         renderBackground();
         renderMap();
         renderWallsAroundMap();
-        renderItems();
         renderHut();
+        renderGreenhouse();
+        renderItems();
         renderPlayer();
         renderTime();
         batch.end();
@@ -188,6 +191,40 @@ public class GameScreen implements Screen {
         }
 
         batch.draw(house,
+            map.getTiles()[startTIleX][startTIleY].getX() * 32,
+            map.getTiles()[startTIleX][startTIleY].getY() * 32,
+            (endTIleX - startTIleX + 2) * 32,
+            (endTIleY - startTIleY + 3) * 32
+        );
+    }
+
+    private void renderGreenhouse() {
+        int startTIleX = 60;
+        int endTIleX = 65;
+        int startTIleY = 40;
+        int endTIleY = 45;
+
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                Tile tile = tiles[i][j];
+                if (tile.getType() == TileTypes.GREENHOUSE) {
+                    if (tiles[i-1][j].getType() != TileTypes.GREENHOUSE) {
+                        if (tiles[i][j+1].getType() != TileTypes.GREENHOUSE) {
+                            startTIleX = i;
+                            startTIleY = 60 - j;
+                        }
+                    }
+                    if (tiles[i+1][j].getType() != TileTypes.GREENHOUSE) {
+                        if (tiles[i][j-1].getType() != TileTypes.GREENHOUSE) {
+                            endTIleX = i;
+                            endTIleY = 60 - j;
+                        }
+                    }
+                }
+            }
+        }
+
+        batch.draw(greenhouse,
             map.getTiles()[startTIleX][startTIleY].getX() * 32,
             map.getTiles()[startTIleX][startTIleY].getY() * 32,
             (endTIleX - startTIleX + 2) * 32,
