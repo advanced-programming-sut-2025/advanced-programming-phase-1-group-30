@@ -1,5 +1,6 @@
 package AP.group30.StardewValley.views;
 
+import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
@@ -70,6 +71,8 @@ public class GameScreen implements Screen {
     float speed = 150f;
     private boolean facingLeft = false;
 
+    private InventoryScreen inventoryScreen;
+
     public GameScreen(Game game) {
         this.game = game;
 //         for (int i = 0; i < map.getTiles().length; i++) {
@@ -112,6 +115,8 @@ public class GameScreen implements Screen {
 
         Gdx.input.setInputProcessor(null);
         generateGrassMap();
+
+        inventoryScreen = new InventoryScreen(batch, Main.getMain().skin);
     }
 
     @Override
@@ -119,14 +124,17 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        handleInput(delta);
-        if (Gdx.input.isKeyPressed(Input.Keys.W) && y >= 18 * 32 && y <= 48 * 32) camera.position.y += speed * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.S) && y < 48 * 32 && y >= 18 * 32) camera.position.y -= speed * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.A) && (x >= 26 * 32 && x <= 54 * 32)) camera.position.x -= speed * delta;
-        if (Gdx.input.isKeyPressed(Input.Keys.D) && x < 54 * 32 && x >= 26 * 32) camera.position.x += speed * delta;
+        if (!inventoryScreen.isVisible()) {
+            handleInput(delta);
+            if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
+            if (Gdx.input.isKeyPressed(Input.Keys.S)) camera.position.y -= speed * delta;
+            if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
+        }
 
-
-        handleInput(delta);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            inventoryScreen.toggle();
+        }
 
         camera.position.set(x + playerRegion.getRegionWidth() / 2f, y + playerRegion.getRegionHeight() / 2f, 0);
         camera.update();
@@ -142,6 +150,8 @@ public class GameScreen implements Screen {
         renderPlayer();
         renderTime();
         batch.end();
+
+        inventoryScreen.render();
 
         currentTile = getTileUnderPlayer(x, y);
     }
@@ -287,6 +297,7 @@ public class GameScreen implements Screen {
         batch.dispose();
         player.dispose();
         house.dispose();
+        inventoryScreen.dispose();
     }
 
     private void handleInput(float delta) {

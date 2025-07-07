@@ -17,7 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public class Main extends Game {
     private static Main main;
     public static SpriteBatch batch;
-    Skin skin;
+    public Skin skin;
 
 
 
