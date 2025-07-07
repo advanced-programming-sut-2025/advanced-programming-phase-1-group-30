@@ -1,9 +1,9 @@
 package AP.group30.StardewValley.models.Invetory;
 
 public enum BackPackType {
-    INITIAL_BACKPACK(15),
+    INITIAL_BACKPACK(12),
     BIG_BACKPACK(24),
-    DELUX_BACKPACK(Integer.MAX_VALUE);
+    DELUX_BACKPACK(36);
 
     private final int capacity;
 
