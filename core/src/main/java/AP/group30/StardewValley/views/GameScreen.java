@@ -1,33 +1,28 @@
 package AP.group30.StardewValley.views;
 
 import AP.group30.StardewValley.Main;
-import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
-import AP.group30.StardewValley.models.Items.ItemTexture;
+import AP.group30.StardewValley.models.Items.Products.Stone;
+import AP.group30.StardewValley.models.Items.Products.Tree;
 import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Maps.Tile;
 import AP.group30.StardewValley.models.Maps.TileTexture;
 import AP.group30.StardewValley.models.Maps.TileTypes;
-import AP.group30.StardewValley.models.Players.Player;
-import AP.group30.StardewValley.models.Users.RegisterQuestions;
-import AP.group30.StardewValley.models.Users.User;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class GameScreen implements Screen {
@@ -46,16 +41,18 @@ public class GameScreen implements Screen {
 
 
 //     // *** Game entities ***
-//     private ArrayList<Tree> trees = new ArrayList<>();
-//     private ArrayList<Stone> stones = new ArrayList<>();
+     private ArrayList<Tree> trees = new ArrayList<>();
+     private ArrayList<Stone> stones = new ArrayList<>();
 
     private OrthographicCamera camera;
     private Game game;
 
     private Texture player;
+    private Rectangle playerRect = new Rectangle();
     private Texture house;
     private Texture clock;
     private TextureRegion playerRegion;
+    BitmapFont font = (new Skin(Gdx.files.internal("skin/pixthulhu-ui.json")).getFont("font"));
 
 
     private final Map map;
@@ -75,35 +72,36 @@ public class GameScreen implements Screen {
 
     public GameScreen(Game game) {
         this.game = game;
-//         for (int i = 0; i < map.getTiles().length; i++) {
-//             for (int j = 0; j < map.getTiles()[i].length; j++) {
-//                 Tile tile = map.getTiles()[i][j];
-//                 if (tile.getItem() != null) {
-//                     if (tile.getItem().getClass().equals(Tree.class)) {
-//                         Tree tree = (Tree) tile.getItem();
-//                         trees.add(tree);
-//                     } else if (tile.getItem().getClass().equals(Stone.class)) {
-//                         Stone stone = (Stone) tile.getItem();
-//                         stones.add(stone);
-//                     }
-//                 }
-//             }
-//         }
 //         player.setX((int)(Gdx.graphics.getWidth() / 2f));
 //         player.setY((int)(Gdx.graphics.getHeight() / 2f));
 //     }
 
-        player = new Texture(Gdx.files.internal("Horse_rider.png"));
-        house = new Texture(Gdx.files.internal("Hut.png"));
-        clock = new Texture(Gdx.files.internal("Stardew_Valley_Images/Clock/Clock.png"));
+        player = GameAssetManager.assetManager.get(GameAssetManager.player);
+        house = GameAssetManager.assetManager.get(GameAssetManager.house);
+        clock = GameAssetManager.assetManager.get(GameAssetManager.clock);
         playerRegion = new TextureRegion(player);
-
 
         map = game.getCurrentPlayer().getMap();
         tiles = map.getTiles();
+        for (int i = 0; i < map.getTiles().length; i++) {
+            for (int j = 0; j < map.getTiles()[i].length; j++) {
+                Tile tile = map.getTiles()[i][j];
+                if (tile.getItem() != null) {
+                    if (tile.getItem().getClass().equals(Tree.class)) {
+                        Tree tree = (Tree) tile.getItem();
+                        trees.add(tree);
+                    } else if (tile.getItem().getClass().equals(Stone.class)) {
+                        Stone stone = (Stone) tile.getItem();
+                        stones.add(stone);
+                    }
+                }
+            }
+        }
 
         x = Gdx.graphics.getWidth() / 2f;
         y = Gdx.graphics.getHeight() / 2f;
+        playerRect.setPosition(x, y);
+        playerRect.setSize(player.getWidth() / 2f, player.getHeight() / 4f);
     }
 
     @Override
@@ -145,15 +143,14 @@ public class GameScreen implements Screen {
         renderBackground();
         renderMap();
         renderWallsAroundMap();
-        renderItems();
+//        renderItems();
+        renderTreeAndStone();
         renderHut();
         renderPlayer();
         renderTime();
         batch.end();
 
         inventoryScreen.render();
-
-        currentTile = getTileUnderPlayer(x, y);
     }
 
     private void generateGrassMap() {
@@ -194,7 +191,7 @@ public class GameScreen implements Screen {
     }
 
     private void renderPlayer() {
-        batch.draw(playerRegion, x, y);
+        batch.draw(playerRegion, x, y, playerRegion.getRegionWidth() / 2f, playerRegion.getRegionHeight() / 2f);
     }
 
     private void renderWallsAroundMap() {
@@ -206,9 +203,6 @@ public class GameScreen implements Screen {
             batch.draw(TileTexture.DOWN_WALL.getTexture(), i * tileSize, 0, tileSize, tileSize);
             batch.draw(TileTexture.UP_WALL.getTexture(), i * tileSize, (mapHeight + 1) * tileSize, tileSize, (tileSize * 3));
         }
-
-//         batch.draw(playerRegion, player.getX(), y, playerRegion.getRegionWidth() / 1.5f, playerRegion.getRegionHeight() / 1.5f);
-//         batch.end();
 
         for (int j = 1; j < mapHeight + 3; j++) {
             batch.draw(TileTexture.LEFT_WALL.getTexture(), -1 * tileSize, j * tileSize, tileSize, tileSize);
@@ -273,9 +267,17 @@ public class GameScreen implements Screen {
         }
     }
 
+    private void renderTreeAndStone() {
+        for (Tree tree : trees) {
+            batch.draw(tree.getTexture(), tree.getX(), tree.getY(), tree.getWidth(), tree.getHeight());
+        }
+        for (Stone stone : stones) {
+            batch.draw(stone.getTexture(), stone.getX(), stone.getY(), stone.getWidth(), stone.getHeight());
+        }
+    }
+
     private void renderTime(){
         batch.draw(clock,camera.position.x + 650, camera.position.y + 300);
-        BitmapFont font = (new Skin(Gdx.files.internal("skin/pixthulhu-ui.json")).getFont("font"));
         font.setColor(Color.BLACK);
         font.draw(batch, String.format("%s %d",game.getCurrentTime().getDayOfWeek(),game.getCurrentTime().getDay()),camera.position.x + 760,camera.position.y + 510);
         font.draw(batch, String.format("%02d : %02d",game.getCurrentTime().getHour(),game.getCurrentTime().getMinute()),camera.position.x +800, camera.position.y + 420);
@@ -298,50 +300,82 @@ public class GameScreen implements Screen {
         player.dispose();
         house.dispose();
         inventoryScreen.dispose();
+        clock.dispose();
+
     }
 
     private void handleInput(float delta) {
-        float nextX = x;
-        float nextY = y;
-        float speed = 150f;
         float moveAmount = speed * delta;
-        float changeX = 0f;
-        float changeY = 0f;
+
+        float proposedX = x;
+        float proposedY = y;
+
+        boolean moved = false;
 
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            nextY += moveAmount;
-            changeY = player.getHeight();
+            proposedY += moveAmount;
+            moved = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            nextY -= moveAmount;
+            proposedY -= moveAmount;
+            moved = true;
         }
-//         if (Gdx.input.isKeyPressed(Input.Keys.A) && player.getX() >= 0) {
-
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-
+            proposedX -= moveAmount;
             if (!facingLeft) {
                 flipTexture(true);
                 facingLeft = true;
             }
-//             player.setX((int)(player.getX() - speed * delta));
-            nextX -= moveAmount;
-
+            moved = true;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            proposedX += moveAmount;
             if (facingLeft) {
                 flipTexture(false);
                 facingLeft = false;
             }
-//             player.setX((int)(player.getX() + speed * delta));
-            nextX += moveAmount;
-            changeX = player.getWidth();
+            moved = true;
         }
 
-        if (isWalkableTile(nextX, nextY, changeX, changeY)) {
-            x = nextX;
-            y = nextY;
+        if (moved) {
+            // First, check tile collision
+            Tile tile = getTileUnderPlayer(proposedX, proposedY);
+            if (tile.getType().equals(TileTypes.WATER)) {
+                System.out.println("water");
+                return; // Don't move into unwalkable tile
+            }
+
+            // Temporarily move the player's rectangle
+            playerRect.setPosition(proposedX, proposedY);
+
+            // Check collision with trees and stones
+            boolean collides = false;
+            for (Tree tree : trees) {
+                if (playerRect.overlaps(tree.getRect())) {
+                    collides = true;
+                    break;
+                }
+            }
+            if (!collides) {
+                for (Stone stone : stones) {
+                    if (playerRect.overlaps(stone.getRect())) {
+                        collides = true;
+                        break;
+                    }
+                }
+            }
+
+            // If no collisions, apply the move
+            if (!collides) {
+                x = proposedX;
+                y = proposedY;
+            }
+
+            // Always reset playerRect to actual position
+            playerRect.setPosition(x, y);
         }
     }
+
 
     private boolean isWalkableTile(float nextX, float nextY, float changeX, float changeY) {
         int tileSize = 32;
@@ -368,23 +402,27 @@ public class GameScreen implements Screen {
     private Tile getTileUnderPlayer(float playerX, float playerY) {
         int tileX = (int)(playerX / 32);
         int tileY = (int)(playerY / 32);
-        return tiles[tileX][tileY];
+        return tiles[tileX][60 - tileY];
     }
 
-//    private void resolvePlayerCollision(Rectangle player, Rectangle obstacle) {
-//        if (player.x < obstacle.x) {
-//            // player is to the left of obstacle
-//            player.x = obstacle.x - player.width;
-//        } else if (player.x > obstacle.x) {
-//            // player is to the right of obstacle
-//            player.x = obstacle.x + obstacle.width;
-//        }
-//
-//        if (player.y < obstacle.y) {
-//            player.y = obstacle.y - player.height;
-//        } else if (player.y > obstacle.y) {
-//            player.y = obstacle.y + obstacle.height;
-//        }
-//    }
+    private void resolvePlayerCollision(Rectangle player, Rectangle obstacle) {
+        if (player.x < obstacle.x) {
+            // player is to the left of obstacle
+            player.x = obstacle.x - player.width;
+            x = obstacle.x - player.width;
+        } else if (player.x > obstacle.x) {
+            // player is to the right of obstacle
+            player.x = obstacle.x + obstacle.width;
+            x = obstacle.x + obstacle.width;
+        }
+
+        if (player.y < obstacle.y) {
+            player.y = obstacle.y - player.height;
+            y = obstacle.y - player.height;
+        } else if (player.y > obstacle.y) {
+            player.y = obstacle.y + obstacle.height;
+            y = obstacle.y + obstacle.height;
+        }
+    }
 
 }
