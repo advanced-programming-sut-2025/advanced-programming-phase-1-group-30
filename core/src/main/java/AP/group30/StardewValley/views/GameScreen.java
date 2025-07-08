@@ -1,6 +1,7 @@
 package AP.group30.StardewValley.views;
 
 import AP.group30.StardewValley.Main;
+import AP.group30.StardewValley.controllers.GameMenuController;
 import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.Products.Stone;
@@ -9,6 +10,8 @@ import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Maps.Tile;
 import AP.group30.StardewValley.models.Maps.TileTexture;
 import AP.group30.StardewValley.models.Maps.TileTypes;
+import AP.group30.StardewValley.models.Players.Direction;
+import AP.group30.StardewValley.models.Players.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -41,13 +44,14 @@ public class GameScreen implements Screen {
 
 
 //     // *** Game entities ***
-     private ArrayList<Tree> trees = new ArrayList<>();
-     private ArrayList<Stone> stones = new ArrayList<>();
+     public static ArrayList<Tree> trees = new ArrayList<>();
+     public static ArrayList<Stone> stones = new ArrayList<>();
 
     private OrthographicCamera camera;
     private Game game;
+    private Player player;
 
-    private Texture player;
+    private Texture playerTexture;
     private Rectangle playerRect = new Rectangle();
     private Texture house;
     private Texture clock;
@@ -76,10 +80,11 @@ public class GameScreen implements Screen {
 //         player.setY((int)(Gdx.graphics.getHeight() / 2f));
 //     }
 
-        player = GameAssetManager.assetManager.get(GameAssetManager.player);
+        player = game.getCurrentPlayer();
+        playerTexture = GameAssetManager.assetManager.get(GameAssetManager.player);
         house = GameAssetManager.assetManager.get(GameAssetManager.house);
         clock = GameAssetManager.assetManager.get(GameAssetManager.clock);
-        playerRegion = new TextureRegion(player);
+        playerRegion = new TextureRegion(playerTexture);
 
         map = game.getCurrentPlayer().getMap();
         tiles = map.getTiles();
@@ -98,10 +103,10 @@ public class GameScreen implements Screen {
             }
         }
 
-        x = Gdx.graphics.getWidth() / 2f;
-        y = Gdx.graphics.getHeight() / 2f;
+        x = Gdx.graphics.getWidth() + 100;
+        y = Gdx.graphics.getHeight() + 450;
         playerRect.setPosition(x, y);
-        playerRect.setSize(player.getWidth() / 2f, player.getHeight() / 4f);
+        playerRect.setSize(playerTexture.getWidth() / 2f, playerTexture.getHeight() / 4f);
     }
 
     @Override
@@ -122,14 +127,6 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (!inventoryScreen.isVisible()) {
-            handleInput(delta);
-            if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
-            if (Gdx.input.isKeyPressed(Input.Keys.S)) camera.position.y -= speed * delta;
-            if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
-        }
-
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             inventoryScreen.toggle();
         }
@@ -149,6 +146,13 @@ public class GameScreen implements Screen {
         renderPlayer();
         renderTime();
         batch.end();
+        if (!inventoryScreen.isVisible()) {
+            handleInput(delta);
+            if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
+            if (Gdx.input.isKeyPressed(Input.Keys.S)) camera.position.y -= speed * delta;
+            if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
+        }
 
         inventoryScreen.render();
     }
@@ -297,7 +301,7 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         batch.dispose();
-        player.dispose();
+        playerTexture.dispose();
         house.dispose();
         inventoryScreen.dispose();
         clock.dispose();
@@ -315,10 +319,12 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             proposedY += moveAmount;
             moved = true;
+            player.setDirection(Direction.NORTH);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             proposedY -= moveAmount;
             moved = true;
+            player.setDirection(Direction.SOUTH);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             proposedX -= moveAmount;
@@ -327,6 +333,7 @@ public class GameScreen implements Screen {
                 facingLeft = true;
             }
             moved = true;
+            player.setDirection(Direction.WEST);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             proposedX += moveAmount;
@@ -335,20 +342,17 @@ public class GameScreen implements Screen {
                 facingLeft = false;
             }
             moved = true;
+            player.setDirection(Direction.EAST);
         }
 
         if (moved) {
-            // First, check tile collision
             Tile tile = getTileUnderPlayer(proposedX, proposedY);
             if (tile.getType().equals(TileTypes.WATER)) {
-                System.out.println("water");
-                return; // Don't move into unwalkable tile
+                return;
             }
 
-            // Temporarily move the player's rectangle
             playerRect.setPosition(proposedX, proposedY);
 
-            // Check collision with trees and stones
             boolean collides = false;
             for (Tree tree : trees) {
                 if (playerRect.overlaps(tree.getRect())) {
@@ -365,14 +369,17 @@ public class GameScreen implements Screen {
                 }
             }
 
-            // If no collisions, apply the move
             if (!collides) {
                 x = proposedX;
                 y = proposedY;
             }
-
-            // Always reset playerRect to actual position
             playerRect.setPosition(x, y);
+            player.setX((int)x);
+            player.setY((int)y);
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.C) || Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            GameMenuController.toolUse(player.getDirection(), (int)x, (int)y, batch);
         }
     }
 
@@ -425,4 +432,11 @@ public class GameScreen implements Screen {
         }
     }
 
+    public ArrayList<Tree> getTrees() {
+        return trees;
+    }
+
+    public ArrayList<Stone> getStones() {
+        return stones;
+    }
 }

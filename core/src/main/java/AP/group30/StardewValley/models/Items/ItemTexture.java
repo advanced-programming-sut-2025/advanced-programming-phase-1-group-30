@@ -1,5 +1,6 @@
 package AP.group30.StardewValley.models.Items;
 
+import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.Products.ForagingSeedType;
 import AP.group30.StardewValley.models.Items.Products.FruitType;
 import com.badlogic.gdx.Gdx;
@@ -9,25 +10,25 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public enum ItemTexture {
-    WOOD(new Texture(Gdx.files.internal("item/resource/Wood.png"))),
+    WOOD(GameAssetManager.assetManager.get(GameAssetManager.wood)),
 
-    STONE(new Texture(Gdx.files.internal("item/resource/Stone.png"))),
+    STONE(GameAssetManager.assetManager.get(GameAssetManager.stones)),
 
-    APRICOT_TREE(new Texture(Gdx.files.internal("tree/Apricot.png"))),
-    CHERRY_TREE(new Texture(Gdx.files.internal("tree/Cherry.png"))),
-    BANANA_TREE(new Texture(Gdx.files.internal("tree/Banana.png"))),
-    MANGO_TREE(new Texture(Gdx.files.internal("tree/Mango.png"))),
-    ORANGE_TREE(new Texture(Gdx.files.internal("tree/Orange.png"))),
-    PEACH_TREE(new Texture(Gdx.files.internal("tree/Peach.png"))),
-    APPLE_TREE(new Texture(Gdx.files.internal("tree/Apple.png"))),
-    POMEGRANATE_TREE(new Texture(Gdx.files.internal("tree/Pomegranate.png"))),
-    OAK_TREE(new Texture(Gdx.files.internal("tree/Oak.png"))),
-    MAPLE_TREE(new Texture(Gdx.files.internal("tree/Maple.png"))),
-    PINE_TREE(new Texture(Gdx.files.internal("tree/Pine.png"))),
-    MAHOGANY_TREE(new Texture(Gdx.files.internal("tree/Mahogany.png"))),
-    MUSHROOM_TREE(new Texture(Gdx.files.internal("tree/Mushroom.png"))),
-    WILD_TREE(new Texture(Gdx.files.internal("tree/Wild.png"))),
-    MYSTIC_TREE(new Texture(Gdx.files.internal("tree/Mystic.png"))),;
+    APRICOT_TREE(GameAssetManager.assetManager.get(GameAssetManager.apricot_tree)),
+    CHERRY_TREE(GameAssetManager.assetManager.get(GameAssetManager.cherry_tree)),
+    BANANA_TREE(GameAssetManager.assetManager.get(GameAssetManager.banana_tree)),
+    MANGO_TREE(GameAssetManager.assetManager.get(GameAssetManager.mango_tree)),
+    ORANGE_TREE(GameAssetManager.assetManager.get(GameAssetManager.orange_tree)),
+    PEACH_TREE(GameAssetManager.assetManager.get(GameAssetManager.peach_tree)),
+    APPLE_TREE(GameAssetManager.assetManager.get(GameAssetManager.apple_tree)),
+    POMEGRANATE_TREE(GameAssetManager.assetManager.get(GameAssetManager.pomegranate_tree)),
+    OAK_TREE(GameAssetManager.assetManager.get(GameAssetManager.oak_tree)),
+    MAPLE_TREE(GameAssetManager.assetManager.get(GameAssetManager.maple_tree)),
+    PINE_TREE(GameAssetManager.assetManager.get(GameAssetManager.pine_tree)),
+    MAHOGANY_TREE(GameAssetManager.assetManager.get(GameAssetManager.mahogany_tree)),
+    MUSHROOM_TREE(GameAssetManager.assetManager.get(GameAssetManager.mushroom_tree)),
+    WILD_TREE(GameAssetManager.assetManager.get(GameAssetManager.wild_tree)),
+    MYSTIC_TREE(GameAssetManager.assetManager.get(GameAssetManager.mystic_tree));
 
     private final Texture TEXTURE;
 

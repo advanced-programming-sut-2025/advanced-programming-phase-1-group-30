@@ -39,6 +39,26 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> hoe = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Hoe/Hoe.png", Texture.class);
     public static final AssetDescriptor<Texture> wateringCan = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Watering_Can/Watering_Can.png", Texture.class);
 
+    public static final AssetDescriptor<Texture> wood = new AssetDescriptor<>("item/resource/Wood.png", Texture.class);
+    public static final AssetDescriptor<Texture> stones = new AssetDescriptor<>("item/resource/Stone.png", Texture.class);
+
+    public static final AssetDescriptor<Texture> apricot_tree = new AssetDescriptor<>("tree/Apricot.png", Texture.class);
+    public static final AssetDescriptor<Texture> cherry_tree = new AssetDescriptor<>("tree/Cherry.png", Texture.class);
+    public static final AssetDescriptor<Texture> banana_tree = new AssetDescriptor<>("tree/Banana.png", Texture.class);
+    public static final AssetDescriptor<Texture> mango_tree = new AssetDescriptor<>("tree/Mango.png", Texture.class);
+    public static final AssetDescriptor<Texture> orange_tree = new AssetDescriptor<>("tree/Orange.png", Texture.class);
+    public static final AssetDescriptor<Texture> peach_tree = new AssetDescriptor<>("tree/Peach.png", Texture.class);
+    public static final AssetDescriptor<Texture> apple_tree = new AssetDescriptor<>("tree/Apple.png", Texture.class);
+    public static final AssetDescriptor<Texture> pomegranate_tree = new AssetDescriptor<>("tree/Pomegranate.png", Texture.class);
+    public static final AssetDescriptor<Texture> oak_tree = new AssetDescriptor<>("tree/Oak.png", Texture.class);
+    public static final AssetDescriptor<Texture> maple_tree = new AssetDescriptor<>("tree/Maple.png", Texture.class);
+    public static final AssetDescriptor<Texture> pine_tree = new AssetDescriptor<>("tree/Pine.png", Texture.class);
+    public static final AssetDescriptor<Texture> mahogany_tree = new AssetDescriptor<>("tree/Mahogany.png", Texture.class);
+    public static final AssetDescriptor<Texture> mushroom_tree = new AssetDescriptor<>("tree/Mushroom.png", Texture.class);
+    public static final AssetDescriptor<Texture> wild_tree = new AssetDescriptor<>("tree/Wild.png", Texture.class);
+    public static final AssetDescriptor<Texture> mystic_tree = new AssetDescriptor<>("tree/Mystic.png", Texture.class);
+
+
     public static void queueAsset() {
         assetManager.load(background);
         assetManager.load(nightBackground);
@@ -69,5 +89,25 @@ public class GameAssetManager {
         assetManager.load(scythe);
         assetManager.load(hoe);
         assetManager.load(wateringCan);
+        assetManager.load(wood);
+        assetManager.load(stones);
+        assetManager.load(apricot_tree);
+        assetManager.load(cherry_tree);
+        assetManager.load(banana_tree);
+        assetManager.load(mango_tree);
+        assetManager.load(orange_tree);
+        assetManager.load(peach_tree);
+        assetManager.load(apple_tree);
+        assetManager.load(pomegranate_tree);
+        assetManager.load(oak_tree);
+        assetManager.load(maple_tree);
+        assetManager.load(pine_tree);
+        assetManager.load(mahogany_tree);
+        assetManager.load(mushroom_tree);
+        assetManager.load(wild_tree);
+        assetManager.load(mystic_tree);
+        assetManager.load(pine_tree);
+        assetManager.load(mahogany_tree);
+        assetManager.load(mushroom_tree);
     }
 }

@@ -145,7 +145,7 @@ public class GameMenu implements AppMenu {
         matcher = GameMenuCommands.Tool_Use.regexMatcher(command);
         if (matcher.matches()) {
             String direction = matcher.group("direction");
-            GameMenuController.toolUse(direction);
+//            GameMenuController.toolUse(direction);
             return;
         }
         matcher = GameMenuCommands.UPGRADE_TOOL.regexMatcher(command);
