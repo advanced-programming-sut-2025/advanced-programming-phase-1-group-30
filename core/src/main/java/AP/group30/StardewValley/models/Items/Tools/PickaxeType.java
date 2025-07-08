@@ -4,11 +4,11 @@ import AP.group30.StardewValley.models.Items.ItemTexture;
 import com.badlogic.gdx.graphics.Texture;
 
 public enum PickaxeType {
-    NORMAL("normal pickaxe",5,0, ItemTexture.WOOD.getTexture()),
-    COPPER("copper pickaxe", 4,1, ItemTexture.WOOD.getTexture()),
-    IRON("iron pickaxe", 3,2, ItemTexture.WOOD.getTexture()),
-    GOLD("gold pickaxe", 2,3, ItemTexture.WOOD.getTexture()),
-    IRIDIUM("iridium pickaxe", 1,4, ItemTexture.WOOD.getTexture());
+    NORMAL("normal pickaxe",5,0, ItemTexture.PICKAXE.getTexture()),
+    COPPER("copper pickaxe", 4,1, ItemTexture.PICKAXE.getTexture()),
+    IRON("iron pickaxe", 3,2, ItemTexture.PICKAXE.getTexture()),
+    GOLD("gold pickaxe", 2,3, ItemTexture.PICKAXE.getTexture()),
+    IRIDIUM("iridium pickaxe", 1,4, ItemTexture.PICKAXE.getTexture());
 
     private final String name;
     private final int energyUsed;

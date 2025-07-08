@@ -38,6 +38,7 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> scythe = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Scythe/Scythe.png", Texture.class);
     public static final AssetDescriptor<Texture> hoe = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Hoe/Hoe.png", Texture.class);
     public static final AssetDescriptor<Texture> wateringCan = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Watering_Can/Watering_Can.png", Texture.class);
+    public static final AssetDescriptor<Texture> trashCan = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Trash_Can_Copper.png", Texture.class);
 
     public static final AssetDescriptor<Texture> wood = new AssetDescriptor<>("item/resource/Wood.png", Texture.class);
     public static final AssetDescriptor<Texture> stones = new AssetDescriptor<>("item/resource/Stone.png", Texture.class);
@@ -109,5 +110,6 @@ public class GameAssetManager {
         assetManager.load(pine_tree);
         assetManager.load(mahogany_tree);
         assetManager.load(mushroom_tree);
+        assetManager.load(trashCan);
     }
 }

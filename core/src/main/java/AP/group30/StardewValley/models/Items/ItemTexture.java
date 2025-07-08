@@ -4,14 +4,15 @@ import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.Products.ForagingSeedType;
 import AP.group30.StardewValley.models.Items.Products.FruitType;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.graphics.Texture;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public enum ItemTexture {
-    WOOD(GameAssetManager.assetManager.get(GameAssetManager.wood)),
 
+    WOOD(GameAssetManager.assetManager.get(GameAssetManager.wood)),
     STONE(GameAssetManager.assetManager.get(GameAssetManager.stones)),
 
     APRICOT_TREE(GameAssetManager.assetManager.get(GameAssetManager.apricot_tree)),
@@ -29,6 +30,13 @@ public enum ItemTexture {
     MUSHROOM_TREE(GameAssetManager.assetManager.get(GameAssetManager.mushroom_tree)),
     WILD_TREE(GameAssetManager.assetManager.get(GameAssetManager.wild_tree)),
     MYSTIC_TREE(GameAssetManager.assetManager.get(GameAssetManager.mystic_tree));
+  
+    AXE(GameAssetManager.assetManager.get(GameAssetManager.axe)),
+    PICKAXE(GameAssetManager.assetManager.get(GameAssetManager.pickaxe)),
+    SCYTHE(GameAssetManager.assetManager.get(GameAssetManager.scythe)),
+    HOE(GameAssetManager.assetManager.get(GameAssetManager.hoe)),
+    WATERING_CAN(GameAssetManager.assetManager.get(GameAssetManager.wateringCan)),
+    TRASH_CAN(GameAssetManager.assetManager.get(GameAssetManager.trashCan)),;
 
     private final Texture TEXTURE;
 
