@@ -7,8 +7,8 @@ import com.badlogic.gdx.math.Rectangle;
 public class Tree extends Product {
     private final TreeType type;
     private boolean isHitByThunder;
-    private final Texture texture = GameAssetManager.assetManager.get(GameAssetManager.tree);
-    private final float width = texture.getWidth(), height = texture.getHeight();
+    private Texture texture;
+    private float width, height;
     private Rectangle rect = new Rectangle();
     private int x, y;
 
@@ -16,13 +16,15 @@ public class Tree extends Product {
         super(count, type.getName(), 0, type.getTexture());
         this.type = type;
         this.isHitByThunder = false;
+        this.texture = type.getTexture();
+        width = texture.getWidth();
+        height = texture.getHeight();
         this.x = x;
         this.y = y;
         rect.x = x + width / 4;
         rect.y = y;
         rect.width = (int)width / 2f;
         rect.height = (int)height / 2f;
-
     }
 
     public TreeType getType() {
