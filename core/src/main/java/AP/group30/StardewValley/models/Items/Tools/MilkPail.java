@@ -8,7 +8,7 @@ public class MilkPail extends Tool {
     private int capacity = 0;
 
     public MilkPail(int count, int capacity) {
-        super(count, "Milk Pail", ItemTexture.WOOD.getTexture());
+        super(count, "Milk Pail", ItemTexture.WATERING_CAN.getTexture());
         this.capacity = capacity;
     }
     public int getCost() {

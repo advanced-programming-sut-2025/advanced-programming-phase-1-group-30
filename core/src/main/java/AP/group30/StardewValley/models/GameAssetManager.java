@@ -38,6 +38,7 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> scythe = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Scythe/Scythe.png", Texture.class);
     public static final AssetDescriptor<Texture> hoe = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Hoe/Hoe.png", Texture.class);
     public static final AssetDescriptor<Texture> wateringCan = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Watering_Can/Watering_Can.png", Texture.class);
+    public static final AssetDescriptor<Texture> trashCan = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Trash_Can_Copper.png", Texture.class);
 
     public static void queueAsset() {
         assetManager.load(background);
@@ -69,5 +70,6 @@ public class GameAssetManager {
         assetManager.load(scythe);
         assetManager.load(hoe);
         assetManager.load(wateringCan);
+        assetManager.load(trashCan);
     }
 }

@@ -44,7 +44,7 @@ public class Player {
     private final ArrayList<Skills> skills = new ArrayList<>();
     private int selectionNumber;
     private boolean isPassedOut = false;
-    private Item wield = null;
+    private Item wield;
     private int farming = 0;
     private int foraging = 0;
     private int fishing = 0;
@@ -91,6 +91,7 @@ public class Player {
         this.backPack.addItem(new Basket(1, BasketType.NORMAL));
         this.backPack.addItem(new MilkPail(1, 10));
         this.backPack.addItem(new Scythe(1));
+        wield = backPack.getItems().getFirst();
         this.trashCan = new TrashCan(TrashCanType.INITIAL_TRASHCAN);
         this.backPack.addItem(new ForagingSeed(10, ForagingSeedType.MELON_SEEDS)); //TODO tile & initial seed
         this.backPack.addItem(new Item(1, "bouquet", 10, ItemTexture.WOOD.getTexture()));
