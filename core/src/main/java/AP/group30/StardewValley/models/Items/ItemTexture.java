@@ -35,7 +35,8 @@ public enum ItemTexture {
     PICKAXE(GameAssetManager.assetManager.get(GameAssetManager.pickaxe)),
     SCYTHE(GameAssetManager.assetManager.get(GameAssetManager.scythe)),
     HOE(GameAssetManager.assetManager.get(GameAssetManager.hoe)),
-    WATERING_CAN(GameAssetManager.assetManager.get(GameAssetManager.wateringCan)),;
+    WATERING_CAN(GameAssetManager.assetManager.get(GameAssetManager.wateringCan)),
+    TRASH_CAN(GameAssetManager.assetManager.get(GameAssetManager.trashCan)),;
 
     private final Texture TEXTURE;
 

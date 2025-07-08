@@ -2,6 +2,7 @@ package AP.group30.StardewValley.views;
 
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Items.Item;
+import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Players.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -36,6 +38,10 @@ public class InventoryScreen {
     private final ArrayList<Item> items = App.getCurrentGame().getCurrentPlayer().getBackPack().getItems();
     private Item currentItem;
 
+    private final DragAndDrop dragAndDrop = new DragAndDrop();
+
+    private final Label errorLabel;
+
     public InventoryScreen(SpriteBatch batch, Skin skin) {
         this.skin = skin;
         this.stage = new Stage(new ScreenViewport(), batch);
@@ -54,19 +60,26 @@ public class InventoryScreen {
             (Gdx.graphics.getHeight() - table.getHeight()) / 2
         );
 
+        errorLabel = new Label("You can't sell this Item!", skin);
+        errorLabel.setColor(Color.RED);
+        errorLabel.setPosition(positionX + 350, positionY - 400);
+        errorLabel.setVisible(false);
 
         Player player = App.getCurrentGame().getCurrentPlayer();
         Label info = new Label(player.getUsername() + " Farm", skin);
-        info.setPosition(positionX + 300, positionY - 250);
+        info.setPosition(positionX + 250, positionY - 250);
         Label energy = new Label("Current Energy: " + player.getEnergy(), skin);
-        energy.setPosition(positionX + 300, positionY - 300);
+        energy.setPosition(positionX + 250, positionY - 300);
         Label money = new Label("Current Money: " + player.getMoney(), skin);
-        money.setPosition(positionX + 300, positionY - 350);
+        money.setPosition(positionX + 250, positionY - 350);
 
         stage.addActor(table);
         stage.addActor(info);
         stage.addActor(energy);
         stage.addActor(money);
+        stage.addActor(errorLabel);
+
+        createTrashCanImage();
 
         renderItemsInGrid();
     }
@@ -127,10 +140,10 @@ public class InventoryScreen {
             }
         }
 
+        stage.addActor(borderImage);
         for (Image image : itemImages) {
             stage.addActor(image);
         }
-        stage.addActor(borderImage);
     }
 
     private void createItemImage(Item item, double x, float y) {
@@ -176,6 +189,15 @@ public class InventoryScreen {
         });
 
         itemImages.add(itemImage);
+
+        dragAndDrop.addSource(new DragAndDrop.Source(itemImage) {
+            public DragAndDrop.Payload dragStart(InputEvent event, float x, float y, int pointer) {
+                DragAndDrop.Payload payload = new DragAndDrop.Payload();
+                payload.setObject(item);
+                payload.setDragActor(new Image(new TextureRegionDrawable(new TextureRegion(item.getTexture()))));
+                return payload;
+            }
+        });
     }
 
     private Image createBorderImage(int width, int height, Color color) {
@@ -215,6 +237,40 @@ public class InventoryScreen {
         pixmap.dispose();
 
         return new TextureRegionDrawable(new TextureRegion(texture));
+    }
+
+    private void createTrashCanImage() {
+        Texture trashTexture = ItemTexture.TRASH_CAN.getTexture();
+        Image trashCanImage = new Image(new TextureRegionDrawable(new TextureRegion(trashTexture)));
+        trashCanImage.setSize(64, 64);
+        trashCanImage.setPosition(positionX + 570, positionY - 370);
+
+        stage.addActor(trashCanImage);
+
+        dragAndDrop.addTarget(new DragAndDrop.Target(trashCanImage) {
+            public boolean drag(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
+                trashCanImage.setColor(Color.RED);
+                return true;
+            }
+
+            public void reset(DragAndDrop.Source source, DragAndDrop.Payload payload) {
+                trashCanImage.setColor(Color.WHITE);
+            }
+
+            public void drop(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
+                Item itemToDelete = (Item) payload.getObject();
+                if (itemToDelete.getPrice() != 0) {
+                    errorLabel.setVisible(false);
+                    App.getCurrentGame().getCurrentPlayer().getBackPack().getItems().remove(itemToDelete);
+                    if (App.getCurrentGame().getCurrentPlayer().getWield() == itemToDelete) {
+                        App.getCurrentGame().getCurrentPlayer().setWield(App.getCurrentGame().getCurrentPlayer().getBackPack().getItems().getFirst());
+                    }
+                    refresh();
+                }
+                else errorLabel.setVisible(true);
+            }
+        });
+
     }
 }
 
