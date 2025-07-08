@@ -73,6 +73,7 @@ public class GameScreen implements Screen {
     private boolean facingLeft = false;
 
     private InventoryScreen inventoryScreen;
+    private SkillScreen skillScreen;
 
     public GameScreen(Game game) {
         this.game = game;
@@ -120,6 +121,7 @@ public class GameScreen implements Screen {
         generateGrassMap();
 
         inventoryScreen = new InventoryScreen(batch, Main.getMain().skin);
+        skillScreen = new SkillScreen(batch, Main.getMain().skin);
     }
 
     @Override
@@ -127,9 +129,16 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            inventoryScreen.toggle();
+        if (!inventoryScreen.isVisible() && !skillScreen.isVisible()) {
+            handleInput(delta);
+            if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
+            if (Gdx.input.isKeyPressed(Input.Keys.S)) camera.position.y -= speed * delta;
+            if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
         }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) inventoryScreen.toggle();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.N)) skillScreen.toggle();
 
         camera.position.set(x + playerRegion.getRegionWidth() / 2f, y + playerRegion.getRegionHeight() / 2f, 0);
         camera.update();
@@ -155,6 +164,7 @@ public class GameScreen implements Screen {
         }
 
         inventoryScreen.render();
+        skillScreen.render();
     }
 
     private void generateGrassMap() {
@@ -304,6 +314,7 @@ public class GameScreen implements Screen {
         playerTexture.dispose();
         house.dispose();
         inventoryScreen.dispose();
+        skillScreen.dispose();
         clock.dispose();
 
     }
