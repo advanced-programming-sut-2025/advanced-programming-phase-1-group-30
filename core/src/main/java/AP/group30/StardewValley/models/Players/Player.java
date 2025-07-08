@@ -74,6 +74,7 @@ public class Player {
     private Player hamsar = null;
     private boolean gotRejected = false;
     private int daysGotRejected = -1;
+    private Direction direction = Direction.EAST;
     private ArrayList<ArtisanItemProsses> artisanItemsProsses = new ArrayList<>();
 
     public Player(User user,String username, int selectionNumber, String gender, Map map) {
@@ -573,5 +574,13 @@ public class Player {
 
     public void removeArtisanItemProsses(ArtisanItemProsses artisanItemProsses) {
         this.artisanItemsProsses.remove(artisanItemProsses);
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 }

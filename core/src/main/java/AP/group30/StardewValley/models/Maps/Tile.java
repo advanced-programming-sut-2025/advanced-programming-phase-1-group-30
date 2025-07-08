@@ -127,7 +127,8 @@ public class Tile {
                 // Empty
             }
             else if (randomItem <= 45) {
-                tile.setItem(new Tree(1, TreeType.getRandomTreeType(randomItem - 36), tile.getX() * 32 - 32, (60 - tile.getY()) * 32));
+                int x = random.nextInt(13);
+                tile.setItem(new Tree(1, TreeType.getRandomTreeType(x), tile.getX() * 32 - 32, (60 - tile.getY()) * 32));
                 tile.changeWalkable();
             }
             else {

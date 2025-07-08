@@ -1,9 +1,11 @@
 package AP.group30.StardewValley.controllers;
 
+import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.models.Animals.*;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Buildings.*;
 //import AP.group30.StardewValley.models.Commands.Menus;
+import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Invetory.BackPackType;
 import AP.group30.StardewValley.models.Items.Gift;
 import AP.group30.StardewValley.models.Items.ItemTexture;
@@ -20,6 +22,7 @@ import AP.group30.StardewValley.models.Items.IndustrialProducts.IndustrialProduc
 import AP.group30.StardewValley.models.Items.Tools.*;
 import AP.group30.StardewValley.models.Maps.*;
 import AP.group30.StardewValley.models.Maps.Map;
+import AP.group30.StardewValley.models.Players.Direction;
 import AP.group30.StardewValley.models.Players.Friendship;
 import AP.group30.StardewValley.models.Players.NPC.NPC;
 import AP.group30.StardewValley.models.TimeAndDate.Season;
@@ -27,7 +30,10 @@ import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.models.Players.Trade;
 import AP.group30.StardewValley.models.Users.User;
 import AP.group30.StardewValley.views.GameMenu;
+import AP.group30.StardewValley.views.GameScreen;
 import AP.group30.StardewValley.views.RegisterMenu;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import java.util.*;
 
 public class GameMenuController {
@@ -307,7 +313,7 @@ public class GameMenuController {
         }
         GameMenu.printResult("You have to be inside blacksmith to upgrade tools.");
     }
-    public static void toolUse(String direction) {
+    public static void toolUse(Direction direction, int playerX, int playerY, SpriteBatch batch) {
         Player player = App.getCurrentGame().getCurrentPlayer();
         Item wield = player.getWield();
         Tile[][] tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
@@ -318,19 +324,19 @@ public class GameMenuController {
         }
 
 
-        int x = player.getX();
-        int y = player.getY();
+        int x = playerX / 32;
+        int y = 60 - (playerY / 32);
         int dx = 0, dy = 0;
 
         switch (direction) {
-            case "w": dy = -1; break;
-            case "s": dy = 1; break;
-            case "a": dx = -1; break;
-            case "d": dx = 1; break;
-            case "Q": dx = -1; dy = -1; break;
-            case "E": dx = 1; dy = -1; break;
-            case "Z": dx = -1; dy = 1; break;
-            case "C": dx = 1; dy = 1; break;
+            case NORTH: dy = -1; break;
+            case SOUTH: dy = +1; break;
+            case WEST: dx = -1; break;
+            case EAST: dx = 1; break;
+//            case "Q": dx = -1; dy = -1; break;
+//            case "E": dx = 1; dy = -1; break;
+//            case "Z": dx = -1; dy = 1; break;
+//            case "C": dx = 1; dy = 1; break;
             default:
                 GameMenu.printResult("Invalid direction!");
                 return;
@@ -339,12 +345,22 @@ public class GameMenuController {
         int newX = x + dx;
         int newY = y + dy;
 
+
+        batch.begin();
+        batch.draw(GameAssetManager.assetManager.get(GameAssetManager.axe), newX * 32, (60 - newY) * 32);
+//        batch.draw(GameAssetManager.assetManager.get(GameAssetManager.axe), playerX, playerY);
+        batch.end();
+
+
         if (newX < 0 || newX >= tiles.length || newY < 0 || newY >= tiles[0].length) {
             GameMenu.printResult("Out of bounds!");
             return;
         }
 
         Tile targetTile = tiles[newX][newY];
+        if (targetTile.getItem() instanceof Tree) {
+            System.out.println("Yesssss");
+        }
         double rate = 1;
         if(App.getCurrentGame().getCurrentWeather().equals(Weather.SUNNY)){
             rate = 2;
@@ -375,17 +391,17 @@ public class GameMenuController {
                 GameMenu.printResult("You don't have enough energy!");
             }
 
-        }else if(wield instanceof Pickaxe){
+        } else if (wield instanceof Pickaxe) {
             int energyNeeded = ((Pickaxe) wield).getType().getEnergyUsed();
-            if(player.getMining() == 450){
+            if (player.getMining() == 450){
                 energyNeeded -= 1;
             }
 
-            if(player.getEnergy() > energyNeeded){
-                if(targetTile.getType().equals(TileTypes.PLANTABLE)){
+            if (player.getEnergy() > energyNeeded) {
+                if (targetTile.getType().equals(TileTypes.PLANTABLE)) {
                     targetTile.setType(TileTypes.DIRT);
                     GameMenu.printResult("Done!");
-                } else if(targetTile.getType().equals(TileTypes.QUARRY)){
+                } else if (targetTile.getType().equals(TileTypes.QUARRY)) {
                     int cof = 1;
                     if(player.getMining() >= 250){
                         cof = 2;
@@ -491,6 +507,7 @@ public class GameMenuController {
                             }
                         }
 
+                        GameScreen.trees.remove(targetTile.getItem());
                         targetTile.setItem(null);
                         GameMenu.printResult("You chop down the tree and collect 12 wood and 2 sap.");
                         player.increaseForaging(10);
