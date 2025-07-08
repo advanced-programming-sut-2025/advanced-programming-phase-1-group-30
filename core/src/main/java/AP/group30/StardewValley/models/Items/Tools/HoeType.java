@@ -4,11 +4,11 @@ import AP.group30.StardewValley.models.Items.ItemTexture;
 import com.badlogic.gdx.graphics.Texture;
 
 public enum HoeType {
-    NORMAL("normal hoe", 5, ItemTexture.WOOD.getTexture()),
-    COPPER("copper hoe", 4, ItemTexture.WOOD.getTexture()),
-    IRON("iron hoe", 3, ItemTexture.WOOD.getTexture()),
-    GOLD("gold hoe", 2, ItemTexture.WOOD.getTexture()),
-    IRIDIUM("iridium hoe", 1, ItemTexture.WOOD.getTexture());
+    NORMAL("normal hoe", 5, ItemTexture.HOE.getTexture()),
+    COPPER("copper hoe", 4, ItemTexture.HOE.getTexture()),
+    IRON("iron hoe", 3, ItemTexture.HOE.getTexture()),
+    GOLD("gold hoe", 2, ItemTexture.HOE.getTexture()),
+    IRIDIUM("iridium hoe", 1, ItemTexture.HOE.getTexture());
 
     private final String name;
     private final int energyUsed;

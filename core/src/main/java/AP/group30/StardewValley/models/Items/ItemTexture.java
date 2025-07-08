@@ -1,8 +1,10 @@
 package AP.group30.StardewValley.models.Items;
 
+import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.Products.ForagingSeedType;
 import AP.group30.StardewValley.models.Items.Products.FruitType;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.graphics.Texture;
 
 import java.util.ArrayList;
@@ -27,7 +29,13 @@ public enum ItemTexture {
     MAHOGANY_TREE(new Texture(Gdx.files.internal("tree/Mahogany.png"))),
     MUSHROOM_TREE(new Texture(Gdx.files.internal("tree/Mushroom.png"))),
     WILD_TREE(new Texture(Gdx.files.internal("tree/Wild.png"))),
-    MYSTIC_TREE(new Texture(Gdx.files.internal("tree/Mystic.png"))),;
+    MYSTIC_TREE(new Texture(Gdx.files.internal("tree/Mystic.png"))),
+
+    AXE(GameAssetManager.assetManager.get(GameAssetManager.axe)),
+    PICKAXE(GameAssetManager.assetManager.get(GameAssetManager.pickaxe)),
+    SCYTHE(GameAssetManager.assetManager.get(GameAssetManager.scythe)),
+    HOE(GameAssetManager.assetManager.get(GameAssetManager.hoe)),
+    WATERING_CAN(GameAssetManager.assetManager.get(GameAssetManager.wateringCan)),;
 
     private final Texture TEXTURE;
 
