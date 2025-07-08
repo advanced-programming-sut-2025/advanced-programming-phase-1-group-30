@@ -26,10 +26,7 @@ public class Main extends Game {
         main = this;
         batch = new SpriteBatch();
         skin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
-        main.setScreen(new LoadingScreen(new RegisterMenu(skin), GameAssetManager.background, GameAssetManager.menuSkin
-            , GameAssetManager.grass, GameAssetManager.dirt,
-            GameAssetManager.player, GameAssetManager.house, GameAssetManager.water, GameAssetManager.nightBackground,
-            GameAssetManager.tree, GameAssetManager.kaj, GameAssetManager.stone, GameAssetManager.ruinedGreenhouse));
+        main.setScreen(new LoadingScreen(new RegisterMenu(skin)));
     }
 
     public static Main getMain() {

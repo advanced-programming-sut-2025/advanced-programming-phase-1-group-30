@@ -1,8 +1,8 @@
 package AP.group30.StardewValley.views;
 
 import AP.group30.StardewValley.Main;
+import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetDescriptor;
@@ -19,7 +19,6 @@ import java.time.LocalTime;
 
 public class LoadingScreen implements Screen {
     private final Screen nextScreen;
-    private final AssetDescriptor<?>[] assetsToLoad;
     public static LocalTime time = LocalTime.now();
     private Texture background;
 
@@ -30,9 +29,8 @@ public class LoadingScreen implements Screen {
     private Label loadingLabel;
     private float delay = 0f;
 
-    public LoadingScreen(Screen nextScreen, AssetDescriptor<?>... assetsToLoad) {
+    public LoadingScreen(Screen nextScreen) {
         this.nextScreen = nextScreen;
-        this.assetsToLoad = assetsToLoad;
     }
 
     @Override
@@ -69,11 +67,7 @@ public class LoadingScreen implements Screen {
         table.add(progressBar).width(300).height(20);
 
         // Start loading assets
-        for (AssetDescriptor<?> asset : assetsToLoad) {
-            if (!GameAssetManager.assetManager.isLoaded(asset.fileName)) {
-                GameAssetManager.assetManager.load(asset);
-            }
-        }
+        GameAssetManager.queueAsset();
     }
 
     @Override

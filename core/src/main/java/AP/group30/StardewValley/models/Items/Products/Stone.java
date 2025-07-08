@@ -1,16 +1,13 @@
 package AP.group30.StardewValley.models.Items.Products;
 
-import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.Item;
-import AP.group30.StardewValley.models.Items.ItemTexture;
-import AP.group30.StardewValley.models.Maps.TileTexture;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Stone extends Item {
     private final Texture texture = GameAssetManager.assetManager.get(GameAssetManager.stone);
-    private final float width = texture.getWidth() * 2f, height = texture.getHeight() * 2f;
+    private final float width = texture.getWidth(), height = texture.getHeight();
     private Rectangle rect = new Rectangle();
     private int x, y;
 
@@ -48,5 +45,9 @@ public class Stone extends Item {
 
     public float getHeight() {
         return height;
+    }
+
+    public Rectangle getRect() {
+        return rect;
     }
 }

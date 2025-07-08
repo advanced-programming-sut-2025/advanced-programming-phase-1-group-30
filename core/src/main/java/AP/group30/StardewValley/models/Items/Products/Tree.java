@@ -2,14 +2,13 @@ package AP.group30.StardewValley.models.Items.Products;
 
 import AP.group30.StardewValley.models.GameAssetManager;
 import com.badlogic.gdx.graphics.Texture;
-
-import java.awt.*;
+import com.badlogic.gdx.math.Rectangle;
 
 public class Tree extends Product {
     private final TreeType type;
     private boolean isHitByThunder;
     private final Texture texture = GameAssetManager.assetManager.get(GameAssetManager.tree);
-    private final float width = texture.getWidth() * 2f, height = texture.getHeight() * 2f;
+    private final float width = texture.getWidth(), height = texture.getHeight();
     private Rectangle rect = new Rectangle();
     private int x, y;
 
@@ -19,10 +18,10 @@ public class Tree extends Product {
         this.isHitByThunder = false;
         this.x = x;
         this.y = y;
-        rect.x = x;
+        rect.x = x + width / 4;
         rect.y = y;
-        rect.width = (int)width;
-        rect.height = (int)height;
+        rect.width = (int)width / 2f;
+        rect.height = (int)height / 2f;
 
     }
 
@@ -48,5 +47,17 @@ public class Tree extends Product {
 
     public float getHeight() {
         return height;
+    }
+
+    public Rectangle getRect() {
+        return rect;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }
