@@ -9,6 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public class GameAssetManager {
     public static AssetManager assetManager = new AssetManager();
     public static final AssetDescriptor<Texture> background = new AssetDescriptor<>("menu assets/loading screen.png", Texture.class);
+    public static final AssetDescriptor<Texture> inventoryScreen = new AssetDescriptor<>("Inventory.png", Texture.class);
+    public static final AssetDescriptor<Texture> inventoryItem = new AssetDescriptor<>("Inventory_Item.png", Texture.class);
+    public static final AssetDescriptor<Texture> skill = new AssetDescriptor<>("Skill.png", Texture.class);
+    public static final AssetDescriptor<Texture> energyBar = new AssetDescriptor<>("energy_bar.png", Texture.class);
     public static final AssetDescriptor<Texture> nightBackground = new AssetDescriptor<>("menu assets/sebastianRideTiles.png", Texture.class);
     public static final AssetDescriptor<Skin> menuSkin = new AssetDescriptor<>("skin/pixthulhu-ui.json", Skin.class);
     public static final AssetDescriptor<Texture> grass = new AssetDescriptor<>("tile/grass.png", Texture.class);
@@ -42,6 +46,7 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> scythe = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Scythe/Scythe.png", Texture.class);
     public static final AssetDescriptor<Texture> hoe = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Hoe/Hoe.png", Texture.class);
     public static final AssetDescriptor<Texture> wateringCan = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Watering_Can/Watering_Can.png", Texture.class);
+    public static final AssetDescriptor<Texture> milkPail = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Milk_Pail.png", Texture.class);
     public static final AssetDescriptor<Texture> trashCan = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Trash_Can_Copper.png", Texture.class);
 
     public static final AssetDescriptor<Texture> farmingIcon = new AssetDescriptor<>("Stardew_Valley_Images/Skill/Farming_Skill_Icon.png", Texture.class);
@@ -73,6 +78,10 @@ public class GameAssetManager {
 
     public static void queueAsset() {
         assetManager.load(background);
+        assetManager.load(inventoryScreen);
+        assetManager.load(inventoryItem);
+        assetManager.load(skill);
+        assetManager.load(energyBar);
         assetManager.load(nightBackground);
         assetManager.load(grass);
         assetManager.load(dirt);
@@ -106,6 +115,7 @@ public class GameAssetManager {
         assetManager.load(scythe);
         assetManager.load(hoe);
         assetManager.load(wateringCan);
+        assetManager.load(milkPail);
         assetManager.load(wood);
         assetManager.load(stones);
         assetManager.load(apricot_tree);

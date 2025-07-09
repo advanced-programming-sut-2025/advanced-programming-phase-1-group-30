@@ -1,6 +1,7 @@
 package AP.group30.StardewValley.views;
 
 import AP.group30.StardewValley.models.App;
+import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Players.Player;
 import com.badlogic.gdx.Gdx;
@@ -28,10 +29,10 @@ public class SkillScreen {
         this.skin = skin;
         this.stage = new Stage(new ScreenViewport(), batch);
 
-        backgroundTexture = new Texture(Gdx.files.internal("Skill.png"));
+        backgroundTexture = GameAssetManager.assetManager.get(GameAssetManager.skill);
         Drawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
 
-        backgroundItemTexture = new Texture(Gdx.files.internal("Inventory_Item.png"));
+        backgroundItemTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryItem);
 
         table = new Table();
         table.setVisible(false);
@@ -125,7 +126,7 @@ public class SkillScreen {
         Label nameLabel = new Label("Skill Name: " + name, skin);
         tooltipTable.add(nameLabel).left().row();
 
-        Label countLabel = new Label("Amount: " + amount, skin);
+        Label countLabel = new Label("Level: " + amount, skin);
         tooltipTable.add(countLabel).left().row();
 
         Tooltip<Table> tooltip = new Tooltip<>(tooltipTable);

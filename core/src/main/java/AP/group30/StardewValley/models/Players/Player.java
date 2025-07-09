@@ -98,7 +98,7 @@ public class Player {
         this.backPack.addItem(new Item(1, "bouquet", 10, ItemTexture.WOOD.getTexture()));
         this.backPack.addItem(new Item(1, "wedding ring", 10, ItemTexture.WOOD.getTexture()));
         this.backPack.addItem(new Item(1000, "wood", 10, ItemTexture.WOOD.getTexture()));
-        this.backPack.addItem(new Item(1000, "stone", 20, ItemTexture.WOOD.getTexture()));
+        this.backPack.addItem(new Item(1000, "stone", 20, ItemTexture.STONE.getTexture()));
         this.backPack.addItem(new Item(50, "hay", 50, ItemTexture.WOOD.getTexture()));
         this.backPack.addItem(new ForagingSeed(1, ForagingSeedType.BEAN_STARTER));
         this.backPack.addItem(new Item(50, "speed-gro", 50, ItemTexture.WOOD.getTexture()));
@@ -106,7 +106,7 @@ public class Player {
         this.backPack.addItem(new Item(50, "copper bar", 50, ItemTexture.WOOD.getTexture()));
         this.money = 20000;
         this.selectionNumber = selectionNumber;
-        this.maxEnergy = 200;
+        this.maxEnergy = 1000;
         this.building = new Building(0, 0, 0, 0, 9, 21); //TODO home!!!
         this.lastEnergy = maxEnergy;
         this.recipes = new ArrayList<>();

@@ -37,6 +37,7 @@ public enum ItemTexture {
     SCYTHE(GameAssetManager.assetManager.get(GameAssetManager.scythe)),
     HOE(GameAssetManager.assetManager.get(GameAssetManager.hoe)),
     WATERING_CAN(GameAssetManager.assetManager.get(GameAssetManager.wateringCan)),
+    MILK_PAIL(GameAssetManager.assetManager.get(GameAssetManager.milkPail)),
     TRASH_CAN(GameAssetManager.assetManager.get(GameAssetManager.trashCan)),
 
     FARMING_ICON(GameAssetManager.assetManager.get(GameAssetManager.farmingIcon)),

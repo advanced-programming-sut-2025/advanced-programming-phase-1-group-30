@@ -4,7 +4,7 @@ import AP.group30.StardewValley.models.Items.ItemTexture;
 import com.badlogic.gdx.graphics.Texture;
 
 public enum BasketType {
-    NORMAL("normal watering can",0,300, ItemTexture.WATERING_CAN.getTexture()),
+    NORMAL("normal watering can",0,40, ItemTexture.WATERING_CAN.getTexture()),
     COPPER("copper watering can",1,55, ItemTexture.WATERING_CAN.getTexture()),
     IRON("iron watering can",2,70, ItemTexture.WATERING_CAN.getTexture()),
     GOLD("gold watering can",3,85, ItemTexture.WATERING_CAN.getTexture()),
