@@ -13,7 +13,20 @@ public class GameAssetManager {
     public static final AssetDescriptor<Skin> menuSkin = new AssetDescriptor<>("skin/pixthulhu-ui.json", Skin.class);
     public static final AssetDescriptor<Texture> grass = new AssetDescriptor<>("tile/grass.png", Texture.class);
     public static final AssetDescriptor<Texture> dirt = new AssetDescriptor<>("tile/dirt.png", Texture.class);
-    public static final AssetDescriptor<Texture> player = new AssetDescriptor<>("Horse_rider.png", Texture.class);
+
+    public static final AssetDescriptor<Texture> player00 = new AssetDescriptor<>("player/00.png", Texture.class);
+    public static final AssetDescriptor<Texture> player01 = new AssetDescriptor<>("player/01.png", Texture.class);
+    public static final AssetDescriptor<Texture> player02 = new AssetDescriptor<>("player/02.png", Texture.class);
+    public static final AssetDescriptor<Texture> player03 = new AssetDescriptor<>("player/03.png", Texture.class);
+    public static final AssetDescriptor<Texture> player10 = new AssetDescriptor<>("player/10.png", Texture.class);
+    public static final AssetDescriptor<Texture> player11 = new AssetDescriptor<>("player/11.png", Texture.class);
+    public static final AssetDescriptor<Texture> player12 = new AssetDescriptor<>("player/12.png", Texture.class);
+    public static final AssetDescriptor<Texture> player13 = new AssetDescriptor<>("player/13.png", Texture.class);
+    public static final AssetDescriptor<Texture> player20 = new AssetDescriptor<>("player/20.png", Texture.class);
+    public static final AssetDescriptor<Texture> player21 = new AssetDescriptor<>("player/21.png", Texture.class);
+    public static final AssetDescriptor<Texture> player22 = new AssetDescriptor<>("player/22.png", Texture.class);
+    public static final AssetDescriptor<Texture> player23 = new AssetDescriptor<>("player/23.png", Texture.class);
+
     public static final AssetDescriptor<Texture> house = new AssetDescriptor<>("Hut.png", Texture.class);
     public static final AssetDescriptor<Texture> water = new AssetDescriptor<>("water.png", Texture.class);
     public static final AssetDescriptor<Texture> river = new AssetDescriptor<>("tile/river.png", Texture.class);
@@ -65,7 +78,18 @@ public class GameAssetManager {
         assetManager.load(nightBackground);
         assetManager.load(grass);
         assetManager.load(dirt);
-        assetManager.load(player);
+        assetManager.load(player00);
+        assetManager.load(player01);
+        assetManager.load(player02);
+        assetManager.load(player03);
+        assetManager.load(player10);
+        assetManager.load(player11);
+        assetManager.load(player12);
+        assetManager.load(player13);
+        assetManager.load(player20);
+        assetManager.load(player21);
+        assetManager.load(player22);
+        assetManager.load(player23);
         assetManager.load(house);
         assetManager.load(water);
         assetManager.load(tree);
