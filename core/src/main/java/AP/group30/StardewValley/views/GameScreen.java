@@ -20,6 +20,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -53,8 +54,13 @@ public class GameScreen implements Screen {
     private OrthographicCamera camera;
     private Game game;
     private Player player;
-
+    private Animation<TextureRegion> walkingW;
+    private Animation<TextureRegion> walkingD;
+    private Animation<TextureRegion> walkingS;
     private Texture playerTexture;
+    private float stateTime = 0f;
+    private boolean isMoving = false;
+
     private Rectangle playerRect = new Rectangle();
     private Texture house;
     private Texture clock;
@@ -85,7 +91,7 @@ public class GameScreen implements Screen {
         this.game = game;
 
         player = game.getCurrentPlayer();
-        playerTexture = GameAssetManager.assetManager.get(GameAssetManager.player);
+        initializePlayerAnimations();
         house = GameAssetManager.assetManager.get(GameAssetManager.house);
         clock = GameAssetManager.assetManager.get(GameAssetManager.clock);
         energyBar = GameAssetManager.assetManager.get(GameAssetManager.energyBar);
@@ -111,7 +117,7 @@ public class GameScreen implements Screen {
         x = Gdx.graphics.getWidth() * 1.2f;
         y = Gdx.graphics.getHeight() * 1.4f;
         playerRect.setPosition(x, y);
-        playerRect.setSize(playerTexture.getWidth() / 2f, playerTexture.getHeight() / 4f);
+        playerRect.setSize(playerTexture.getWidth() * 2f, playerTexture.getHeight() / 2f);
     }
 
     @Override
@@ -133,6 +139,8 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        stateTime += delta;
+        isMoving = false;
 
         if (!inventoryScreen.isVisible() && !skillScreen.isVisible()) {
             handleInput(delta);
@@ -160,7 +168,6 @@ public class GameScreen implements Screen {
         renderPlayer();
         renderEnergyBar();
         renderTime();
-        batch.end();
         if (!inventoryScreen.isVisible()) {
             handleInput(delta);
             if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
@@ -168,6 +175,9 @@ public class GameScreen implements Screen {
             if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
             if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
         }
+        renderPlayer();
+        batch.end();
+
 
         inventoryScreen.render();
         skillScreen.render();
@@ -211,7 +221,29 @@ public class GameScreen implements Screen {
     }
 
     private void renderPlayer() {
-        batch.draw(playerRegion, x, y, playerRegion.getRegionWidth() / 2f, playerRegion.getRegionHeight() / 2f);
+        TextureRegion currentFrame;
+        if(isMoving){
+            if(player.getDirection().equals(Direction.NORTH)){
+                currentFrame = walkingW.getKeyFrame(stateTime);
+            } else if (player.getDirection().equals(Direction.SOUTH)){
+                currentFrame = walkingS.getKeyFrame(stateTime);
+            } else {
+                currentFrame = walkingD.getKeyFrame(stateTime);
+                if (facingLeft) {
+                    if (!currentFrame.isFlipX()) {
+                        currentFrame.flip(true, false);
+                    }
+                } else {
+                    if (currentFrame.isFlipX()) {
+                        currentFrame.flip(true, false);
+                    }
+                }
+            }
+            playerRegion = currentFrame;
+        } else {
+            currentFrame = playerRegion;
+        }
+        batch.draw(currentFrame, x, y, playerRegion.getRegionWidth() * 2f , playerRegion.getRegionHeight() * 2f);
     }
 
     private void renderWallsAroundMap() {
@@ -357,7 +389,6 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         batch.dispose();
-        playerTexture.dispose();
         house.dispose();
         inventoryScreen.dispose();
         skillScreen.dispose();
@@ -386,7 +417,6 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             proposedX -= moveAmount;
             if (!facingLeft) {
-                flipTexture(true);
                 facingLeft = true;
             }
             moved = true;
@@ -395,7 +425,6 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             proposedX += moveAmount;
             if (facingLeft) {
-                flipTexture(false);
                 facingLeft = false;
             }
             moved = true;
@@ -403,6 +432,7 @@ public class GameScreen implements Screen {
         }
 
         if (moved) {
+            isMoving = true;
             Tile tile = getTileUnderPlayer(proposedX, proposedY);
             if (tile.getType().equals(TileTypes.WATER)) {
                 return;
@@ -458,12 +488,6 @@ public class GameScreen implements Screen {
         return false;
     }
 
-    private void flipTexture(boolean flipX) {
-        if (playerRegion.isFlipX() != flipX) {
-            playerRegion.flip(true, false);
-        }
-    }
-
     private Tile getTileUnderPlayer(float playerX, float playerY) {
         int tileX = (int)(playerX / 32);
         int tileY = (int)(playerY / 32);
@@ -489,6 +513,36 @@ public class GameScreen implements Screen {
             y = obstacle.y + obstacle.height;
         }
     }
+
+    private void initializePlayerAnimations() {
+        TextureRegion[] sWalkingRegion = new TextureRegion[4];
+        sWalkingRegion[0] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player00));
+        sWalkingRegion[1] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player01));
+        sWalkingRegion[2] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player02));
+        sWalkingRegion[3] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player03));
+        walkingS = new Animation<TextureRegion>(0.15f, sWalkingRegion);
+        walkingS.setPlayMode(Animation.PlayMode.LOOP);
+
+        TextureRegion[] dWalkingRegion = new TextureRegion[4];
+        dWalkingRegion[0] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player10));
+        dWalkingRegion[1] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player11));
+        dWalkingRegion[2] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player12));
+        dWalkingRegion[3] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player13));
+        walkingD = new Animation<TextureRegion>(0.15f, dWalkingRegion);
+        walkingD.setPlayMode(Animation.PlayMode.LOOP);
+
+        TextureRegion[] wWalkingRegion = new TextureRegion[4];
+        wWalkingRegion[0] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player20));
+        wWalkingRegion[1] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player21));
+        wWalkingRegion[2] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player22));
+        wWalkingRegion[3] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player23));
+        walkingW = new Animation<TextureRegion>(0.15f, wWalkingRegion);
+        walkingW.setPlayMode(Animation.PlayMode.LOOP);
+
+        playerRegion = sWalkingRegion[1];
+        playerTexture = GameAssetManager.assetManager.get(GameAssetManager.player21);
+    }
+
 
     public ArrayList<Tree> getTrees() {
         return trees;

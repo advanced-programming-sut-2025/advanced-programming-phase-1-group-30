@@ -4,6 +4,7 @@ import AP.group30.StardewValley.controllers.NewGameController;
 import AP.group30.StardewValley.models.Animals.Animal;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Buildings.Building;
+import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Invetory.BackPack;
 import AP.group30.StardewValley.models.Invetory.BackPackType;
 import AP.group30.StardewValley.models.Invetory.Refrigerator;
@@ -24,6 +25,9 @@ import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Players.NPC.NPC;
 import AP.group30.StardewValley.models.Users.User;
 import AP.group30.StardewValley.views.GameMenu;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.*;
 
@@ -76,6 +80,7 @@ public class Player {
     private int daysGotRejected = -1;
     private Direction direction = Direction.EAST;
     private ArrayList<ArtisanItemProsses> artisanItemsProsses = new ArrayList<>();
+
 
     public Player(User user,String username, int selectionNumber, String gender, Map map) {
         this.user = user;
