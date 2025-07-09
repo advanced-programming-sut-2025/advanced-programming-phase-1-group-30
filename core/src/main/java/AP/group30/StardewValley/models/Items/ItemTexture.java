@@ -28,15 +28,15 @@ public enum ItemTexture {
     PINE_TREE(GameAssetManager.assetManager.get(GameAssetManager.pine_tree)),
     MAHOGANY_TREE(GameAssetManager.assetManager.get(GameAssetManager.mahogany_tree)),
     MUSHROOM_TREE(GameAssetManager.assetManager.get(GameAssetManager.mushroom_tree)),
-    WILD_TREE(GameAssetManager.assetManager.get(GameAssetManager.wild_tree)),
-    MYSTIC_TREE(GameAssetManager.assetManager.get(GameAssetManager.mystic_tree));
-  
+    TREE(GameAssetManager.assetManager.get(GameAssetManager.tree)),
+    MYSTIC_TREE(GameAssetManager.assetManager.get(GameAssetManager.mystic_tree)),
+
     AXE(GameAssetManager.assetManager.get(GameAssetManager.axe)),
     PICKAXE(GameAssetManager.assetManager.get(GameAssetManager.pickaxe)),
     SCYTHE(GameAssetManager.assetManager.get(GameAssetManager.scythe)),
     HOE(GameAssetManager.assetManager.get(GameAssetManager.hoe)),
     WATERING_CAN(GameAssetManager.assetManager.get(GameAssetManager.wateringCan)),
-    TRASH_CAN(GameAssetManager.assetManager.get(GameAssetManager.trashCan)),;
+    TRASH_CAN(GameAssetManager.assetManager.get(GameAssetManager.trashCan));
 
     private final Texture TEXTURE;
 

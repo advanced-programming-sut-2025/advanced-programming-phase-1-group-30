@@ -13,6 +13,10 @@ public class GameAssetManager {
     public static final AssetDescriptor<Skin> menuSkin = new AssetDescriptor<>("skin/pixthulhu-ui.json", Skin.class);
     public static final AssetDescriptor<Texture> grass = new AssetDescriptor<>("tile/grass.png", Texture.class);
     public static final AssetDescriptor<Texture> dirt = new AssetDescriptor<>("tile/dirt.png", Texture.class);
+    public static final AssetDescriptor<Texture> dirt2 = new AssetDescriptor<>("tile/dirt2.png", Texture.class);
+    public static final AssetDescriptor<Texture> dirt3 = new AssetDescriptor<>("tile/dirt3.png", Texture.class);
+    public static final AssetDescriptor<Texture> dirt4 = new AssetDescriptor<>("tile/dirt4.png", Texture.class);
+    public static final AssetDescriptor<Texture> plantable = new AssetDescriptor<>("tile/plantable.png", Texture.class);
     public static final AssetDescriptor<Texture> player = new AssetDescriptor<>("Horse_rider.png", Texture.class);
     public static final AssetDescriptor<Texture> house = new AssetDescriptor<>("Hut.png", Texture.class);
     public static final AssetDescriptor<Texture> water = new AssetDescriptor<>("water.png", Texture.class);
@@ -65,6 +69,11 @@ public class GameAssetManager {
         assetManager.load(nightBackground);
         assetManager.load(grass);
         assetManager.load(dirt);
+        assetManager.load(dirt2);
+        assetManager.load(dirt3);
+        assetManager.load(dirt4);
+        assetManager.load(plantable);
+
         assetManager.load(player);
         assetManager.load(house);
         assetManager.load(water);

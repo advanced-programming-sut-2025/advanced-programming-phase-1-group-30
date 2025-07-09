@@ -82,7 +82,7 @@ public class Player {
         this.username = username;
         this.map = map;
         this.gender = gender;
-        this.energy = 200;
+        this.energy = 1000;
         this.shippingBin = new ShippingBin(ShippingBinType.REGULAR, 70, 10);
         this.refrigerator = new Refrigerator();
         this.backPack = new BackPack(BackPackType.INITIAL_BACKPACK);

@@ -378,8 +378,9 @@ public class GameScreen implements Screen {
             player.setY((int)y);
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.C) || Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.C) || Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             GameMenuController.toolUse(player.getDirection(), (int)x, (int)y, batch);
+            GameMenuController.inventoryShow();
         }
     }
 

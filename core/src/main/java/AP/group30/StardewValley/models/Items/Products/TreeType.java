@@ -22,8 +22,8 @@ public enum TreeType implements ItemsInteface {
     MAHOGANY_TREE("mahogany tree", ForagingSeedType.MAHOGANY_SEEDS, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.SAP, ItemTexture.MAHOGANY_TREE.getTexture()),
     MUSHROOM_TREE("mushroom tree", ForagingSeedType.MUSHROOM_TREE_SEEDS, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.COMMON_MUSHROOM, ItemTexture.MUSHROOM_TREE.getTexture()),
     MYSTIC_TREE("mystic tree", ForagingSeedType.MYSTIC_TREE_SEEDS, new ArrayList<Integer>(Arrays.asList(7, 7, 7, 7)), 28, FruitType.MYSTIC_SYRUP, ItemTexture.MYSTIC_TREE.getTexture()),
-    WILD_TREE("wild tree", null, null, -1, null, ItemTexture.WILD_TREE.getTexture()),
-    STUMP("stump", null, null, 0, null, ItemTexture.WILD_TREE.getTexture());
+    TREE("wild tree", null, null, -1, null, ItemTexture.TREE.getTexture()),
+    STUMP("stump", null, null, 0, null, ItemTexture.TREE.getTexture());
 
     private final String name;
 	private final ForagingSeedType source;
@@ -75,11 +75,11 @@ public enum TreeType implements ItemsInteface {
         if (id == 5) return PEACH_TREE;
         if (id == 6) return APPLE_TREE;
         if (id == 7) return POMEGRANATE_TREE;
-        if (id == 8) return OAK_TREE;
-        if (id == 9) return MAPLE_TREE;
-        if (id == 10) return PINE_TREE;
-        if (id == 11) return MAHOGANY_TREE;
-        if (id == 12) return MUSHROOM_TREE;
-        else return WILD_TREE;
+//        if (id == 8) return OAK_TREE;
+//        if (id == 9) return MAPLE_TREE;
+//        if (id == 10) return PINE_TREE;
+//        if (id == 11) return MAHOGANY_TREE;
+//        if (id == 12) return MUSHROOM_TREE;
+        else return TREE;
     }
 }
