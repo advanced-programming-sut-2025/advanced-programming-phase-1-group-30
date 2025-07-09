@@ -44,6 +44,14 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> wateringCan = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Watering_Can/Watering_Can.png", Texture.class);
     public static final AssetDescriptor<Texture> trashCan = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Trash_Can_Copper.png", Texture.class);
 
+    public static final AssetDescriptor<Texture> farmingIcon = new AssetDescriptor<>("Stardew_Valley_Images/Skill/Farming_Skill_Icon.png", Texture.class);
+    public static final AssetDescriptor<Texture> fishingIcon = new AssetDescriptor<>("Stardew_Valley_Images/Skill/Fishing_Skill_Icon.png", Texture.class);
+    public static final AssetDescriptor<Texture> foragingIcon = new AssetDescriptor<>("Stardew_Valley_Images/Skill/Foraging_Skill_Icon.png", Texture.class);
+    public static final AssetDescriptor<Texture> miningIcon = new AssetDescriptor<>("Stardew_Valley_Images/Skill/Mining_Skill_Icon.png", Texture.class);
+
+    public static final AssetDescriptor<Texture> playerInfo = new AssetDescriptor<>("playerInfo.png", Texture.class);
+    public static final AssetDescriptor<Texture> tapperIcon = new AssetDescriptor<>("Tapper_Icon.png", Texture.class);
+
     public static final AssetDescriptor<Texture> wood = new AssetDescriptor<>("item/resource/Wood.png", Texture.class);
     public static final AssetDescriptor<Texture> stones = new AssetDescriptor<>("item/resource/Stone.png", Texture.class);
 
@@ -62,7 +70,6 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> mushroom_tree = new AssetDescriptor<>("tree/Mushroom.png", Texture.class);
     public static final AssetDescriptor<Texture> wild_tree = new AssetDescriptor<>("tree/Wild.png", Texture.class);
     public static final AssetDescriptor<Texture> mystic_tree = new AssetDescriptor<>("tree/Mystic.png", Texture.class);
-
 
     public static void queueAsset() {
         assetManager.load(background);
@@ -120,5 +127,11 @@ public class GameAssetManager {
         assetManager.load(mahogany_tree);
         assetManager.load(mushroom_tree);
         assetManager.load(trashCan);
+        assetManager.load(farmingIcon);
+        assetManager.load(fishingIcon);
+        assetManager.load(foragingIcon);
+        assetManager.load(miningIcon);
+        assetManager.load(playerInfo);
+        assetManager.load(tapperIcon);
     }
 }
