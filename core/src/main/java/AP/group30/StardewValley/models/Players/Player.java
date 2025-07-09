@@ -49,8 +49,8 @@ public class Player {
     private int selectionNumber;
     private boolean isPassedOut = false;
     private Item wield;
-    private int farming = 0;
-    private int foraging = 0;
+    private int farming = 5;
+    private int foraging = 10;
     private int fishing = 0;
     private int mining = 0;
     private int maxEnergy;
@@ -87,7 +87,7 @@ public class Player {
         this.username = username;
         this.map = map;
         this.gender = gender;
-        this.energy = 200;
+        this.energy = 1000;
         this.shippingBin = new ShippingBin(ShippingBinType.REGULAR, 70, 10);
         this.refrigerator = new Refrigerator();
         this.backPack = new BackPack(BackPackType.INITIAL_BACKPACK);

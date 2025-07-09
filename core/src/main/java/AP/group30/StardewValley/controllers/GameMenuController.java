@@ -330,9 +330,9 @@ public class GameMenuController {
 
         switch (direction) {
             case NORTH: dy = -1; break;
-            case SOUTH: dy = +1; break;
+            case SOUTH: dy = +2; break;
             case WEST: dx = -1; break;
-            case EAST: dx = 1; break;
+            case EAST: dx = 2; break;
 //            case "Q": dx = -1; dy = -1; break;
 //            case "E": dx = 1; dy = -1; break;
 //            case "Z": dx = -1; dy = 1; break;
@@ -358,9 +358,6 @@ public class GameMenuController {
         }
 
         Tile targetTile = tiles[newX][newY];
-        if (targetTile.getItem() instanceof Tree) {
-            System.out.println("Yesssss");
-        }
         double rate = 1;
         if(App.getCurrentGame().getCurrentWeather().equals(Weather.SUNNY)){
             rate = 2;
@@ -378,6 +375,7 @@ public class GameMenuController {
                 if (targetTile.getItem() == null) {
                     if (targetTile.getType().equals(TileTypes.DIRT) || targetTile.getType().equals(TileTypes.GRASS)) {
                         targetTile.setType(TileTypes.PLANTABLE);
+                        targetTile.setTexture(TileTexture.PLANTABLE.getTexture());
                         GameMenu.printResult("The ground is now soft and ready to plant.");
                         player.increaseFarming(5);
                     } else {
@@ -434,7 +432,7 @@ public class GameMenuController {
                             energyNeeded -= 1;
                         }
                     }
-                } else if(targetTile.getType().equals(TileTypes.HUT) && targetTile.getItem() != (null)){
+                } else if(targetTile.getType().equals(TileTypes.HUT) && targetTile.getItem() != (null)) {
                     Item newItem = Item.findItemByName(targetTile.getItem().getName(), player.getBackPack().getItems());
                     if (newItem != null) {
                         newItem.setCount(newItem.getCount() + 1);
@@ -448,6 +446,25 @@ public class GameMenuController {
                     }
                     GameMenu.printResult(targetTile.getItem().getName() + " successfully added to your backpack");
                     targetTile.setItem(null);
+                } else if (targetTile.getItem() != null) {
+                    if (targetTile.getItem() instanceof Stone) {
+                        Item stone = new Item(5, "stone", 10, ItemTexture.STONE.getTexture());
+                        Item newStone = Item.findItemByName(stone.getName(), player.getBackPack().getItems());
+
+                        if (newStone == null) {
+                            if (player.getBackPack().getItems().size() + 1 == player.getBackPack().getType().getCapacity()) {
+                                GameMenu.printResult("You don't have enough space in your backpack!");
+                                return;
+                            } else {
+                                player.getBackPack().addItem(stone);
+                            }
+                        } else {
+                            newStone.setCount(newStone.getCount() + 5);
+                        }
+                        GameScreen.stones.remove(targetTile.getItem());
+                        targetTile.setItem(null);
+                        GameMenu.printResult("Collected Stone!");
+                    }
                 } else {
                     GameMenu.printResult("You swing your pickaxe, but nothing happens.");
                     if(energyNeeded > 0){
@@ -488,14 +505,14 @@ public class GameMenuController {
                             }
                             if (newWood == null) {
                                 player.getBackPack().addItem(wood);
-                                newSap.setCount(newSap.getCount() + 1);
+                                newSap.setCount(newSap.getCount() + 2);
                             } else {
                                 player.getBackPack().addItem(sap);
-                                newWood.setCount(newWood.getCount() + 1);
+                                newWood.setCount(newWood.getCount() + 12);
                             }
                         } else {
-                            newWood.setCount(newWood.getCount() + 1);
-                            newSap.setCount(newSap.getCount() + 1);
+                            newWood.setCount(newWood.getCount() + 12);
+                            newSap.setCount(newSap.getCount() + 2);
                         }
                         if (targetTile.getItem() != null && targetTile.getItem() instanceof ForagingSeed) {
                             if (((ForagingSeed) targetTile.getItem()).getType().getTreeOrCrop() == 1) {

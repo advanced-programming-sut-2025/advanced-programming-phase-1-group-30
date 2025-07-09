@@ -85,6 +85,8 @@ public class InventoryScreen {
     }
 
     public void show() {
+        refresh();
+        
         visible = true;
         table.setVisible(true);
         Gdx.input.setInputProcessor(stage);

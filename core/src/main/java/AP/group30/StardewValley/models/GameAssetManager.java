@@ -26,7 +26,10 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> player21 = new AssetDescriptor<>("player/21.png", Texture.class);
     public static final AssetDescriptor<Texture> player22 = new AssetDescriptor<>("player/22.png", Texture.class);
     public static final AssetDescriptor<Texture> player23 = new AssetDescriptor<>("player/23.png", Texture.class);
-
+    public static final AssetDescriptor<Texture> dirt2 = new AssetDescriptor<>("tile/dirt2.png", Texture.class);
+    public static final AssetDescriptor<Texture> dirt3 = new AssetDescriptor<>("tile/dirt3.png", Texture.class);
+    public static final AssetDescriptor<Texture> dirt4 = new AssetDescriptor<>("tile/dirt4.png", Texture.class);
+    public static final AssetDescriptor<Texture> plantable = new AssetDescriptor<>("tile/plantable.png", Texture.class);
     public static final AssetDescriptor<Texture> house = new AssetDescriptor<>("Hut.png", Texture.class);
     public static final AssetDescriptor<Texture> water = new AssetDescriptor<>("water.png", Texture.class);
     public static final AssetDescriptor<Texture> river = new AssetDescriptor<>("tile/river.png", Texture.class);
@@ -53,6 +56,14 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> wateringCan = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Watering_Can/Watering_Can.png", Texture.class);
     public static final AssetDescriptor<Texture> trashCan = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Trash_Can_Copper.png", Texture.class);
 
+    public static final AssetDescriptor<Texture> farmingIcon = new AssetDescriptor<>("Stardew_Valley_Images/Skill/Farming_Skill_Icon.png", Texture.class);
+    public static final AssetDescriptor<Texture> fishingIcon = new AssetDescriptor<>("Stardew_Valley_Images/Skill/Fishing_Skill_Icon.png", Texture.class);
+    public static final AssetDescriptor<Texture> foragingIcon = new AssetDescriptor<>("Stardew_Valley_Images/Skill/Foraging_Skill_Icon.png", Texture.class);
+    public static final AssetDescriptor<Texture> miningIcon = new AssetDescriptor<>("Stardew_Valley_Images/Skill/Mining_Skill_Icon.png", Texture.class);
+
+    public static final AssetDescriptor<Texture> playerInfo = new AssetDescriptor<>("playerInfo.png", Texture.class);
+    public static final AssetDescriptor<Texture> tapperIcon = new AssetDescriptor<>("Tapper_Icon.png", Texture.class);
+
     public static final AssetDescriptor<Texture> wood = new AssetDescriptor<>("item/resource/Wood.png", Texture.class);
     public static final AssetDescriptor<Texture> stones = new AssetDescriptor<>("item/resource/Stone.png", Texture.class);
 
@@ -72,12 +83,12 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> wild_tree = new AssetDescriptor<>("tree/Wild.png", Texture.class);
     public static final AssetDescriptor<Texture> mystic_tree = new AssetDescriptor<>("tree/Mystic.png", Texture.class);
 
-
     public static void queueAsset() {
         assetManager.load(background);
         assetManager.load(nightBackground);
         assetManager.load(grass);
         assetManager.load(dirt);
+
         assetManager.load(player00);
         assetManager.load(player01);
         assetManager.load(player02);
@@ -90,6 +101,11 @@ public class GameAssetManager {
         assetManager.load(player21);
         assetManager.load(player22);
         assetManager.load(player23);
+
+        assetManager.load(dirt2);
+        assetManager.load(dirt3);
+        assetManager.load(dirt4);
+        assetManager.load(plantable);
         assetManager.load(house);
         assetManager.load(water);
         assetManager.load(tree);
@@ -135,5 +151,11 @@ public class GameAssetManager {
         assetManager.load(mahogany_tree);
         assetManager.load(mushroom_tree);
         assetManager.load(trashCan);
+        assetManager.load(farmingIcon);
+        assetManager.load(fishingIcon);
+        assetManager.load(foragingIcon);
+        assetManager.load(miningIcon);
+        assetManager.load(playerInfo);
+        assetManager.load(tapperIcon);
     }
 }

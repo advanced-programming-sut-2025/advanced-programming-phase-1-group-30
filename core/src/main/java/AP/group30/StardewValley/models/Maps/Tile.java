@@ -23,7 +23,7 @@ public class Tile {
     private boolean isGiantCrop = false;
     private boolean giantCropCheck = false;
     private Crop crop;
-    private final Texture texture;
+    private Texture texture;
 
     public Tile(int x, int y, TileTypes type, boolean walkable, boolean isHarvestable, int id, Texture texture) {
         this.type = type;
@@ -38,9 +38,20 @@ public class Tile {
         this.texture = texture;
     }
     public static Tile createTileFromType(int x, int y, String tileType, int id) {
+        Random random = new Random();
+        int rand = random.nextInt(30);
         switch (tileType.toLowerCase()) {
-            case "dirt":
-                return new Tile(x, y, TileTypes.DIRT, true, true, id, TileTexture.DIRT.getTexture());
+            case "dirt": {
+                if (rand < 27) {
+                    return new Tile(x, y, TileTypes.DIRT, true, true, id, TileTexture.DIRT.getTexture());
+                } else if (rand == 27) {
+                    return new Tile(x, y, TileTypes.DIRT, true, true, id, TileTexture.DIRT_2.getTexture());
+                } else if (rand == 28) {
+                    return new Tile(x, y, TileTypes.DIRT, true, true, id, TileTexture.DIRT_3.getTexture());
+                } else {
+                    return new Tile(x, y, TileTypes.DIRT, true, true, id, TileTexture.DIRT_4.getTexture());
+                }
+            }
             case "grass":
                 return new Tile(x, y, TileTypes.GRASS, true, true, id, TileTexture.GRASS.getTexture());
             case "river":
@@ -79,6 +90,10 @@ public class Tile {
             case WATER, BUILDING, GREENHOUSE: this.walkable = false; break;
             case GRASS, PLANTABLE, DIRT, QUARRY: this.walkable = true; break;
         }
+    }
+
+    public void setTexture(Texture texture) {
+        this.texture = texture;
     }
 
     public Item getItem() {
@@ -132,7 +147,7 @@ public class Tile {
                 tile.changeWalkable();
             }
             else {
-                tile.setItem(new Stone(randomItem - 49, tile.getX() * 32 - 32, (60 - tile.getY()) * 32));
+                tile.setItem(new Stone(randomItem - 49, tile.getX() * 32, (60 - tile.getY()) * 32));
                 tile.changeWalkable();
             }
         }

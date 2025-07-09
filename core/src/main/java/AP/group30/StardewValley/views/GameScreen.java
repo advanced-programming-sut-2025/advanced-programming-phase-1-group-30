@@ -79,6 +79,7 @@ public class GameScreen implements Screen {
     private boolean facingLeft = false;
 
     private InventoryScreen inventoryScreen;
+    private SkillScreen skillScreen;
 
     public GameScreen(Game game) {
         this.game = game;
@@ -125,6 +126,7 @@ public class GameScreen implements Screen {
         generateGrassMap();
 
         inventoryScreen = new InventoryScreen(batch, Main.getMain().skin);
+        skillScreen = new SkillScreen(batch, Main.getMain().skin);
     }
 
     @Override
@@ -134,9 +136,16 @@ public class GameScreen implements Screen {
         stateTime += delta;
         isMoving = false;
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            inventoryScreen.toggle();
+        if (!inventoryScreen.isVisible() && !skillScreen.isVisible()) {
+            handleInput(delta);
+            if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
+            if (Gdx.input.isKeyPressed(Input.Keys.S)) camera.position.y -= speed * delta;
+            if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
         }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) inventoryScreen.toggle();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.N)) skillScreen.toggle();
 
         camera.position.set(x + playerRegion.getRegionWidth() / 2f, y + playerRegion.getRegionHeight() / 2f, 0);
         camera.update();
@@ -163,6 +172,7 @@ public class GameScreen implements Screen {
 
 
         inventoryScreen.render();
+        skillScreen.render();
     }
 
     private void generateGrassMap() {
@@ -333,6 +343,7 @@ public class GameScreen implements Screen {
         batch.dispose();
         house.dispose();
         inventoryScreen.dispose();
+        skillScreen.dispose();
         clock.dispose();
 
     }
@@ -406,8 +417,9 @@ public class GameScreen implements Screen {
             player.setY((int)y);
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.C) || Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.C) || Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             GameMenuController.toolUse(player.getDirection(), (int)x, (int)y, batch);
+            GameMenuController.inventoryShow();
         }
     }
 
