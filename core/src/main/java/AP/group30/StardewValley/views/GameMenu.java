@@ -166,11 +166,6 @@ public class GameMenu implements AppMenu {
             GameMenuController.showPlant(matcher.group("x"), matcher.group("y"));
             return;
         }
-        matcher = GameMenuCommands.ENERGY_SHOW.regexMatcher(command);
-        if (matcher.matches()) {
-            GameMenuController.energyShow();
-            return;
-        }
         matcher = GameMenuCommands.ENERGY_SET.regexMatcher(command);
         if (matcher.matches()) {
             GameMenuController.cheatEnergySet(matcher.group("value"));

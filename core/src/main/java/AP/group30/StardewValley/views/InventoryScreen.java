@@ -1,6 +1,7 @@
 package AP.group30.StardewValley.views;
 
 import AP.group30.StardewValley.models.App;
+import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.Item;
 import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Players.Player;
@@ -46,10 +47,10 @@ public class InventoryScreen {
         this.skin = skin;
         this.stage = new Stage(new ScreenViewport(), batch);
 
-        backgroundTexture = new Texture(Gdx.files.internal("Inventory.png"));
+        backgroundTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryScreen);
         Drawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
 
-        backgroundItemTexture = new Texture(Gdx.files.internal("Inventory_Item.png"));
+        backgroundItemTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryItem);
 
         table = new Table();
         table.setVisible(false);
@@ -86,7 +87,7 @@ public class InventoryScreen {
 
     public void show() {
         refresh();
-        
+
         visible = true;
         table.setVisible(true);
         Gdx.input.setInputProcessor(stage);

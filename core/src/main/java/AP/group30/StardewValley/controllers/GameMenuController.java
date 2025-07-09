@@ -32,6 +32,9 @@ import AP.group30.StardewValley.models.Users.User;
 import AP.group30.StardewValley.views.GameMenu;
 import AP.group30.StardewValley.views.GameScreen;
 import AP.group30.StardewValley.views.RegisterMenu;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.util.*;
@@ -327,19 +330,46 @@ public class GameMenuController {
         int x = playerX / 32;
         int y = 60 - (playerY / 32);
         int dx = 0, dy = 0;
-
-        switch (direction) {
-            case NORTH: dy = -1; break;
-            case SOUTH: dy = +2; break;
-            case WEST: dx = -1; break;
-            case EAST: dx = 2; break;
-//            case "Q": dx = -1; dy = -1; break;
-//            case "E": dx = 1; dy = -1; break;
-//            case "Z": dx = -1; dy = 1; break;
-//            case "C": dx = 1; dy = 1; break;
-            default:
-                GameMenu.printResult("Invalid direction!");
-                return;
+        if (player.getWield() instanceof Axe) {
+            switch (direction) {
+                case NORTH:
+                    dy = -1;
+                    x = (playerX + 16) / 32;
+                    break;
+                case SOUTH:
+                    dy = +2;
+                    x = (playerX + 8) / 32;
+                    break;
+                case WEST:
+                    dx = -1;
+                    break;
+                case EAST:
+                    dx = 2;
+                    break;
+                default:
+                    GameMenu.printResult("Invalid direction!");
+                    return;
+            }
+        } else {
+            switch (direction) {
+                case NORTH:
+                    dy = -1;
+                    x = (playerX + 16) / 32;
+                    break;
+                case SOUTH:
+                    dy = +1;
+                    x = (playerX + 8) / 32;
+                    break;
+                case WEST:
+                    dx = -1;
+                    break;
+                case EAST:
+                    dx = 2;
+                    break;
+                default:
+                    GameMenu.printResult("Invalid direction!");
+                    return;
+            }
         }
 
         int newX = x + dx;
@@ -348,7 +378,6 @@ public class GameMenuController {
 
         batch.begin();
         batch.draw(GameAssetManager.assetManager.get(GameAssetManager.axe), newX * 32, (60 - newY) * 32);
-//        batch.draw(GameAssetManager.assetManager.get(GameAssetManager.axe), playerX, playerY);
         batch.end();
 
 
@@ -358,6 +387,7 @@ public class GameMenuController {
         }
 
         Tile targetTile = tiles[newX][newY];
+        Tile targetTile2 = tiles[x][newY];
         double rate = 1;
         if(App.getCurrentGame().getCurrentWeather().equals(Weather.SUNNY)){
             rate = 2;
@@ -398,6 +428,7 @@ public class GameMenuController {
             if (player.getEnergy() > energyNeeded) {
                 if (targetTile.getType().equals(TileTypes.PLANTABLE)) {
                     targetTile.setType(TileTypes.DIRT);
+                    targetTile.setTexture(TileTexture.DIRT.getTexture());
                     GameMenu.printResult("Done!");
                 } else if (targetTile.getType().equals(TileTypes.QUARRY)) {
                     int cof = 1;
@@ -537,6 +568,61 @@ public class GameMenuController {
                             energyNeeded -= 1;
                         }
                     }
+                } else if(direction.equals(Direction.WEST) && targetTile2.getItem() != null && (targetTile2.getItem() instanceof ForagingSeed || targetTile2.getItem() instanceof Tree)) {
+                    if (targetTile2.getItem() instanceof Tree || ((ForagingSeed)targetTile2.getItem()).getType().getTreeOrCrop() == 1) {
+                        Item wood = new Item(12, "wood", 10, ItemTexture.WOOD.getTexture());
+                        Item sap = new Item(2, "sap", 10, ItemTexture.WOOD.getTexture());
+
+                        Item newWood = Item.findItemByName(wood.getName(), player.getBackPack().getItems());
+                        Item newSap = Item.findItemByName(sap.getName(), player.getBackPack().getItems());
+
+                        if (newWood == null && newSap == null) {
+                            if (player.getBackPack().getItems().size() + 1 == player.getBackPack().getType().getCapacity()) {
+                                GameMenu.printResult("You don't have enough space in your backpack!");
+                                return;
+                            } else {
+                                player.getBackPack().addItem(sap);
+                                player.getBackPack().addItem(wood);
+                            }
+                        } else if (newWood == null || newSap == null) {
+                            if (player.getBackPack().getItems().size() == player.getBackPack().getType().getCapacity()) {
+                                GameMenu.printResult("You don't have enough space in your backpack!");
+                                return;
+                            }
+                            if (newWood == null) {
+                                player.getBackPack().addItem(wood);
+                                newSap.setCount(newSap.getCount() + 2);
+                            } else {
+                                player.getBackPack().addItem(sap);
+                                newWood.setCount(newWood.getCount() + 12);
+                            }
+                        } else {
+                            newWood.setCount(newWood.getCount() + 12);
+                            newSap.setCount(newSap.getCount() + 2);
+                        }
+                        if (targetTile2.getItem() != null && targetTile2.getItem() instanceof ForagingSeed) {
+                            if (((ForagingSeed) targetTile.getItem()).getType().getTreeOrCrop() == 1) {
+                                targetTile2.setItem(null);
+                                targetTile2.setCrop(null);
+                                targetTile2.setReadyToHarvest(false);
+                                targetTile2.setPlanted(false);
+                                targetTile2.setType(TileTypes.DIRT);
+                            }
+                        }
+
+                        GameScreen.trees.remove(targetTile2.getItem());
+                        targetTile2.setItem(null);
+                        GameMenu.printResult("You chop down the tree and collect 12 wood and 2 sap.");
+                        player.increaseForaging(10);
+                    } else if (targetTile2.getItem().equals(new Item(1, "Wood", 10, ItemTexture.WOOD.getTexture()))) {
+                        targetTile2.setItem(null);
+                        GameMenu.printResult("You clear the branch from the ground.");
+                    } else {
+                        GameMenu.printResult("You swing your axe, but nothing happens.");
+                        if (energyNeeded > 0) {
+                            energyNeeded -= 1;
+                        }
+                    }
                 } else {
                     GameMenu.printResult("You swing your axe, but nothing happens.");
                     if (energyNeeded > 0) {
@@ -547,7 +633,7 @@ public class GameMenuController {
             }else{
                 GameMenu.printResult("You don't have enough energy!");
             }
-        }else if(wield instanceof Basket){
+        } else if(wield instanceof Basket){
             int energyNeeded = ((Basket) wield).getType().getEnergyUsed();
             if(player.getFarming() == 450){
                 energyNeeded -= 1;

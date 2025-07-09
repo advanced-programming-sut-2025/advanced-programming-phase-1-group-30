@@ -2,6 +2,7 @@ package AP.group30.StardewValley.views;
 
 import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.controllers.GameMenuController;
+import AP.group30.StardewValley.controllers.NewGameController;
 import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.Products.Stone;
@@ -23,11 +24,13 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 public class GameScreen implements Screen {
     private SpriteBatch batch;
@@ -61,11 +64,14 @@ public class GameScreen implements Screen {
     private Rectangle playerRect = new Rectangle();
     private Texture house;
     private Texture clock;
+    private Texture energyBar;
     private TextureRegion playerRegion;
     BitmapFont font = (new Skin(Gdx.files.internal("skin/pixthulhu-ui.json")).getFont("font"));
+    private final ShapeRenderer shapeRenderer = new ShapeRenderer();
 
 
-    private final Map map;
+
+    private Map map;
     private final Tile[][] tiles;
     private Tile currentTile;
 
@@ -83,14 +89,13 @@ public class GameScreen implements Screen {
 
     public GameScreen(Game game) {
         this.game = game;
-//         player.setX((int)(Gdx.graphics.getWidth() / 2f));
-//         player.setY((int)(Gdx.graphics.getHeight() / 2f));
-//     }
 
         player = game.getCurrentPlayer();
         initializePlayerAnimations();
         house = GameAssetManager.assetManager.get(GameAssetManager.house);
         clock = GameAssetManager.assetManager.get(GameAssetManager.clock);
+        energyBar = GameAssetManager.assetManager.get(GameAssetManager.energyBar);
+        playerRegion = new TextureRegion(playerTexture);
 
         map = game.getCurrentPlayer().getMap();
         tiles = map.getTiles();
@@ -109,8 +114,8 @@ public class GameScreen implements Screen {
             }
         }
 
-        x = Gdx.graphics.getWidth() + 100;
-        y = Gdx.graphics.getHeight() + 450;
+        x = Gdx.graphics.getWidth() * 1.2f;
+        y = Gdx.graphics.getHeight() * 1.4f;
         playerRect.setPosition(x, y);
         playerRect.setSize(playerTexture.getWidth() * 2f, playerTexture.getHeight() / 2f);
     }
@@ -121,6 +126,7 @@ public class GameScreen implements Screen {
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.zoom = 1f;
 
         Gdx.input.setInputProcessor(null);
         generateGrassMap();
@@ -159,6 +165,8 @@ public class GameScreen implements Screen {
 //        renderItems();
         renderTreeAndStone();
         renderHut();
+        renderPlayer();
+        renderEnergyBar();
         renderTime();
         if (!inventoryScreen.isVisible()) {
             handleInput(delta);
@@ -320,8 +328,48 @@ public class GameScreen implements Screen {
         }
     }
 
+    private void renderEnergyBar() {
+
+        float maxEnergy = player.getMaxEnergy();
+        float currentEnergy = player.getEnergy();
+        float energyRatio = currentEnergy / maxEnergy;
+        System.out.println(energyRatio);
+
+        float barWidth = energyBar.getWidth();
+        float barHeight = energyBar.getHeight();
+        float barX = camera.position.x + Gdx.graphics.getWidth() / 2f - barWidth * 1.5f;
+        float barY = camera.position.y - barHeight * 3.3f;
+
+        // Calculate filled height
+        float filledHeight = barHeight * energyRatio;
+
+        // Determine color
+        Color barColor;
+        if (energyRatio >= 0.66f) {
+            barColor = Color.GREEN;
+        } else if (energyRatio >= 0.33f) {
+            barColor = Color.ORANGE;
+        } else {
+            barColor = Color.RED;
+        }
+        // Draw the energy bar frame (border image)
+        batch.draw(energyBar, barX, barY);
+
+        // Disable batch temporarily to use ShapeRenderer
+        batch.end();
+
+        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(barColor);
+        shapeRenderer.rect(barX + energyBar.getWidth() / 6f, barY + energyBar.getHeight() / 30f, barWidth * 2 / 3f, filledHeight * 3 / 4f); // draw from bottom up
+        shapeRenderer.end();
+
+        batch.begin();
+    }
+
+
     private void renderTime(){
-        batch.draw(clock,camera.position.x + 650, camera.position.y + 300);
+        batch.draw(clock,camera.position.x + Gdx.graphics.getWidth() / 2.96f, camera.position.y + Gdx.graphics.getHeight() / 3.7f);
         font.setColor(Color.BLACK);
         font.draw(batch, String.format("%s %d",game.getCurrentTime().getDayOfWeek(),game.getCurrentTime().getDay()),camera.position.x + 760,camera.position.y + 510);
         font.draw(batch, String.format("%02d : %02d",game.getCurrentTime().getHour(),game.getCurrentTime().getMinute()),camera.position.x +800, camera.position.y + 420);
@@ -417,9 +465,9 @@ public class GameScreen implements Screen {
             player.setY((int)y);
         }
 
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.C) || Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-            GameMenuController.toolUse(player.getDirection(), (int)x, (int)y, batch);
-            GameMenuController.inventoryShow();
+            GameMenuController.toolUse(player.getDirection(), (int)(x), (int)(y + playerRegion.getRegionHeight() / 8f), batch);
         }
     }
 
