@@ -28,6 +28,7 @@ public enum ItemTexture {
     PINE_TREE(GameAssetManager.assetManager.get(GameAssetManager.pine_tree)),
     MAHOGANY_TREE(GameAssetManager.assetManager.get(GameAssetManager.mahogany_tree)),
     MUSHROOM_TREE(GameAssetManager.assetManager.get(GameAssetManager.mushroom_tree)),
+    TREE(GameAssetManager.assetManager.get(GameAssetManager.tree)),
     WILD_TREE(GameAssetManager.assetManager.get(GameAssetManager.wild_tree)),
     MYSTIC_TREE(GameAssetManager.assetManager.get(GameAssetManager.mystic_tree)),
 
