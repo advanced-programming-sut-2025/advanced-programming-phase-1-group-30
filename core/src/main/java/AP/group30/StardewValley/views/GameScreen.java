@@ -142,13 +142,13 @@ public class GameScreen implements Screen {
         stateTime += delta;
         isMoving = false;
 
-        if (!inventoryScreen.isVisible() && !skillScreen.isVisible()) {
-            handleInput(delta);
-            if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
-            if (Gdx.input.isKeyPressed(Input.Keys.S)) camera.position.y -= speed * delta;
-            if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
-        }
+//        if (!inventoryScreen.isVisible() && !skillScreen.isVisible()) {
+//            handleInput(delta);
+//            if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
+//            if (Gdx.input.isKeyPressed(Input.Keys.S)) camera.position.y -= speed * delta;
+//            if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
+//            if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
+//        }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) inventoryScreen.toggle();
         if (Gdx.input.isKeyJustPressed(Input.Keys.N)) skillScreen.toggle();
@@ -177,7 +177,6 @@ public class GameScreen implements Screen {
         }
         renderPlayer();
         batch.end();
-
 
         inventoryScreen.render();
         skillScreen.render();

@@ -375,10 +375,7 @@ public class GameMenuController {
         int newX = x + dx;
         int newY = y + dy;
 
-
-        batch.begin();
         batch.draw(GameAssetManager.assetManager.get(GameAssetManager.axe), newX * 32, (60 - newY) * 32);
-        batch.end();
 
 
         if (newX < 0 || newX >= tiles.length || newY < 0 || newY >= tiles[0].length) {
