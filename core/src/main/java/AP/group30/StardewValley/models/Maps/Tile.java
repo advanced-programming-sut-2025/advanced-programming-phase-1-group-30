@@ -124,7 +124,7 @@ public class Tile {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (obj == null || this.getClass() != obj.getClass()) return false;
         Tile other = (Tile) obj;
         return this.x == other.x && this.y == other.y;
     }

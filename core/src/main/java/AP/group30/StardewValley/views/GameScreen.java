@@ -26,7 +26,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -74,6 +77,7 @@ public class GameScreen implements Screen {
     private Map map;
     private final Tile[][] tiles;
     private Tile currentTile;
+    private Tile hutEntryTile = null;
 
 
     private int[][] grassMap;
@@ -86,6 +90,8 @@ public class GameScreen implements Screen {
 
     private InventoryScreen inventoryScreen;
     private SkillScreen skillScreen;
+
+    private final BitmapFont info = (Main.getMain().skin).getFont("font");
 
     public GameScreen(Game game) {
         this.game = game;
@@ -133,6 +139,8 @@ public class GameScreen implements Screen {
 
         inventoryScreen = new InventoryScreen(batch, Main.getMain().skin);
         skillScreen = new SkillScreen(batch, Main.getMain().skin);
+
+        info.setColor(Color.WHITE);
     }
 
     @Override
@@ -177,6 +185,15 @@ public class GameScreen implements Screen {
         }
         renderPlayer();
         batch.end();
+
+        currentTile = getTileUnderPlayer(x, y);
+
+        if (currentTile.getX() == hutEntryTile.getX() &&
+            currentTile.getY() == hutEntryTile.getY() + 1) {
+            batch.begin();
+            info.draw(batch, "You reached Hut entry!\nPress 'H' to enter!",camera.position.x - 50,camera.position.y + 510);
+            batch.end();
+        }
 
         inventoryScreen.render();
         skillScreen.render();
@@ -296,6 +313,8 @@ public class GameScreen implements Screen {
             (endTIleX - startTIleX + 2) * 32,
             (endTIleY - startTIleY + 3) * 32
         );
+
+        hutEntryTile = map.getTiles()[(startTIleX + endTIleX) / 2][60 - startTIleY];
     }
 
     private void renderMap() {
@@ -332,7 +351,6 @@ public class GameScreen implements Screen {
         float maxEnergy = player.getMaxEnergy();
         float currentEnergy = player.getEnergy();
         float energyRatio = currentEnergy / maxEnergy;
-        System.out.println(energyRatio);
 
         float barWidth = energyBar.getWidth();
         float barHeight = energyBar.getHeight();
@@ -440,20 +458,20 @@ public class GameScreen implements Screen {
             playerRect.setPosition(proposedX, proposedY);
 
             boolean collides = false;
-            for (Tree tree : trees) {
-                if (playerRect.overlaps(tree.getRect())) {
-                    collides = true;
-                    break;
-                }
-            }
-            if (!collides) {
-                for (Stone stone : stones) {
-                    if (playerRect.overlaps(stone.getRect())) {
-                        collides = true;
-                        break;
-                    }
-                }
-            }
+//            for (Tree tree : trees) {
+//                if (playerRect.overlaps(tree.getRect())) {
+//                    collides = true;
+//                    break;
+//                }
+//            }
+//            if (!collides) {
+//                for (Stone stone : stones) {
+//                    if (playerRect.overlaps(stone.getRect())) {
+//                        collides = true;
+//                        break;
+//                    }
+//                }
+//            }
 
             if (!collides) {
                 x = proposedX;
