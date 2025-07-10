@@ -6,13 +6,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Stone extends Item {
-    private final Texture texture = GameAssetManager.assetManager.get(GameAssetManager.stone);
+    private final Texture texture = GameAssetManager.assetManager.get(GameAssetManager.stones);
     private final float width = texture.getWidth(), height = texture.getHeight();
     private Rectangle rect = new Rectangle();
     private int x, y;
 
     public Stone(int count, int x, int y) {
-        super(count, "Stone", 10, GameAssetManager.assetManager.get(GameAssetManager.stone));
+        super(count, "Stone", 10, GameAssetManager.assetManager.get(GameAssetManager.stones));
         this.x = x;
         this.y = y;
         rect.x = x;

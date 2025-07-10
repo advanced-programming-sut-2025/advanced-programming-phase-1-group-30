@@ -142,7 +142,7 @@ public class SkillScreen {
     }
 
     private void createPlayerImage() {
-        Texture playerTexture = ItemTexture.PLAYER_INFO.getTexture();
+        Texture playerTexture = GameAssetManager.assetManager.get(GameAssetManager.playerInfo);
         Image playerImage = new Image(new TextureRegionDrawable(new TextureRegion(playerTexture)));
         playerImage.setPosition(positionX + 55, positionY + 60);
 
