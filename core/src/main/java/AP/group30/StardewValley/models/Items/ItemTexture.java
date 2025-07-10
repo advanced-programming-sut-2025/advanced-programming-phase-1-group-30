@@ -44,7 +44,6 @@ public enum ItemTexture {
     FORAGING_ICON(GameAssetManager.assetManager.get(GameAssetManager.foragingIcon)),
     MINING_ICON(GameAssetManager.assetManager.get(GameAssetManager.miningIcon)),
 
-    PLAYER_INFO(GameAssetManager.assetManager.get(GameAssetManager.playerInfo)),
     TAPPER_ICON(GameAssetManager.assetManager.get(GameAssetManager.tapperIcon)),;
 
     private final Texture TEXTURE;
