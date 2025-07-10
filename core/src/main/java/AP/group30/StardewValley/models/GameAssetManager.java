@@ -9,10 +9,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public class GameAssetManager {
     public static AssetManager assetManager = new AssetManager();
     public static final AssetDescriptor<Texture> background = new AssetDescriptor<>("menu assets/loading screen.png", Texture.class);
-    public static final AssetDescriptor<Texture> inventoryScreen = new AssetDescriptor<>("Inventory.png", Texture.class);
-    public static final AssetDescriptor<Texture> inventoryItem = new AssetDescriptor<>("Inventory_Item.png", Texture.class);
-    public static final AssetDescriptor<Texture> skill = new AssetDescriptor<>("Skill.png", Texture.class);
-    public static final AssetDescriptor<Texture> energyBar = new AssetDescriptor<>("energy_bar.png", Texture.class);
+
+    public static final AssetDescriptor<Texture> inventoryScreen = new AssetDescriptor<>("Inventory/Inventory.png", Texture.class);
+    public static final AssetDescriptor<Texture> inventoryItem = new AssetDescriptor<>("Inventory/Inventory_Item.png", Texture.class);
+
+    public static final AssetDescriptor<Texture> skill = new AssetDescriptor<>("Skill/Skill.png", Texture.class);
+    public static final AssetDescriptor<Texture> farmingIcon = new AssetDescriptor<>("Skill/Farming_Skill_Icon.png", Texture.class);
+    public static final AssetDescriptor<Texture> fishingIcon = new AssetDescriptor<>("Skill/Fishing_Skill_Icon.png", Texture.class);
+    public static final AssetDescriptor<Texture> foragingIcon = new AssetDescriptor<>("Skill/Foraging_Skill_Icon.png", Texture.class);
+    public static final AssetDescriptor<Texture> miningIcon = new AssetDescriptor<>("Skill/Mining_Skill_Icon.png", Texture.class);
+    public static final AssetDescriptor<Texture> playerInfo = new AssetDescriptor<>("Skill/playerInfo.png", Texture.class);
+    public static final AssetDescriptor<Texture> tapperIcon = new AssetDescriptor<>("Skill/Tapper_Icon.png", Texture.class);
+
+    public static final AssetDescriptor<Texture> energyBar = new AssetDescriptor<>("EnergyBar/energy_bar.png", Texture.class);
     public static final AssetDescriptor<Texture> nightBackground = new AssetDescriptor<>("menu assets/sebastianRideTiles.png", Texture.class);
     public static final AssetDescriptor<Skin> menuSkin = new AssetDescriptor<>("skin/pixthulhu-ui.json", Skin.class);
     public static final AssetDescriptor<Texture> grass = new AssetDescriptor<>("tile/grass.png", Texture.class);
@@ -34,8 +43,7 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> dirt3 = new AssetDescriptor<>("tile/dirt3.png", Texture.class);
     public static final AssetDescriptor<Texture> dirt4 = new AssetDescriptor<>("tile/dirt4.png", Texture.class);
     public static final AssetDescriptor<Texture> plantable = new AssetDescriptor<>("tile/plantable.png", Texture.class);
-    public static final AssetDescriptor<Texture> house = new AssetDescriptor<>("Hut.png", Texture.class);
-    public static final AssetDescriptor<Texture> water = new AssetDescriptor<>("water.png", Texture.class);
+    public static final AssetDescriptor<Texture> house = new AssetDescriptor<>("Building/Hut.png", Texture.class);
     public static final AssetDescriptor<Texture> river = new AssetDescriptor<>("tile/river.png", Texture.class);
     public static final AssetDescriptor<Texture> leftWall = new AssetDescriptor<>("tile/wall/leftWall.png", Texture.class);
     public static final AssetDescriptor<Texture> rightWall = new AssetDescriptor<>("tile/wall/rightWall.png", Texture.class);
@@ -48,30 +56,21 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> outdoorGrass3 = new AssetDescriptor<>("tile/wall/outdoorGrass3.png", Texture.class);
     public static final AssetDescriptor<Texture> outdoorGrass4 = new AssetDescriptor<>("tile/wall/outdoorGrass4.png", Texture.class);
     public static final AssetDescriptor<Texture> clock = new AssetDescriptor<>("Stardew_Valley_Images/Clock/Clock.png", Texture.class);
-    public static final AssetDescriptor<Texture> tree = new AssetDescriptor<>("tree.png", Texture.class);
-    public static final AssetDescriptor<Texture> kaj = new AssetDescriptor<>("tree_kaj.png", Texture.class);
-    public static final AssetDescriptor<Texture> stone = new AssetDescriptor<>("stone.png", Texture.class);
-    public static final AssetDescriptor<Texture> ruinedGreenhouse = new AssetDescriptor<>("ruined_greenhouse.png", Texture.class);
+    public static final AssetDescriptor<Texture> ruinedGreenhouse = new AssetDescriptor<>("Building/ruined_greenhouse.png", Texture.class);
 
-    public static final AssetDescriptor<Texture> axe = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Axe/Axe.png", Texture.class);
-    public static final AssetDescriptor<Texture> pickaxe = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Pickaxe/Pickaxe.png", Texture.class);
-    public static final AssetDescriptor<Texture> scythe = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Scythe/Scythe.png", Texture.class);
-    public static final AssetDescriptor<Texture> hoe = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Hoe/Hoe.png", Texture.class);
-    public static final AssetDescriptor<Texture> wateringCan = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Watering_Can/Watering_Can.png", Texture.class);
-    public static final AssetDescriptor<Texture> milkPail = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Milk_Pail.png", Texture.class);
-    public static final AssetDescriptor<Texture> trashCan = new AssetDescriptor<>("Stardew_Valley_Images/Tools/Trash_Can_Copper.png", Texture.class);
-
-    public static final AssetDescriptor<Texture> farmingIcon = new AssetDescriptor<>("Stardew_Valley_Images/Skill/Farming_Skill_Icon.png", Texture.class);
-    public static final AssetDescriptor<Texture> fishingIcon = new AssetDescriptor<>("Stardew_Valley_Images/Skill/Fishing_Skill_Icon.png", Texture.class);
-    public static final AssetDescriptor<Texture> foragingIcon = new AssetDescriptor<>("Stardew_Valley_Images/Skill/Foraging_Skill_Icon.png", Texture.class);
-    public static final AssetDescriptor<Texture> miningIcon = new AssetDescriptor<>("Stardew_Valley_Images/Skill/Mining_Skill_Icon.png", Texture.class);
-
-    public static final AssetDescriptor<Texture> playerInfo = new AssetDescriptor<>("playerInfo.png", Texture.class);
-    public static final AssetDescriptor<Texture> tapperIcon = new AssetDescriptor<>("Tapper_Icon.png", Texture.class);
+    public static final AssetDescriptor<Texture> axe = new AssetDescriptor<>("Tools/Axe/Axe.png", Texture.class);
+    public static final AssetDescriptor<Texture> pickaxe = new AssetDescriptor<>("Tools/Pickaxe/Pickaxe.png", Texture.class);
+    public static final AssetDescriptor<Texture> scythe = new AssetDescriptor<>("Tools/Scythe/Scythe.png", Texture.class);
+    public static final AssetDescriptor<Texture> hoe = new AssetDescriptor<>("Tools/Hoe/Hoe.png", Texture.class);
+    public static final AssetDescriptor<Texture> wateringCan = new AssetDescriptor<>("Tools/Watering_Can/Watering_Can.png", Texture.class);
+    public static final AssetDescriptor<Texture> milkPail = new AssetDescriptor<>("Tools/Milk_Pail/Milk_Pail.png", Texture.class);
+    public static final AssetDescriptor<Texture> trashCan = new AssetDescriptor<>("Tools/Trash_Can/Trash_Can_Copper.png", Texture.class);
 
     public static final AssetDescriptor<Texture> wood = new AssetDescriptor<>("item/resource/Wood.png", Texture.class);
-    public static final AssetDescriptor<Texture> stones = new AssetDescriptor<>("item/resource/Stone.png", Texture.class);
+    public static final AssetDescriptor<Texture> stone = new AssetDescriptor<>("item/resource/Stone.png", Texture.class);
+    public static final AssetDescriptor<Texture> stones = new AssetDescriptor<>("item/resource/Stones.png", Texture.class);
 
+    public static final AssetDescriptor<Texture> tree = new AssetDescriptor<>("tree/tree.png", Texture.class);
     public static final AssetDescriptor<Texture> apricot_tree = new AssetDescriptor<>("tree/Apricot.png", Texture.class);
     public static final AssetDescriptor<Texture> cherry_tree = new AssetDescriptor<>("tree/Cherry.png", Texture.class);
     public static final AssetDescriptor<Texture> banana_tree = new AssetDescriptor<>("tree/Banana.png", Texture.class);
@@ -116,10 +115,6 @@ public class GameAssetManager {
         assetManager.load(dirt4);
         assetManager.load(plantable);
         assetManager.load(house);
-        assetManager.load(water);
-        assetManager.load(tree);
-        assetManager.load(kaj);
-        assetManager.load(stone);
         assetManager.load(ruinedGreenhouse);
         assetManager.load(menuSkin);
         assetManager.load(river);
@@ -142,6 +137,8 @@ public class GameAssetManager {
         assetManager.load(milkPail);
         assetManager.load(wood);
         assetManager.load(stones);
+        assetManager.load(stone);
+        assetManager.load(tree);
         assetManager.load(apricot_tree);
         assetManager.load(cherry_tree);
         assetManager.load(banana_tree);
