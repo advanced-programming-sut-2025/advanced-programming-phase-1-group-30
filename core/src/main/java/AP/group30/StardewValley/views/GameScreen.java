@@ -134,13 +134,13 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (!inventoryScreen.isVisible() && !skillScreen.isVisible()) {
-            handleInput(delta);
-            if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
-            if (Gdx.input.isKeyPressed(Input.Keys.S)) camera.position.y -= speed * delta;
-            if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
-        }
+//        if (!inventoryScreen.isVisible() && !skillScreen.isVisible()) {
+//            handleInput(delta);
+//            if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
+//            if (Gdx.input.isKeyPressed(Input.Keys.S)) camera.position.y -= speed * delta;
+//            if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
+//            if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
+//        }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) inventoryScreen.toggle();
         if (Gdx.input.isKeyJustPressed(Input.Keys.N)) skillScreen.toggle();
@@ -301,7 +301,6 @@ public class GameScreen implements Screen {
         float maxEnergy = player.getMaxEnergy();
         float currentEnergy = player.getEnergy();
         float energyRatio = currentEnergy / maxEnergy;
-        System.out.println(energyRatio);
 
         float barWidth = energyBar.getWidth();
         float barHeight = energyBar.getHeight();
@@ -433,6 +432,11 @@ public class GameScreen implements Screen {
             playerRect.setPosition(x, y);
             player.setX((int)x);
             player.setY((int)y);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            NewGameController.NextTurn(new Scanner(System.in));
+            System.out.println("yekbar");
         }
 
 
