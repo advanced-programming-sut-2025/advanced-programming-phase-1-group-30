@@ -2,7 +2,6 @@ package AP.group30.StardewValley.views;
 
 import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.controllers.GameMenuController;
-import AP.group30.StardewValley.controllers.NewGameController;
 import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.Products.Stone;
@@ -13,6 +12,7 @@ import AP.group30.StardewValley.models.Maps.TileTexture;
 import AP.group30.StardewValley.models.Maps.TileTypes;
 import AP.group30.StardewValley.models.Players.Direction;
 import AP.group30.StardewValley.models.Players.Player;
+import AP.group30.StardewValley.views.Hut.Hut;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -26,14 +26,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
 
 public class GameScreen implements Screen {
     private SpriteBatch batch;

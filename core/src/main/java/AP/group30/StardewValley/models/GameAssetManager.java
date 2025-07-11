@@ -90,6 +90,8 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> wild_tree = new AssetDescriptor<>("tree/Wild.png", Texture.class);
     public static final AssetDescriptor<Texture> mystic_tree = new AssetDescriptor<>("tree/Mystic.png", Texture.class);
 
+    public static final AssetDescriptor<Texture> refrigerator = new AssetDescriptor<>("Inventory/Refrigerator.png", Texture.class);
+
     public static void queueAsset() {
         assetManager.load(background);
         assetManager.load(inventoryScreen);
@@ -168,5 +170,6 @@ public class GameAssetManager {
         assetManager.load(playerInfo);
         assetManager.load(tapperIcon);
         assetManager.load(insideHouse);
+        assetManager.load(refrigerator);
     }
 }
