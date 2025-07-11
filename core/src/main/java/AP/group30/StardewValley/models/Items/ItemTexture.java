@@ -44,7 +44,17 @@ public enum ItemTexture {
     FORAGING_ICON(GameAssetManager.assetManager.get(GameAssetManager.foragingIcon)),
     MINING_ICON(GameAssetManager.assetManager.get(GameAssetManager.miningIcon)),
 
-    TAPPER_ICON(GameAssetManager.assetManager.get(GameAssetManager.tapperIcon)),;
+    TAPPER_ICON(GameAssetManager.assetManager.get(GameAssetManager.tapperIcon)),
+
+
+    // *** Buildings ***
+    CARPENTER(GameAssetManager.assetManager.get(GameAssetManager.carpenter)),
+    RANCH(GameAssetManager.assetManager.get(GameAssetManager.ranch)),
+    SALOON(GameAssetManager.assetManager.get(GameAssetManager.saloon)),
+    BLACKSMITH(GameAssetManager.assetManager.get(GameAssetManager.blacksmith)),
+    PIERRES(GameAssetManager.assetManager.get(GameAssetManager.pierres)),
+    JOJA(GameAssetManager.assetManager.get(GameAssetManager.jojamart)),
+    FISH_SHOP(GameAssetManager.assetManager.get(GameAssetManager.fishShop));
 
     private final Texture TEXTURE;
 

@@ -2,8 +2,6 @@ package AP.group30.StardewValley.models.Maps;
 
 import AP.group30.StardewValley.models.Items.Item;
 import AP.group30.StardewValley.models.Items.Products.*;
-import AP.group30.StardewValley.views.GameScreen;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -67,7 +65,7 @@ public class Tile {
             case "carpenters-shop":
                 return new Tile(x, y, TileTypes.CARPENTERS_SHOP, true, true, id, TileTexture.DIRT.getTexture());
             case "jojomart":
-                return new Tile(x, y, TileTypes.JOJOMART, true, false, id, TileTexture.DIRT.getTexture());
+                return new Tile(x, y, TileTypes.JOJAMART, true, false, id, TileTexture.DIRT.getTexture());
             case "pierres-store":
                 return new Tile(x, y, TileTypes.PIERRES_GENERAL_STORE, true, false, id, TileTexture.DIRT.getTexture());
             case "fish-shop":

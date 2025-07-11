@@ -2,13 +2,7 @@ package AP.group30.StardewValley.models;
 
 import java.util.ArrayList;
 
-import AP.group30.StardewValley.models.Buildings.Blacksmith;
-import AP.group30.StardewValley.models.Buildings.Carpenter;
-import AP.group30.StardewValley.models.Buildings.FishShop;
-import AP.group30.StardewValley.models.Buildings.GeneralStore;
-import AP.group30.StardewValley.models.Buildings.JojaMart;
-import AP.group30.StardewValley.models.Buildings.Ranch;
-import AP.group30.StardewValley.models.Buildings.Saloon;
+import AP.group30.StardewValley.models.Buildings.*;
 import AP.group30.StardewValley.models.Maps.GreatMap;
 import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Maps.Weather;
@@ -30,8 +24,10 @@ public class Game {
     private ArrayList<Player> players;
     private ArrayList<Trade> trades = new ArrayList<>();
     private ArrayList<Trade> allTrades = new ArrayList<>();
+    private ArrayList<Building> buildings = new ArrayList<>();
     private ArrayList<NPC> NPCs = new ArrayList<>();
     private Map currentMap;
+    private Map cityMap = new Map(-1);
 
     private final Blacksmith blacksmith;
     private final Carpenter carpenter;
@@ -78,13 +74,20 @@ public class Game {
         this.NPCs.add(new Harvey());
         this.NPCs.add(new Leah());
         this.NPCs.add(new Robin());
-        this.blacksmith = new Blacksmith(0, 0, 0, 0);
-        this.carpenter = new Carpenter(0, 0, 0, 0);
-        this.fishShop = new FishShop(0, 0, 0, 0);
-        this.generalStore = new GeneralStore(0, 0, 0, 0);
-        this.jojaMart = new JojaMart(0, 0, 0, 0);
-        this.ranch = new Ranch(0, 0, 0, 0);
-        this.saloon = new Saloon(0, 0, 0, 0);
+        this.blacksmith = new Blacksmith(8, 10, 68, 33);
+        this.carpenter = new Carpenter(9, 12, 8, 46);
+        this.fishShop = new FishShop(8, 11, 28, 3);
+        this.generalStore = new GeneralStore(11, 10, 34, 28);
+        this.jojaMart = new JojaMart(8, 11, 5, 16);
+        this.ranch = new Ranch(5, 14, 32, 54);
+        this.saloon = new Saloon(7, 6, 70, 52);
+        buildings.add(blacksmith);
+        buildings.add(carpenter);
+        buildings.add(fishShop);
+        buildings.add(generalStore);
+        buildings.add(jojaMart);
+        buildings.add(ranch);
+        buildings.add(saloon);
     }
 
     public GreatMap getGreatMap() {
@@ -148,5 +151,17 @@ public class Game {
 
     public ArrayList<Trade> getAllTrades() {
         return allTrades;
+    }
+
+    public Map getCityMap() {
+        return cityMap;
+    }
+
+    public void setCityMap(Map cityMap) {
+        this.cityMap = cityMap;
+    }
+
+    public ArrayList<Building> getBuildings() {
+        return buildings;
     }
 }

@@ -2,9 +2,12 @@ package AP.group30.StardewValley.views;
 
 import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.controllers.GameMenuController;
-import AP.group30.StardewValley.controllers.NewGameController;
+import AP.group30.StardewValley.models.Buildings.Building;
 import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
+import AP.group30.StardewValley.models.GameObjects;
+import AP.group30.StardewValley.models.Items.Item;
+import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Items.Products.Stone;
 import AP.group30.StardewValley.models.Items.Products.Tree;
 import AP.group30.StardewValley.models.Maps.Map;
@@ -29,35 +32,22 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Random;
-import java.util.Scanner;
 
 public class GameScreen implements Screen {
     private SpriteBatch batch;
-
-//     private InputProcessor gameInputProcessor;
-//     Player player;
-//     TextureRegion playerRegion = new TextureRegion(GameAssetManager.assetManager.get("Horse_rider.png", Texture.class));
-//     Texture house = GameAssetManager.assetManager.get(GameAssetManager.house);
-//     Texture ruinedGreenhouse = GameAssetManager.assetManager.get(GameAssetManager.ruinedGreenhouse);
-//     float playerDx = 0, playerDy = 0;
-//     Map map = new Map(2);
-//     float x = Gdx.graphics.getWidth() / 2f;
-//     float y = Gdx.graphics.getHeight() / 2f;
-//     OrthographicCamera camera;
 
 
 //     // *** Game entities ***
      public static ArrayList<Tree> trees = new ArrayList<>();
      public static ArrayList<Stone> stones = new ArrayList<>();
+     public static ArrayList<GameObjects> entities = new ArrayList<>();
 
     private OrthographicCamera camera;
     private Game game;
     private Player player;
-    private Animation<TextureRegion> walkingW;
-    private Animation<TextureRegion> walkingD;
-    private Animation<TextureRegion> walkingS;
-    private Texture playerTexture;
+    private Texture playerTexture = GameAssetManager.assetManager.get(GameAssetManager.player21);
     private float stateTime = 0f;
     private boolean isMoving = false;
 
@@ -82,7 +72,6 @@ public class GameScreen implements Screen {
     private float x;
     private float y;
     float speed = 150f;
-    private boolean facingLeft = false;
 
     private InventoryScreen inventoryScreen;
     private SkillScreen skillScreen;
@@ -91,7 +80,6 @@ public class GameScreen implements Screen {
         this.game = game;
 
         player = game.getCurrentPlayer();
-        initializePlayerAnimations();
         house = GameAssetManager.assetManager.get(GameAssetManager.house);
         clock = GameAssetManager.assetManager.get(GameAssetManager.clock);
         energyBar = GameAssetManager.assetManager.get(GameAssetManager.energyBar);
@@ -99,20 +87,25 @@ public class GameScreen implements Screen {
 
         map = game.getCurrentPlayer().getMap();
         tiles = map.getTiles();
-        for (int i = 0; i < map.getTiles().length; i++) {
+        for (int i = map.getTiles().length - 1; i >= 0; i--) {
             for (int j = 0; j < map.getTiles()[i].length; j++) {
                 Tile tile = map.getTiles()[i][j];
                 if (tile.getItem() != null) {
                     if (tile.getItem().getClass().equals(Tree.class)) {
                         Tree tree = (Tree) tile.getItem();
                         trees.add(tree);
+                        entities.add(tree);
                     } else if (tile.getItem().getClass().equals(Stone.class)) {
                         Stone stone = (Stone) tile.getItem();
                         stones.add(stone);
+                        entities.add(stone);
                     }
                 }
             }
         }
+        entities.addAll(game.getBuildings());
+        entities.add(player);
+
 
         x = Gdx.graphics.getWidth() * 1.2f;
         y = Gdx.graphics.getHeight() * 1.4f;
@@ -140,15 +133,16 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stateTime += delta;
+        player.setStateTime(stateTime);
         isMoving = false;
 
-//        if (!inventoryScreen.isVisible() && !skillScreen.isVisible()) {
-//            handleInput(delta);
-//            if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
-//            if (Gdx.input.isKeyPressed(Input.Keys.S)) camera.position.y -= speed * delta;
-//            if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
-//            if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
-//        }
+        if (!inventoryScreen.isVisible() && !skillScreen.isVisible()) {
+            handleInput(delta);
+            if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
+            if (Gdx.input.isKeyPressed(Input.Keys.S)) camera.position.y -= speed * delta;
+            if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
+        }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) inventoryScreen.toggle();
         if (Gdx.input.isKeyJustPressed(Input.Keys.N)) skillScreen.toggle();
@@ -158,24 +152,19 @@ public class GameScreen implements Screen {
 
         batch.setProjectionMatrix(camera.combined);
 
+        entities.sort(Comparator.comparing(GameObjects::getRenderY).reversed());
         batch.begin();
         renderBackground();
-        renderMap();
         renderWallsAroundMap();
-//        renderItems();
-        renderTreeAndStone();
-        renderHut();
-        renderPlayer();
+        if (player.isInCity()) {
+            renderMap(game.getCityMap());
+        } else {
+            renderMap(map);
+            renderBuilding(TileTypes.HUT, map, house);
+        }
+        renderEntities();
         renderEnergyBar();
         renderTime();
-        if (!inventoryScreen.isVisible()) {
-            handleInput(delta);
-            if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
-            if (Gdx.input.isKeyPressed(Input.Keys.S)) camera.position.y -= speed * delta;
-            if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
-        }
-        renderPlayer();
         batch.end();
 
         inventoryScreen.render();
@@ -219,30 +208,20 @@ public class GameScreen implements Screen {
         }
     }
 
-    private void renderPlayer() {
-        TextureRegion currentFrame;
-        if(isMoving){
-            if(player.getDirection().equals(Direction.NORTH)){
-                currentFrame = walkingW.getKeyFrame(stateTime);
-            } else if (player.getDirection().equals(Direction.SOUTH)){
-                currentFrame = walkingS.getKeyFrame(stateTime);
-            } else {
-                currentFrame = walkingD.getKeyFrame(stateTime);
-                if (facingLeft) {
-                    if (!currentFrame.isFlipX()) {
-                        currentFrame.flip(true, false);
-                    }
-                } else {
-                    if (currentFrame.isFlipX()) {
-                        currentFrame.flip(true, false);
-                    }
+    private void renderEntities() {
+        if (player.isInCity()) {
+            for (GameObjects g : entities) {
+                if (!(g instanceof Tree) && !(g instanceof Stone)) {
+                    g.render(batch, game.getCityMap());
                 }
             }
-            playerRegion = currentFrame;
         } else {
-            currentFrame = playerRegion;
+            for (GameObjects g : entities) {
+                if (!(g instanceof Building)) {
+                    g.render(batch, map);
+                }
+            }
         }
-        batch.draw(currentFrame, x, y, playerRegion.getRegionWidth() * 2f , playerRegion.getRegionHeight() * 2f);
     }
 
     private void renderWallsAroundMap() {
@@ -264,24 +243,25 @@ public class GameScreen implements Screen {
         batch.draw(TileTexture.CORNER2_WALL.getTexture(), 80 * tileSize, 63 * tileSize, tileSize, tileSize);
     }
 
-    private void renderHut() {
+    private void renderBuilding(TileTypes tileType, Map map1, Texture texture) {
         int startTIleX = 60;
         int endTIleX = 65;
         int startTIleY = 40;
         int endTIleY = 45;
+        Tile[][] tiles1 = map1.getTiles();
 
-        for (int i = 0; i < tiles.length; i++) {
-            for (int j = 0; j < tiles[i].length; j++) {
-                Tile tile = tiles[i][j];
-                if (tile.getType() == TileTypes.HUT) {
-                    if (tiles[i-1][j].getType() != TileTypes.HUT) {
-                        if (tiles[i][j+1].getType() != TileTypes.HUT) {
+        for (int i = 0; i < tiles1.length; i++) {
+            for (int j = 0; j < tiles1[i].length; j++) {
+                Tile tile = tiles1[i][j];
+                if (tile.getType() == tileType) {
+                    if (tiles1[i-1][j].getType() != tileType) {
+                        if (tiles1[i][j+1].getType() != tileType) {
                             startTIleX = i;
                             startTIleY = 60 - j;
                         }
                     }
-                    if (tiles[i+1][j].getType() != TileTypes.HUT) {
-                        if (tiles[i][j-1].getType() != TileTypes.HUT) {
+                    if (tiles1[i+1][j].getType() != tileType) {
+                        if (tiles1[i][j-1].getType() != tileType) {
                             endTIleX = i;
                             endTIleY = 60 - j;
                         }
@@ -290,16 +270,16 @@ public class GameScreen implements Screen {
             }
         }
 
-        batch.draw(house,
-            map.getTiles()[startTIleX][startTIleY].getX() * 32,
-            map.getTiles()[startTIleX][startTIleY].getY() * 32,
-            (endTIleX - startTIleX + 2) * 32,
-            (endTIleY - startTIleY + 3) * 32
+        batch.draw(texture,
+            map1.getTiles()[startTIleX - 1][startTIleY + 1].getX() * 32,
+            map1.getTiles()[startTIleX][startTIleY].getY() * 32,
+            (endTIleX - startTIleX + 3) * 32,
+            (endTIleY - startTIleY + 4) * 32
         );
     }
 
-    private void renderMap() {
-        Tile[][] tiles = map.getTiles();
+    private void renderMap(Map map1) {
+        Tile[][] tiles = map1.getTiles();
         for (Tile[] value : tiles) {
             for (Tile tile : value) {
                 if (tile != null) tile.render(batch);
@@ -318,21 +298,11 @@ public class GameScreen implements Screen {
         }
     }
 
-    private void renderTreeAndStone() {
-        for (Tree tree : trees) {
-            batch.draw(tree.getTexture(), tree.getX(), tree.getY(), tree.getWidth(), tree.getHeight());
-        }
-        for (Stone stone : stones) {
-            batch.draw(stone.getTexture(), stone.getX(), stone.getY(), stone.getWidth(), stone.getHeight());
-        }
-    }
-
     private void renderEnergyBar() {
 
         float maxEnergy = player.getMaxEnergy();
         float currentEnergy = player.getEnergy();
         float energyRatio = currentEnergy / maxEnergy;
-        System.out.println(energyRatio);
 
         float barWidth = energyBar.getWidth();
         float barHeight = energyBar.getHeight();
@@ -415,53 +385,71 @@ public class GameScreen implements Screen {
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             proposedX -= moveAmount;
-            if (!facingLeft) {
-                facingLeft = true;
+            if (!player.isFacingLeft()) {
+                player.setFacingLeft(true);
             }
             moved = true;
             player.setDirection(Direction.WEST);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             proposedX += moveAmount;
-            if (facingLeft) {
-                facingLeft = false;
+            if (player.isFacingLeft()) {
+                player.setFacingLeft(false);
             }
             moved = true;
             player.setDirection(Direction.EAST);
         }
 
         if (moved) {
-            isMoving = true;
+            player.setMoving(true);
             Tile tile = getTileUnderPlayer(proposedX, proposedY);
             if (tile.getType().equals(TileTypes.WATER)) {
                 return;
             }
 
             playerRect.setPosition(proposedX, proposedY);
-
-            boolean collides = false;
-            for (Tree tree : trees) {
-                if (playerRect.overlaps(tree.getRect())) {
-                    collides = true;
-                    break;
-                }
-            }
-            if (!collides) {
-                for (Stone stone : stones) {
-                    if (playerRect.overlaps(stone.getRect())) {
+            if (!player.isInCity()) {
+                boolean collides = false;
+                for (Tree tree : trees) {
+                    if (playerRect.overlaps(tree.getRect())) {
                         collides = true;
                         break;
                     }
                 }
+                if (!collides) {
+                    for (Stone stone : stones) {
+                        if (playerRect.overlaps(stone.getRect())) {
+                            collides = true;
+                            break;
+                        }
+                    }
+                }
+                if (!collides) {
+                    x = proposedX;
+                    y = proposedY;
+                }
+            } else {
+                boolean collides = false;
+                for (Building building : game.getBuildings()) {
+                    if (playerRect.overlaps(building.getRectangle())) {
+                        collides = true;
+                        break;
+                    }
+                }
+                if (!collides) {
+                    x = proposedX;
+                    y = proposedY;
+                }
             }
 
-            if (!collides) {
-                x = proposedX;
-                y = proposedY;
-            }
+
             playerRect.setPosition(x, y);
             player.setX((int)x);
             player.setY((int)y);
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            player.setInCity(!player.isInCity());
         }
 
 
@@ -490,6 +478,9 @@ public class GameScreen implements Screen {
     private Tile getTileUnderPlayer(float playerX, float playerY) {
         int tileX = (int)(playerX / 32);
         int tileY = (int)(playerY / 32);
+        if (player.isInCity()) {
+            return game.getCityMap().getTiles()[tileX][60 - tileY];
+        }
         return tiles[tileX][60 - tileY];
     }
 
@@ -512,36 +503,6 @@ public class GameScreen implements Screen {
             y = obstacle.y + obstacle.height;
         }
     }
-
-    private void initializePlayerAnimations() {
-        TextureRegion[] sWalkingRegion = new TextureRegion[4];
-        sWalkingRegion[0] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player00));
-        sWalkingRegion[1] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player01));
-        sWalkingRegion[2] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player02));
-        sWalkingRegion[3] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player03));
-        walkingS = new Animation<TextureRegion>(0.15f, sWalkingRegion);
-        walkingS.setPlayMode(Animation.PlayMode.LOOP);
-
-        TextureRegion[] dWalkingRegion = new TextureRegion[4];
-        dWalkingRegion[0] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player10));
-        dWalkingRegion[1] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player11));
-        dWalkingRegion[2] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player12));
-        dWalkingRegion[3] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player13));
-        walkingD = new Animation<TextureRegion>(0.15f, dWalkingRegion);
-        walkingD.setPlayMode(Animation.PlayMode.LOOP);
-
-        TextureRegion[] wWalkingRegion = new TextureRegion[4];
-        wWalkingRegion[0] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player20));
-        wWalkingRegion[1] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player21));
-        wWalkingRegion[2] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player22));
-        wWalkingRegion[3] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player23));
-        walkingW = new Animation<TextureRegion>(0.15f, wWalkingRegion);
-        walkingW.setPlayMode(Animation.PlayMode.LOOP);
-
-        playerRegion = sWalkingRegion[1];
-        playerTexture = GameAssetManager.assetManager.get(GameAssetManager.player21);
-    }
-
 
     public ArrayList<Tree> getTrees() {
         return trees;

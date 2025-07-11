@@ -13,6 +13,7 @@ public class Item implements ItemsInteface {
     private double cof;
     private double price;
     private final Texture texture;
+    private int x, y;
 
     public Item(int count, String name, double price, Texture texture) {
         this.name = name;
@@ -83,4 +84,8 @@ public class Item implements ItemsInteface {
     public void renderItem(SpriteBatch batch, float x, float y) {
         batch.draw(texture, x, y);
     }
+
+//    public int getRenderY() {
+//        return y;
+//    }
 }
