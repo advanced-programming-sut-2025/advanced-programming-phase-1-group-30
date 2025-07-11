@@ -1,11 +1,14 @@
 package AP.group30.StardewValley.models.Items.Products;
 
 import AP.group30.StardewValley.models.GameAssetManager;
+import AP.group30.StardewValley.models.GameObjects;
 import AP.group30.StardewValley.models.Items.Item;
+import AP.group30.StardewValley.models.Maps.Map;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
-public class Stone extends Item {
+public class Stone extends Item implements GameObjects {
     private final Texture texture = GameAssetManager.assetManager.get(GameAssetManager.stones);
     private final float width = texture.getWidth(), height = texture.getHeight();
     private Rectangle rect = new Rectangle();
@@ -49,5 +52,14 @@ public class Stone extends Item {
 
     public Rectangle getRect() {
         return rect;
+    }
+
+    public int getRenderY() {
+        return y;
+    }
+
+    @Override
+    public void render(SpriteBatch batch, Map map) {
+        batch.draw(texture, x, y, width, height);
     }
 }

@@ -1,6 +1,9 @@
 package AP.group30.StardewValley.models.Buildings;
 
 import AP.group30.StardewValley.models.Animals.Animal;
+import AP.group30.StardewValley.models.Items.ItemTexture;
+import AP.group30.StardewValley.models.Maps.TileTypes;
+
 import java.util.ArrayList;
 
 public class Barn extends Building {
@@ -10,7 +13,7 @@ public class Barn extends Building {
     private ArrayList<Animal> animals = new ArrayList<>();
 
     public Barn(int length, int width, int startX, int startY, int capacity, String type) {
-        super(length, width, startX, startY, 9, 21);
+        super(length, width, startX, startY, 9, 21, TileTypes.BARN, ItemTexture.PIERRES.getTexture()); // TODO
         this.capacity = capacity;
         this.currentNumberOfAnimals = 0;
         this.type = type;

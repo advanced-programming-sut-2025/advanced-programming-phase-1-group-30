@@ -1,6 +1,8 @@
 package AP.group30.StardewValley.models.Buildings;
 
 import AP.group30.StardewValley.models.Animals.Animal;
+import AP.group30.StardewValley.models.Items.ItemTexture;
+import AP.group30.StardewValley.models.Maps.TileTypes;
 
 import java.util.ArrayList;
 
@@ -11,7 +13,7 @@ public class Coop extends Building {
     private ArrayList<Animal> animals = new ArrayList<>();
 
     public Coop(int height, int width, int startX, int startY, int capacity, String type) {
-        super(height, width, startX, startY, 9, 21);
+        super(height, width, startX, startY, 9, 21, TileTypes.COOP, ItemTexture.WOOD.getTexture());
         this.type = type;
         this.capacity = capacity;
         this.currentNumberOfAnimals = 0;

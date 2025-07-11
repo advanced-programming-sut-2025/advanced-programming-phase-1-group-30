@@ -199,7 +199,7 @@ public class Map {
                             System.out.print(RED + "\uD83D\uDE00" + RESET);
                         } else
                             System.out.print(BRIGHT_CYAN + "⬛" + RESET);
-                    }else if (tiles[j][i].getType().equals(TileTypes.JOJOMART)) {
+                    }else if (tiles[j][i].getType().equals(TileTypes.JOJAMART)) {
                         if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
                             System.out.print(RED + "\uD83D\uDE00" + RESET);
                         } else
@@ -356,7 +356,7 @@ public class Map {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);
                     } else
                         System.out.print("\uD83D\uDED6");
-                }else if (tiles[j][i].getType().equals(TileTypes.JOJOMART)) {
+                }else if (tiles[j][i].getType().equals(TileTypes.JOJAMART)) {
                     if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);
                     } else
@@ -496,7 +496,7 @@ public class Map {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);
                     } else
                         System.out.print("\uD83D\uDED6");
-                }else if (tiles[j][i].getType().equals(TileTypes.JOJOMART)) {
+                }else if (tiles[j][i].getType().equals(TileTypes.JOJAMART)) {
                     if (player.getX() == j && player.getY() == i && ((player.isInCity() && this.id == -1) || (!player.isInCity() && this.id != -1))) {
                         System.out.print(RED + "\uD83D\uDE00" + RESET);
                     } else
