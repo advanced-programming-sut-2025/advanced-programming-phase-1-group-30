@@ -43,7 +43,10 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> dirt3 = new AssetDescriptor<>("tile/dirt3.png", Texture.class);
     public static final AssetDescriptor<Texture> dirt4 = new AssetDescriptor<>("tile/dirt4.png", Texture.class);
     public static final AssetDescriptor<Texture> plantable = new AssetDescriptor<>("tile/plantable.png", Texture.class);
+
     public static final AssetDescriptor<Texture> house = new AssetDescriptor<>("Building/Hut.png", Texture.class);
+    public static final AssetDescriptor<Texture> insideHouse = new AssetDescriptor<>("Building/InsideHut.png", Texture.class);
+
     public static final AssetDescriptor<Texture> river = new AssetDescriptor<>("tile/river.png", Texture.class);
     public static final AssetDescriptor<Texture> leftWall = new AssetDescriptor<>("tile/wall/leftWall.png", Texture.class);
     public static final AssetDescriptor<Texture> rightWall = new AssetDescriptor<>("tile/wall/rightWall.png", Texture.class);
@@ -164,5 +167,6 @@ public class GameAssetManager {
         assetManager.load(miningIcon);
         assetManager.load(playerInfo);
         assetManager.load(tapperIcon);
+        assetManager.load(insideHouse);
     }
 }
