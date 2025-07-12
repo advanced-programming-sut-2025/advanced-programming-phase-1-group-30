@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public enum ItemTexture {
 
@@ -46,6 +47,29 @@ public enum ItemTexture {
 
     TAPPER_ICON(GameAssetManager.assetManager.get(GameAssetManager.tapperIcon)),
 
+    FRIED_EGG(GameAssetManager.assetManager.get(GameAssetManager.friedEgg)),
+    BAKED_FISH(GameAssetManager.assetManager.get(GameAssetManager.bakedFish)),
+    SALAD(GameAssetManager.assetManager.get(GameAssetManager.salad)),
+    OMELET(GameAssetManager.assetManager.get(GameAssetManager.omelet)),
+    PUMPKIN_PIE(GameAssetManager.assetManager.get(GameAssetManager.pumpkinPie)),
+    SPAGHETTI(GameAssetManager.assetManager.get(GameAssetManager.spaghetti)),
+    PIZZA(GameAssetManager.assetManager.get(GameAssetManager.pizza)),
+    TORTILLA(GameAssetManager.assetManager.get(GameAssetManager.tortilla)),
+    MAKI_ROLL(GameAssetManager.assetManager.get(GameAssetManager.makiRoll)),
+    TRIPLE_SHOT_ESPRESSO(GameAssetManager.assetManager.get(GameAssetManager.tripleShotEspresso)),
+    COOKIE(GameAssetManager.assetManager.get(GameAssetManager.cookie)),
+    HASH_BROWNS(GameAssetManager.assetManager.get(GameAssetManager.hashBrowns)),
+    PANCAKES(GameAssetManager.assetManager.get(GameAssetManager.pancakes)),
+    FRUIT_SALAD(GameAssetManager.assetManager.get(GameAssetManager.fruitSalad)),
+    RED_PLATE(GameAssetManager.assetManager.get(GameAssetManager.redPlate)),
+    BREAD(GameAssetManager.assetManager.get(GameAssetManager.bread)),
+    SALMON_DINNER(GameAssetManager.assetManager.get(GameAssetManager.salmonDinner)),
+    VEGETABLE_MEDLEY(GameAssetManager.assetManager.get(GameAssetManager.vegetableMedley)),
+    FARMERS_LUNCH(GameAssetManager.assetManager.get(GameAssetManager.farmersLunch)),
+    SURVIVAL_BURGER(GameAssetManager.assetManager.get(GameAssetManager.survivalBurger)),
+    DISH_O_THE_SEA(GameAssetManager.assetManager.get(GameAssetManager.dishOTheSea)),
+    SEAFOAM_PUDDING(GameAssetManager.assetManager.get(GameAssetManager.seafoamPudding)),
+    MINERS_TREAT(GameAssetManager.assetManager.get(GameAssetManager.minersTreat)),;
 
     // *** Buildings ***
     CARPENTER(GameAssetManager.assetManager.get(GameAssetManager.carpenter)),

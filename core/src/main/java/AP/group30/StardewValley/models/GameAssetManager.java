@@ -43,6 +43,10 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> dirt3 = new AssetDescriptor<>("tile/dirt3.png", Texture.class);
     public static final AssetDescriptor<Texture> dirt4 = new AssetDescriptor<>("tile/dirt4.png", Texture.class);
     public static final AssetDescriptor<Texture> plantable = new AssetDescriptor<>("tile/plantable.png", Texture.class);
+
+    public static final AssetDescriptor<Texture> house = new AssetDescriptor<>("Building/Hut.png", Texture.class);
+    public static final AssetDescriptor<Texture> insideHouse = new AssetDescriptor<>("Building/InsideHut.png", Texture.class);
+
     public static final AssetDescriptor<Texture> river = new AssetDescriptor<>("tile/river.png", Texture.class);
     public static final AssetDescriptor<Texture> leftWall = new AssetDescriptor<>("tile/wall/leftWall.png", Texture.class);
     public static final AssetDescriptor<Texture> rightWall = new AssetDescriptor<>("tile/wall/rightWall.png", Texture.class);
@@ -85,6 +89,32 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> wild_tree = new AssetDescriptor<>("tree/Wild.png", Texture.class);
     public static final AssetDescriptor<Texture> mystic_tree = new AssetDescriptor<>("tree/Mystic.png", Texture.class);
 
+    public static final AssetDescriptor<Texture> refrigerator = new AssetDescriptor<>("Inventory/Refrigerator.png", Texture.class);
+
+    public static final AssetDescriptor<Texture> friedEgg = new AssetDescriptor<>("item/FoodType/Fried_Egg.png", Texture.class);
+    public static final AssetDescriptor<Texture> bakedFish = new AssetDescriptor<>("item/FoodType/Baked_Fish.png", Texture.class);
+    public static final AssetDescriptor<Texture> salad = new AssetDescriptor<>("item/FoodType/Salad.png", Texture.class);
+    public static final AssetDescriptor<Texture> omelet = new AssetDescriptor<>("item/FoodType/Omelet.png", Texture.class);
+    public static final AssetDescriptor<Texture> pumpkinPie = new AssetDescriptor<>("item/FoodType/Pumpkin_Pie.png", Texture.class);
+    public static final AssetDescriptor<Texture> spaghetti = new AssetDescriptor<>("item/FoodType/spaghetti.png", Texture.class);
+    public static final AssetDescriptor<Texture> pizza = new AssetDescriptor<>("item/FoodType/Pizza.png", Texture.class);
+    public static final AssetDescriptor<Texture> tortilla = new AssetDescriptor<>("item/FoodType/Tortilla.png", Texture.class);
+    public static final AssetDescriptor<Texture> makiRoll = new AssetDescriptor<>("item/FoodType/Maki_Roll.png", Texture.class);
+    public static final AssetDescriptor<Texture> tripleShotEspresso = new AssetDescriptor<>("item/FoodType/Triple_Shot_Espresso.png", Texture.class);
+    public static final AssetDescriptor<Texture> cookie = new AssetDescriptor<>("item/FoodType/Cookie.png", Texture.class);
+    public static final AssetDescriptor<Texture> hashBrowns = new AssetDescriptor<>("item/FoodType/HashBrowns.png", Texture.class);
+    public static final AssetDescriptor<Texture> pancakes = new AssetDescriptor<>("item/FoodType/Pancakes.png", Texture.class);
+    public static final AssetDescriptor<Texture> fruitSalad = new AssetDescriptor<>("item/FoodType/Fruit_Salad.png", Texture.class);
+    public static final AssetDescriptor<Texture> redPlate = new AssetDescriptor<>("item/FoodType/Red_Plate.png", Texture.class);
+    public static final AssetDescriptor<Texture> bread = new AssetDescriptor<>("item/FoodType/Bread.png", Texture.class);
+    public static final AssetDescriptor<Texture> salmonDinner = new AssetDescriptor<>("item/FoodType/Salmon_Dinner.png", Texture.class);
+    public static final AssetDescriptor<Texture> vegetableMedley = new AssetDescriptor<>("item/FoodType/Vegetable_Medley.png", Texture.class);
+    public static final AssetDescriptor<Texture> farmersLunch = new AssetDescriptor<>("item/FoodType/Farmer's_Lunch.png", Texture.class);
+    public static final AssetDescriptor<Texture> survivalBurger = new AssetDescriptor<>("item/FoodType/Survival_Burger.png", Texture.class);
+    public static final AssetDescriptor<Texture> dishOTheSea = new AssetDescriptor<>("item/FoodType/Dish_O_The_Sea.png", Texture.class);
+    public static final AssetDescriptor<Texture> seafoamPudding = new AssetDescriptor<>("item/FoodType/Seafoam_Pudding.png", Texture.class);
+    public static final AssetDescriptor<Texture> minersTreat = new AssetDescriptor<>("item/FoodType/Miner's_Treat.png", Texture.class);
+  
     // *** Buildings ***
     public static final AssetDescriptor<Texture> carpenter = new AssetDescriptor<>("buildings/Carpenter's_Shop.png", Texture.class);
     public static final AssetDescriptor<Texture> fishShop = new AssetDescriptor<>("buildings/Fish_Shop.png", Texture.class);
@@ -173,6 +203,34 @@ public class GameAssetManager {
         assetManager.load(miningIcon);
         assetManager.load(playerInfo);
         assetManager.load(tapperIcon);
+
+        assetManager.load(insideHouse);
+        assetManager.load(refrigerator);
+
+        assetManager.load(friedEgg);
+        assetManager.load(bakedFish);
+        assetManager.load(pumpkinPie);
+        assetManager.load(spaghetti);
+        assetManager.load(tortilla);
+        assetManager.load(makiRoll);
+        assetManager.load(tripleShotEspresso);
+        assetManager.load(hashBrowns);
+        assetManager.load(pancakes);
+        assetManager.load(fruitSalad);
+        assetManager.load(redPlate);
+        assetManager.load(salmonDinner);
+        assetManager.load(vegetableMedley);
+        assetManager.load(farmersLunch);
+        assetManager.load(survivalBurger);
+        assetManager.load(dishOTheSea);
+        assetManager.load(seafoamPudding);
+        assetManager.load(minersTreat);
+        assetManager.load(omelet);
+        assetManager.load(pizza);
+        assetManager.load(cookie);
+        assetManager.load(bread);
+        assetManager.load(salad);
+
         assetManager.load(carpenter);
         assetManager.load(blacksmith);
         assetManager.load(jojamart);

@@ -18,6 +18,7 @@ import AP.group30.StardewValley.models.Maps.TileTexture;
 import AP.group30.StardewValley.models.Maps.TileTypes;
 import AP.group30.StardewValley.models.Players.Direction;
 import AP.group30.StardewValley.models.Players.Player;
+import AP.group30.StardewValley.views.Hut.HutScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -66,6 +67,7 @@ public class GameScreen implements Screen {
     private Map map;
     private final Tile[][] tiles;
     private Tile currentTile;
+    private Tile hutEntryTile = null;
 
 
     private int[][] grassMap;
@@ -77,6 +79,9 @@ public class GameScreen implements Screen {
 
     private InventoryScreen inventoryScreen;
     private SkillScreen skillScreen;
+    private HutScreen hut;
+
+    private final BitmapFont info = (Main.getMain().skin).getFont("font");
     private ShopScreen shopScreen;
 
     public GameScreen(Game game) {
@@ -129,6 +134,9 @@ public class GameScreen implements Screen {
 
         inventoryScreen = new InventoryScreen(batch, Main.getMain().skin);
         skillScreen = new SkillScreen(batch, Main.getMain().skin);
+        hut = new HutScreen(batch, Main.getMain().skin);
+        info.setColor(Color.WHITE);
+      
         shopScreen = new ShopScreen(batch, Main.getMain().skin, BlacksmithCosts.values());
     }
 
@@ -170,10 +178,30 @@ public class GameScreen implements Screen {
         renderEntities();
         renderEnergyBar();
         renderTime();
+        if (!isAnyMenuOpened()) {
+            handleInput(delta);
+            if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
+            if (Gdx.input.isKeyPressed(Input.Keys.S)) camera.position.y -= speed * delta;
+            if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
+        }
+        renderPlayer();
         batch.end();
+
+        currentTile = getTileUnderPlayer(x, y);
+
+        if (currentTile.getX() == hutEntryTile.getX() &&
+            currentTile.getY() == hutEntryTile.getY() + 1) {
+            batch.begin();
+            info.draw(batch, "You reached Hut entry!\nPress 'H' to enter!",camera.position.x - 50,camera.position.y + 510);
+            batch.end();
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.H)) hut.toggle();
+        }
 
         inventoryScreen.render();
         skillScreen.render();
+        hut.render();
         shopScreen.render();
     }
 
@@ -250,6 +278,42 @@ public class GameScreen implements Screen {
 
         batch.draw(TileTexture.CORNER1_WALL.getTexture(), -1 * tileSize, 63 * tileSize, tileSize, tileSize);
         batch.draw(TileTexture.CORNER2_WALL.getTexture(), 80 * tileSize, 63 * tileSize, tileSize, tileSize);
+    }
+
+    private void renderHut() {
+        int startTIleX = 60;
+        int endTIleX = 65;
+        int startTIleY = 40;
+        int endTIleY = 45;
+
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                Tile tile = tiles[i][j];
+                if (tile.getType() == TileTypes.HUT) {
+                    if (tiles[i-1][j].getType() != TileTypes.HUT) {
+                        if (tiles[i][j+1].getType() != TileTypes.HUT) {
+                            startTIleX = i;
+                            startTIleY = 60 - j;
+                        }
+                    }
+                    if (tiles[i+1][j].getType() != TileTypes.HUT) {
+                        if (tiles[i][j-1].getType() != TileTypes.HUT) {
+                            endTIleX = i;
+                            endTIleY = 60 - j;
+                        }
+                    }
+                }
+            }
+        }
+
+        batch.draw(house,
+            map.getTiles()[startTIleX][startTIleY].getX() * 32,
+            map.getTiles()[startTIleX][startTIleY].getY() * 32,
+            (endTIleX - startTIleX + 2) * 32,
+            (endTIleY - startTIleY + 3) * 32
+        );
+
+        hutEntryTile = map.getTiles()[(startTIleX + endTIleX) / 2][60 - startTIleY];
     }
 
 //    private void renderBuilding(TileTypes tileType, Map map1, Texture texture) {
@@ -371,6 +435,7 @@ public class GameScreen implements Screen {
         house.dispose();
         inventoryScreen.dispose();
         skillScreen.dispose();
+        hut.dispose();
         clock.dispose();
 
     }
@@ -456,7 +521,6 @@ public class GameScreen implements Screen {
                 }
             }
 
-
             playerRect.setPosition(x, y);
             player.setX((int)x);
             player.setY((int)y);
@@ -523,5 +587,12 @@ public class GameScreen implements Screen {
 
     public ArrayList<Stone> getStones() {
         return stones;
+    }
+
+    private boolean isAnyMenuOpened() {
+        return inventoryScreen.isVisible() ||
+               skillScreen.isVisible() ||
+               hut.isVisible() ||
+               shopScreen.isVisible();
     }
 }

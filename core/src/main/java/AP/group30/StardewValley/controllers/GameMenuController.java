@@ -1185,44 +1185,31 @@ public class GameMenuController {
         MaintainerController.cheatAddItem(name, Integer.parseInt(count));
     }
 
-    public static void putRefrigerator(String item) {
+    public static String putRefrigerator(Item item) {
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Item wantedItem = Item.findItemByName(item, player.getBackPack().getItems());
 
-        if (wantedItem == null) {
-            GameMenu.printResult("No Item Found!");
-            return;
-        }
-
-        if (wantedItem.getClass() != Food.class) {
-            GameMenu.printResult("Item is not eatable");
-            return;
+        if (item.getClass() != Food.class) {
+            return "Item is not eatable";
         }
 
         if (player.getRefrigerator().getItems().size() + 1 > player.getRefrigerator().getCAPTIYITY()) {
-            GameMenu.printResult("Refrigerator is full!");
-            return;
+            return "Refrigerator is full!";
         }
 
-        player.getBackPack().removeItem(wantedItem);
-        player.getRefrigerator().addItem(wantedItem);
-        GameMenu.printResult("Item moved successfully!");
+        player.getBackPack().removeItem(item);
+        player.getRefrigerator().addItem(item);
+        return null;
     }
 
-    public static void pickRefrigerator(String item) {
+    public static String pickRefrigerator(Item item) {
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Item wantedItem = Item.findItemByName(item, player.getRefrigerator().getItems());
-
-        if (wantedItem == null)
-            GameMenu.printResult("No Item Found!");
 
         if (player.getBackPack().getItems().size() + 1 > player.getBackPack().getType().getCapacity()) {
-            GameMenu.printResult("Backpack is full!");
-            return;
+            return "Backpack is full!";
         }
-        player.getBackPack().addItem(wantedItem);
-        player.getRefrigerator().removeItem(wantedItem);
-        GameMenu.printResult("Item moved successfully!");
+        player.getBackPack().addItem(item);
+        player.getRefrigerator().removeItem(item);
+        return null;
     }
 
     public static void showCookingRecipe(boolean isAll) {
@@ -1265,36 +1252,19 @@ public class GameMenuController {
         GameMenu.printResult("Recipe added successfully!");
     }
 
-    public static void cooking(String name, Scanner scanner) {
-        FoodType recipe = FoodType.getrecipeByName(name);
+    public static String cooking(FoodType recipe) {
         Player player = App.getCurrentGame().getCurrentPlayer();
-        if (recipe == null) {
-            GameMenu.printResult("No recipe with given name were found!");
-            return;
-        }
 
-        boolean recipeLeared = false;
-        for (FoodType foodType : App.getCurrentGame().getCurrentPlayer().getRecipes()) {
-            if (foodType.equals(recipe)) {
-                recipeLeared = true;
-                break;
-            }
-        }
-        if (!recipeLeared) {
-            GameMenu.printResult("You didn't learn this recipe!");
-            return;
-        }
         if (player.getBackPack().getItems().size() >= player.getBackPack().getType().getCapacity()) {
-            GameMenu.printResult("Your Backpack is full!!");
-            return;
+            return "Your Backpack is full!!";
         }
-        if (player.getEnergy() <= 3) {
-            player.setEnergy(0);
-            player.setPassedOut(true);
-            GameMenu.printResult("You have a carismatic passing out! WHILE COOKING");
-            NewGameController.NextTurn(scanner);
-            return;
-        }
+//        if (player.getEnergy() <= 3) {
+//            player.setEnergy(0);
+//            player.setPassedOut(true);
+//            GameMenu.printResult("You have a carismatic passing out! WHILE COOKING");
+//            NewGameController.NextTurn(scanner);
+//            return;
+//        } //TODO Next Turn??!
 
         for (Item ingredient : recipe.getIngredients()) {
             Item refrigratorItem = Item.findItemByName(ingredient.getName(), App.getCurrentGame().getCurrentPlayer().getRefrigerator().getItems());
@@ -1302,28 +1272,24 @@ public class GameMenuController {
 
             if (backpackItem == null) {
                 if (refrigratorItem == null)
-                    GameMenu.printResult("You don't have any " + ingredient.getName());
+                    return "You don't have any " + ingredient.getName();
                 else {
                     if (refrigratorItem.getCount() < ingredient.getCount())
-                        GameMenu.printResult("You don't have enough " + ingredient.getName());
+                        return "You don't have enough " + ingredient.getName();
                     else
-                        GameMenu.printResult("You have enough " + ingredient.getName() + " in your refrigrator. Please move it to your backpack");
+                        return "You have enough " + ingredient.getName() + " in your refrigerator. Please move it to your backpack";
                 }
-
-                return;
             }
             else {
                 if (backpackItem.getCount() < ingredient.getCount()) {
                     if (refrigratorItem == null)
-                        GameMenu.printResult("You don't have enough " + ingredient.getName());
+                        return "You don't have enough " + ingredient.getName();
                     else {
                         if (refrigratorItem.getCount() < ingredient.getCount())
-                            GameMenu.printResult("You don't have enough " + ingredient.getName());
+                            return "You don't have enough " + ingredient.getName();
                         else
-                            GameMenu.printResult("You have enough " + ingredient.getName() + " in your refrigrator. Please move it to your backpack");
+                            return "You have enough " + ingredient.getName() + " in your refrigrator. Please move it to your backpack";
                     }
-
-                    return;
                 }
             }
         }
@@ -1339,7 +1305,7 @@ public class GameMenuController {
 
         App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(new Food(1, recipe));
         App.getCurrentGame().getCurrentPlayer().changeEnergy(-3);
-        GameMenu.printResult(name + " (x1) added successfully!");
+        return null;
     }
 
     public static void eat(String name) {
