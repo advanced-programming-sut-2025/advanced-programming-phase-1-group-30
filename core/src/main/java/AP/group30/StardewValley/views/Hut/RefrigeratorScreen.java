@@ -1,14 +1,9 @@
 package AP.group30.StardewValley.views.Hut;
 
-import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.controllers.GameMenuController;
-import AP.group30.StardewValley.controllers.RegisterMenuController;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.Item;
-import AP.group30.StardewValley.models.Items.ItemTexture;
-import AP.group30.StardewValley.models.Players.Player;
-import AP.group30.StardewValley.views.LoginMenu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -19,14 +14,13 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
 
-public class Refrigerator {
+public class RefrigeratorScreen {
     private final Stage stage;
     private final Skin skin;
     private final Table table1;
@@ -44,7 +38,7 @@ public class Refrigerator {
 
     private final Label errorLabel;
 
-    public Refrigerator(SpriteBatch batch, Skin skin) {
+    public RefrigeratorScreen(SpriteBatch batch, Skin skin) {
         this.skin = skin;
         this.stage = new Stage(new ScreenViewport(), batch);
 

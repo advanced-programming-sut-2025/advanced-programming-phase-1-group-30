@@ -12,8 +12,7 @@ import AP.group30.StardewValley.models.Maps.TileTexture;
 import AP.group30.StardewValley.models.Maps.TileTypes;
 import AP.group30.StardewValley.models.Players.Direction;
 import AP.group30.StardewValley.models.Players.Player;
-import AP.group30.StardewValley.views.Hut.Hut;
-import AP.group30.StardewValley.views.Hut.Refrigerator;
+import AP.group30.StardewValley.views.Hut.HutScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -87,7 +86,7 @@ public class GameScreen implements Screen {
 
     private InventoryScreen inventoryScreen;
     private SkillScreen skillScreen;
-    private Hut hut;
+    private HutScreen hut;
 
     private final BitmapFont info = (Main.getMain().skin).getFont("font");
 
@@ -137,7 +136,7 @@ public class GameScreen implements Screen {
 
         inventoryScreen = new InventoryScreen(batch, Main.getMain().skin);
         skillScreen = new SkillScreen(batch, Main.getMain().skin);
-        hut = new Hut(batch, Main.getMain().skin);
+        hut = new HutScreen(batch, Main.getMain().skin);
 
         info.setColor(Color.WHITE);
     }

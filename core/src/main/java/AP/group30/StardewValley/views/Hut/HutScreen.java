@@ -1,9 +1,6 @@
 package AP.group30.StardewValley.views.Hut;
 
-import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameAssetManager;
-import AP.group30.StardewValley.models.Items.ItemTexture;
-import AP.group30.StardewValley.models.Players.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
@@ -15,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class Hut {
+public class HutScreen {
     private final Stage stage;
     private final Skin skin;
     private final Table table;
@@ -23,11 +20,10 @@ public class Hut {
     private final Texture backgroundTexture;
     private final Texture backgroundItemTexture;
 
-    private final int positionX;
-    private final int positionY;
-    private final Refrigerator refrigerator;
+    private final RefrigeratorScreen refrigerator;
+    private final CookingScreen cooking;
 
-    public Hut(SpriteBatch batch, Skin skin) {
+    public HutScreen(SpriteBatch batch, Skin skin) {
         this.skin = skin;
         this.stage = new Stage(new ScreenViewport(), batch);
 
@@ -45,11 +41,10 @@ public class Hut {
             (Gdx.graphics.getHeight() - table.getHeight()) / 2
         );
 
-        positionX = (int) ((Gdx.graphics.getWidth() - table.getWidth()) / 2);
-        positionY = (int) ((Gdx.graphics.getHeight() - table.getHeight()) / 2);
         stage.addActor(table);
 
-        refrigerator = new Refrigerator(batch, skin);
+        refrigerator = new RefrigeratorScreen(batch, skin);
+        cooking = new CookingScreen(batch, skin);
     }
 
     public void show() {
@@ -75,8 +70,10 @@ public class Hut {
             stage.draw();
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.R)) refrigerator.toggle();
+            if (Gdx.input.isKeyJustPressed(Input.Keys.C)) cooking.toggle();
 
             refrigerator.render();
+            cooking.render();
         }
     }
 

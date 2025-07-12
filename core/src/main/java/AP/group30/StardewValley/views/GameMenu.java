@@ -237,7 +237,7 @@ public class GameMenu implements AppMenu {
         }
         matcher = GameMenuCommands.COOKING_PREPARE.regexMatcher(command);
         if (matcher.matches()) {
-            GameMenuController.cooking(matcher.group("recipeName"), scanner);
+            //GameMenuController.cooking(matcher.group("recipeName"), scanner);
             return;
         }
         matcher = GameMenuCommands.EAT.regexMatcher(command);
