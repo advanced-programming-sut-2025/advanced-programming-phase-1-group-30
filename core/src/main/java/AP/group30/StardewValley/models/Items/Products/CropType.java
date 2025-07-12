@@ -116,7 +116,7 @@ public enum CropType implements ItemsInteface {
     public int getRegrowthTime() {
         return regrowthTime;
     }
-    public int getBaseSellPrice() {
+    public int getPrice() {
         return baseSellPrice;
     }
     public boolean isEdible() {

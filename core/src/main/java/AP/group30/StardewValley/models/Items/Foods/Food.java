@@ -6,7 +6,7 @@ public class Food extends Item {
     private final FoodType type;
 
     public Food(int count, FoodType type) {
-        super(count, type.getName(), type.getSellPrice(), type.getTexture());
+        super(count, type.getName(), type.getPrice(), type.getTexture());
         this.type = type;
     }
 

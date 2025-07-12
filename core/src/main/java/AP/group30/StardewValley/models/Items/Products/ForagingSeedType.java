@@ -101,4 +101,7 @@ public enum ForagingSeedType implements ItemsInteface {
     public Texture getTexture() {
         return texture;
     }
+    public int getPrice() {
+        return 20;
+    }
 }

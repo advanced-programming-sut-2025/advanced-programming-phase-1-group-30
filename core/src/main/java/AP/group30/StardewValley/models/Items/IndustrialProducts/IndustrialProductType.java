@@ -79,7 +79,7 @@ public enum IndustrialProductType implements ItemsInteface {
     private final String name;
     private final String description;
     private final ArrayList<Item> ingredients;
-    private final int sellPrice;
+    private final int price;
     private final Texture texture;
 
     public String getName() {
@@ -94,19 +94,19 @@ public enum IndustrialProductType implements ItemsInteface {
         return ingredients;
     }
 
-    public int getSellPrice() {
-        return sellPrice;
+    public int getPrice() {
+        return price;
     }
 
     public Texture getTexture() {
         return texture;
     }
 
-    IndustrialProductType(String name, String description, ArrayList<Item> ingredients, int sellPrice, Texture texture) {
+    IndustrialProductType(String name, String description, ArrayList<Item> ingredients, int price, Texture texture) {
         this.name = name;
         this.description = description;
         this.ingredients = ingredients;
-        this.sellPrice = sellPrice;
+        this.price = price;
         this.texture = texture;
     }
 }

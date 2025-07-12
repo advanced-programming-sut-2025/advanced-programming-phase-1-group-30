@@ -795,7 +795,7 @@ public class GameMenuController {
         sb.append("Total Harvest Time: " + craft.getTotalHarvestTime() + "\n");
         sb.append("One Time: " + craft.isOneTime() + "\n");
         sb.append("Regrowth Time: " + craft.getRegrowthTime() + "\n");
-        sb.append("Base Sell Price: " + craft.getBaseSellPrice() + "\n");
+        sb.append("Base Sell Price: " + craft.getPrice() + "\n");
         sb.append("Is Edible: " + craft.isEdible() + "\n");
         sb.append("Base Energy: " + craft.getEnergy() + "\n");
         sb.append("Base Health: " + craft.getHealth() + "\n");
@@ -1427,7 +1427,7 @@ public class GameMenuController {
                 GameMenu.printResult("You don't have enough resources!");
                 return;
             }
-            if (item.getCost() > player.getMoney()) {
+            if (item.getPrice() > player.getMoney()) {
                 GameMenu.printResult("You don't have enough money!");
                 return;
             } else if (item.getWood() > item1.getCount()) {
@@ -1471,7 +1471,7 @@ public class GameMenuController {
             }
             item1.setCount(item1.getCount() - item.getWood());
             item2.setCount(item2.getCount() - item.getStone());
-            player.setMoney(player.getMoney() - item.getCost());
+            player.setMoney(player.getMoney() - item.getPrice());
             for (int i = x; i < x + item.getWidth(); i++) {
                 for (int j = y - item.getLength(); j < y; j++) {
                     if (barnORcoop == 1) {
@@ -1511,12 +1511,12 @@ public class GameMenuController {
                 return;
             }
         }
-        if (player.getMoney() < animal3.getCost()) {
+        if (player.getMoney() < animal3.getPrice()) {
             GameMenu.printResult("You don't have enough money!");
             return;
         }
-        else if (player.getMoney() >= animal3.getCost()) {
-            player.setMoney(player.getMoney() - animal3.getCost());
+        else if (player.getMoney() >= animal3.getPrice()) {
+            player.setMoney(player.getMoney() - animal3.getPrice());
         }
         switch (animal3) {
             case CHICKEN -> {

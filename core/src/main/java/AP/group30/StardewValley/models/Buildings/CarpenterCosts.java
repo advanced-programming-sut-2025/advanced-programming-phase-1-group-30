@@ -18,7 +18,7 @@ public enum CarpenterCosts implements ItemsInteface {
     SHIPPING_BIN("shipping bin", 250, 150, 0, 1, 1, Integer.MAX_VALUE, Season.ALL, ItemTexture.WOOD.getTexture());
 
     private final String name;
-    private final int cost;
+    private final int price;
     private final int wood;
     private final int stone;
     private final int length;
@@ -27,9 +27,9 @@ public enum CarpenterCosts implements ItemsInteface {
     private final Season season;
     private final Texture texture;
 
-    CarpenterCosts(String name, int cost, int wood, int stone, int length, int width, int dailyLimit, Season season, Texture texture) {
+    CarpenterCosts(String name, int price, int wood, int stone, int length, int width, int dailyLimit, Season season, Texture texture) {
         this.name = name;
-        this.cost = cost;
+        this.price = price;
         this.wood = wood;
         this.stone = stone;
         this.length = length;
@@ -41,10 +41,6 @@ public enum CarpenterCosts implements ItemsInteface {
 
     public String getName() {
         return name;
-    }
-
-    public int getCost() {
-        return cost;
     }
 
     public int getWood() {
@@ -73,6 +69,11 @@ public enum CarpenterCosts implements ItemsInteface {
 
     public Texture getTexture() {
         return texture;
+    }
+
+    @Override
+    public int getPrice() {
+        return price;
     }
 }
 

@@ -59,4 +59,7 @@ public enum ForagingCropType implements ItemsInteface {
     public Texture getTexture() {
         return texture;
     }
+    public int getPrice() {
+        return baseSellPrice;
+    }
 }

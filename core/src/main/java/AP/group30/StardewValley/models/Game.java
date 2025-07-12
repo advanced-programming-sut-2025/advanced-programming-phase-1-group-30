@@ -3,6 +3,7 @@ package AP.group30.StardewValley.models;
 import java.util.ArrayList;
 
 import AP.group30.StardewValley.models.Buildings.*;
+import AP.group30.StardewValley.models.Items.ItemsInteface;
 import AP.group30.StardewValley.models.Maps.GreatMap;
 import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Maps.Weather;
@@ -36,9 +37,20 @@ public class Game {
     private final JojaMart jojaMart;
     private final Ranch ranch;
     private final Saloon saloon;
+    private Hut hut;
+    private java.util.Map<ItemsInteface, Integer> dailyShopCounter = new java.util.HashMap<>();
 
     public Blacksmith getBlacksmith() {
         return blacksmith;
+    }
+
+    public java.util.Map<ItemsInteface,Integer> getDailyShopCounter() {
+        return dailyShopCounter;
+    }
+
+    public void incrementPurchase(ItemsInteface item) {
+        int old = dailyShopCounter.getOrDefault(item, 0);
+        dailyShopCounter.put(item, old + 1);
     }
 
     public Carpenter getCarpenter() {
@@ -81,6 +93,7 @@ public class Game {
         this.jojaMart = new JojaMart(8, 11, 5, 16);
         this.ranch = new Ranch(5, 14, 32, 54);
         this.saloon = new Saloon(7, 6, 70, 52);
+        this.hut = new Hut(5, 12, 63, 51);
         buildings.add(blacksmith);
         buildings.add(carpenter);
         buildings.add(fishShop);
@@ -88,6 +101,7 @@ public class Game {
         buildings.add(jojaMart);
         buildings.add(ranch);
         buildings.add(saloon);
+        buildings.add(hut);
     }
 
     public GreatMap getGreatMap() {
@@ -163,5 +177,9 @@ public class Game {
 
     public ArrayList<Building> getBuildings() {
         return buildings;
+    }
+
+    public Hut getHut() {
+        return hut;
     }
 }

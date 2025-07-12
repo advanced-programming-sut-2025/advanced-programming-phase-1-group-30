@@ -4,7 +4,7 @@ public class Fruit extends Product{
     private final FruitType type;
 
     public Fruit(int count, FruitType type) {
-        super(count, type.getName(), type.getBaseSellPrice(), type.getTexture());
+        super(count, type.getName(), type.getPrice(), type.getTexture());
         this.type = type;
     }
 

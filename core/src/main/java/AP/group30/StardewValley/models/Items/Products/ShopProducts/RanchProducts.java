@@ -6,7 +6,7 @@ public class RanchProducts extends ShopProduct {
     private final RanchCosts type;
 
     public RanchProducts(int count, RanchCosts type) {
-        super(count, type.getName(), type.getDailyLimit(), type.getCost(), type.getSeason(), type.getTexture());
+        super(count, type.getName(), type.getDailyLimit(), type.getPrice(), type.getSeason(), type.getTexture());
         this.type = type;
     }
 

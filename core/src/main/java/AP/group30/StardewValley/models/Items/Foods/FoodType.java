@@ -67,7 +67,7 @@ public enum FoodType implements ItemsInteface {
     public String getSource() {
         return source;
     }
-    public int getSellPrice() {
+    public int getPrice() {
         return sellPrice;
     }
     public Texture getTexture() {
