@@ -11,11 +11,10 @@ public class Item implements ItemsInteface {
     private int count;
     private String quality;
     private double cof;
-    private double price;
+    private int price;
     private final Texture texture;
-    private int x, y;
 
-    public Item(int count, String name, double price, Texture texture) {
+    public Item(int count, String name, int price, Texture texture) {
         this.name = name;
         this.count = count;
         this.cof = 1;
@@ -55,11 +54,11 @@ public class Item implements ItemsInteface {
         return cof;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
@@ -84,8 +83,4 @@ public class Item implements ItemsInteface {
     public void renderItem(SpriteBatch batch, float x, float y) {
         batch.draw(texture, x, y);
     }
-
-//    public int getRenderY() {
-//        return y;
-//    }
 }

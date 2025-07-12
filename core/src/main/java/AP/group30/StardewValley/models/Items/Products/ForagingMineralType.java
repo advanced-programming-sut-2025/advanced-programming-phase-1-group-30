@@ -51,6 +51,10 @@ public enum ForagingMineralType implements ItemsInteface {
         return baseSellPrice;
     }
 
+    public int getPrice() {
+        return baseSellPrice;
+    }
+
     public int getMineralLevel() {
         return mineralLevel;
     }

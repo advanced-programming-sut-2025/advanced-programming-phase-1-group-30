@@ -6,7 +6,7 @@ import AP.group30.StardewValley.models.TimeAndDate.Season;
 import com.badlogic.gdx.graphics.Texture;
 
 public enum BlacksmithCosts implements ItemsInteface {
-    CopperOre("copper one", 75,Integer.MAX_VALUE, Season.ALL, ItemTexture.WOOD.getTexture()),
+    CopperOre("copper ore", 75,Integer.MAX_VALUE, Season.ALL, ItemTexture.WOOD.getTexture()),
     IronOre("iron", 150, Integer.MAX_VALUE, Season.ALL, ItemTexture.WOOD.getTexture()),
     Coal("coal", 150, Integer.MAX_VALUE, Season.ALL, ItemTexture.WOOD.getTexture()),
     GoldOre("gold", 400, Integer.MAX_VALUE, Season.ALL, ItemTexture.WOOD.getTexture()),
@@ -37,7 +37,7 @@ public enum BlacksmithCosts implements ItemsInteface {
         return name;
     }
 
-    public int getCost() {
+    public int getPrice() {
         return cost;
     }
 

@@ -41,7 +41,7 @@ public enum SaloonCosts implements ItemsInteface {
         return name;
     }
 
-    public int getCost() {
+    public int getPrice() {
         return cost;
     }
 

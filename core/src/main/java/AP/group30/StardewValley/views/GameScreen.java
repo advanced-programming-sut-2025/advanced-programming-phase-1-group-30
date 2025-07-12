@@ -2,7 +2,9 @@ package AP.group30.StardewValley.views;
 
 import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.controllers.GameMenuController;
+import AP.group30.StardewValley.models.Buildings.BlacksmithCosts;
 import AP.group30.StardewValley.models.Buildings.Building;
+import AP.group30.StardewValley.models.Buildings.Hut;
 import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.GameObjects;
@@ -75,6 +77,7 @@ public class GameScreen implements Screen {
 
     private InventoryScreen inventoryScreen;
     private SkillScreen skillScreen;
+    private ShopScreen shopScreen;
 
     public GameScreen(Game game) {
         this.game = game;
@@ -126,6 +129,7 @@ public class GameScreen implements Screen {
 
         inventoryScreen = new InventoryScreen(batch, Main.getMain().skin);
         skillScreen = new SkillScreen(batch, Main.getMain().skin);
+        shopScreen = new ShopScreen(batch, Main.getMain().skin, BlacksmithCosts.values());
     }
 
     @Override
@@ -136,7 +140,7 @@ public class GameScreen implements Screen {
         player.setStateTime(stateTime);
         isMoving = false;
 
-        if (!inventoryScreen.isVisible() && !skillScreen.isVisible()) {
+        if (!inventoryScreen.isVisible() && !skillScreen.isVisible() && !shopScreen.isVisible()) {
             handleInput(delta);
             if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
             if (Gdx.input.isKeyPressed(Input.Keys.S)) camera.position.y -= speed * delta;
@@ -144,6 +148,7 @@ public class GameScreen implements Screen {
             if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
         }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) shopScreen.toggle();
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) inventoryScreen.toggle();
         if (Gdx.input.isKeyJustPressed(Input.Keys.N)) skillScreen.toggle();
 
@@ -160,7 +165,7 @@ public class GameScreen implements Screen {
             renderMap(game.getCityMap());
         } else {
             renderMap(map);
-            renderBuilding(TileTypes.HUT, map, house);
+//            renderBuilding(TileTypes.HUT, map, house);
         }
         renderEntities();
         renderEnergyBar();
@@ -169,6 +174,7 @@ public class GameScreen implements Screen {
 
         inventoryScreen.render();
         skillScreen.render();
+        shopScreen.render();
     }
 
     private void generateGrassMap() {
@@ -211,13 +217,16 @@ public class GameScreen implements Screen {
     private void renderEntities() {
         if (player.isInCity()) {
             for (GameObjects g : entities) {
-                if (!(g instanceof Tree) && !(g instanceof Stone)) {
+                if (!(g instanceof Tree) && !(g instanceof Stone) && !(g instanceof Hut)) {
                     g.render(batch, game.getCityMap());
                 }
             }
         } else {
             for (GameObjects g : entities) {
                 if (!(g instanceof Building)) {
+                    g.render(batch, map);
+                }
+                if (g instanceof Hut) {
                     g.render(batch, map);
                 }
             }
@@ -243,40 +252,41 @@ public class GameScreen implements Screen {
         batch.draw(TileTexture.CORNER2_WALL.getTexture(), 80 * tileSize, 63 * tileSize, tileSize, tileSize);
     }
 
-    private void renderBuilding(TileTypes tileType, Map map1, Texture texture) {
-        int startTIleX = 60;
-        int endTIleX = 65;
-        int startTIleY = 40;
-        int endTIleY = 45;
-        Tile[][] tiles1 = map1.getTiles();
-
-        for (int i = 0; i < tiles1.length; i++) {
-            for (int j = 0; j < tiles1[i].length; j++) {
-                Tile tile = tiles1[i][j];
-                if (tile.getType() == tileType) {
-                    if (tiles1[i-1][j].getType() != tileType) {
-                        if (tiles1[i][j+1].getType() != tileType) {
-                            startTIleX = i;
-                            startTIleY = 60 - j;
-                        }
-                    }
-                    if (tiles1[i+1][j].getType() != tileType) {
-                        if (tiles1[i][j-1].getType() != tileType) {
-                            endTIleX = i;
-                            endTIleY = 60 - j;
-                        }
-                    }
-                }
-            }
-        }
-
-        batch.draw(texture,
-            map1.getTiles()[startTIleX - 1][startTIleY + 1].getX() * 32,
-            map1.getTiles()[startTIleX][startTIleY].getY() * 32,
-            (endTIleX - startTIleX + 3) * 32,
-            (endTIleY - startTIleY + 4) * 32
-        );
-    }
+//    private void renderBuilding(TileTypes tileType, Map map1, Texture texture) {
+//        int startTIleX = 60;
+//        int endTIleX = 65;
+//        int startTIleY = 40;
+//        int endTIleY = 45;
+//        Tile[][] tiles1 = map1.getTiles();
+//
+//        for (int i = 0; i < tiles1.length; i++) {
+//            for (int j = 0; j < tiles1[i].length; j++) {
+//                Tile tile = tiles1[i][j];
+//                if (tile.getType() == tileType) {
+//                    if (tiles1[i-1][j].getType() != tileType) {
+//                        if (tiles1[i][j+1].getType() != tileType) {
+//                            startTIleX = i;
+//                            startTIleY = 60 - j;
+//                        }
+//                    }
+//                    if (tiles1[i+1][j].getType() != tileType) {
+//                        if (tiles1[i][j-1].getType() != tileType) {
+//                            endTIleX = i;
+//                            endTIleY = 60 - j;
+//                        }
+//                    }
+//                }
+//            }
+//            System.out.println("x: " + startTIleX + ", y: " + startTIleY + ", width: " + (endTIleX - startTIleX) + ", height: " + (startTIleY -endTIleY));
+//        }
+//
+//        batch.draw(texture,
+//            map1.getTiles()[startTIleX - 1][startTIleY + 1].getX() * 32,
+//            map1.getTiles()[startTIleX][startTIleY].getY() * 32,
+//            (endTIleX - startTIleX + 3) * 32,
+//            (endTIleY - startTIleY + 4) * 32
+//        );
+//    }
 
     private void renderMap(Map map1) {
         Tile[][] tiles = map1.getTiles();
@@ -410,6 +420,10 @@ public class GameScreen implements Screen {
             playerRect.setPosition(proposedX, proposedY);
             if (!player.isInCity()) {
                 boolean collides = false;
+
+                if (playerRect.overlaps(game.getHut().getRectangle())) {
+                    collides = true;
+                }
                 for (Tree tree : trees) {
                     if (playerRect.overlaps(tree.getRect())) {
                         collides = true;
@@ -431,7 +445,7 @@ public class GameScreen implements Screen {
             } else {
                 boolean collides = false;
                 for (Building building : game.getBuildings()) {
-                    if (playerRect.overlaps(building.getRectangle())) {
+                    if (playerRect.overlaps(building.getRectangle()) && !(building instanceof Hut)) {
                         collides = true;
                         break;
                     }
@@ -451,7 +465,6 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             player.setInCity(!player.isInCity());
         }
-
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.C) || Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             GameMenuController.toolUse(player.getDirection(), (int)(x), (int)(y + playerRegion.getRegionHeight() / 8f), batch);

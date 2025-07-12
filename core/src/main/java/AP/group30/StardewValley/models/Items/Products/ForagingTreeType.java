@@ -31,4 +31,7 @@ public enum ForagingTreeType implements ItemsInteface {
     public Texture getTexture() {
         return texture;
     }
+    public int getPrice() {
+        return 20;
+    }
 }

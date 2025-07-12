@@ -46,7 +46,7 @@ public enum FruitType implements ItemsInteface {
     public int getHarvestCycle() {
         return harvestCycle;
     }
-    public int getBaseSellPrice() {
+    public int getPrice() {
         return baseSellPrice;
     }
     public boolean isFruitEdible() {
