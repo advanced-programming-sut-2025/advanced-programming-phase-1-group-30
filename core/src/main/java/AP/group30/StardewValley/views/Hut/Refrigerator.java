@@ -1,10 +1,14 @@
 package AP.group30.StardewValley.views.Hut;
 
+import AP.group30.StardewValley.Main;
+import AP.group30.StardewValley.controllers.GameMenuController;
+import AP.group30.StardewValley.controllers.RegisterMenuController;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.Item;
 import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Players.Player;
+import AP.group30.StardewValley.views.LoginMenu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -31,16 +35,12 @@ public class Refrigerator {
     private final Texture backgroundTexture;
     private final Texture backgroundItemTexture;
 
-    private final int positionX = 645;
-    private final int positionY = 670;
+    private TextButton moveButton;
 
     private final ArrayList<Image> itemImages = new ArrayList<>();
-    private Image borderImage;
-
-    private final ArrayList<Item> items = App.getCurrentGame().getCurrentPlayer().getBackPack().getItems();
-    private Item currentItem;
-
-    private final DragAndDrop dragAndDrop = new DragAndDrop();
+    private ArrayList<Item> backPackItems = App.getCurrentGame().getCurrentPlayer().getBackPack().getItems();
+    private ArrayList<Item> refrigeratorItems = App.getCurrentGame().getCurrentPlayer().getRefrigerator().getItems();
+    private Item currentItem = null;
 
     private final Label errorLabel;
 
@@ -58,8 +58,8 @@ public class Refrigerator {
         table1.setBackground(backgroundDrawable);
         table1.setSize(800, 300);
         table1.setPosition(
-            (Gdx.graphics.getWidth() - table1.getWidth()) / 2,
-            (Gdx.graphics.getHeight() - table1.getHeight()) / 2 + 200
+            (Gdx.graphics.getWidth() - table1.getWidth()) / 2f,
+            (Gdx.graphics.getHeight() - table1.getHeight()) / 2f + 200
         );
 
         table2 = new Table();
@@ -67,38 +67,37 @@ public class Refrigerator {
         table2.setBackground(backgroundDrawable);
         table2.setSize(800, 300);
         table2.setPosition(
-            (Gdx.graphics.getWidth() - table2.getWidth()) / 2,
-            (Gdx.graphics.getHeight() - table2.getHeight()) / 2 - 150
+            (Gdx.graphics.getWidth() - table2.getWidth()) / 2f,
+            (Gdx.graphics.getHeight() - table2.getHeight()) / 2f - 200
         );
 
-        errorLabel = new Label("You can't sell this Item!", skin);
-        errorLabel.setColor(Color.RED);
-        errorLabel.setPosition(positionX + 350, positionY - 400);
-        errorLabel.setVisible(false);
+        moveButton = new TextButton("Move", skin);
+        moveButton.setPosition(table1.getX() + table1.getWidth() / 2f - moveButton.getWidth() / 2f - 50,
+            (table1.getY() + table2.getY() + table2.getHeight()) / 2f - moveButton.getHeight() / 2f);
+        moveButton.setVisible(false);
+        moveButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                handleMove();
+            }
+        });
 
-        Player player = App.getCurrentGame().getCurrentPlayer();
-        Label info = new Label(player.getUsername() + " Farm", skin);
-        info.setPosition(positionX + 250, positionY - 250);
-        Label energy = new Label("Current Energy: " + player.getEnergy(), skin);
-        energy.setPosition(positionX + 250, positionY - 300);
-        Label money = new Label("Current Money: " + player.getMoney(), skin);
-        money.setPosition(positionX + 250, positionY - 350);
+        errorLabel = new Label("", skin);
+        errorLabel.setColor(Color.RED);
+        errorLabel.setPosition(table1.getX() + table1.getWidth() / 2f + 50,
+            (table1.getY() + table2.getY() + table2.getHeight()) / 2f);
+        errorLabel.setVisible(false);
 
         stage.addActor(table1);
         stage.addActor(table2);
-        stage.addActor(info);
-        stage.addActor(energy);
-        stage.addActor(money);
         stage.addActor(errorLabel);
+        stage.addActor(moveButton);
 
-        createTrashCanImage();
-
-        renderItemsInGrid();
+        refresh();
     }
 
     public void show() {
         refresh();
-
         visible = true;
         table1.setVisible(true);
         table2.setVisible(true);
@@ -129,17 +128,42 @@ public class Refrigerator {
     }
 
     public void dispose() {
+        for (Image img : itemImages) {
+            img.remove();
+        }
         stage.dispose();
         backgroundTexture.dispose();
+        backgroundItemTexture.dispose();
     }
 
-    private void renderItemsInGrid() {
-        double cellSizeX = 53.5;
-        int cellSizeY1 = 67;
-        int cellSizeY2 = 62;
-        int cols = 12;
+    private void handleMove() {
+        if (currentItem == null) return;
 
-        currentItem = App.getCurrentGame().getCurrentPlayer().getWield();
+        String result = null;
+        if (backPackItems.contains(currentItem)) {
+            result = GameMenuController.putRefrigerator(currentItem);
+        } else if (refrigeratorItems.contains(currentItem)) {
+            result = GameMenuController.pickRefrigerator(currentItem);
+        }
+
+        if (result != null) {
+            errorLabel.setText(result);
+            errorLabel.setVisible(true);
+        } else {
+            errorLabel.setText("");
+            errorLabel.setVisible(false);
+            currentItem = null;
+            moveButton.setVisible(false);
+        }
+
+        refresh();
+    }
+
+    private void renderItemsInGrid(float posX, float posY, ArrayList<Item> items) {
+        int cellSizeX = 60;
+        int cellSizeY1 = 78;
+        int cellSizeY2 = 73;
+        int cols = 12;
 
         for (int i = 0; i < items.size(); i++) {
             Item item = items.get(i);
@@ -147,73 +171,58 @@ public class Refrigerator {
                 int row = i / cols;
                 int col = i % cols;
 
-                double x = positionX + col * cellSizeX;
-                float y;
-                if (i < cols * 2) y = positionY - row * cellSizeY1;
-                else y = positionY - row * cellSizeY2;
+                float x = posX + col * cellSizeX;
+                float y = (i < cols * 2) ? posY - row * cellSizeY1 : posY - row * cellSizeY2;
 
                 createItemImage(item, x, y);
             }
         }
 
-        stage.addActor(borderImage);
         for (Image image : itemImages) {
             stage.addActor(image);
         }
     }
 
-    private void createItemImage(Item item, double x, float y) {
-        Image itemImage = new Image(new TextureRegionDrawable(new TextureRegion(item.getTexture())));
+    private void createItemImage(Item item, float x, float y) {
+        Texture itemTexture = item.getTexture();
+        Image itemImage = new Image(new TextureRegionDrawable(new TextureRegion(itemTexture)));
         itemImage.setSize(45, 45);
-        itemImage.setPosition((float) x, y);
-
-        if (item == currentItem) {
-            Image border = createBorderImage(50, 52, Color.BLUE);
-            border.setPosition((float) (x - 5), y - 5);
-            borderImage = border;
-        }
+        itemImage.setPosition(x, y);
 
         Table tooltipTable = new Table(skin);
         Drawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundItemTexture));
         tooltipTable.setBackground(backgroundDrawable);
-
         tooltipTable.pad(10);
 
-        Label nameLabel = new Label("Name: " + item.getName(), skin);
-        tooltipTable.add(nameLabel).left().row();
-
-        Label countLabel = new Label("Count: " + item.getCount(), skin);
-        tooltipTable.add(countLabel).left().row();
-
+        tooltipTable.add(new Label("Name: " + item.getName(), skin)).left().row();
+        tooltipTable.add(new Label("Count: " + item.getCount(), skin)).left().row();
         if (item.getPrice() != 0) {
-            Label priceLabel = new Label("Price: " + item.getPrice(), skin);
-            tooltipTable.add(priceLabel).left();
+            tooltipTable.add(new Label("Price: " + item.getPrice(), skin)).left();
         }
 
         Tooltip<Table> tooltip = new Tooltip<>(tooltipTable);
         tooltip.setInstant(true);
         tooltip.setAlways(false);
-
         itemImage.addListener(tooltip);
 
         itemImage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float xOffset, float yOffset) {
-                App.getCurrentGame().getCurrentPlayer().setWield(item);
+                if (currentItem != item) {
+                    currentItem = item;
+                } else {
+                    currentItem = null;
+                }
+                moveButton.setVisible(currentItem != null);
+
+                errorLabel.setText("");
+                errorLabel.setVisible(false);
+
                 refresh();
             }
         });
 
         itemImages.add(itemImage);
-
-        dragAndDrop.addSource(new DragAndDrop.Source(itemImage) {
-            public DragAndDrop.Payload dragStart(InputEvent event, float x, float y, int pointer) {
-                DragAndDrop.Payload payload = new DragAndDrop.Payload();
-                payload.setObject(item);
-                payload.setDragActor(new Image(new TextureRegionDrawable(new TextureRegion(item.getTexture()))));
-                return payload;
-            }
-        });
     }
 
     private Image createBorderImage(int width, int height, Color color) {
@@ -223,10 +232,8 @@ public class Refrigerator {
 
         pixmap.setColor(color);
         int thickness = 3;
-
         pixmap.fillRectangle(0, 0, width, thickness);
         pixmap.fillRectangle(0, height - thickness, width, thickness);
-
         pixmap.fillRectangle(0, 0, thickness, height);
         pixmap.fillRectangle(width - thickness, 0, thickness, height);
 
@@ -240,52 +247,12 @@ public class Refrigerator {
             img.remove();
         }
         itemImages.clear();
-        borderImage.remove();
-        renderItemsInGrid();
-    }
 
-    private Drawable createBackground(Color color, int width, int height) {
-        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
-        pixmap.setColor(color);
-        pixmap.fill();
+        backPackItems = App.getCurrentGame().getCurrentPlayer().getBackPack().getItems();
+        refrigeratorItems = App.getCurrentGame().getCurrentPlayer().getRefrigerator().getItems();
 
-        Texture texture = new Texture(pixmap);
-        pixmap.dispose();
-
-        return new TextureRegionDrawable(new TextureRegion(texture));
-    }
-
-    private void createTrashCanImage() {
-        Texture trashTexture = ItemTexture.TRASH_CAN.getTexture();
-        Image trashCanImage = new Image(new TextureRegionDrawable(new TextureRegion(trashTexture)));
-        trashCanImage.setSize(64, 64);
-        trashCanImage.setPosition(positionX + 570, positionY - 370);
-
-        stage.addActor(trashCanImage);
-
-        dragAndDrop.addTarget(new DragAndDrop.Target(trashCanImage) {
-            public boolean drag(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
-                trashCanImage.setColor(Color.RED);
-                return true;
-            }
-
-            public void reset(DragAndDrop.Source source, DragAndDrop.Payload payload) {
-                trashCanImage.setColor(Color.WHITE);
-            }
-
-            public void drop(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
-                Item itemToDelete = (Item) payload.getObject();
-                if (itemToDelete.getPrice() != 0) {
-                    errorLabel.setVisible(false);
-                    App.getCurrentGame().getCurrentPlayer().getBackPack().getItems().remove(itemToDelete);
-                    if (App.getCurrentGame().getCurrentPlayer().getWield() == itemToDelete) {
-                        App.getCurrentGame().getCurrentPlayer().setWield(App.getCurrentGame().getCurrentPlayer().getBackPack().getItems().getFirst());
-                    }
-                    refresh();
-                }
-                else errorLabel.setVisible(true);
-            }
-        });
-
+        renderItemsInGrid(table1.getX() + 50, table1.getY() + table1.getHeight() - 100, backPackItems);
+        renderItemsInGrid(table2.getX() + 50, table2.getY() + table2.getHeight() - 100, refrigeratorItems);
     }
 }
+

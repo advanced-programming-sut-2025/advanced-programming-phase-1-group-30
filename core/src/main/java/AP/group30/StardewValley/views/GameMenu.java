@@ -214,13 +214,13 @@ public class GameMenu implements AppMenu {
         }
         matcher = GameMenuCommands.COOKING_REFRIGERATOR.regexMatcher(command);
         if (matcher.matches()) {
-            if (matcher.group("action").equals("put"))
-                GameMenuController.putRefrigerator(matcher.group("item"));
-            else if (matcher.group("action").equals("pick"))
-                GameMenuController.pickRefrigerator(matcher.group("item"));
-            else
-                printResult("You should just put or pick!");
-            return;
+//            if (matcher.group("action").equals("put"))
+//                GameMenuController.putRefrigerator(matcher.group("item"));
+//            else if (matcher.group("action").equals("pick"))
+//                GameMenuController.pickRefrigerator(matcher.group("item"));
+//            else
+//                printResult("You should just put or pick!");
+//            return;
         }
         matcher = GameMenuCommands.COOKING_SHOW_RECIPES.regexMatcher(command);
         if (matcher.matches()) {

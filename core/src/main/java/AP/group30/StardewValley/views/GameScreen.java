@@ -13,6 +13,7 @@ import AP.group30.StardewValley.models.Maps.TileTypes;
 import AP.group30.StardewValley.models.Players.Direction;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.views.Hut.Hut;
+import AP.group30.StardewValley.views.Hut.Refrigerator;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;

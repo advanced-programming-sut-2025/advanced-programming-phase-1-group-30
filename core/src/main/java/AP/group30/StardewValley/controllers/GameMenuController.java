@@ -1184,44 +1184,31 @@ public class GameMenuController {
         MaintainerController.cheatAddItem(name, Integer.parseInt(count));
     }
 
-    public static void putRefrigerator(String item) {
+    public static String putRefrigerator(Item item) {
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Item wantedItem = Item.findItemByName(item, player.getBackPack().getItems());
 
-        if (wantedItem == null) {
-            GameMenu.printResult("No Item Found!");
-            return;
-        }
-
-        if (wantedItem.getClass() != Food.class) {
-            GameMenu.printResult("Item is not eatable");
-            return;
+        if (item.getClass() != Food.class) {
+            return "Item is not eatable";
         }
 
         if (player.getRefrigerator().getItems().size() + 1 > player.getRefrigerator().getCAPTIYITY()) {
-            GameMenu.printResult("Refrigerator is full!");
-            return;
+            return "Refrigerator is full!";
         }
 
-        player.getBackPack().removeItem(wantedItem);
-        player.getRefrigerator().addItem(wantedItem);
-        GameMenu.printResult("Item moved successfully!");
+        player.getBackPack().removeItem(item);
+        player.getRefrigerator().addItem(item);
+        return null;
     }
 
-    public static void pickRefrigerator(String item) {
+    public static String pickRefrigerator(Item item) {
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Item wantedItem = Item.findItemByName(item, player.getRefrigerator().getItems());
-
-        if (wantedItem == null)
-            GameMenu.printResult("No Item Found!");
 
         if (player.getBackPack().getItems().size() + 1 > player.getBackPack().getType().getCapacity()) {
-            GameMenu.printResult("Backpack is full!");
-            return;
+            return "Backpack is full!";
         }
-        player.getBackPack().addItem(wantedItem);
-        player.getRefrigerator().removeItem(wantedItem);
-        GameMenu.printResult("Item moved successfully!");
+        player.getBackPack().addItem(item);
+        player.getRefrigerator().removeItem(item);
+        return null;
     }
 
     public static void showCookingRecipe(boolean isAll) {
