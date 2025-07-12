@@ -71,6 +71,14 @@ public enum ItemTexture {
     SEAFOAM_PUDDING(GameAssetManager.assetManager.get(GameAssetManager.seafoamPudding)),
     MINERS_TREAT(GameAssetManager.assetManager.get(GameAssetManager.minersTreat)),;
 
+    // *** Buildings ***
+    CARPENTER(GameAssetManager.assetManager.get(GameAssetManager.carpenter)),
+    RANCH(GameAssetManager.assetManager.get(GameAssetManager.ranch)),
+    SALOON(GameAssetManager.assetManager.get(GameAssetManager.saloon)),
+    BLACKSMITH(GameAssetManager.assetManager.get(GameAssetManager.blacksmith)),
+    PIERRES(GameAssetManager.assetManager.get(GameAssetManager.pierres)),
+    JOJA(GameAssetManager.assetManager.get(GameAssetManager.jojamart)),
+    FISH_SHOP(GameAssetManager.assetManager.get(GameAssetManager.fishShop));
 
     private final Texture TEXTURE;
 

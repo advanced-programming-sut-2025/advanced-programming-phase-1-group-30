@@ -1,10 +1,12 @@
 package AP.group30.StardewValley.models.Items.Products;
 
-import AP.group30.StardewValley.models.GameAssetManager;
+import AP.group30.StardewValley.models.GameObjects;
+import AP.group30.StardewValley.models.Maps.Map;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
-public class Tree extends Product {
+public class Tree extends Product implements GameObjects {
     private final TreeType type;
     private boolean isHitByThunder;
     private Texture texture;
@@ -61,5 +63,14 @@ public class Tree extends Product {
 
     public int getY() {
         return y;
+    }
+
+    public int getRenderY() {
+        return y;
+    }
+
+    @Override
+    public void render(SpriteBatch batch, Map map) {
+        batch.draw(texture, x, y, width, height);
     }
 }

@@ -1,6 +1,5 @@
 package AP.group30.StardewValley.controllers;
 
-import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.models.Animals.*;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Buildings.*;
@@ -32,9 +31,6 @@ import AP.group30.StardewValley.models.Users.User;
 import AP.group30.StardewValley.views.GameMenu;
 import AP.group30.StardewValley.views.GameScreen;
 import AP.group30.StardewValley.views.RegisterMenu;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.util.*;
@@ -134,7 +130,7 @@ public class GameMenuController {
         }
         if (player.isInCity()) {
             switch (map[player.getCityX()][player.getCityY()].getType()) {
-                case JOJOMART -> player.setBuilding(App.getCurrentGame().getJojaMart());
+                case JOJAMART -> player.setBuilding(App.getCurrentGame().getJojaMart());
                 case FISH_SHOP -> player.setBuilding(App.getCurrentGame().getFishShop());
                 case MARINES_RANCH -> player.setBuilding(App.getCurrentGame().getRanch());
                 case BLACKSMITH -> player.setBuilding(App.getCurrentGame().getBlacksmith());
@@ -375,7 +371,9 @@ public class GameMenuController {
         int newX = x + dx;
         int newY = y + dy;
 
+        batch.begin();
         batch.draw(GameAssetManager.assetManager.get(GameAssetManager.axe), newX * 32, (60 - newY) * 32);
+        batch.end();
 
 
         if (newX < 0 || newX >= tiles.length || newY < 0 || newY >= tiles[0].length) {
@@ -490,6 +488,7 @@ public class GameMenuController {
                             newStone.setCount(newStone.getCount() + 5);
                         }
                         GameScreen.stones.remove(targetTile.getItem());
+                        GameScreen.entities.remove(targetTile.getItem());
                         targetTile.setItem(null);
                         GameMenu.printResult("Collected Stone!");
                     }
@@ -553,6 +552,7 @@ public class GameMenuController {
                         }
 
                         GameScreen.trees.remove(targetTile.getItem());
+                        GameScreen.entities.remove(targetTile.getItem());
                         targetTile.setItem(null);
                         GameMenu.printResult("You chop down the tree and collect 12 wood and 2 sap.");
                         player.increaseForaging(10);
@@ -608,6 +608,7 @@ public class GameMenuController {
                         }
 
                         GameScreen.trees.remove(targetTile2.getItem());
+                        GameScreen.entities.remove(targetTile2.getItem());
                         targetTile2.setItem(null);
                         GameMenu.printResult("You chop down the tree and collect 12 wood and 2 sap.");
                         player.increaseForaging(10);
@@ -794,7 +795,7 @@ public class GameMenuController {
         sb.append("Total Harvest Time: " + craft.getTotalHarvestTime() + "\n");
         sb.append("One Time: " + craft.isOneTime() + "\n");
         sb.append("Regrowth Time: " + craft.getRegrowthTime() + "\n");
-        sb.append("Base Sell Price: " + craft.getBaseSellPrice() + "\n");
+        sb.append("Base Sell Price: " + craft.getPrice() + "\n");
         sb.append("Is Edible: " + craft.isEdible() + "\n");
         sb.append("Base Energy: " + craft.getEnergy() + "\n");
         sb.append("Base Health: " + craft.getHealth() + "\n");
@@ -1392,7 +1393,7 @@ public class GameMenuController {
                 GameMenu.printResult("You don't have enough resources!");
                 return;
             }
-            if (item.getCost() > player.getMoney()) {
+            if (item.getPrice() > player.getMoney()) {
                 GameMenu.printResult("You don't have enough money!");
                 return;
             } else if (item.getWood() > item1.getCount()) {
@@ -1436,7 +1437,7 @@ public class GameMenuController {
             }
             item1.setCount(item1.getCount() - item.getWood());
             item2.setCount(item2.getCount() - item.getStone());
-            player.setMoney(player.getMoney() - item.getCost());
+            player.setMoney(player.getMoney() - item.getPrice());
             for (int i = x; i < x + item.getWidth(); i++) {
                 for (int j = y - item.getLength(); j < y; j++) {
                     if (barnORcoop == 1) {
@@ -1476,12 +1477,12 @@ public class GameMenuController {
                 return;
             }
         }
-        if (player.getMoney() < animal3.getCost()) {
+        if (player.getMoney() < animal3.getPrice()) {
             GameMenu.printResult("You don't have enough money!");
             return;
         }
-        else if (player.getMoney() >= animal3.getCost()) {
-            player.setMoney(player.getMoney() - animal3.getCost());
+        else if (player.getMoney() >= animal3.getPrice()) {
+            player.setMoney(player.getMoney() - animal3.getPrice());
         }
         switch (animal3) {
             case CHICKEN -> {
@@ -1967,7 +1968,7 @@ public class GameMenuController {
                     GameMenu.printResult(MaintainerController.printingShopProducts("FishShop", FishShopCosts.values()));
             case PIERRES_GENERAL_STORE ->
                     GameMenu.printResult(MaintainerController.printingShopProducts("GeneralStore", GeneralStoreCosts.values()));
-            case JOJOMART ->
+            case JOJAMART ->
                     GameMenu.printResult(MaintainerController.printingShopProducts("JojaMart", JojaMartCosts.values()));
             case MARINES_RANCH ->
                     GameMenu.printResult(MaintainerController.printingShopProducts("Ranch", RanchCosts.values()));
@@ -1993,7 +1994,7 @@ public class GameMenuController {
                     GameMenu.printResult(MaintainerController.printingShopProducts2("FishShop", App.getCurrentGame().getFishShop().getItems()));
             case PIERRES_GENERAL_STORE ->
                     GameMenu.printResult(MaintainerController.printingShopProducts2("GeneralStore", App.getCurrentGame().getGeneralStore().getItems()));
-            case JOJOMART ->
+            case JOJAMART ->
                     GameMenu.printResult(MaintainerController.printingShopProducts2("JojaMart", App.getCurrentGame().getJojaMart().getItems()));
             case MARINES_RANCH ->
                     GameMenu.printResult(MaintainerController.printingShopProducts2("Ranch", App.getCurrentGame().getRanch().getItems()));

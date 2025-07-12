@@ -5,6 +5,7 @@ import AP.group30.StardewValley.models.Animals.Animal;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Buildings.Building;
 import AP.group30.StardewValley.models.GameAssetManager;
+import AP.group30.StardewValley.models.GameObjects;
 import AP.group30.StardewValley.models.Invetory.BackPack;
 import AP.group30.StardewValley.models.Invetory.BackPackType;
 import AP.group30.StardewValley.models.Invetory.Refrigerator;
@@ -27,11 +28,12 @@ import AP.group30.StardewValley.models.Users.User;
 import AP.group30.StardewValley.views.GameMenu;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.*;
 
-public class Player {
+public class Player implements GameObjects {
     private int x;
     private int y;
     private int cityX;
@@ -80,6 +82,15 @@ public class Player {
     private int daysGotRejected = -1;
     private Direction direction = Direction.EAST;
     private ArrayList<ArtisanItemProsses> artisanItemsProsses = new ArrayList<>();
+    private boolean isMoving = false;
+
+    private Animation<TextureRegion> walkingW;
+    private Animation<TextureRegion> walkingD;
+    private Animation<TextureRegion> walkingS;
+    private Texture playerTexture;
+    private TextureRegion playerRegion;
+    private float stateTime = 0f;
+    private boolean facingLeft = false;
 
 
     public Player(User user,String username, int selectionNumber, String gender, Map map) {
@@ -88,6 +99,8 @@ public class Player {
         this.map = map;
         this.gender = gender;
         this.energy = 1000;
+        initializePlayerAnimations();
+        playerRegion = new TextureRegion(playerTexture);
         this.shippingBin = new ShippingBin(ShippingBinType.REGULAR, 70, 10);
         this.refrigerator = new Refrigerator();
         this.backPack = new BackPack(BackPackType.INITIAL_BACKPACK);
@@ -112,7 +125,7 @@ public class Player {
         this.money = 20000;
         this.selectionNumber = selectionNumber;
         this.maxEnergy = 1000;
-        this.building = new Building(0, 0, 0, 0, 9, 21); //TODO home!!!
+        this.building = App.getCurrentGame().getBlacksmith(); // TODO !!!!!
         this.lastEnergy = maxEnergy;
         this.recipes = new ArrayList<>();
         this.inCity = false;
@@ -587,5 +600,83 @@ public class Player {
 
     public void setDirection(Direction direction) {
         this.direction = direction;
+    }
+
+    @Override
+    public int getRenderY() {
+        return y;
+    }
+
+    @Override
+    public void render(SpriteBatch batch, Map map) {
+        TextureRegion currentFrame;
+        if(isMoving){
+            if(direction.equals(Direction.NORTH)){
+                currentFrame = walkingW.getKeyFrame(stateTime);
+            } else if (direction.equals(Direction.SOUTH)){
+                currentFrame = walkingS.getKeyFrame(stateTime);
+            } else {
+                currentFrame = walkingD.getKeyFrame(stateTime);
+                if (facingLeft) {
+                    if (!currentFrame.isFlipX()) {
+                        currentFrame.flip(true, false);
+                    }
+                } else {
+                    if (currentFrame.isFlipX()) {
+                        currentFrame.flip(true, false);
+                    }
+                }
+            }
+            playerRegion = currentFrame;
+        } else {
+            currentFrame = playerRegion;
+        }
+        batch.draw(currentFrame, x, y, playerRegion.getRegionWidth() * 2f , playerRegion.getRegionHeight() * 2f);
+        isMoving = false;
+    }
+
+    public void setMoving(boolean moving) {
+        isMoving = moving;
+    }
+
+    public void setStateTime(float stateTime) {
+        this.stateTime = stateTime;
+    }
+
+    public void setFacingLeft(boolean facingLeft) {
+        this.facingLeft = facingLeft;
+    }
+
+    public boolean isFacingLeft() {
+        return facingLeft;
+    }
+
+    private void initializePlayerAnimations() {
+        TextureRegion[] sWalkingRegion = new TextureRegion[4];
+        sWalkingRegion[0] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player00));
+        sWalkingRegion[1] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player01));
+        sWalkingRegion[2] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player02));
+        sWalkingRegion[3] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player03));
+        walkingS = new Animation<TextureRegion>(0.15f, sWalkingRegion);
+        walkingS.setPlayMode(Animation.PlayMode.LOOP);
+
+        TextureRegion[] dWalkingRegion = new TextureRegion[4];
+        dWalkingRegion[0] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player10));
+        dWalkingRegion[1] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player11));
+        dWalkingRegion[2] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player12));
+        dWalkingRegion[3] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player13));
+        walkingD = new Animation<TextureRegion>(0.15f, dWalkingRegion);
+        walkingD.setPlayMode(Animation.PlayMode.LOOP);
+
+        TextureRegion[] wWalkingRegion = new TextureRegion[4];
+        wWalkingRegion[0] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player20));
+        wWalkingRegion[1] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player21));
+        wWalkingRegion[2] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player22));
+        wWalkingRegion[3] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player23));
+        walkingW = new Animation<TextureRegion>(0.15f, wWalkingRegion);
+        walkingW.setPlayMode(Animation.PlayMode.LOOP);
+
+        playerRegion = sWalkingRegion[1];
+        playerTexture = GameAssetManager.assetManager.get(GameAssetManager.player21);
     }
 }

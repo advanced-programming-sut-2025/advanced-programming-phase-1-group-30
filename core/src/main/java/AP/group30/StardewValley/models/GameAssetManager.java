@@ -59,7 +59,6 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> outdoorGrass3 = new AssetDescriptor<>("tile/wall/outdoorGrass3.png", Texture.class);
     public static final AssetDescriptor<Texture> outdoorGrass4 = new AssetDescriptor<>("tile/wall/outdoorGrass4.png", Texture.class);
     public static final AssetDescriptor<Texture> clock = new AssetDescriptor<>("Stardew_Valley_Images/Clock/Clock.png", Texture.class);
-    public static final AssetDescriptor<Texture> ruinedGreenhouse = new AssetDescriptor<>("Building/ruined_greenhouse.png", Texture.class);
 
     public static final AssetDescriptor<Texture> axe = new AssetDescriptor<>("Tools/Axe/Axe.png", Texture.class);
     public static final AssetDescriptor<Texture> pickaxe = new AssetDescriptor<>("Tools/Pickaxe/Pickaxe.png", Texture.class);
@@ -115,6 +114,17 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> dishOTheSea = new AssetDescriptor<>("item/FoodType/Dish_O_The_Sea.png", Texture.class);
     public static final AssetDescriptor<Texture> seafoamPudding = new AssetDescriptor<>("item/FoodType/Seafoam_Pudding.png", Texture.class);
     public static final AssetDescriptor<Texture> minersTreat = new AssetDescriptor<>("item/FoodType/Miner's_Treat.png", Texture.class);
+  
+    // *** Buildings ***
+    public static final AssetDescriptor<Texture> carpenter = new AssetDescriptor<>("buildings/Carpenter's_Shop.png", Texture.class);
+    public static final AssetDescriptor<Texture> fishShop = new AssetDescriptor<>("buildings/Fish_Shop.png", Texture.class);
+    public static final AssetDescriptor<Texture> jojamart = new AssetDescriptor<>("buildings/Jojamart.png", Texture.class);
+    public static final AssetDescriptor<Texture> pierres = new AssetDescriptor<>("buildings/Pierres_shop.png", Texture.class);
+    public static final AssetDescriptor<Texture> ranch = new AssetDescriptor<>("buildings/Ranch.png", Texture.class);
+    public static final AssetDescriptor<Texture> saloon = new AssetDescriptor<>("buildings/Saloon.png", Texture.class);
+    public static final AssetDescriptor<Texture> blacksmith = new AssetDescriptor<>("buildings/BlackSmith.png", Texture.class);
+    public static final AssetDescriptor<Texture> house = new AssetDescriptor<>("buildings/Hut.png", Texture.class);
+    public static final AssetDescriptor<Texture> ruinedGreenhouse = new AssetDescriptor<>("buildings/ruined_greenhouse.png", Texture.class);
 
     public static void queueAsset() {
         assetManager.load(background);
@@ -193,6 +203,7 @@ public class GameAssetManager {
         assetManager.load(miningIcon);
         assetManager.load(playerInfo);
         assetManager.load(tapperIcon);
+
         assetManager.load(insideHouse);
         assetManager.load(refrigerator);
 
@@ -219,5 +230,13 @@ public class GameAssetManager {
         assetManager.load(cookie);
         assetManager.load(bread);
         assetManager.load(salad);
+
+        assetManager.load(carpenter);
+        assetManager.load(blacksmith);
+        assetManager.load(jojamart);
+        assetManager.load(pierres);
+        assetManager.load(ranch);
+        assetManager.load(fishShop);
+        assetManager.load(saloon);
     }
 }

@@ -82,4 +82,8 @@ public enum TreeType implements ItemsInteface {
 //        if (id == 12) return MUSHROOM_TREE;
         else return TREE;
     }
+
+    public int getPrice() {
+        return 20;
+    }
 }
