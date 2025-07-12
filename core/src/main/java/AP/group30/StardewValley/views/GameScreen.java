@@ -136,7 +136,7 @@ public class GameScreen implements Screen {
         skillScreen = new SkillScreen(batch, Main.getMain().skin);
         hut = new HutScreen(batch, Main.getMain().skin);
         info.setColor(Color.WHITE);
-      
+
         shopScreen = new ShopScreen(batch, Main.getMain().skin, BlacksmithCosts.values());
     }
 
@@ -185,9 +185,9 @@ public class GameScreen implements Screen {
             if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
             if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
         }
-        renderPlayer();
         batch.end();
 
+        findHut();
         currentTile = getTileUnderPlayer(x, y);
 
         if (currentTile.getX() == hutEntryTile.getX() &&
@@ -280,7 +280,7 @@ public class GameScreen implements Screen {
         batch.draw(TileTexture.CORNER2_WALL.getTexture(), 80 * tileSize, 63 * tileSize, tileSize, tileSize);
     }
 
-    private void renderHut() {
+    private void findHut() {
         int startTIleX = 60;
         int endTIleX = 65;
         int startTIleY = 40;
@@ -305,13 +305,6 @@ public class GameScreen implements Screen {
                 }
             }
         }
-
-        batch.draw(house,
-            map.getTiles()[startTIleX][startTIleY].getX() * 32,
-            map.getTiles()[startTIleX][startTIleY].getY() * 32,
-            (endTIleX - startTIleX + 2) * 32,
-            (endTIleY - startTIleY + 3) * 32
-        );
 
         hutEntryTile = map.getTiles()[(startTIleX + endTIleX) / 2][60 - startTIleY];
     }

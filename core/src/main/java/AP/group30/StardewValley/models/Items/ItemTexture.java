@@ -69,7 +69,7 @@ public enum ItemTexture {
     SURVIVAL_BURGER(GameAssetManager.assetManager.get(GameAssetManager.survivalBurger)),
     DISH_O_THE_SEA(GameAssetManager.assetManager.get(GameAssetManager.dishOTheSea)),
     SEAFOAM_PUDDING(GameAssetManager.assetManager.get(GameAssetManager.seafoamPudding)),
-    MINERS_TREAT(GameAssetManager.assetManager.get(GameAssetManager.minersTreat)),;
+    MINERS_TREAT(GameAssetManager.assetManager.get(GameAssetManager.minersTreat)),
 
     // *** Buildings ***
     CARPENTER(GameAssetManager.assetManager.get(GameAssetManager.carpenter)),

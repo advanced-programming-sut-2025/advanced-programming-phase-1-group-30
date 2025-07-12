@@ -44,7 +44,6 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> dirt4 = new AssetDescriptor<>("tile/dirt4.png", Texture.class);
     public static final AssetDescriptor<Texture> plantable = new AssetDescriptor<>("tile/plantable.png", Texture.class);
 
-    public static final AssetDescriptor<Texture> house = new AssetDescriptor<>("Building/Hut.png", Texture.class);
     public static final AssetDescriptor<Texture> insideHouse = new AssetDescriptor<>("Building/InsideHut.png", Texture.class);
 
     public static final AssetDescriptor<Texture> river = new AssetDescriptor<>("tile/river.png", Texture.class);
@@ -114,7 +113,7 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> dishOTheSea = new AssetDescriptor<>("item/FoodType/Dish_O_The_Sea.png", Texture.class);
     public static final AssetDescriptor<Texture> seafoamPudding = new AssetDescriptor<>("item/FoodType/Seafoam_Pudding.png", Texture.class);
     public static final AssetDescriptor<Texture> minersTreat = new AssetDescriptor<>("item/FoodType/Miner's_Treat.png", Texture.class);
-  
+
     // *** Buildings ***
     public static final AssetDescriptor<Texture> carpenter = new AssetDescriptor<>("buildings/Carpenter's_Shop.png", Texture.class);
     public static final AssetDescriptor<Texture> fishShop = new AssetDescriptor<>("buildings/Fish_Shop.png", Texture.class);
