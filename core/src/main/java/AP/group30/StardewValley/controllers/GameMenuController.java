@@ -1073,27 +1073,27 @@ public class GameMenuController {
         }
         GameMenu.printResult("You dont have any crafting recipes!");
     }
-    public static void crafting(String name) {
+    public static String crafting(IndustrialProductType recipe) {
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Tile tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles()[player.getX()][player.getY()];
+//        Tile tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles()[player.getX()][player.getY()];
 
-        if(!tiles.getType().equals(TileTypes.HUT)){
-            GameMenu.printResult("Crafting doesn't work outside of your home!");
-            return;
-        }
+//        if(!tiles.getType().equals(TileTypes.HUT)){
+//            GameMenu.printResult("Crafting doesn't work outside of your home!");
+//            return;
+//        }
 
-        for(IndustrialProductType recipe : IndustrialProductType.values()){
-            if(recipe.getName().equals(name)){
-                if(player.getCraftingRecipes().contains(recipe)){
+//        for(IndustrialProductType recipe : IndustrialProductType.values()){
+//            if(recipe.getName().equals(name)){
+//                if(player.getCraftingRecipes().contains(recipe)){
                     for(Item items : recipe.getIngredients()){
                         Item ingredient = Item.findItemByName(items.getName(), player.getBackPack().getItems());
                         if(ingredient == null){
-                            GameMenu.printResult("You don't have necessary ingredients!");
-                            return;
+//                            GameMenu.printResult("You don't have necessary ingredients!");
+                            return "You don't have necessary ingredients!";
                         }else{
                             if(ingredient.getCount() < items.getCount()){
-                                GameMenu.printResult("You don't have enough ingredients!");
-                                return;
+//                                GameMenu.printResult("You don't have enough ingredients!");
+                                return "You don't have enough ingredients!";
                             }
                         }
                     }
@@ -1102,8 +1102,8 @@ public class GameMenuController {
                     Item newItem = Item.findItemByName(crafted.getName(), player.getBackPack().getItems());
 
                     if((newItem == null) && player.getBackPack().getType().getCapacity() == player.getBackPack().getItems().size()){
-                        GameMenu.printResult("You don't have enough space in your backpack!");
-                        return;
+//                        GameMenu.printResult("You don't have enough space in your backpack!");
+                        return "You don't have enough space in your backpack!";
                     }
 
                     for(Item ingredient : recipe.getIngredients()){
@@ -1121,16 +1121,17 @@ public class GameMenuController {
                     } else {
                         player.getBackPack().getItems().add(crafted);
                     }
-                    GameMenu.printResult("You have successfully crafted " + recipe.getName() + "!");
+//                    GameMenu.printResult("You have successfully crafted " + recipe.getName() + "!");
                     player.setEnergy(player.getEnergy() - 2);
-                    player.getMap().changeHasScareCrow();
-                } else{
-                    GameMenu.printResult("Sorry! you don't have the recipe for " + recipe.getName());
-                }
-                return;
-            }
-        }
-        GameMenu.printResult(name + " cannot be crafted!");
+//                    player.getMap().changeHasScareCrow();
+                    return "You have successfully crafted " + recipe.getName() + "!";
+//                } else{
+//                    GameMenu.printResult("Sorry! you don't have the recipe for " + recipe.getName());
+//                }
+//                return;
+//            }
+//        }
+//        GameMenu.printResult(name + " cannot be crafted!");
     }
     public static void placeItem(String name, String direction) {
         Player player = App.getCurrentGame().getCurrentPlayer();

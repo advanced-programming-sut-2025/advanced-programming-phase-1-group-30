@@ -86,6 +86,7 @@ public class GameScreen implements Screen {
     private InventoryScreen inventoryScreen;
     private SkillScreen skillScreen;
     private HutScreen hut;
+    private CraftingScreen craftingScreen;
 
     private final BitmapFont info = (Main.getMain().skin).getFont("font");
     private ShopScreen shopScreen;
@@ -140,6 +141,7 @@ public class GameScreen implements Screen {
 
         inventoryScreen = new InventoryScreen(batch, Main.getMain().skin);
         skillScreen = new SkillScreen(batch, Main.getMain().skin);
+        craftingScreen = new CraftingScreen(batch, Main.getMain().skin);
         hut = new HutScreen(batch, Main.getMain().skin);
         info.setColor(Color.BLACK);
 
@@ -165,6 +167,7 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) shopScreen.toggle();
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) inventoryScreen.toggle();
         if (Gdx.input.isKeyJustPressed(Input.Keys.N)) skillScreen.toggle();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.B)) craftingScreen.toggle();
 
         camera.position.set(x + playerRegion.getRegionWidth() / 2f, y + playerRegion.getRegionHeight() / 2f, 0);
         camera.update();
@@ -207,6 +210,7 @@ public class GameScreen implements Screen {
 
         inventoryScreen.render();
         skillScreen.render();
+        craftingScreen.render();
         hut.render(batch, camera);
         shopScreen.render();
     }
@@ -434,6 +438,7 @@ public class GameScreen implements Screen {
         house.dispose();
         inventoryScreen.dispose();
         skillScreen.dispose();
+        craftingScreen.dispose();
         hut.dispose();
         clock.dispose();
 
@@ -602,6 +607,7 @@ public class GameScreen implements Screen {
         return inventoryScreen.isVisible() ||
                skillScreen.isVisible() ||
                hut.isVisible() ||
-               shopScreen.isVisible();
+               shopScreen.isVisible() ||
+               craftingScreen.isVisible();
     }
 }

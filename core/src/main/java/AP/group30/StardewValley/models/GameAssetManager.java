@@ -1,6 +1,5 @@
 package AP.group30.StardewValley.models;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
@@ -134,6 +133,37 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> carrotStage3 = new AssetDescriptor<>("Stardew_Valley_Images/Crops/Carrot_Stage_3.png", Texture.class);
     public static final AssetDescriptor<Texture> carrotStage4 = new AssetDescriptor<>("Stardew_Valley_Images/Crops/Carrot_Stage_4.png", Texture.class);
 
+    public static final AssetDescriptor<Texture> crafting = new AssetDescriptor<>("Inventory/Crafting.png", Texture.class);
+    public static final AssetDescriptor<Texture> cherry_bomb = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Cherry_Bomb.png", Texture.class);
+    public static final AssetDescriptor<Texture> bomb = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Bomb.png", Texture.class);
+    public static final AssetDescriptor<Texture> mega_bomb = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Mega_Bomb.png", Texture.class);
+    public static final AssetDescriptor<Texture> sprinkler = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Sprinkler.png", Texture.class);
+    public static final AssetDescriptor<Texture> quality_sprinkler = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Quality_Sprinkler.png", Texture.class);
+    public static final AssetDescriptor<Texture> iridium_sprinkler = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Iridium_Sprinkler.png", Texture.class);
+    public static final AssetDescriptor<Texture> charcoal_kiln = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Charcoal_Kiln.png", Texture.class);
+    public static final AssetDescriptor<Texture> furnace = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Furnace.png", Texture.class);
+    public static final AssetDescriptor<Texture> scarecrow = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Scarecrow.png", Texture.class);
+    public static final AssetDescriptor<Texture> deluxe_scarecrow = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Deluxe_Scarecrow.png", Texture.class);
+    public static final AssetDescriptor<Texture> bee_house = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Bee_House.png", Texture.class);
+    public static final AssetDescriptor<Texture> cheese_press = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Cheese_Press.png", Texture.class);
+    public static final AssetDescriptor<Texture> keg = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Keg.png", Texture.class);
+    public static final AssetDescriptor<Texture> loom = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Loom.png", Texture.class);
+    public static final AssetDescriptor<Texture> mayonnaise_machine = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Mayonnaise_Machine.png", Texture.class);
+    public static final AssetDescriptor<Texture> oil_maker = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Oil_Maker.png", Texture.class);
+    public static final AssetDescriptor<Texture> preserves_jar = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Preserves_Jar.png", Texture.class);
+    public static final AssetDescriptor<Texture> dehydrator = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Dehydrator.png", Texture.class);
+    public static final AssetDescriptor<Texture> grass_starter = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Grass_Starter.png", Texture.class);
+    public static final AssetDescriptor<Texture> fish_smoker = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Fish_Smoker.png", Texture.class);
+    public static final AssetDescriptor<Texture> mystic_tree_seed = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Mystic_Tree_Seed.png", Texture.class);
+
+
+
+
+
+
+
+
+
     public static void queueAsset() {
         assetManager.load(background);
         assetManager.load(blackBackground);
@@ -254,5 +284,28 @@ public class GameAssetManager {
         assetManager.load(carrotStage2);
         assetManager.load(carrotStage3);
         assetManager.load(carrotStage4);
+
+        assetManager.load(crafting);
+        assetManager.load(cherry_bomb);
+        assetManager.load(bomb);
+        assetManager.load(mega_bomb);
+        assetManager.load(sprinkler);
+        assetManager.load(quality_sprinkler);
+        assetManager.load(iridium_sprinkler);
+        assetManager.load(charcoal_kiln);
+        assetManager.load(furnace);
+        assetManager.load(scarecrow);
+        assetManager.load(deluxe_scarecrow);
+        assetManager.load(bee_house);
+        assetManager.load(cheese_press);
+        assetManager.load(keg);
+        assetManager.load(loom);
+        assetManager.load(mayonnaise_machine);
+        assetManager.load(oil_maker);
+        assetManager.load(preserves_jar);
+        assetManager.load(dehydrator);
+        assetManager.load(grass_starter);
+        assetManager.load(fish_smoker);
+        assetManager.load(mystic_tree_seed);
     }
 }

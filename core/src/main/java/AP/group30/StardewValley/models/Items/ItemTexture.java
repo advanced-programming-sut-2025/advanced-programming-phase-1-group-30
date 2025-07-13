@@ -1,15 +1,7 @@
 package AP.group30.StardewValley.models.Items;
 
 import AP.group30.StardewValley.models.GameAssetManager;
-import AP.group30.StardewValley.models.Items.Products.ForagingSeedType;
-import AP.group30.StardewValley.models.Items.Products.FruitType;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.graphics.Texture;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public enum ItemTexture {
 
@@ -86,7 +78,30 @@ public enum ItemTexture {
     CARROT_STAGE_1(GameAssetManager.assetManager.get(GameAssetManager.carrotStage1)),
     CARROT_STAGE_2(GameAssetManager.assetManager.get(GameAssetManager.carrotStage2)),
     CARROT_STAGE_3(GameAssetManager.assetManager.get(GameAssetManager.carrotStage3)),
-    CARROT_STAGE_4(GameAssetManager.assetManager.get(GameAssetManager.carrotStage4));
+    CARROT_STAGE_4(GameAssetManager.assetManager.get(GameAssetManager.carrotStage4)),
+
+    // crafting
+    Cherry_Bomb(GameAssetManager.assetManager.get(GameAssetManager.cherry_bomb)),
+    Bomb(GameAssetManager.assetManager.get(GameAssetManager.bomb)),
+    Mega_Bomb(GameAssetManager.assetManager.get(GameAssetManager.mega_bomb)),
+    Sprinkler(GameAssetManager.assetManager.get(GameAssetManager.sprinkler)),
+    Quality_Sprinkler(GameAssetManager.assetManager.get(GameAssetManager.quality_sprinkler)),
+    Iridium_Sprinkler(GameAssetManager.assetManager.get(GameAssetManager.iridium_sprinkler)),
+    Charcoal_Kiln(GameAssetManager.assetManager.get(GameAssetManager.charcoal_kiln)),
+    Furnace(GameAssetManager.assetManager.get(GameAssetManager.furnace)),
+    Scarecrow(GameAssetManager.assetManager.get(GameAssetManager.scarecrow)),
+    Deluxe_Scarecrow(GameAssetManager.assetManager.get(GameAssetManager.deluxe_scarecrow)),
+    Bee_House(GameAssetManager.assetManager.get(GameAssetManager.bee_house)),
+    Cheese_press(GameAssetManager.assetManager.get(GameAssetManager.cheese_press)),
+    Keg(GameAssetManager.assetManager.get(GameAssetManager.keg)),
+    Loom(GameAssetManager.assetManager.get(GameAssetManager.loom)),
+    Mayonnaise_Machine(GameAssetManager.assetManager.get(GameAssetManager.mayonnaise_machine)),
+    Oil_Maker(GameAssetManager.assetManager.get(GameAssetManager.oil_maker)),
+    Preserves_Jar(GameAssetManager.assetManager.get(GameAssetManager.preserves_jar)),
+    Dehydrator(GameAssetManager.assetManager.get(GameAssetManager.dehydrator)),
+    Grass_Starter(GameAssetManager.assetManager.get(GameAssetManager.grass_starter)),
+    Fish_Smoker(GameAssetManager.assetManager.get(GameAssetManager.fish_smoker)),
+    Mystic_Tree_Seed(GameAssetManager.assetManager.get(GameAssetManager.mystic_tree_seed));
 
     private final Texture TEXTURE;
 

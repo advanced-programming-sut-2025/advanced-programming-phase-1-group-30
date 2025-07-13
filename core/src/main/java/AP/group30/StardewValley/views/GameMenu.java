@@ -199,8 +199,8 @@ public class GameMenu implements AppMenu {
         }
         matcher = GameMenuCommands.CRAFTING_CRAFT.regexMatcher(command);
         if (matcher.matches()) {
-            GameMenuController.crafting(matcher.group("itemName"));
-            return;
+//            GameMenuController.crafting(matcher.group("itemName"));
+//            return;
         }
         matcher = GameMenuCommands.PLACE_ITEM.regexMatcher(command);
         if (matcher.matches()) {
