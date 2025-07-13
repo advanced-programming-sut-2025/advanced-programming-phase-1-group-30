@@ -1,4 +1,4 @@
-package AP.group30.StardewValley.models.Invetory;
+package AP.group30.StardewValley.models.Inventory;
 
 public class BackPack extends Inventory {
     private BackPackType type;

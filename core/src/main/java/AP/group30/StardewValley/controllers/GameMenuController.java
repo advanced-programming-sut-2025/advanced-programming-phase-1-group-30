@@ -5,7 +5,7 @@ import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Buildings.*;
 //import AP.group30.StardewValley.models.Commands.Menus;
 import AP.group30.StardewValley.models.GameAssetManager;
-import AP.group30.StardewValley.models.Invetory.BackPackType;
+import AP.group30.StardewValley.models.Inventory.BackPackType;
 import AP.group30.StardewValley.models.Items.Gift;
 import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Items.Products.*;
@@ -371,9 +371,7 @@ public class GameMenuController {
         int newX = x + dx;
         int newY = y + dy;
 
-        batch.begin();
         batch.draw(GameAssetManager.assetManager.get(GameAssetManager.axe), newX * 32, (60 - newY) * 32);
-        batch.end();
 
 
         if (newX < 0 || newX >= tiles.length || newY < 0 || newY >= tiles[0].length) {
@@ -803,9 +801,41 @@ public class GameMenuController {
         sb.append("Can Become Giant: " + craft.isCanBecomeGiant());
         RegisterMenu.printResult(sb.toString());
     }
-    public static void plant(String seed1, String direction) {
+    public static Crop plant(String seed1, Direction direction) {
         ForagingSeed seed;
         Player player = App.getCurrentGame().getCurrentPlayer();
+
+        Tile[][] tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
+
+        int x = player.getX() / 32;
+        int y = 60 - (player.getY() / 32);
+        int dx = 0, dy = 0;
+
+        switch (direction) {
+            case NORTH: dy = -1; break;      // up
+            case SOUTH: dy = 1; break;       // down
+            case WEST: dx = -1; break;      // left
+            case EAST: dx = 1; break;       // right
+//            case "Q": dx = -1; dy = -1; break; // up-left
+//            case "E": dx = 1; dy = -1; break;  // up-right
+//            case "Z": dx = -1; dy = 1; break;  // down-left
+//            case "C": dx = 1; dy = 1; break;   // down-right
+            default:
+                GameMenu.printResult("Invalid direction!");
+                return null;
+        }
+
+        int newX = x + dx;
+        int newY = y + dy;
+
+        // Bounds check
+        if (newX < 0 || newX >= tiles.length || newY < 0 || newY >= tiles[0].length) {
+            GameMenu.printResult("Out of bounds!");
+            return null;
+        }
+        // Check for plantable tile
+        Tile targetTile = tiles[newX][newY];
+
         if (seed1.equals("mixed seeds") && (Item.findItemByName(seed1, player.getBackPack().getItems()) != null)) {
             Season currentSeason = App.getCurrentGame().getCurrentTime().getSeason();
 
@@ -819,7 +849,7 @@ public class GameMenuController {
 
             if (seasonalSeeds.isEmpty()) {
                 GameMenu.printResult("No available seeds for the current season.");
-                return;
+                return null;
             }
 
             // Pick a random type
@@ -831,45 +861,14 @@ public class GameMenuController {
         } else {
             seed = (ForagingSeed) Item.findItemByName(seed1, player.getBackPack().getItems());
         }
-
-        Tile[][] tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
-
-        int x = player.getX();
-        int y = player.getY();
-        int dx = 0, dy = 0;
-
-        switch (direction) {
-            case "w": dy = -1; break;      // up
-            case "s": dy = 1; break;       // down
-            case "a": dx = -1; break;      // left
-            case "d": dx = 1; break;       // right
-            case "Q": dx = -1; dy = -1; break; // up-left
-            case "E": dx = 1; dy = -1; break;  // up-right
-            case "Z": dx = -1; dy = 1; break;  // down-left
-            case "C": dx = 1; dy = 1; break;   // down-right
-            default:
-                GameMenu.printResult("Invalid direction!");
-                return;
-        }
-
-        int newX = x + dx;
-        int newY = y + dy;
-
-        // Bounds check
-        if (newX < 0 || newX >= tiles.length || newY < 0 || newY >= tiles[0].length) {
-            GameMenu.printResult("Out of bounds!");
-            return;
-        }
-        // Check for plantable tile
-        Tile targetTile = tiles[newX][newY];
         if (!(targetTile.getType().equals(TileTypes.PLANTABLE) || ((targetTile.getType().equals(TileTypes.GREENHOUSE) && player.getMap().getGreenHouse() != null)))) {
             GameMenu.printResult("Tile is not plantable!");
-            return;
+            return null;
         }
         Item item = Item.findItemByName(seed1, App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
         if (item == null) {
             GameMenu.printResult("No item with this name found in your backpack!");
-            return;
+            return null;
         }
         if (item.getCount() > 0) {
             if (targetTile.getItem() == null) {
@@ -936,10 +935,14 @@ public class GameMenuController {
                 }
             } else {
                 GameMenu.printResult("Tile is not farmable!");
+                return null;
             }
         } else {
             GameMenu.printResult("No item with this name found in your backpack!");
+            return null;
         }
+        seed.getCrop().setPosition(targetTile.getX(), 60 - targetTile.getY());
+        return seed.getCrop();
     }
 
     public static void showPlant(String x, String y) {

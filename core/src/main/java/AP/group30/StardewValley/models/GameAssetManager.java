@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public class GameAssetManager {
     public static AssetManager assetManager = new AssetManager();
     public static final AssetDescriptor<Texture> background = new AssetDescriptor<>("menu assets/loading screen.png", Texture.class);
+    public static final AssetDescriptor<Texture> blackBackground = new AssetDescriptor<>("menu assets/Black.png", Texture.class);
 
     public static final AssetDescriptor<Texture> inventoryScreen = new AssetDescriptor<>("Inventory/Inventory.png", Texture.class);
     public static final AssetDescriptor<Texture> inventoryItem = new AssetDescriptor<>("Inventory/Inventory_Item.png", Texture.class);
@@ -95,13 +96,13 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> salad = new AssetDescriptor<>("item/FoodType/Salad.png", Texture.class);
     public static final AssetDescriptor<Texture> omelet = new AssetDescriptor<>("item/FoodType/Omelet.png", Texture.class);
     public static final AssetDescriptor<Texture> pumpkinPie = new AssetDescriptor<>("item/FoodType/Pumpkin_Pie.png", Texture.class);
-    public static final AssetDescriptor<Texture> spaghetti = new AssetDescriptor<>("item/FoodType/spaghetti.png", Texture.class);
+    public static final AssetDescriptor<Texture> spaghetti = new AssetDescriptor<>("item/FoodType/Spaghetti.png", Texture.class);
     public static final AssetDescriptor<Texture> pizza = new AssetDescriptor<>("item/FoodType/Pizza.png", Texture.class);
     public static final AssetDescriptor<Texture> tortilla = new AssetDescriptor<>("item/FoodType/Tortilla.png", Texture.class);
     public static final AssetDescriptor<Texture> makiRoll = new AssetDescriptor<>("item/FoodType/Maki_Roll.png", Texture.class);
     public static final AssetDescriptor<Texture> tripleShotEspresso = new AssetDescriptor<>("item/FoodType/Triple_Shot_Espresso.png", Texture.class);
     public static final AssetDescriptor<Texture> cookie = new AssetDescriptor<>("item/FoodType/Cookie.png", Texture.class);
-    public static final AssetDescriptor<Texture> hashBrowns = new AssetDescriptor<>("item/FoodType/HashBrowns.png", Texture.class);
+    public static final AssetDescriptor<Texture> hashBrowns = new AssetDescriptor<>("item/FoodType/Hashbrowns.png", Texture.class);
     public static final AssetDescriptor<Texture> pancakes = new AssetDescriptor<>("item/FoodType/Pancakes.png", Texture.class);
     public static final AssetDescriptor<Texture> fruitSalad = new AssetDescriptor<>("item/FoodType/Fruit_Salad.png", Texture.class);
     public static final AssetDescriptor<Texture> redPlate = new AssetDescriptor<>("item/FoodType/Red_Plate.png", Texture.class);
@@ -125,8 +126,17 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> house = new AssetDescriptor<>("buildings/Hut.png", Texture.class);
     public static final AssetDescriptor<Texture> ruinedGreenhouse = new AssetDescriptor<>("buildings/ruined_greenhouse.png", Texture.class);
 
+    // *** Seeds And Crops ***
+    public static final AssetDescriptor<Texture> carrotSeeds = new AssetDescriptor<>("Stardew_Valley_Images/Crops/Carrot_Seeds.png", Texture.class);
+    public static final AssetDescriptor<Texture> carrot = new AssetDescriptor<>("Stardew_Valley_Images/Crops/Carrot.png", Texture.class);
+    public static final AssetDescriptor<Texture> carrotStage1 = new AssetDescriptor<>("Stardew_Valley_Images/Crops/Carrot_Stage_1.png", Texture.class);
+    public static final AssetDescriptor<Texture> carrotStage2 = new AssetDescriptor<>("Stardew_Valley_Images/Crops/Carrot_Stage_2.png", Texture.class);
+    public static final AssetDescriptor<Texture> carrotStage3 = new AssetDescriptor<>("Stardew_Valley_Images/Crops/Carrot_Stage_3.png", Texture.class);
+    public static final AssetDescriptor<Texture> carrotStage4 = new AssetDescriptor<>("Stardew_Valley_Images/Crops/Carrot_Stage_4.png", Texture.class);
+
     public static void queueAsset() {
         assetManager.load(background);
+        assetManager.load(blackBackground);
         assetManager.load(inventoryScreen);
         assetManager.load(inventoryItem);
         assetManager.load(skill);
@@ -237,5 +247,12 @@ public class GameAssetManager {
         assetManager.load(ranch);
         assetManager.load(fishShop);
         assetManager.load(saloon);
+
+        assetManager.load(carrotSeeds);
+        assetManager.load(carrot);
+        assetManager.load(carrotStage1);
+        assetManager.load(carrotStage2);
+        assetManager.load(carrotStage3);
+        assetManager.load(carrotStage4);
     }
 }

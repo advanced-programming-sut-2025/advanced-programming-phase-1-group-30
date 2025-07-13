@@ -1,7 +1,9 @@
 package AP.group30.StardewValley.views;
 
 import AP.group30.StardewValley.Main;
+import AP.group30.StardewValley.controllers.DateAndWeatherController;
 import AP.group30.StardewValley.controllers.GameMenuController;
+import AP.group30.StardewValley.controllers.NewGameController;
 import AP.group30.StardewValley.models.Buildings.BlacksmithCosts;
 import AP.group30.StardewValley.models.Buildings.Building;
 import AP.group30.StardewValley.models.Buildings.Hut;
@@ -10,8 +12,11 @@ import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.GameObjects;
 import AP.group30.StardewValley.models.Items.Item;
 import AP.group30.StardewValley.models.Items.ItemTexture;
+import AP.group30.StardewValley.models.Items.Products.Crop;
+import AP.group30.StardewValley.models.Items.Products.ForagingSeed;
 import AP.group30.StardewValley.models.Items.Products.Stone;
 import AP.group30.StardewValley.models.Items.Products.Tree;
+import AP.group30.StardewValley.models.Items.Tools.Tool;
 import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Maps.Tile;
 import AP.group30.StardewValley.models.Maps.TileTexture;
@@ -37,6 +42,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
+import java.util.Scanner;
 
 public class GameScreen implements Screen {
     private SpriteBatch batch;
@@ -135,7 +141,7 @@ public class GameScreen implements Screen {
         inventoryScreen = new InventoryScreen(batch, Main.getMain().skin);
         skillScreen = new SkillScreen(batch, Main.getMain().skin);
         hut = new HutScreen(batch, Main.getMain().skin);
-        info.setColor(Color.WHITE);
+        info.setColor(Color.BLACK);
 
         shopScreen = new ShopScreen(batch, Main.getMain().skin, BlacksmithCosts.values());
     }
@@ -148,13 +154,13 @@ public class GameScreen implements Screen {
         player.setStateTime(stateTime);
         isMoving = false;
 
-        if (!inventoryScreen.isVisible() && !skillScreen.isVisible() && !shopScreen.isVisible()) {
-            handleInput(delta);
-            if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
-            if (Gdx.input.isKeyPressed(Input.Keys.S)) camera.position.y -= speed * delta;
-            if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
-        }
+//        if (!inventoryScreen.isVisible() && !skillScreen.isVisible() && !shopScreen.isVisible()) {
+//            handleInput(delta);
+//            if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
+//            if (Gdx.input.isKeyPressed(Input.Keys.S)) camera.position.y -= speed * delta;
+//            if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
+//            if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
+//        }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) shopScreen.toggle();
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) inventoryScreen.toggle();
@@ -201,7 +207,7 @@ public class GameScreen implements Screen {
 
         inventoryScreen.render();
         skillScreen.render();
-        hut.render();
+        hut.render(batch, camera);
         shopScreen.render();
     }
 
@@ -306,7 +312,7 @@ public class GameScreen implements Screen {
             }
         }
 
-        hutEntryTile = map.getTiles()[(startTIleX + endTIleX) / 2][60 - startTIleY];
+        hutEntryTile = map.getTiles()[(startTIleX + endTIleX) / 2 + 1][58 - startTIleY];
     }
 
 //    private void renderBuilding(TileTypes tileType, Map map1, Texture texture) {
@@ -524,7 +530,17 @@ public class GameScreen implements Screen {
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.C) || Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-            GameMenuController.toolUse(player.getDirection(), (int)(x), (int)(y + playerRegion.getRegionHeight() / 8f), batch);
+            if (player.getWield() instanceof Tool) {
+                GameMenuController.toolUse(player.getDirection(), (int) (x), (int) (y + playerRegion.getRegionHeight() / 8f), batch);
+            } else if (player.getWield() instanceof ForagingSeed) {
+                Crop crop = GameMenuController.plant(player.getWield().getName(), player.getDirection());
+                if (crop != null) {
+                    entities.add(crop);
+                }
+            }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+            DateAndWeatherController.cheatAdvanceTime("10");
         }
     }
 

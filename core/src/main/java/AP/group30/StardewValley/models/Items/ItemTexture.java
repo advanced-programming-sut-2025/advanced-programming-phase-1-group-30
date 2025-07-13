@@ -78,7 +78,15 @@ public enum ItemTexture {
     BLACKSMITH(GameAssetManager.assetManager.get(GameAssetManager.blacksmith)),
     PIERRES(GameAssetManager.assetManager.get(GameAssetManager.pierres)),
     JOJA(GameAssetManager.assetManager.get(GameAssetManager.jojamart)),
-    FISH_SHOP(GameAssetManager.assetManager.get(GameAssetManager.fishShop));
+    FISH_SHOP(GameAssetManager.assetManager.get(GameAssetManager.fishShop)),
+
+    // *** Crops and Seeds ***
+    CARROT(GameAssetManager.assetManager.get(GameAssetManager.carrot)),
+    CARROT_SEEDS(GameAssetManager.assetManager.get(GameAssetManager.carrotSeeds)),
+    CARROT_STAGE_1(GameAssetManager.assetManager.get(GameAssetManager.carrotStage1)),
+    CARROT_STAGE_2(GameAssetManager.assetManager.get(GameAssetManager.carrotStage2)),
+    CARROT_STAGE_3(GameAssetManager.assetManager.get(GameAssetManager.carrotStage3)),
+    CARROT_STAGE_4(GameAssetManager.assetManager.get(GameAssetManager.carrotStage4));
 
     private final Texture TEXTURE;
 

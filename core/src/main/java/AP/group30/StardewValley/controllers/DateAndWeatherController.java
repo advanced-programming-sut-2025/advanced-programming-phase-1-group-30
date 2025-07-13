@@ -4,6 +4,7 @@ import AP.group30.StardewValley.models.Animals.Animal;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Items.Item;
 import AP.group30.StardewValley.models.Items.ItemTexture;
+import AP.group30.StardewValley.models.Items.Products.ForagingSeed;
 import AP.group30.StardewValley.models.Items.Products.GiantCrop;
 import AP.group30.StardewValley.models.Items.Products.Tree;
 import AP.group30.StardewValley.models.Maps.Tile;
@@ -14,6 +15,7 @@ import AP.group30.StardewValley.models.Players.NPC.NPC;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.models.TimeAndDate.Season;
 import AP.group30.StardewValley.views.GameMenu;
+import AP.group30.StardewValley.views.GameScreen;
 
 import java.util.Random;
 
@@ -95,6 +97,7 @@ public class DateAndWeatherController {
                                     if (!tiles[i][j].getCrop().isWateredToday()) {
                                         tiles[i][j].getCrop().setDaysNotWatered(tiles[i][j].getCrop().getDaysNotWatered() + 1);
                                         if (tiles[i][j].getCrop().getDaysNotWatered() >= 2) {
+                                            GameScreen.entities.remove(((ForagingSeed)tiles[i][j].getItem()).getCrop());
                                             tiles[i][j].setCrop(null);
                                             tiles[i][j].setPlanted(false);
                                             tiles[i][j].setReadyToHarvest(false);
@@ -107,7 +110,7 @@ public class DateAndWeatherController {
                                         tiles[i][j].getCrop().setWateredToday(false);
                                     }
 
-                                    if (tiles[i][j].getCrop().getCurrentStage() < tiles[i][j].getCrop().getStages().size()) {
+                                    if (tiles[i][j].getCrop().getCurrentStage() < tiles[i][j].getCrop().getStages().size() - 1) {
                                         if (tiles[i][j].getCrop().getStages().get(tiles[i][j].getCrop().getCurrentStage()) == tiles[i][j].getCrop().getDaysPassed()) {
                                             if (tiles[i][j].getCrop().getCurrentStage() == tiles[i][j].getCrop().getStages().size()) {
                                                 tiles[i][j].setReadyToHarvest(true);
@@ -166,7 +169,7 @@ public class DateAndWeatherController {
                     }
                 }
 
-                MaintainerController.randomPlanting(player);
+//                MaintainerController.randomPlanting(player);
                 for (Animal animal : player.getAnimals()) {
                     if (animal.isFedToday()) {
                         animal.produceProduct();
