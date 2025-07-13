@@ -3,6 +3,7 @@ package AP.group30.StardewValley.views.Hut;
 import AP.group30.StardewValley.models.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -35,7 +36,7 @@ public class HutScreen {
         table = new Table();
         table.setVisible(false);
         table.setBackground(backgroundDrawable);
-        table.setSize(1000, 900);
+        table.setSize(500, 450);
         table.setPosition(
             (Gdx.graphics.getWidth() - table.getWidth()) / 2,
             (Gdx.graphics.getHeight() - table.getHeight()) / 2
@@ -64,8 +65,12 @@ public class HutScreen {
         else show();
     }
 
-    public void render() {
+    public void render(SpriteBatch batch, OrthographicCamera camera) {
         if (visible) {
+            batch.begin();
+            batch.draw(GameAssetManager.assetManager.get(GameAssetManager.blackBackground), camera.position.x - Gdx.graphics.getWidth() * 1.2f,
+                camera.position.y - Gdx.graphics.getHeight() * 1.4f, Gdx.graphics.getWidth() * 2f, Gdx.graphics.getHeight() * 2f);
+            batch.end();
             stage.act();
             stage.draw();
 

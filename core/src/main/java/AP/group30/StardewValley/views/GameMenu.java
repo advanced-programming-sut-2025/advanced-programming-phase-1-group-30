@@ -6,7 +6,7 @@ import AP.group30.StardewValley.controllers.NewGameController;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Buildings.FishShopCosts;
 import AP.group30.StardewValley.models.Commands.GameMenuCommands;
-import AP.group30.StardewValley.models.Invetory.BackPackType;
+import AP.group30.StardewValley.models.Inventory.BackPackType;
 import AP.group30.StardewValley.models.Items.Products.ShopProducts.FishShopProducts;
 import AP.group30.StardewValley.models.Players.Player;
 
@@ -154,13 +154,13 @@ public class GameMenu implements AppMenu {
             GameMenuController.upgradeTools(name);
             return;
         }
-        matcher = GameMenuCommands.PLANT.regexMatcher(command);
-        if (matcher.matches()) {
-            String seed = matcher.group("seed");
-            String direction = matcher.group("direction");
-            GameMenuController.plant(seed, direction);
-            return;
-        }
+//        matcher = GameMenuCommands.PLANT.regexMatcher(command);
+//        if (matcher.matches()) {
+//            String seed = matcher.group("seed");
+//            String direction = matcher.group("direction");
+//            GameMenuController.plant(seed, p);
+//            return;
+//        }
         matcher = GameMenuCommands.SHOW_PLANT.regexMatcher(command);
         if (matcher.matches()) {
             GameMenuController.showPlant(matcher.group("x"), matcher.group("y"));

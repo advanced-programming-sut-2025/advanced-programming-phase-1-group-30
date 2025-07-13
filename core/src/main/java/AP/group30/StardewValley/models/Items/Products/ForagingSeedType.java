@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 
 public enum ForagingSeedType implements ItemsInteface {
     JAZZ_SEEDS("jazz seeds", Season.SPRING, CropType.BLUE_JAZZ, null, 0, ItemTexture.WOOD.getTexture()),
-    CARROT_SEEDS("carrot seeds", Season.SPRING, CropType.CARROT, null, 0, ItemTexture.WOOD.getTexture()),
+    CARROT_SEEDS("carrot seeds", Season.SPRING, CropType.CARROT, null, 0, ItemTexture.CARROT_SEEDS.getTexture()),
     CAULIFLOWER_SEEDS("cauliflower seeds", Season.SPRING, CropType.CAULIFLOWER, null, 0, ItemTexture.WOOD.getTexture()),
     COFFEE_BEAN("coffee bean", Season.SPRING, CropType.COFFEE_BEAN, null, 0, ItemTexture.WOOD.getTexture()),
     GARLIC_SEEDS("garlic seeds", Season.SPRING, CropType.GARLIC, null, 0, ItemTexture.WOOD.getTexture()),
