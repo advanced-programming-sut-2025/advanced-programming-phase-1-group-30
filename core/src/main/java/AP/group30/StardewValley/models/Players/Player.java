@@ -118,7 +118,7 @@ public class Player implements GameObjects {
         this.backPack.addItem(new Item(1000, "wood", 10, ItemTexture.WOOD.getTexture()));
         this.backPack.addItem(new Item(1000, "stone", 20, ItemTexture.STONE.getTexture()));
         this.backPack.addItem(new Item(50, "hay", 50, ItemTexture.WOOD.getTexture()));
-        this.backPack.addItem(new ForagingSeed(1, ForagingSeedType.CARROT_SEEDS));
+        this.backPack.addItem(new ForagingSeed(10, ForagingSeedType.CARROT_SEEDS));
         this.backPack.addItem(new Item(50, "speed-gro", 50, ItemTexture.WOOD.getTexture()));
         this.backPack.addItem(new Item(50, "deluxe retaining soil", 50, ItemTexture.WOOD.getTexture()));
         this.backPack.addItem(new Item(50, "copper bar", 50, ItemTexture.WOOD.getTexture()));

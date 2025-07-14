@@ -41,6 +41,13 @@ public class RegisterMenu implements Screen {
     private boolean randomPassIsChecked = false;
     Texture background;
 
+
+
+
+    // TODO for maintain purpose:
+    public static GameScreen gameScreen;
+    public static CityScreen cityScreen;
+
     public RegisterMenu(Skin skin) {
         table = new Table(skin);
         usernameField = new TextField("username", skin);
@@ -294,7 +301,9 @@ public class RegisterMenu implements Screen {
             App.getAppUsers().add(user2);
             App.setCurrentUser(user1);
             Game game = NewGameController.NewGame(2, "2", "", "", 2, 3, 2, 3);
-            Main.getMain().setScreen(new LoadingScreen(new GameScreen(game)));
+            gameScreen = new GameScreen(game);
+            cityScreen = new CityScreen(game);
+            Main.getMain().setScreen(new LoadingScreen(gameScreen));
         }
 
         stage.act(delta);

@@ -3,6 +3,7 @@ package AP.group30.StardewValley.models;
 //import AP.group30.StardewValley.models.Commands.Menus;
 import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Users.User;
+import AP.group30.StardewValley.views.CityScreen;
 
 import java.util.ArrayList;
 
@@ -13,6 +14,7 @@ public class App {
     private static ArrayList<String> questions = new ArrayList<>();
 //    private static Menus currentMenu = Menus.RegisterMenu;
     private static Game currentGame;
+
     private static ArrayList<Game> games = new ArrayList<>();
 
     public static ArrayList<String> getQuestions() {return questions;}
