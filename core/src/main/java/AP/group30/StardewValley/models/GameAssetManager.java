@@ -43,7 +43,6 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> dirt2 = new AssetDescriptor<>("tile/dirt2.png", Texture.class);
     public static final AssetDescriptor<Texture> dirt3 = new AssetDescriptor<>("tile/dirt3.png", Texture.class);
     public static final AssetDescriptor<Texture> dirt4 = new AssetDescriptor<>("tile/dirt4.png", Texture.class);
-    public static final AssetDescriptor<Texture> plantable = new AssetDescriptor<>("tile/plantable.png", Texture.class);
 
     public static final AssetDescriptor<Texture> insideHouse = new AssetDescriptor<>("Building/InsideHut.png", Texture.class);
 
@@ -58,6 +57,8 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> outdoorGrass2 = new AssetDescriptor<>("tile/wall/outdoorGrass2.png", Texture.class);
     public static final AssetDescriptor<Texture> outdoorGrass3 = new AssetDescriptor<>("tile/wall/outdoorGrass3.png", Texture.class);
     public static final AssetDescriptor<Texture> outdoorGrass4 = new AssetDescriptor<>("tile/wall/outdoorGrass4.png", Texture.class);
+    public static final AssetDescriptor<Texture> plantable = new AssetDescriptor<>("tile/plantable.png", Texture.class);
+    public static final AssetDescriptor<Texture> wateredTile = new AssetDescriptor<>("tile/watered_tile.png", Texture.class);
     public static final AssetDescriptor<Texture> clock = new AssetDescriptor<>("Stardew_Valley_Images/Clock/Clock.png", Texture.class);
 
     public static final AssetDescriptor<Texture> axe = new AssetDescriptor<>("Tools/Axe/Axe.png", Texture.class);
@@ -162,6 +163,7 @@ public class GameAssetManager {
         assetManager.load(dirt3);
         assetManager.load(dirt4);
         assetManager.load(plantable);
+        assetManager.load(wateredTile);
         assetManager.load(house);
         assetManager.load(ruinedGreenhouse);
         assetManager.load(menuSkin);
