@@ -1,4 +1,4 @@
-package AP.group30.StardewValley.views.Hut;
+package AP.group30.StardewValley.views.InGameMenus.Hut;
 
 import AP.group30.StardewValley.controllers.GameMenuController;
 import AP.group30.StardewValley.models.App;

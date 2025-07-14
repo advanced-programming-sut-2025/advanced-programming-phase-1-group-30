@@ -1,9 +1,8 @@
-package AP.group30.StardewValley.views;
+package AP.group30.StardewValley.views.InGameMenus;
 
 import AP.group30.StardewValley.controllers.GameMenuController;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameAssetManager;
-import AP.group30.StardewValley.models.Items.Foods.FoodType;
 import AP.group30.StardewValley.models.Items.IndustrialProducts.IndustrialProductType;
 import AP.group30.StardewValley.models.Items.Item;
 import com.badlogic.gdx.Gdx;
