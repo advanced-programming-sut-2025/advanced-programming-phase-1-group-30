@@ -157,13 +157,30 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> fish_smoker = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Fish_Smoker.png", Texture.class);
     public static final AssetDescriptor<Texture> mystic_tree_seed = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Mystic_Tree_Seed.png", Texture.class);
 
-
-
-
-
-
-
-
+    public static final AssetDescriptor<Texture> honey = new AssetDescriptor<>("item/ArtisanGoods/Honey.png", Texture.class);
+    public static final AssetDescriptor<Texture> cheese = new AssetDescriptor<>("item/ArtisanGoods/Cheese.png", Texture.class);
+    public static final AssetDescriptor<Texture> goatCheese = new AssetDescriptor<>("item/ArtisanGoods/Goat_Cheese.png", Texture.class);
+    public static final AssetDescriptor<Texture> beer = new AssetDescriptor<>("item/ArtisanGoods/Beer.png", Texture.class);
+    public static final AssetDescriptor<Texture> vinegar = new AssetDescriptor<>("item/ArtisanGoods/Vinegar.png", Texture.class);
+    public static final AssetDescriptor<Texture> coffee = new AssetDescriptor<>("item/ArtisanGoods/Coffee.png", Texture.class);
+    public static final AssetDescriptor<Texture> juice = new AssetDescriptor<>("item/ArtisanGoods/Juice.png", Texture.class);
+    public static final AssetDescriptor<Texture> mead = new AssetDescriptor<>("item/ArtisanGoods/Mead.png", Texture.class);
+    public static final AssetDescriptor<Texture> paleAle = new AssetDescriptor<>("item/ArtisanGoods/Pale_Ale.png", Texture.class);
+    public static final AssetDescriptor<Texture> wine = new AssetDescriptor<>("item/ArtisanGoods/Wine.png", Texture.class);
+    public static final AssetDescriptor<Texture> driedMushrooms = new AssetDescriptor<>("item/ArtisanGoods/Dried_Mushrooms.png", Texture.class);
+    public static final AssetDescriptor<Texture> driedFruit = new AssetDescriptor<>("item/ArtisanGoods/Dried_Fruit.png", Texture.class);
+    public static final AssetDescriptor<Texture> raisins = new AssetDescriptor<>("item/ArtisanGoods/Raisins.png", Texture.class);
+    public static final AssetDescriptor<Texture> coal = new AssetDescriptor<>("item/ArtisanGoods/Coal.png", Texture.class);
+    public static final AssetDescriptor<Texture> cloth = new AssetDescriptor<>("item/ArtisanGoods/Cloth.png", Texture.class);
+    public static final AssetDescriptor<Texture> mayonnaise = new AssetDescriptor<>("item/ArtisanGoods/Mayonnaise.png", Texture.class);
+    public static final AssetDescriptor<Texture> duckMayonnaise = new AssetDescriptor<>("item/ArtisanGoods/Duck_Mayonnaise.png", Texture.class);
+    public static final AssetDescriptor<Texture> dinosaurMayonnaise = new AssetDescriptor<>("item/ArtisanGoods/Dinosaur_Mayonnaise.png", Texture.class);
+    public static final AssetDescriptor<Texture> truffleOil = new AssetDescriptor<>("item/ArtisanGoods/Truffle_Oil.png", Texture.class);
+    public static final AssetDescriptor<Texture> oil = new AssetDescriptor<>("item/ArtisanGoods/Oil.png", Texture.class);
+    public static final AssetDescriptor<Texture> pickles = new AssetDescriptor<>("item/ArtisanGoods/Pickles.png", Texture.class);
+    public static final AssetDescriptor<Texture> jelly = new AssetDescriptor<>("item/ArtisanGoods/Jelly.png", Texture.class);
+    public static final AssetDescriptor<Texture> smokedFish = new AssetDescriptor<>("item/ArtisanGoods/Smoked_Fish.png", Texture.class);
+    public static final AssetDescriptor<Texture> metalBar = new AssetDescriptor<>("item/ArtisanGoods/Metal_Bar.png", Texture.class);
 
     public static void queueAsset() {
         assetManager.load(background);
@@ -309,5 +326,30 @@ public class GameAssetManager {
         assetManager.load(grass_starter);
         assetManager.load(fish_smoker);
         assetManager.load(mystic_tree_seed);
+
+        assetManager.load(honey);
+        assetManager.load(cheese);
+        assetManager.load(goatCheese);
+        assetManager.load(beer);
+        assetManager.load(vinegar);
+        assetManager.load(coffee);
+        assetManager.load(juice);
+        assetManager.load(paleAle);
+        assetManager.load(driedMushrooms);
+        assetManager.load(driedFruit);
+        assetManager.load(raisins);
+        assetManager.load(coal);
+        assetManager.load(cloth);
+        assetManager.load(mayonnaise);
+        assetManager.load(duckMayonnaise);
+        assetManager.load(dinosaurMayonnaise);
+        assetManager.load(truffleOil);
+        assetManager.load(oil);
+        assetManager.load(pickles);
+        assetManager.load(jelly);
+        assetManager.load(smokedFish);
+        assetManager.load(metalBar);
+        assetManager.load(mead);
+        assetManager.load(wine);
     }
 }

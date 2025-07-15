@@ -1123,10 +1123,24 @@ public class GameMenuController {
                         }
                     }
 
-                    if(newItem != null){
-                        newItem.setCount(newItem.getCount() + 1);
-                    } else {
-                        player.getBackPack().getItems().add(crafted);
+                    if (recipe.equals(IndustrialProductType.BEE_HOUSE) ||
+                        recipe.equals(IndustrialProductType.KEG) ||
+                        recipe.equals(IndustrialProductType.CHEESE_PRESS) ||
+                        recipe.equals(IndustrialProductType.DEHYDRATOR) ||
+                        recipe.equals(IndustrialProductType.CHARCOAL_KILN) ||
+                        recipe.equals(IndustrialProductType.LOOM) ||
+                        recipe.equals(IndustrialProductType.MAYONNAISE_MACHINE) ||
+                        recipe.equals(IndustrialProductType.OIL_MAKER) ||
+                        recipe.equals(IndustrialProductType.PRESERVES_JAR) ||
+                        recipe.equals(IndustrialProductType.FISH_SMOKER) ||
+                        recipe.equals(IndustrialProductType.FURNACE))
+                        player.addDevice(recipe);
+                    else {
+                        if (newItem != null) {
+                            newItem.setCount(newItem.getCount() + 1);
+                        } else {
+                            player.getBackPack().getItems().add(crafted);
+                        }
                     }
 //                    GameMenu.printResult("You have successfully crafted " + recipe.getName() + "!");
                     player.setEnergy(player.getEnergy() - 2);
@@ -1883,50 +1897,20 @@ public class GameMenuController {
         GameMenu.printResult("Wow! You got " + count + " " + quality + " " + fishType.getDisplayName());
     }
 
-    public static void artisanUse(String artisanName, String itemName) {
-        IndustrialProductType recipe = null;
+    public static String artisanUse(ArtisanGoodType item) {
         Player player = App.getCurrentGame().getCurrentPlayer();
-        for (IndustrialProductType craftingRecipe : App.getCurrentGame().getCurrentPlayer().getCraftingRecipes()) {
-            if (craftingRecipe.getName().equals(artisanName)) recipe = craftingRecipe;
-        }
 
-        if (recipe == null) {
-            GameMenu.printResult("No recipe with given name were found!");
-            return;
-        }
-
-        ArtisanGoodType item = null;
-        for (ArtisanGoodType artisanGoodType : ArtisanGoodType.values()) {
-            if (artisanGoodType.getName().equals(itemName)) item = artisanGoodType;
-        }
-
-        if (item == null) {
-            GameMenu.printResult("No item with given name were found!");
-            return;
-        }
-
-        if (!item.getSource().equals(recipe)) {
-            GameMenu.printResult("You can't make " + itemName + " with " + artisanName);
-            return;
-        }
-
-        if (player.getBackPack().getItems().size() >= player.getBackPack().getType().getCapacity()) {
-            GameMenu.printResult("Your Backpack is full!!");
-            return;
-        }
+        if (player.getBackPack().getItems().size() >= player.getBackPack().getType().getCapacity())
+            return "Your Backpack is full!!";
 
         for (Item ingredient : item.getIngredients()) {
             Item backpackItem = Item.findItemByName(ingredient.getName(), App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
 
-            if (backpackItem == null) {
-                GameMenu.printResult("You don't have any " + ingredient.getName());
-                return;
-            }
+            if (backpackItem == null)
+                return "You don't have any " + ingredient.getName();
             else {
-                if (backpackItem.getCount() < ingredient.getCount()) {
-                    GameMenu.printResult("You don't have enough " + ingredient.getName());
-                    return;
-                }
+                if (backpackItem.getCount() < ingredient.getCount())
+                    return "You don't have enough " + ingredient.getName();
             }
         }
 
@@ -1940,27 +1924,23 @@ public class GameMenuController {
         }
 
         App.getCurrentGame().getCurrentPlayer().addArtisanItemProsses(new ArtisanItemProsses(new ArtisanGood(1, item)));
-        GameMenu.printResult(itemName + " (x1) start making successfully!");
+        return null;
     }
 
-    public static void artisanGet(String name) {
-        Player player = App.getCurrentGame().getCurrentPlayer();
-        ArtisanItemProsses item = null;
-        for (ArtisanItemProsses item2 : player.getArtisanItemsProsses()) {
-            if (item2.getArtisanGood().getName().equals(name)) item = item2;
+    public static void artisanGet(ArtisanItemProsses artisanItemProsses) {
+        App.getCurrentGame().getCurrentPlayer().getArtisanItemsProsses().remove(artisanItemProsses);
+
+        String artisanItemName = artisanItemProsses.getArtisanGood().getName();
+        boolean itemInBackPack = false;
+        for (Item item: App.getCurrentGame().getCurrentPlayer().getBackPack().getItems()) {
+            if (item.getName().equals(artisanItemName)) {
+                item.setCount(item.getCount() + 1);
+                itemInBackPack = true;
+            }
         }
 
-        if (item == null) {
-            GameMenu.printResult("No item with given name found!");
-            return;
-        }
-
-        if (item.getRemainingTime() != 0) {
-            GameMenu.printResult(item.getRemainingTime() + " hours still left to be prossesed");
-            return;
-        }
-        App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(item.getArtisanGood());
-        GameMenu.printResult("You got (x1)" + name);
+        if (!itemInBackPack)
+            App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(artisanItemProsses.getArtisanGood());
     }
 
     public static void showAllProducts() {
