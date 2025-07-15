@@ -3,11 +3,8 @@ package AP.group30.StardewValley.views;
 import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.controllers.DateAndWeatherController;
 import AP.group30.StardewValley.controllers.GameMenuController;
-<<<<<<< HEAD
-=======
 import AP.group30.StardewValley.controllers.NewGameController;
 import AP.group30.StardewValley.models.App;
->>>>>>> d4259f1ee7b60f679070b231a10a21c6dc17f73a
 import AP.group30.StardewValley.models.Buildings.BlacksmithCosts;
 import AP.group30.StardewValley.models.Buildings.Building;
 import AP.group30.StardewValley.models.Buildings.Hut;
@@ -209,16 +206,13 @@ public class GameScreen implements Screen {
         skillScreen.render();
         craftingScreen.render();
         hut.render(batch, camera);
-<<<<<<< HEAD
-        shopScreen.render();
+        shopScreen.render(batch, camera);
         artisanScreen.render();
-=======
         shopScreen.render(batch, camera);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
             System.out.println(entities.size());
         }
->>>>>>> d4259f1ee7b60f679070b231a10a21c6dc17f73a
     }
 
     static int[][] generateGrassMap(Tile[][] tiles, int[][] grassMap, Random random) {
