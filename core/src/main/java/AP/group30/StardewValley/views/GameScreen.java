@@ -20,11 +20,8 @@ import AP.group30.StardewValley.models.Maps.TileTexture;
 import AP.group30.StardewValley.models.Maps.TileTypes;
 import AP.group30.StardewValley.models.Players.Direction;
 import AP.group30.StardewValley.models.Players.Player;
+import AP.group30.StardewValley.views.InGameMenus.*;
 import AP.group30.StardewValley.views.InGameMenus.Hut.HutScreen;
-import AP.group30.StardewValley.views.InGameMenus.CraftingScreen;
-import AP.group30.StardewValley.views.InGameMenus.InventoryScreen;
-import AP.group30.StardewValley.views.InGameMenus.ShopScreen;
-import AP.group30.StardewValley.views.InGameMenus.SkillScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -86,6 +83,7 @@ public class GameScreen implements Screen {
     private SkillScreen skillScreen;
     private HutScreen hut;
     private CraftingScreen craftingScreen;
+    private ArtisanScreen artisanScreen;
 
     private final BitmapFont info = (Main.getMain().skin).getFont("font");
     private ShopScreen shopScreen;
@@ -142,6 +140,7 @@ public class GameScreen implements Screen {
         skillScreen = new SkillScreen(batch, Main.getMain().skin);
         craftingScreen = new CraftingScreen(batch, Main.getMain().skin);
         hut = new HutScreen(batch, Main.getMain().skin);
+        artisanScreen = new ArtisanScreen(batch, Main.getMain().skin);
         info.setColor(Color.BLACK);
 
         shopScreen = new ShopScreen(batch, Main.getMain().skin, BlacksmithCosts.values());
@@ -167,6 +166,7 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) inventoryScreen.toggle();
         if (Gdx.input.isKeyJustPressed(Input.Keys.N)) skillScreen.toggle();
         if (Gdx.input.isKeyJustPressed(Input.Keys.B)) craftingScreen.toggle();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.I)) artisanScreen.toggle();
 
         camera.position.set(x + playerRegion.getRegionWidth() / 2f, y + playerRegion.getRegionHeight() / 2f, 0);
         camera.update();
@@ -212,6 +212,7 @@ public class GameScreen implements Screen {
         craftingScreen.render();
         hut.render(batch, camera);
         shopScreen.render();
+        artisanScreen.render();
     }
 
     private void generateGrassMap() {
@@ -440,7 +441,7 @@ public class GameScreen implements Screen {
         craftingScreen.dispose();
         hut.dispose();
         clock.dispose();
-
+        artisanScreen.dispose();
     }
 
     private void handleInput(float delta) {
