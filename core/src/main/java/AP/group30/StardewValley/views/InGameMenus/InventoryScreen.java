@@ -29,6 +29,9 @@ public class InventoryScreen {
     private boolean visible = false;
     private final Texture backgroundTexture;
     private final Texture backgroundItemTexture;
+    Label money;
+    Label energy;
+    Player player = App.getCurrentGame().getCurrentPlayer();
 
     private final int positionX = 645;
     private final int positionY = 670;
@@ -66,12 +69,11 @@ public class InventoryScreen {
         errorLabel.setPosition(positionX + 350, positionY - 400);
         errorLabel.setVisible(false);
 
-        Player player = App.getCurrentGame().getCurrentPlayer();
         Label info = new Label(player.getUsername() + " Farm", skin);
         info.setPosition(positionX + 250, positionY - 250);
-        Label energy = new Label("Current Energy: " + player.getEnergy(), skin);
+        energy = new Label("Current Energy: " + player.getEnergy(), skin);
         energy.setPosition(positionX + 250, positionY - 300);
-        Label money = new Label("Current Money: " + player.getMoney(), skin);
+        money = new Label("Current Money: " + player.getMoney(), skin);
         money.setPosition(positionX + 250, positionY - 350);
 
         stage.addActor(table);
@@ -226,6 +228,8 @@ public class InventoryScreen {
         for (Image img : itemImages) {
             img.remove();
         }
+        money.setText("Current Money: " + player.getMoney());
+        energy.setText("Current Energy: " + player.getEnergy());
         itemImages.clear();
         borderImage.remove();
         renderItemsInGrid();

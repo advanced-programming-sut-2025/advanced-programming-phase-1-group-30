@@ -1,5 +1,6 @@
 package AP.group30.StardewValley.controllers;
 
+import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.models.Animals.*;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Buildings.*;
@@ -486,7 +487,7 @@ public class GameMenuController {
                             newStone.setCount(newStone.getCount() + 5);
                         }
                         GameScreen.stones.remove(targetTile.getItem());
-                        GameScreen.entities.remove(targetTile.getItem());
+                        RegisterMenu.gameScreen.getEntities().remove(targetTile.getItem());
                         targetTile.setItem(null);
                         GameMenu.printResult("Collected Stone!");
                     }
@@ -539,18 +540,18 @@ public class GameMenuController {
                             newWood.setCount(newWood.getCount() + 12);
                             newSap.setCount(newSap.getCount() + 2);
                         }
-                        if (targetTile.getItem() != null && targetTile.getItem() instanceof ForagingSeed) {
-                            if (((ForagingSeed) targetTile.getItem()).getType().getTreeOrCrop() == 1) {
-                                targetTile.setItem(null);
-                                targetTile.setCrop(null);
-                                targetTile.setReadyToHarvest(false);
-                                targetTile.setPlanted(false);
-                                targetTile.setType(TileTypes.DIRT);
-                            }
-                        }
+//                        if (targetTile.getItem() != null && targetTile.getItem() instanceof ForagingSeed) {
+//                            if (((ForagingSeed) targetTile.getItem()).getType().getTreeOrCrop() == 1) {
+//                                targetTile.setItem(null);
+//                                targetTile.setCrop(null);
+//                                targetTile.setReadyToHarvest(false);
+//                                targetTile.setPlanted(false);
+//                                targetTile.setType(TileTypes.DIRT);
+//                            }
+//                        }
 
                         GameScreen.trees.remove(targetTile.getItem());
-                        GameScreen.entities.remove(targetTile.getItem());
+                        ((GameScreen)Main.getMain().getScreen()).entities.remove(targetTile.getItem());
                         targetTile.setItem(null);
                         GameMenu.printResult("You chop down the tree and collect 12 wood and 2 sap.");
                         player.increaseForaging(10);
@@ -606,7 +607,7 @@ public class GameMenuController {
                         }
 
                         GameScreen.trees.remove(targetTile2.getItem());
-                        GameScreen.entities.remove(targetTile2.getItem());
+                        RegisterMenu.gameScreen.getEntities().remove(targetTile2.getItem());
                         targetTile2.setItem(null);
                         GameMenu.printResult("You chop down the tree and collect 12 wood and 2 sap.");
                         player.increaseForaging(10);
@@ -649,6 +650,7 @@ public class GameMenuController {
                         if (targetTile.getItem() instanceof ForagingSeed) {
                             targetTile.getCrop().setWateredToday(true);
                             GameMenu.printResult("You give the plants a refreshing splash!");
+                            targetTile.setTexture(TileTexture.WATERED.getTexture());
                             player.increaseFarming(5);
                         } else {
                             GameMenu.printResult("You spill some water on the ground.");
@@ -673,6 +675,7 @@ public class GameMenuController {
                         Item newItem = Item.findItemByName(targetTile.getCrop().getName(), player.getBackPack().getItems());
                         if(newItem != null){
                             newItem.setCount(newItem.getCount() + targetTile.getCrop().getCount());
+
                             GameMenu.printResult("You collected " + targetTile.getCrop().getName() + " and added it to your backpack!");
                             targetTile.getCrop().setRegrowthTime(targetTile.getCrop().getRegrowthTime() + 1);
                             player.increaseFarming(5);
@@ -689,6 +692,7 @@ public class GameMenuController {
                         }
                         if (targetTile.getCrop().getType().getRegrowthTime() == targetTile.getCrop().getRegrowthTime()) {
                             targetTile.setReadyToHarvest(false);
+                            RegisterMenu.gameScreen.getEntities().remove(((ForagingSeed)targetTile.getItem()).getCrop());
                             targetTile.setCrop(null);
                             targetTile.setItem(null);
                             targetTile.setGiantCrop(false);
@@ -721,6 +725,7 @@ public class GameMenuController {
                             Tile[] tiles1 = ((GiantCrop) targetTile.getCrop()).getTiles();
                             for (Tile tile : tiles1) {
                                 tile.setReadyToHarvest(false);
+                                RegisterMenu.gameScreen.getEntities().remove(((ForagingSeed)tile.getItem()).getCrop());
                                 tile.setCrop(null);
                                 tile.setItem(null);
                                 tile.setGiantCrop(false);
@@ -729,6 +734,7 @@ public class GameMenuController {
                         } else {
                             if (targetTile.getCrop().getRegrowthTime() >= targetTile.getCrop().getType().getRegrowthTime() - 1) {
                                 targetTile.setReadyToHarvest(false);
+                                RegisterMenu.gameScreen.getEntities().remove(((ForagingSeed)targetTile.getItem()).getCrop());
                                 targetTile.setCrop(null);
                                 targetTile.setItem(null);
                                 targetTile.setGiantCrop(false);
@@ -749,6 +755,7 @@ public class GameMenuController {
                     targetTile.setType(TileTypes.DIRT);
                     GameMenu.printResult("Tile type changed to Dirt!");
                 } else {
+                    System.out.println(targetTile.isReadyToHarvest());
                     GameMenu.printResult("Nothing here to harvest!");
                 }
                 player.setEnergy(player.getEnergy() - 2 * (int) rate);

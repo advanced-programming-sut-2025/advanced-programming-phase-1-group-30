@@ -81,7 +81,8 @@ public class Map {
                      // You need to create the right Tile object based on the type
                      mapInstance.tiles[x][y] = Tile.createTileFromType(x, y, tileType, id);
                      if (!(x >= 55 && x <= 73 && y >= 6 && y <= 34)
-                        && !(x >= 25 && x <= 40 && y >= 6 && y <= 30)) {
+                        && !(x >= 25 && x <= 40 && y >= 6 && y <= 30)
+                        && !(x >= 70 && x <= 77 && y >= 2 && y <= 30)) {
                          Tile.putItemInTile(mapInstance.tiles[x][y]);
                      }
                  }

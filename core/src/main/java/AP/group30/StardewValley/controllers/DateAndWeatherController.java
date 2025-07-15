@@ -8,6 +8,7 @@ import AP.group30.StardewValley.models.Items.Products.ForagingSeed;
 import AP.group30.StardewValley.models.Items.Products.GiantCrop;
 import AP.group30.StardewValley.models.Items.Products.Tree;
 import AP.group30.StardewValley.models.Maps.Tile;
+import AP.group30.StardewValley.models.Maps.TileTexture;
 import AP.group30.StardewValley.models.Maps.TileTypes;
 import AP.group30.StardewValley.models.Maps.Weather;
 import AP.group30.StardewValley.models.Players.Friendship;
@@ -16,6 +17,7 @@ import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.models.TimeAndDate.Season;
 import AP.group30.StardewValley.views.GameMenu;
 import AP.group30.StardewValley.views.GameScreen;
+import AP.group30.StardewValley.views.RegisterMenu;
 
 import java.util.Random;
 
@@ -97,7 +99,7 @@ public class DateAndWeatherController {
                                     if (!tiles[i][j].getCrop().isWateredToday()) {
                                         tiles[i][j].getCrop().setDaysNotWatered(tiles[i][j].getCrop().getDaysNotWatered() + 1);
                                         if (tiles[i][j].getCrop().getDaysNotWatered() >= 2) {
-                                            GameScreen.entities.remove(((ForagingSeed)tiles[i][j].getItem()).getCrop());
+                                            RegisterMenu.gameScreen.getEntities().remove(((ForagingSeed)tiles[i][j].getItem()).getCrop());
                                             tiles[i][j].setCrop(null);
                                             tiles[i][j].setPlanted(false);
                                             tiles[i][j].setReadyToHarvest(false);
@@ -108,6 +110,7 @@ public class DateAndWeatherController {
                                     }
                                     if (tiles[i][j].getCrop().isWateredToday()) {
                                         tiles[i][j].getCrop().setWateredToday(false);
+                                        tiles[i][j].setTexture(TileTexture.PLANTABLE.getTexture());
                                     }
 
                                     if (tiles[i][j].getCrop().getCurrentStage() < tiles[i][j].getCrop().getStages().size() - 1) {
@@ -119,7 +122,7 @@ public class DateAndWeatherController {
                                                 tiles[i][j].getCrop().setDaysPassed(0);
                                             }
                                         }
-                                    } else if (tiles[i][j].getCrop().getCurrentStage() == tiles[i][j].getCrop().getStages().size()) {
+                                    } else if (tiles[i][j].getCrop().getCurrentStage() == tiles[i][j].getCrop().getStages().size() - 1) {
                                         tiles[i][j].setReadyToHarvest(true);
                                     }
                                     if (tiles[i][j].getCrop().getCurrentStage() == tiles[i][j].getCrop().getStages().size()) {
