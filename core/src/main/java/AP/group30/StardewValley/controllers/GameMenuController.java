@@ -1920,24 +1920,20 @@ public class GameMenuController {
         return null;
     }
 
-    public static void artisanGet(String name) {
-        Player player = App.getCurrentGame().getCurrentPlayer();
-        ArtisanItemProsses item = null;
-        for (ArtisanItemProsses item2 : player.getArtisanItemsProsses()) {
-            if (item2.getArtisanGood().getName().equals(name)) item = item2;
+    public static void artisanGet(ArtisanItemProsses artisanItemProsses) {
+        App.getCurrentGame().getCurrentPlayer().getArtisanItemsProsses().remove(artisanItemProsses);
+
+        String artisanItemName = artisanItemProsses.getArtisanGood().getName();
+        boolean itemInBackPack = false;
+        for (Item item: App.getCurrentGame().getCurrentPlayer().getBackPack().getItems()) {
+            if (item.getName().equals(artisanItemName)) {
+                item.setCount(item.getCount() + 1);
+                itemInBackPack = true;
+            }
         }
 
-        if (item == null) {
-            GameMenu.printResult("No item with given name found!");
-            return;
-        }
-
-        if (item.getRemainingTime() != 0) {
-            GameMenu.printResult(item.getRemainingTime() + " hours still left to be prossesed");
-            return;
-        }
-        App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(item.getArtisanGood());
-        GameMenu.printResult("You got (x1)" + name);
+        if (!itemInBackPack)
+            App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(artisanItemProsses.getArtisanGood());
     }
 
     public static void showAllProducts() {

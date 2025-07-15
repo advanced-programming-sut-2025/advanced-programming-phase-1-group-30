@@ -1,17 +1,21 @@
 package AP.group30.StardewValley.views.InGameMenus;
 
 import AP.group30.StardewValley.controllers.GameMenuController;
+import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.ArtisanGoods.ArtisanGoodType;
+import AP.group30.StardewValley.models.Items.ArtisanGoods.ArtisanItemProsses;
 import AP.group30.StardewValley.models.Items.IndustrialProducts.IndustrialProductType;
 import AP.group30.StardewValley.models.Items.Item;
-import AP.group30.StardewValley.models.Items.ItemTexture;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -38,6 +42,7 @@ public class DeviceScreen {
     private Image borderImage;
     private TextButton makeButton;
     private TextButton exitButton;
+    private TextButton claimButton;
 
     private final ArrayList<ArtisanGoodType> items = new ArrayList<>();
     private ArtisanGoodType currentItem;
@@ -47,12 +52,19 @@ public class DeviceScreen {
     private IndustrialProductType device;
     private ArtisanScreen artisanScreen;
 
+    private boolean itemInProses;
+    private ArtisanItemProsses artisanGood;
+    private Texture prosesBar;
+    private final ShapeRenderer shapeRenderer = new ShapeRenderer();
+    private Label itemLabel;
+
     public DeviceScreen(SpriteBatch batch, Skin skin) {
         this.skin = skin;
         this.stage = new Stage(new ScreenViewport(), batch);
 
         backgroundTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryScreen);
         Drawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
+        prosesBar = GameAssetManager.assetManager.get(GameAssetManager.energyBar);
 
         backgroundItemTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryItem);
 
@@ -84,6 +96,17 @@ public class DeviceScreen {
             }
         });
 
+        claimButton = new TextButton("Claim", skin);
+        claimButton.setPosition(table.getX() + table.getWidth() / 2f - claimButton.getWidth() / 2f + 100,
+            table.getY() - claimButton.getHeight());
+        claimButton.setVisible(false);
+        claimButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                claim();
+            }
+        });
+
         exitButton = new TextButton("Exit", skin);
         exitButton.setPosition(table.getX() + table.getWidth() / 2f - exitButton.getWidth() / 2f - 100,
             table.getY() - exitButton.getHeight());
@@ -94,26 +117,52 @@ public class DeviceScreen {
             }
         });
 
+        itemLabel = new Label("", skin);
+        itemLabel.setVisible(false);
+
         stage.addActor(table);
         stage.addActor(infoLabel);
         stage.addActor(errorLabel);
         stage.addActor(makeButton);
         stage.addActor(exitButton);
-
-        createTrashCanImage();
+        stage.addActor(claimButton);
+        stage.addActor(itemLabel);
 
         renderItemsInGrid();
+    }
+
+    private void claim() {
+        GameMenuController.artisanGet(artisanGood);
+        show(device, artisanScreen);
     }
 
     public void show(IndustrialProductType type, ArtisanScreen screen) {
         device = type;
         artisanScreen = screen;
+        itemInProses = false;
+
+        currentItem = null;
+        artisanGood = null;
+        itemLabel.setVisible(false);
+        claimButton.setVisible(false);
+        makeButton.setVisible(false);
 
         infoLabel.setText("Ingredients:");
+        infoLabel.setVisible(true);
         errorLabel.setText("");
         errorLabel.setVisible(false);
 
         findArtisanGoods(type);
+        for (ArtisanItemProsses artisanItemProsses : App.getCurrentGame().getCurrentPlayer().getArtisanItemsProsses()) {
+            if (items.contains(artisanItemProsses.getArtisanGood().getType())) {
+                itemInProses = true;
+                artisanGood = artisanItemProsses;
+                break;
+            }
+        }
+
+        if (itemInProses) infoLabel.setVisible(false);
+
         refresh();
 
         visible = true;
@@ -131,6 +180,8 @@ public class DeviceScreen {
         if (visible) {
             stage.act();
             stage.draw();
+
+            if (itemInProses) renderProsesBar();
         }
     }
 
@@ -175,7 +226,7 @@ public class DeviceScreen {
         itemImage.setSize(45, 45);
         itemImage.setPosition((float) x, y);
 
-        if (item == currentItem) {
+        if (!itemInProses && item == currentItem) {
             Image border = createBorderImage(50, 52, Color.BLUE);
             border.setPosition((float) (x - 5), y - 5);
             borderImage = border;
@@ -199,46 +250,29 @@ public class DeviceScreen {
 
         itemImage.addListener(tooltip);
 
-        itemImage.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float xOffset, float yOffset) {
-                if (currentItem != item) {
-                    currentItem = item;
-                    infoLabel.setText("Ingredients:\n" + ingredients(item));
-                } else {
-                    currentItem = null;
-                    infoLabel.setText("Ingredients:");
+        if (!itemInProses) {
+            itemImage.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float xOffset, float yOffset) {
+                    if (currentItem != item) {
+                        currentItem = item;
+                        infoLabel.setText("Ingredients:\n" + ingredients(item));
+                        if (ingredients(item).isEmpty()) infoLabel.setText("Ingredients:\nNOTHING!");
+                    } else {
+                        currentItem = null;
+                        infoLabel.setText("Ingredients:");
+                    }
+                    makeButton.setVisible(currentItem != null);
+
+                    errorLabel.setText("");
+                    errorLabel.setVisible(false);
+
+                    refresh();
                 }
-                makeButton.setVisible(currentItem != null);
-
-                errorLabel.setText("");
-                errorLabel.setVisible(false);
-
-                refresh();
-            }
-        });
+            });
+        }
 
         itemImages.add(itemImage);
-    }
-
-    private Drawable createBackground(Color color, int width, int height) {
-        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
-        pixmap.setColor(color);
-        pixmap.fill();
-
-        Texture texture = new Texture(pixmap);
-        pixmap.dispose();
-
-        return new TextureRegionDrawable(new TextureRegion(texture));
-    }
-
-    private void createTrashCanImage() {
-        Texture trashTexture = ItemTexture.TRASH_CAN.getTexture();
-        Image trashCanImage = new Image(new TextureRegionDrawable(new TextureRegion(trashTexture)));
-        trashCanImage.setSize(64, 64);
-        trashCanImage.setPosition(positionX + 570, positionY - 370);
-
-        stage.addActor(trashCanImage);
     }
 
     private void refresh() {
@@ -298,10 +332,7 @@ public class DeviceScreen {
             errorLabel.setText(result);
             errorLabel.setVisible(true);
         } else {
-            errorLabel.setText("OK");
-            //errorLabel.setVisible(false);
-            currentItem = null;
-            makeButton.setVisible(false);
+            show(device, artisanScreen);
         }
 
         refresh();
@@ -320,5 +351,38 @@ public class DeviceScreen {
         }
 
         return ingredientsText.toString();
+    }
+
+    private void renderProsesBar() {
+        float maxTime = artisanGood.getArtisanGood().getType().getProcessingTime();
+        float currentTime = maxTime - artisanGood.getRemainingTime();
+        float timeRatio = MathUtils.clamp(currentTime / maxTime, 0f, 1f);
+
+        float barWidth = 300f;
+        float barHeight = 25f;
+        float barX = positionX + 300;
+        float barY = positionY - 300;
+
+        itemLabel.setVisible(true);
+        itemLabel.setText("Item In Proses: " + artisanGood.getArtisanGood().getName());
+        itemLabel.setPosition(barX, barY + 45);
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+
+        shapeRenderer.setProjectionMatrix(stage.getCamera().combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+        shapeRenderer.setColor(Color.DARK_GRAY);
+        shapeRenderer.rect(barX, barY, barWidth, barHeight);
+
+        shapeRenderer.setColor(Color.GREEN);
+        shapeRenderer.rect(barX, barY, barWidth * timeRatio, barHeight);
+
+        shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+
+        if (timeRatio == 1) {
+            claimButton.setVisible(true);
+            itemLabel.setText(artisanGood.getArtisanGood().getName() + " is ready!");
+        }
     }
 }
