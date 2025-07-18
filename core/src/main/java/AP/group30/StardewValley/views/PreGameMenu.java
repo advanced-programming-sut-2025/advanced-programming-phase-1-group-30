@@ -244,7 +244,9 @@ public class PreGameMenu implements Screen {
                     Integer.parseInt(mapPlayer2Box.getSelected()), Integer.parseInt(mapPlayer3Box.getSelected()),
                     Integer.parseInt(mapPlayer4Box.getSelected()));
                 if (result != null) {
-                    Main.getMain().setScreen(new GameScreen(result));
+                    RegisterMenu.gameScreen = new GameScreen(result);
+                    RegisterMenu.cityScreen = new CityScreen(result);
+                    Main.getMain().setScreen(RegisterMenu.gameScreen);
                 }
             }
         });

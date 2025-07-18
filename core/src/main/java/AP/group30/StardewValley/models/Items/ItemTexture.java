@@ -71,14 +71,8 @@ public enum ItemTexture {
     SEAFOAM_PUDDING(GameAssetManager.assetManager.get(GameAssetManager.seafoamPudding)),
     MINERS_TREAT(GameAssetManager.assetManager.get(GameAssetManager.minersTreat)),
 
-    // *** Buildings ***
-    CARPENTER(GameAssetManager.assetManager.get(GameAssetManager.carpenter)),
-    RANCH(GameAssetManager.assetManager.get(GameAssetManager.ranch)),
-    SALOON(GameAssetManager.assetManager.get(GameAssetManager.saloon)),
-    BLACKSMITH(GameAssetManager.assetManager.get(GameAssetManager.blacksmith)),
-    PIERRES(GameAssetManager.assetManager.get(GameAssetManager.pierres)),
-    JOJA(GameAssetManager.assetManager.get(GameAssetManager.jojamart)),
-    FISH_SHOP(GameAssetManager.assetManager.get(GameAssetManager.fishShop)),
+    DELUXE_RETAINING_SOIL(GameAssetManager.assetManager.get(GameAssetManager.deluxeRetainingSoil)),
+    SPEED_GRO(GameAssetManager.assetManager.get(GameAssetManager.speedGro)),
 
     // *** Crops and Seeds ***
     CARROT(GameAssetManager.assetManager.get(GameAssetManager.carrot)),
@@ -86,15 +80,25 @@ public enum ItemTexture {
     CARROT_STAGE_1(GameAssetManager.assetManager.get(GameAssetManager.carrotStage1)),
     CARROT_STAGE_2(GameAssetManager.assetManager.get(GameAssetManager.carrotStage2)),
     CARROT_STAGE_3(GameAssetManager.assetManager.get(GameAssetManager.carrotStage3)),
-    CARROT_STAGE_4(GameAssetManager.assetManager.get(GameAssetManager.carrotStage4));
+    CARROT_STAGE_4(GameAssetManager.assetManager.get(GameAssetManager.carrotStage4)),
 
-    private final Texture TEXTURE;
+    PUMPKIN(GameAssetManager.assetManager.get(GameAssetManager.pumpkin)),
+    PUMPKIN_SEEDS(GameAssetManager.assetManager.get(GameAssetManager.pumpkinSeeds)),
+    PUMPKIN_STAGE_1(GameAssetManager.assetManager.get(GameAssetManager.pumpkinStage1)),
+    PUMPKIN_STAGE_2(GameAssetManager.assetManager.get(GameAssetManager.pumpkinStage2)),
+    PUMPKIN_STAGE_3(GameAssetManager.assetManager.get(GameAssetManager.pumpkinStage3)),
+    PUMPKIN_STAGE_4(GameAssetManager.assetManager.get(GameAssetManager.pumpkinStage4)),
+    PUMPKIN_STAGE_5(GameAssetManager.assetManager.get(GameAssetManager.pumpkinStage5)),
+    PUMPKIN_STAGE_6(GameAssetManager.assetManager.get(GameAssetManager.pumpkinStage6)),
+    GIANT_PUMPKIN(GameAssetManager.assetManager.get(GameAssetManager.giantPumpkin));
+
+    private final Texture texture;
 
     ItemTexture(Texture texture) {
-        this.TEXTURE = texture;
+        this.texture = texture;
     }
 
     public Texture getTexture() {
-        return TEXTURE;
+        return texture;
     }
 }

@@ -33,8 +33,10 @@ import AP.group30.StardewValley.views.GameMenu;
 import AP.group30.StardewValley.views.GameScreen;
 import AP.group30.StardewValley.views.RegisterMenu;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 import java.util.*;
+import java.util.List;
 
 public class GameMenuController {
     public static void greenHouseBuild() {
@@ -243,75 +245,84 @@ public class GameMenuController {
             }
         }
     }
-    public static void upgradeTools(String name) {
+
+    public static boolean upgradeTools(String name, Label errorLabel) {
         Player player = App.getCurrentGame().getCurrentPlayer();
         if(player.isInCity()){
             Map citymap = App.getMaps().get(4);
-            if(citymap.getTiles()[player.getCityX()][player.getCityY()].getType().equals(TileTypes.BLACKSMITH)){
-                Item item = Item.findItemByName(name,player.getBackPack().getItems());
-                if(item != null){
-                    if(item instanceof Tool) {
-                        int price;
-                        String need;
-                        if (item.getName().contains("normal")) {
-                            price = 2000;
-                            need = "copper bar";
-                        } else if (item.getName().contains("copper")) {
-                            price = 5000;
-                            need = "iron bar";
-                        } else if (item.getName().contains("iron")) {
-                            price = 10000;
-                            need = "gold bar";
-                        } else if (item.getName().contains("gold")) {
-                            price = 25000;
-                            need = "iridium bar";
-                        } else {
-                            GameMenu.printResult("Tool is not upgradable!");
-                            return;
-                        }
-                        Item found = Item.findItemByName(need, player.getBackPack().getItems());
-                        if(found == null){
-                            GameMenu.printResult("You don't have the ingredient " + need + " in your backpack.");
-                            return;
-                        } else {
-                            if(found.getCount() >= 5){
-                                if(player.getMoney() >= price){
-                                    player.setMoney(player.getMoney() - price);
-                                    if(found.getCount() == 5){
-                                        player.getBackPack().removeItem(found);
-                                    } else {
-                                        found.setCount(found.getCount() - 5);
-                                    }
-
-                                    if(item instanceof Axe){
-                                        ((Axe) item).upgrade();
-                                    } else if(item instanceof Pickaxe){
-                                        ((Pickaxe) item).upgrade();
-                                    } else if(item instanceof Hoe){
-                                        ((Hoe) item).upgrade();
-                                    } else if(item instanceof Basket){
-                                        ((Basket) item).upgrade();
-                                    }
-                                    GameMenu.printResult("Your tool has been upgraded successfully!");
-                                } else {
-                                    GameMenu.printResult("You need " + price + " gold to upgrade!");
-                                }
-                            } else {
-                                GameMenu.printResult("You have need 5 " + found.getName() + " in your backpack.");
-                            }
-                            return;
-                        }
+            Item item = Item.findItemByName(name,player.getBackPack().getItems());
+            if(item != null){
+                if(item instanceof Tool) {
+                    int price;
+                    String need;
+                    if (item.getName().contains("normal")) {
+                        price = 2000;
+                        need = "copper bar";
+                    } else if (item.getName().contains("copper")) {
+                        price = 5000;
+                        need = "iron bar";
+                    } else if (item.getName().contains("iron")) {
+                        price = 10000;
+                        need = "gold bar";
+                    } else if (item.getName().contains("gold")) {
+                        price = 25000;
+                        need = "iridium bar";
                     } else {
-                        GameMenu.printResult("item has to be a tool.");
-                        return;
+                        GameMenu.printResult("Tool is not upgradable!");
+                        errorLabel.setText("Tool is not upgradable!");
+                        return false;
+                    }
+                    Item found = Item.findItemByName(need, player.getBackPack().getItems());
+                    if(found == null){
+                        GameMenu.printResult("You don't have the ingredient " + need + " in your backpack.");
+                        errorLabel.setText("You don't have the ingredient " + need + " in your backpack.");
+                        return false;
+                    } else {
+                        if(found.getCount() >= 5){
+                            if(player.getMoney() >= price){
+                                player.setMoney(player.getMoney() - price);
+                                if(found.getCount() == 5){
+                                    player.getBackPack().removeItem(found);
+                                } else {
+                                    found.setCount(found.getCount() - 5);
+                                }
+
+                                if(item instanceof Axe){
+                                    player.getBackPack().getItems().remove(item);
+                                    player.getBackPack().addItem(new Axe(1, Axe.getNextAxeType(((Axe) item).getType())));
+                                } else if(item instanceof Pickaxe){
+                                    player.getBackPack().getItems().remove(item);
+                                    player.getBackPack().addItem(new Pickaxe(1, Pickaxe.getNextPickaxeType(((Pickaxe) item).getType())));
+                                } else if(item instanceof Hoe){
+                                    player.getBackPack().getItems().remove(item);
+                                    player.getBackPack().addItem(new Hoe(1, Hoe.getNextHoeType(((Hoe) item).getType())));
+                                } else if(item instanceof Basket){
+                                    player.getBackPack().getItems().remove(item);
+                                    player.getBackPack().addItem(new Basket(1, Basket.getNextBasketType(((Basket) item).getType())));
+                                }
+                                GameMenu.printResult("Your tool has been upgraded successfully!");
+                                return true;
+                            } else {
+                                GameMenu.printResult("You need " + price + " gold to upgrade!");
+                                errorLabel.setText("You need " + price + " gold to upgrade!");
+                            }
+                        } else {
+                            GameMenu.printResult("You need 5 " + found.getName() + " in your backpack.");
+                        }
+                        return false;
                     }
                 } else {
-                    GameMenu.printResult("You don't have " + item.getName() + " in your backpack.");
-                    return;
+                    GameMenu.printResult("item has to be a tool.");
+                    errorLabel.setText("item has to be a tool");
+                    return false;
                 }
+            } else {
+                GameMenu.printResult("You don't have " + item.getName() + " in your backpack.");
+                errorLabel.setText("You don't have " + item.getName() + " in your backpack.");
+                return false;
             }
         }
-        GameMenu.printResult("You have to be inside blacksmith to upgrade tools.");
+        return false;
     }
     public static void toolUse(Direction direction, int playerX, int playerY, SpriteBatch batch) {
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -405,7 +416,7 @@ public class GameMenuController {
                     } else {
                         GameMenu.printResult("Not possible.");
                     }
-                    player.setEnergy(player.getEnergy() - (int) rate * energyNeeded);
+                    player.setEnergy((float)(player.getEnergy() - rate * energyNeeded));
                 } else {
                     GameMenu.printResult("Not possible.");
                 }
@@ -692,7 +703,9 @@ public class GameMenuController {
                         }
                         if (targetTile.getCrop().getType().getRegrowthTime() == targetTile.getCrop().getRegrowthTime()) {
                             targetTile.setReadyToHarvest(false);
-                            RegisterMenu.gameScreen.getEntities().remove(((ForagingSeed)targetTile.getItem()).getCrop());
+                            RegisterMenu.gameScreen.getEntities().remove(targetTile.getCrop());
+                            targetTile.setTexture(TileTexture.PLANTABLE.getTexture());
+                            targetTile.setType(TileTypes.PLANTABLE);
                             targetTile.setCrop(null);
                             targetTile.setItem(null);
                             targetTile.setGiantCrop(false);
@@ -725,7 +738,7 @@ public class GameMenuController {
                             Tile[] tiles1 = ((GiantCrop) targetTile.getCrop()).getTiles();
                             for (Tile tile : tiles1) {
                                 tile.setReadyToHarvest(false);
-                                RegisterMenu.gameScreen.getEntities().remove(((ForagingSeed)tile.getItem()).getCrop());
+                                RegisterMenu.gameScreen.getEntities().remove(tile.getCrop());
                                 tile.setCrop(null);
                                 tile.setItem(null);
                                 tile.setGiantCrop(false);
@@ -734,7 +747,7 @@ public class GameMenuController {
                         } else {
                             if (targetTile.getCrop().getRegrowthTime() >= targetTile.getCrop().getType().getRegrowthTime() - 1) {
                                 targetTile.setReadyToHarvest(false);
-                                RegisterMenu.gameScreen.getEntities().remove(((ForagingSeed)targetTile.getItem()).getCrop());
+                                RegisterMenu.gameScreen.getEntities().remove(targetTile.getCrop());
                                 targetTile.setCrop(null);
                                 targetTile.setItem(null);
                                 targetTile.setGiantCrop(false);
@@ -755,7 +768,7 @@ public class GameMenuController {
                     targetTile.setType(TileTypes.DIRT);
                     GameMenu.printResult("Tile type changed to Dirt!");
                 } else {
-                    System.out.println(targetTile.isReadyToHarvest());
+                    System.out.println(targetTile.getCrop().getName());
                     GameMenu.printResult("Nothing here to harvest!");
                 }
                 player.setEnergy(player.getEnergy() - 2 * (int) rate);
@@ -864,7 +877,7 @@ public class GameMenuController {
             ForagingSeedType chosenType = seasonalSeeds.get(rand.nextInt(seasonalSeeds.size()));
 
             // Create a ForagingSeed instance from the type
-            seed = new ForagingSeed(1, chosenType);  // assuming such a constructor exists
+            seed = new ForagingSeed(1, chosenType);
         } else {
             seed = (ForagingSeed) Item.findItemByName(seed1, player.getBackPack().getItems());
         }
@@ -887,10 +900,12 @@ public class GameMenuController {
                     player.getBackPack().getItems().remove(item);
                 }
                 tiles[newX][newY].setReadyToHarvest(false);
-                tiles[newX][newY].setCrop(seed.getCrop());
-
-                GameMenu.printResult("Planted " + seed.getName() + " at (" + newX + ", " + newY + ")");
                 CropType plantedCrop = seed.getCrop().getType();
+                Crop crop = new Crop(1, plantedCrop);
+                crop.setPosition(targetTile.getX(), 60 - targetTile.getY());
+                tiles[newX][newY].setCrop(crop);
+                GameMenu.printResult("Planted " + seed.getName() + " at (" + newX + ", " + newY + ")");
+                RegisterMenu.gameScreen.entities.add(tiles[newX][newY].getCrop());
 
                 int[][] squareOffsets = {
                         {0, 0},       // current tile is top-left of square
@@ -922,6 +937,8 @@ public class GameMenuController {
                                     t4.getCrop().getType().equals(plantedCrop)) {
                                 Tile[] tiles1 = {t1, t2, t3, t4};
                                 GiantCrop giantCrop = new GiantCrop(10, t1.getCrop().getType(), tiles1);
+                                giantCrop.setPosition(baseX, 59 - baseY);
+                                RegisterMenu.gameScreen.entities.add(giantCrop);
                                 for (Tile tile : tiles1) {
                                     if (giantCrop.getCurrentStage() < tile.getCrop().getCurrentStage()) {
                                         giantCrop.setCurrentStage(tile.getCrop().getCurrentStage());
@@ -929,6 +946,7 @@ public class GameMenuController {
                                             giantCrop.setDaysPassed(tile.getCrop().getDaysPassed());
                                         }
                                     }
+                                    RegisterMenu.gameScreen.getEntities().remove(tile.getCrop());
                                     tile.setGiantCrops(tiles1);
                                     tile.setGiantCrop(true);
                                     tile.setCrop(giantCrop);
@@ -948,7 +966,6 @@ public class GameMenuController {
             GameMenu.printResult("No item with this name found in your backpack!");
             return null;
         }
-        seed.getCrop().setPosition(targetTile.getX(), 60 - targetTile.getY());
         return seed.getCrop();
     }
 
@@ -983,16 +1000,18 @@ public class GameMenuController {
         }
     }
 
-    public static void fertilize(String fetilizer, String direction) {
+    public static void fertilize(String fetilizer, Direction direction) {
         Item item = Item.findItemByName(fetilizer, App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
         if (item == null) {
             GameMenu.printResult("No item with this name found in your backpack!");
             return;
         }
+
         Player player = App.getCurrentGame().getCurrentPlayer();
         Tile[][] tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
-        int x = player.getX();
-        int y = player.getY();
+        int x = player.getX() / 32;
+        int y = player.getY() / 32;
+        y = 60 - y;
         int dx = 0, dy = 0;
 
         if(player.isInCity()){
@@ -1001,14 +1020,14 @@ public class GameMenuController {
         }
 
         switch (direction) {
-            case "w": dy = -1; break;      // up
-            case "s": dy = 1; break;       // down
-            case "a": dx = -1; break;      // left
-            case "d": dx = 1; break;       // right
-            case "Q": dx = -1; dy = -1; break; // up-left
-            case "E": dx = 1; dy = -1; break;  // up-right
-            case "Z": dx = -1; dy = 1; break;  // down-left
-            case "C": dx = 1; dy = 1; break;   // down-right
+            case NORTH: dy = -1; break;      // up
+            case SOUTH: dy = 1; break;       // down
+            case WEST: dx = -1; break;      // left
+            case EAST: dx = 1; break;       // right
+//            case "Q": dx = -1; dy = -1; break; // up-left
+//            case "E": dx = 1; dy = -1; break;  // up-right
+//            case "Z": dx = -1; dy = 1; break;  // down-left
+//            case "C": dx = 1; dy = 1; break;   // down-right
             default:
                 GameMenu.printResult("Invalid direction!");
                 return;
@@ -1022,17 +1041,23 @@ public class GameMenuController {
         }
         if (tiles[newX][newY].isPlanted()) {
             if (fetilizer.equals("speed-gro")) {
-                if (tiles[newX][newY].getCrop().getCurrentStage() == 4) {
+                if (tiles[newX][newY].getCrop().getCurrentStage() == tiles[newX][newY].getCrop().getStages().size() - 1) {
                     tiles[newX][newY].setReadyToHarvest(true);
                 } else {
                     tiles[newX][newY].getCrop().setCurrentStage(tiles[newX][newY].getCrop().getCurrentStage() + 1);
                 }
             } else if (fetilizer.equals("deluxe retaining soil")) {
                 tiles[newX][newY].getCrop().setNotNeedWaterAnymore(true);
+
             }
             ForagingSeed seed = (ForagingSeed) tiles[newX][newY].getItem();
             seed.setFertilized(true);
             GameMenu.printResult("Fertilizer applied!");
+            item.setCount(item.getCount() - 1);
+            if (item.getCount() == 0) {
+                player.getBackPack().getItems().remove(item);
+            }
+            System.out.println();
         } else {
             GameMenu.printResult("There is no PLANT at (" + newX + ", " + newY + ")!!");
         }
@@ -1378,10 +1403,10 @@ public class GameMenuController {
     }
     public static void showCookingRecipe(){}
 
-    public static void build(String name, String X, String Y){
+    public static boolean build(String name, float X, float Y){
         // TODO check the carpenter's shop for this shit
-        int x = Integer.parseInt(X);
-        int y = Integer.parseInt(Y);
+        int x = (int)(X / 32);
+        int y = (int)(60 - Y / 32);
         int barnORcoop = -1; // 1 for barn and 0 for coop
         Player player = App.getCurrentGame().getCurrentPlayer();
         Tile[][] tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
@@ -1390,10 +1415,14 @@ public class GameMenuController {
         try {
             CarpenterCosts item = CarpenterCosts.valueOf(normalized);
             for (int i = x; i < item.getWidth() + x; i++) {
-                for (int j = y - item.getLength(); j < y; j++) {
+                for (int j = y - item.getHeight(); j < y; j++) {
                     if (tiles[i][j].getItem() != null) {
                         GameMenu.printResult("Not enough space!");
-                        return;
+                        return false;
+                    }
+                    if (!(tiles[i][j].getType().equals(TileTypes.DIRT)) && !(tiles[i][j].getType().equals(TileTypes.GRASS))){
+                        GameMenu.printResult("Invalid Coordinates! The tile type is " + tiles[i][j].getType());
+                        return false;
                     }
                 }
             }
@@ -1401,46 +1430,48 @@ public class GameMenuController {
             Item item2 = Item.findItemByName("stone", player.getBackPack().getItems());
             if (item1 == null || item2 == null) {
                 GameMenu.printResult("You don't have enough resources!");
-                return;
+                return false;
             }
             if (item.getPrice() > player.getMoney()) {
                 GameMenu.printResult("You don't have enough money!");
-                return;
+                return false;
             } else if (item.getWood() > item1.getCount()) {
                 GameMenu.printResult("You don't have enough wood!");
-                return;
+                return false;
             } else if (item.getStone() > item2.getCount()) {
                 GameMenu.printResult("You don't have enough stone!");
-                return;
+                return false;
             }
+            Barn barn = null;
+            Coop coop = null;
             switch (item) {
                 case BARN -> {
-                    Barn barn = new Barn(4, 7, x, y, 4, "regular");
+                    barn = new Barn(4, 7, x, y, 4, "regular");
                     player.getMap().getBarns().add(barn);
                     barnORcoop = 1;
                 }
                 case BIG_BARN -> {
-                    Barn barn = new Barn(4, 7, x, y, 8, "big");
+                    barn = new Barn(4, 7, x, y, 8, "big");
                     player.getMap().getBarns().add(barn);
                     barnORcoop = 1;
                 }
                 case DELUXE_BARN -> {
-                    Barn barn = new Barn(4, 7, x, y, 12, "deluxe");
+                    barn = new Barn(4, 7, x, y, 12, "deluxe");
                     player.getMap().getBarns().add(barn);
                     barnORcoop = 1;
                 }
                 case COOP -> {
-                    Coop coop = new Coop(3, 6, x, y, 4, "regular");
+                    coop = new Coop(3, 6, x, y, 4, "regular");
                     player.getMap().getCoops().add(coop);
                     barnORcoop = 0;
                 }
                 case BIG_COOP -> {
-                    Coop coop = new Coop(3, 6, x, y, 8, "big");
+                    coop = new Coop(3, 6, x, y, 8, "big");
                     player.getMap().getCoops().add(coop);
                     barnORcoop = 0;
                 }
                 case DELUXE_COOP -> {
-                    Coop coop = new Coop(3, 6, x, y, 12, "regular");
+                    coop = new Coop(3, 6, x, y, 12, "deluxe");
                     player.getMap().getCoops().add(coop);
                     barnORcoop = 0;
                 }
@@ -1449,13 +1480,18 @@ public class GameMenuController {
             item2.setCount(item2.getCount() - item.getStone());
             player.setMoney(player.getMoney() - item.getPrice());
             for (int i = x; i < x + item.getWidth(); i++) {
-                for (int j = y - item.getLength(); j < y; j++) {
+                for (int j = (60 - y) - item.getHeight(); j < (60 - y); j++) {
                     if (barnORcoop == 1) {
                         tiles[i][j].setType(TileTypes.BARN);
                     } else if (barnORcoop == 0) {
                         tiles[i][j].setType(TileTypes.COOP);
                     }
                 }
+            }
+            if (coop == null) {
+                RegisterMenu.gameScreen.getEntities().add(barn);
+            } else {
+                RegisterMenu.gameScreen.getEntities().add(coop);
             }
             if (barnORcoop == 0) {
                 GameMenu.printResult("Coop bought successfully!");
@@ -1465,6 +1501,7 @@ public class GameMenuController {
         } catch (IllegalArgumentException e) {
             System.out.println("Invalid item: " + name);
         }
+        return true;
     }
 //    public int animalX(ArrayList<Coop> coops) {
 //        int x = 0;

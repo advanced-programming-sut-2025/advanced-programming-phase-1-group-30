@@ -13,10 +13,15 @@ public class Coop extends Building {
     private ArrayList<Animal> animals = new ArrayList<>();
 
     public Coop(int height, int width, int startX, int startY, int capacity, String type) {
-        super(height, width, startX, startY, 9, 21, TileTypes.COOP, ItemTexture.WOOD.getTexture());
+        super(height, width, startX, startY, 9, 21, TileTypes.COOP, BuildingTexture.COOP.getTexture());
         this.type = type;
         this.capacity = capacity;
         this.currentNumberOfAnimals = 0;
+        switch (type) {
+            case "regular": this.texture = BuildingTexture.COOP.getTexture(); break;
+            case "big": this.texture = BuildingTexture.BIG_COOP.getTexture(); break;
+            case "deluxe": this.texture = BuildingTexture.DELUXE_COOP.getTexture(); break;
+        }
     }
     public int getCapacity() {
         return capacity;
