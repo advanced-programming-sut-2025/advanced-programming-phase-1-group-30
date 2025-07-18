@@ -2846,47 +2846,41 @@ public class GameMenuController {
         }
         GameMenu.printResult("Wrong name!");
     }
-    public static void giftNPC(String name, String item) {
+    public static String giftNPC(String name, String item) {
         Player player = App.getCurrentGame().getCurrentPlayer();
         for(NPC npc : App.getCurrentGame().getNPCs()){
             if(npc.getName().equals(name)){
-                if(npc.getTile().getX() - 1 <= player.getCityX() && player.getCityX() <= npc.getTile().getX() + 1 &&
-                        npc.getTile().getX() - 1 <= player.getCityY() && player.getCityY() <= npc.getTile().getY() + 1){
-                    Item gift = Item.findItemByName(item, player.getBackPack().getItems());
-                    if(gift == null){
-                        GameMenu.printResult("You don't have this gift!");
-                    } else {
-                        if(gift.getCount() == 1){
-                            player.getBackPack().removeItem(gift);
-                        } else {
-                            gift.setCount(gift.getCount() - 1);
-                        }
-                        int liked = 1;
-                        for(String favorite : npc.getDetail().favoriteGiftsName){
-                            if (favorite.equals(gift.getName())) {
-                                liked = 4;
-                                break;
-                            }
-                        }
-                        player.getFriendshipsNPC().put(npc,player.getFriendshipsNPC().get(npc) + 50 * liked);
-                        if(liked == 1){
-                            if(player.getFriendshipsNPC().get(npc) >= 200 && player.getFriendshipsNPC().get(npc) < 250 && !npc.isQuest2()){
-                                player.getActivatedQuestNPC().get(npc).add(2);
-                            }
-                        } else {
-                            if(player.getFriendshipsNPC().get(npc) >= 200 && player.getFriendshipsNPC().get(npc) < 400 && !npc.isQuest2()){
-                                player.getActivatedQuestNPC().get(npc).add(2);
-                            }
-                        }
-                        GameMenu.printResult("You gave " + item + " to " + npc.getName());
-                    }
+                Item gift = Item.findItemByName(item, player.getBackPack().getItems());
+                if(gift == null){
+                    return "You don't have this gift!";
                 } else {
-                    GameMenu.printResult("You are too far!");
+                    if(gift.getCount() == 1){
+                        player.getBackPack().removeItem(gift);
+                    } else {
+                        gift.setCount(gift.getCount() - 1);
+                    }
+                    int liked = 1;
+                    for(String favorite : npc.getDetail().favoriteGiftsName){
+                        if (favorite.equals(gift.getName())) {
+                            liked = 4;
+                            break;
+                        }
+                    }
+                    player.getFriendshipsNPC().put(npc,player.getFriendshipsNPC().get(npc) + 50 * liked);
+                    if(liked == 1){
+                        if(player.getFriendshipsNPC().get(npc) >= 200 && player.getFriendshipsNPC().get(npc) < 250 && !npc.isQuest2()){
+                            player.getActivatedQuestNPC().get(npc).add(2);
+                        }
+                    } else {
+                        if(player.getFriendshipsNPC().get(npc) >= 200 && player.getFriendshipsNPC().get(npc) < 400 && !npc.isQuest2()){
+                            player.getActivatedQuestNPC().get(npc).add(2);
+                        }
+                    }
+                    return "You gave " + item + " to " + npc.getName();
                 }
-                return;
             }
         }
-        GameMenu.printResult("Wrong name!");
+        return "Wrong name!";
     }
     public static void friendshipNPCList() {
         for(NPC npc : App.getCurrentGame().getNPCs()){
@@ -3021,6 +3015,83 @@ public class GameMenuController {
             GameMenu.printResult(message.toString());
         }
     }
+
+    public static String questInfo(NPC npc, Integer active) {
+            StringBuilder message = new StringBuilder();
+                if(npc.getName().equals("Sebastian")){
+                    if (active.equals(1)) {
+                        message.append("50 iron ore");
+                        message.append("    ");
+                        message.append("2 diamond");
+                    } else if (active.equals(2)) {
+                        message.append("pumpkin pie");
+                        message.append("    ");
+                        message.append("5000 coin");
+                    } else if (active.equals(3)) {
+                        message.append("150 stones");
+                        message.append("    ");
+                        message.append("50 quartz");
+                    }
+                } else if(npc.getName().equals("Abigail")){
+                    if (active.equals(1)) {
+                        message.append("1 gold bar");
+                        message.append("    ");
+                        message.append("1 friendship level");
+                    } else if (active.equals(2)) {
+                        message.append("1 pumpkin");
+                        message.append("    ");
+                        message.append("500 coin");
+                    } else if (active.equals(3)) {
+                        message.append("50 wheat");
+                        message.append("    ");
+                        message.append("1 Iridium Sprinkler");
+                    }
+                } else if (npc.getName().equals("Harvey")){
+                    if (active.equals(1)) {
+                        message.append("12 of any plant");
+                        message.append("    ");
+                        message.append("750 coin");
+                    } else if (active.equals(2)) {
+                        message.append("1 salmon");
+                        message.append("    ");
+                        message.append("1 friendship level");
+                    } else if (active.equals(3)) {
+                        message.append("1 bottle of wine");
+                        message.append("    ");
+                        message.append("5 salad");
+                    }
+                } else if (npc.getName().equals("Leah")){
+                    if (active.equals(1)) {
+                        message.append("10 wood");
+                        message.append("    ");
+                        message.append("500 coin");
+                    } else if (active.equals(2)) {
+                        message.append("1 salmon");
+                        message.append("    ");
+                        message.append("1 cooking recipe (dinner salmon)");
+                    } else if (active.equals(3)) {
+                        message.append("200 wood");
+                        message.append("    ");
+                        message.append("3 deluxe scarecrows");
+                    }
+                } else if (npc.getName().equals("Robin")){
+                    if (active.equals(1)) {
+                        message.append("80 wood");
+                        message.append("    ");
+                        message.append("1000 coin");
+                    } else if (active.equals(2)) {
+                        message.append("10 iron bar");
+                        message.append("    ");
+                        message.append("3 beehives");
+                    } else if (active.equals(3)) {
+                        message.append("1000 wood");
+                        message.append("    ");
+                        message.append("25000 coin");
+                    }
+                }
+                return (message.toString());
+            }
+
     public static void questFinish(String indexString) {
         int index = Integer.parseInt(indexString);
         Player player = App.getCurrentGame().getCurrentPlayer();

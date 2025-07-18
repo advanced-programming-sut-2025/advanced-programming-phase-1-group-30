@@ -195,7 +195,6 @@ public class CraftingScreen implements Screen {
 
         tooltipTable.add(new Label("Name: " + recipe.getName(), skin)).left().row();
         tooltipTable.add(new Label("Ingredient: " + ingredients(recipe), skin)).left().row();
-//        tooltipTable.add(new Label("Price: " + recipe.getEnergy(), skin)).left();
 
         Tooltip<Table> tooltip = new Tooltip<>(tooltipTable);
         tooltip.setInstant(true);
