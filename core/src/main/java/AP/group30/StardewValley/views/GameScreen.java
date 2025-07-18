@@ -11,8 +11,6 @@ import AP.group30.StardewValley.models.Buildings.Hut;
 import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.GameObjects;
-import AP.group30.StardewValley.models.Items.Item;
-import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Items.Products.Crop;
 import AP.group30.StardewValley.models.Items.Products.ForagingSeed;
 import AP.group30.StardewValley.models.Items.Products.Stone;
@@ -23,24 +21,30 @@ import AP.group30.StardewValley.models.Maps.Tile;
 import AP.group30.StardewValley.models.Maps.TileTexture;
 import AP.group30.StardewValley.models.Maps.TileTypes;
 import AP.group30.StardewValley.models.Players.Direction;
+import AP.group30.StardewValley.models.Players.NPC.*;
 import AP.group30.StardewValley.models.Players.Player;
-import AP.group30.StardewValley.views.Hut.HutScreen;
+import AP.group30.StardewValley.views.InGameMenus.*;
+import AP.group30.StardewValley.views.InGameMenus.Hut.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
-import java.util.Scanner;
 
 public class GameScreen implements Screen {
     private SpriteBatch batch;
@@ -80,10 +84,11 @@ public class GameScreen implements Screen {
     private float x;
     private float y;
     float speed = 150f;
-
     private InventoryScreen inventoryScreen;
     private SkillScreen skillScreen;
     private HutScreen hut;
+    private CraftingScreen craftingScreen;
+    private ArtisanScreen artisanScreen;
 
     private final BitmapFont info = (Main.getMain().skin).getFont("font");
 
@@ -143,7 +148,9 @@ public class GameScreen implements Screen {
 
         inventoryScreen = new InventoryScreen(batch, Main.getMain().skin);
         skillScreen = new SkillScreen(batch, Main.getMain().skin);
+        craftingScreen = new CraftingScreen(batch, Main.getMain().skin);
         hut = new HutScreen(batch, Main.getMain().skin);
+        artisanScreen = new ArtisanScreen(batch, Main.getMain().skin);
         info.setColor(Color.BLACK);
     }
 
@@ -162,8 +169,11 @@ public class GameScreen implements Screen {
 //            if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
 //            if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
 //        }
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) inventoryScreen.toggle();
         if (Gdx.input.isKeyJustPressed(Input.Keys.N)) skillScreen.toggle();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.B)) craftingScreen.toggle();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.I)) artisanScreen.toggle();
 
         camera.position.set(x + playerRegion.getRegionWidth() / 2f, y + playerRegion.getRegionHeight() / 2f, 0);
         camera.update();
@@ -196,6 +206,8 @@ public class GameScreen implements Screen {
         findHut();
         currentTile = getTileUnderPlayer(x, y);
 
+
+
         if (currentTile.getX() == hutEntryTile.getX() &&
             currentTile.getY() == hutEntryTile.getY() + 1) {
             batch.begin();
@@ -207,7 +219,9 @@ public class GameScreen implements Screen {
 
         inventoryScreen.render();
         skillScreen.render();
+        craftingScreen.render();
         hut.render(batch, camera);
+        artisanScreen.render();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
             System.out.println(entities.size());
@@ -257,6 +271,8 @@ public class GameScreen implements Screen {
             gameObjects.render(batch, map);
         }
     }
+
+
 
     static void renderWallsAroundMap(Tile[][] tiles, SpriteBatch batch) {
         int tileSize = 32;
@@ -410,6 +426,7 @@ public class GameScreen implements Screen {
         font.draw(batch, String.format("5 0 0"),camera.position.x + 720, camera.position.y + 340);
     }
 
+
     @Override
     public void resize(int width, int height) {
         camera.setToOrtho(false, width, height);
@@ -425,9 +442,10 @@ public class GameScreen implements Screen {
         house.dispose();
         inventoryScreen.dispose();
         skillScreen.dispose();
+        craftingScreen.dispose();
         hut.dispose();
         clock.dispose();
-
+        artisanScreen.dispose();
     }
 
     private void handleInput(float delta) {
@@ -609,7 +627,8 @@ public class GameScreen implements Screen {
     private boolean isAnyMenuOpened() {
         return inventoryScreen.isVisible() ||
                skillScreen.isVisible() ||
-               hut.isVisible();
+               hut.isVisible() ||
+               craftingScreen.isVisible();
     }
 
     public ArrayList<GameObjects> getEntities() {

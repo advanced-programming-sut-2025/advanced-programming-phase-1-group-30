@@ -1,10 +1,11 @@
 package AP.group30.StardewValley.models;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+
+import javax.swing.plaf.PanelUI;
 
 public class GameAssetManager {
     public static AssetManager assetManager = new AssetManager();
@@ -160,6 +161,84 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> giantPumpkin = new AssetDescriptor<>("Stardew_Valley_Images/Crops/Giant_Pumpkin.png", Texture.class);
 
 
+
+    public static final AssetDescriptor<Texture> crafting = new AssetDescriptor<>("Inventory/Crafting.png", Texture.class);
+    public static final AssetDescriptor<Texture> cherry_bomb = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Cherry_Bomb.png", Texture.class);
+    public static final AssetDescriptor<Texture> bomb = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Bomb.png", Texture.class);
+    public static final AssetDescriptor<Texture> mega_bomb = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Mega_Bomb.png", Texture.class);
+    public static final AssetDescriptor<Texture> sprinkler = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Sprinkler.png", Texture.class);
+    public static final AssetDescriptor<Texture> quality_sprinkler = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Quality_Sprinkler.png", Texture.class);
+    public static final AssetDescriptor<Texture> iridium_sprinkler = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Iridium_Sprinkler.png", Texture.class);
+    public static final AssetDescriptor<Texture> charcoal_kiln = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Charcoal_Kiln.png", Texture.class);
+    public static final AssetDescriptor<Texture> furnace = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Furnace.png", Texture.class);
+    public static final AssetDescriptor<Texture> scarecrow = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Scarecrow.png", Texture.class);
+    public static final AssetDescriptor<Texture> deluxe_scarecrow = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Deluxe_Scarecrow.png", Texture.class);
+    public static final AssetDescriptor<Texture> bee_house = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Bee_House.png", Texture.class);
+    public static final AssetDescriptor<Texture> cheese_press = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Cheese_Press.png", Texture.class);
+    public static final AssetDescriptor<Texture> keg = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Keg.png", Texture.class);
+    public static final AssetDescriptor<Texture> loom = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Loom.png", Texture.class);
+    public static final AssetDescriptor<Texture> mayonnaise_machine = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Mayonnaise_Machine.png", Texture.class);
+    public static final AssetDescriptor<Texture> oil_maker = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Oil_Maker.png", Texture.class);
+    public static final AssetDescriptor<Texture> preserves_jar = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Preserves_Jar.png", Texture.class);
+    public static final AssetDescriptor<Texture> dehydrator = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Dehydrator.png", Texture.class);
+    public static final AssetDescriptor<Texture> grass_starter = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Grass_Starter.png", Texture.class);
+    public static final AssetDescriptor<Texture> fish_smoker = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Fish_Smoker.png", Texture.class);
+    public static final AssetDescriptor<Texture> mystic_tree_seed = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Mystic_Tree_Seed.png", Texture.class);
+
+
+    public static final AssetDescriptor<Texture> Abigail0 = new AssetDescriptor<>("NPC/Abi0.png", Texture.class);
+    public static final AssetDescriptor<Texture> Abigail1 = new AssetDescriptor<>("NPC/Abi1.png", Texture.class);
+    public static final AssetDescriptor<Texture> Abigail2 = new AssetDescriptor<>("NPC/Abi2.png", Texture.class);
+    public static final AssetDescriptor<Texture> Abigail3 = new AssetDescriptor<>("NPC/Abi3.png", Texture.class);
+    public static final AssetDescriptor<Texture> Harvey0 = new AssetDescriptor<>("NPC/Harvey0.png", Texture.class);
+    public static final AssetDescriptor<Texture> Harvey1 = new AssetDescriptor<>("NPC/Harvey1.png", Texture.class);
+    public static final AssetDescriptor<Texture> Harvey2 = new AssetDescriptor<>("NPC/Harvey2.png", Texture.class);
+    public static final AssetDescriptor<Texture> Harvey3 = new AssetDescriptor<>("NPC/Harvey3.png", Texture.class);
+    public static final AssetDescriptor<Texture> Leah0 = new AssetDescriptor<>("NPC/Leah0.png", Texture.class);
+    public static final AssetDescriptor<Texture> Leah1 = new AssetDescriptor<>("NPC/Leah1.png", Texture.class);
+    public static final AssetDescriptor<Texture> Leah2 = new AssetDescriptor<>("NPC/Leah2.png", Texture.class);
+    public static final AssetDescriptor<Texture> Leah3 = new AssetDescriptor<>("NPC/Leah3.png", Texture.class);
+    public static final AssetDescriptor<Texture> Robin0 = new AssetDescriptor<>("NPC/Robin0.png", Texture.class);
+    public static final AssetDescriptor<Texture> Robin1 = new AssetDescriptor<>("NPC/Robin1.png", Texture.class);
+    public static final AssetDescriptor<Texture> Robin2 = new AssetDescriptor<>("NPC/Robin2.png", Texture.class);
+    public static final AssetDescriptor<Texture> Robin3 = new AssetDescriptor<>("NPC/Robin3.png", Texture.class);
+    public static final AssetDescriptor<Texture> Sebastian0 = new AssetDescriptor<>("NPC/Seb0.png", Texture.class);
+    public static final AssetDescriptor<Texture> Sebastian1 = new AssetDescriptor<>("NPC/Seb1.png", Texture.class);
+    public static final AssetDescriptor<Texture> Sebastian2 = new AssetDescriptor<>("NPC/Seb2.png", Texture.class);
+    public static final AssetDescriptor<Texture> Sebastian3 = new AssetDescriptor<>("NPC/Seb3.png", Texture.class);
+    public static final AssetDescriptor<Texture> chatBox = new AssetDescriptor<>("Stardew_Valley_Images/Chat/chat.jpg", Texture.class);
+    public static final AssetDescriptor<Texture> gift = new AssetDescriptor<>("Stardew_Valley_Images/Sprites/gift Log.png", Texture.class);
+    public static final AssetDescriptor<Texture> heart = new AssetDescriptor<>("Stardew_Valley_Images/Heart/HeartIconLarge.png", Texture.class);
+    public static final AssetDescriptor<Texture> questCompleted = new AssetDescriptor<>("Stardew_Valley_Images/Achievement/Achievement_Danger_In_The_Deep.jpg", Texture.class);
+    public static final AssetDescriptor<Texture> questTodo = new AssetDescriptor<>("Stardew_Valley_Images/Achievement/Achievement_A_Big_Help.jpg", Texture.class);
+    public static final AssetDescriptor<Texture> questUnavailable = new AssetDescriptor<>("Stardew_Valley_Images/Achievement/Achievement_Treasure_Trove.jpg", Texture.class);
+
+
+    public static final AssetDescriptor<Texture> honey = new AssetDescriptor<>("item/ArtisanGoods/Honey.png", Texture.class);
+    public static final AssetDescriptor<Texture> cheese = new AssetDescriptor<>("item/ArtisanGoods/Cheese.png", Texture.class);
+    public static final AssetDescriptor<Texture> goatCheese = new AssetDescriptor<>("item/ArtisanGoods/Goat_Cheese.png", Texture.class);
+    public static final AssetDescriptor<Texture> beer = new AssetDescriptor<>("item/ArtisanGoods/Beer.png", Texture.class);
+    public static final AssetDescriptor<Texture> vinegar = new AssetDescriptor<>("item/ArtisanGoods/Vinegar.png", Texture.class);
+    public static final AssetDescriptor<Texture> coffee = new AssetDescriptor<>("item/ArtisanGoods/Coffee.png", Texture.class);
+    public static final AssetDescriptor<Texture> juice = new AssetDescriptor<>("item/ArtisanGoods/Juice.png", Texture.class);
+    public static final AssetDescriptor<Texture> mead = new AssetDescriptor<>("item/ArtisanGoods/Mead.png", Texture.class);
+    public static final AssetDescriptor<Texture> paleAle = new AssetDescriptor<>("item/ArtisanGoods/Pale_Ale.png", Texture.class);
+    public static final AssetDescriptor<Texture> wine = new AssetDescriptor<>("item/ArtisanGoods/Wine.png", Texture.class);
+    public static final AssetDescriptor<Texture> driedMushrooms = new AssetDescriptor<>("item/ArtisanGoods/Dried_Mushrooms.png", Texture.class);
+    public static final AssetDescriptor<Texture> driedFruit = new AssetDescriptor<>("item/ArtisanGoods/Dried_Fruit.png", Texture.class);
+    public static final AssetDescriptor<Texture> raisins = new AssetDescriptor<>("item/ArtisanGoods/Raisins.png", Texture.class);
+    public static final AssetDescriptor<Texture> coal = new AssetDescriptor<>("item/ArtisanGoods/Coal.png", Texture.class);
+    public static final AssetDescriptor<Texture> cloth = new AssetDescriptor<>("item/ArtisanGoods/Cloth.png", Texture.class);
+    public static final AssetDescriptor<Texture> mayonnaise = new AssetDescriptor<>("item/ArtisanGoods/Mayonnaise.png", Texture.class);
+    public static final AssetDescriptor<Texture> duckMayonnaise = new AssetDescriptor<>("item/ArtisanGoods/Duck_Mayonnaise.png", Texture.class);
+    public static final AssetDescriptor<Texture> dinosaurMayonnaise = new AssetDescriptor<>("item/ArtisanGoods/Dinosaur_Mayonnaise.png", Texture.class);
+    public static final AssetDescriptor<Texture> truffleOil = new AssetDescriptor<>("item/ArtisanGoods/Truffle_Oil.png", Texture.class);
+    public static final AssetDescriptor<Texture> oil = new AssetDescriptor<>("item/ArtisanGoods/Oil.png", Texture.class);
+    public static final AssetDescriptor<Texture> pickles = new AssetDescriptor<>("item/ArtisanGoods/Pickles.png", Texture.class);
+    public static final AssetDescriptor<Texture> jelly = new AssetDescriptor<>("item/ArtisanGoods/Jelly.png", Texture.class);
+    public static final AssetDescriptor<Texture> smokedFish = new AssetDescriptor<>("item/ArtisanGoods/Smoked_Fish.png", Texture.class);
+    public static final AssetDescriptor<Texture> metalBar = new AssetDescriptor<>("item/ArtisanGoods/Metal_Bar.png", Texture.class);
+
     public static void queueAsset() {
         assetManager.load(background);
         assetManager.load(blackBackground);
@@ -303,5 +382,80 @@ public class GameAssetManager {
         assetManager.load(pumpkinStage5);
         assetManager.load(pumpkinStage6);
         assetManager.load(giantPumpkin);
+
+        assetManager.load(crafting);
+        assetManager.load(cherry_bomb);
+        assetManager.load(bomb);
+        assetManager.load(mega_bomb);
+        assetManager.load(sprinkler);
+        assetManager.load(quality_sprinkler);
+        assetManager.load(iridium_sprinkler);
+        assetManager.load(charcoal_kiln);
+        assetManager.load(furnace);
+        assetManager.load(scarecrow);
+        assetManager.load(deluxe_scarecrow);
+        assetManager.load(bee_house);
+        assetManager.load(cheese_press);
+        assetManager.load(keg);
+        assetManager.load(loom);
+        assetManager.load(mayonnaise_machine);
+        assetManager.load(oil_maker);
+        assetManager.load(preserves_jar);
+        assetManager.load(dehydrator);
+        assetManager.load(grass_starter);
+        assetManager.load(fish_smoker);
+        assetManager.load(mystic_tree_seed);
+
+        assetManager.load(Abigail0);
+        assetManager.load(Abigail1);
+        assetManager.load(Abigail2);
+        assetManager.load(Abigail3);
+        assetManager.load(Harvey0);
+        assetManager.load(Harvey1);
+        assetManager.load(Harvey2);
+        assetManager.load(Harvey3);
+        assetManager.load(Leah0);
+        assetManager.load(Leah1);
+        assetManager.load(Leah2);
+        assetManager.load(Leah3);
+        assetManager.load(Robin0);
+        assetManager.load(Robin1);
+        assetManager.load(Robin2);
+        assetManager.load(Robin3);
+        assetManager.load(Sebastian0);
+        assetManager.load(Sebastian1);
+        assetManager.load(Sebastian2);
+        assetManager.load(Sebastian3);
+        assetManager.load(chatBox);
+        assetManager.load(gift);
+        assetManager.load(heart);
+        assetManager.load(questCompleted);
+        assetManager.load(questUnavailable);
+        assetManager.load(questTodo);
+
+        assetManager.load(honey);
+        assetManager.load(cheese);
+        assetManager.load(goatCheese);
+        assetManager.load(beer);
+        assetManager.load(vinegar);
+        assetManager.load(coffee);
+        assetManager.load(juice);
+        assetManager.load(paleAle);
+        assetManager.load(driedMushrooms);
+        assetManager.load(driedFruit);
+        assetManager.load(raisins);
+        assetManager.load(coal);
+        assetManager.load(cloth);
+        assetManager.load(mayonnaise);
+        assetManager.load(duckMayonnaise);
+        assetManager.load(dinosaurMayonnaise);
+        assetManager.load(truffleOil);
+        assetManager.load(oil);
+        assetManager.load(pickles);
+        assetManager.load(jelly);
+        assetManager.load(smokedFish);
+        assetManager.load(metalBar);
+        assetManager.load(mead);
+        assetManager.load(wine);
     }
 }

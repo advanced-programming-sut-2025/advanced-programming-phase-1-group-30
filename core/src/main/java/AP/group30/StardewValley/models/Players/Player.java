@@ -62,6 +62,7 @@ public class Player implements GameObjects {
     java.util.Map<Item, Integer> itemsBoughtToday = new HashMap<>();
     private final ArrayList<Animal> playerAnimals = new ArrayList<>();
     private ArrayList<IndustrialProductType> craftingRecipes = new ArrayList<>();
+    private ArrayList<IndustrialProductType> devices = new ArrayList<>();
     private Building building;
     private ArrayList<FoodType> recipes;
     private HashMap<NPC,Integer> friendshipsNPC = new HashMap<>();
@@ -145,6 +146,11 @@ public class Player implements GameObjects {
         this.buffs.put("dish o' the Sea", -1);
         this.buffs.put("seaform pudding", -1);
         this.buffs.put("miner's treat", -1);
+        this.craftingRecipes.addAll(Arrays.asList(IndustrialProductType.values()));
+
+        this.devices.add(IndustrialProductType.BEE_HOUSE);
+        this.devices.add(IndustrialProductType.KEG);
+        this.devices.add(IndustrialProductType.LOOM);
     }
 
     public String getUsername() {
@@ -396,6 +402,12 @@ public class Player implements GameObjects {
     }
     public void addCraftingRecipe(IndustrialProductType craftingRecipe) {
         this.craftingRecipes.add(craftingRecipe);
+    }
+    public ArrayList<IndustrialProductType> getDevices() {
+        return this.devices;
+    }
+    public void addDevice(IndustrialProductType craftingRecipe) {
+        this.devices.add(craftingRecipe);
     }
     public Building getBuilding() {
         return building;

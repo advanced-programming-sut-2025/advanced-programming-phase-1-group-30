@@ -7,6 +7,7 @@ import AP.group30.StardewValley.models.Items.Item;
 import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Maps.Tile;
 import AP.group30.StardewValley.models.Maps.TileTypes;
+import AP.group30.StardewValley.models.Players.NPC.Leah;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -120,6 +121,7 @@ public class Building implements GameObjects {
                 }
             }
         }
+
         if (this instanceof Hut) {
             batch.draw(texture,
                 map.getTiles()[startTIleX - 1][startTIleY + 1].getX() * 32,

@@ -1,134 +1,157 @@
 package AP.group30.StardewValley.models.Players.NPC;
 
 import AP.group30.StardewValley.models.App;
+import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.Foods.Food;
 import AP.group30.StardewValley.models.Items.Foods.FoodType;
 import AP.group30.StardewValley.models.Items.Item;
 import AP.group30.StardewValley.models.Maps.Weather;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.views.GameMenu;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Harvey extends NPC {
-
+    private static Animation<TextureRegion> animation;
+    private static int x;
+    private static int y;
     public Harvey() {
         super(NPCDetail.HARVEY);
+        TextureRegion[] Region = new TextureRegion[4];
+        Region[0] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.Harvey0));
+        Region[1] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.Harvey1));
+        Region[2] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.Harvey2));
+        Region[3] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.Harvey3));
+        animation = new Animation<TextureRegion>(0.3f, Region);
+        animation.setPlayMode(Animation.PlayMode.LOOP);
+        x = 43 * 32;
+        y = 52 * 32;
+        this.getRectangle().setPosition(x, y);
     }
 
     @Override
-    public void quest1() {
-        if(isQuest1()){
-            GameMenu.printResult("This quest is completed.");
-            return;
+    public String quest1() {
+        if (isQuest1()) {
+            return "This quest is completed.";
         }
 
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Item request = Item.findItemByName("grape",player.getBackPack().getItems());
+        Item request = Item.findItemByName("grape", player.getBackPack().getItems());
         int rate = 1;
-        if(player.getFriendshipsNPC().get(App.getCurrentGame().getNPCs().get(2)) == 2){
+        if (player.getFriendshipsNPC().get(App.getCurrentGame().getNPCs().get(2)) == 2) {
             rate = 2;
         }
-        if(request == null) {
-            GameMenu.printResult("You don't have grape!");
+
+        if (request == null) {
+            return "You don't have grape!";
         } else {
-            if(request.getCount() < 12){
-                GameMenu.printResult("You need at least 12 grape!");
-                return;
-            } else if(request.getCount() == 12){
+            if (request.getCount() < 12) {
+                return "You need at least 12 grape!";
+            } else if (request.getCount() == 12) {
                 player.getBackPack().getItems().remove(request);
             } else {
                 request.setCount(request.getCount() - 12);
             }
+
             int count = 750 * rate;
             player.setMoney(player.getMoney() + count);
 
-            GameMenu.printResult("Congratulations! You have successfully completed the quest!");
             this.setQuest1(true);
-            for(Player player1 :App.getCurrentGame().getPlayers()){
+            for (Player player1 : App.getCurrentGame().getPlayers()) {
                 Integer a = 1;
                 player1.getActivatedQuestNPC().get(App.getCurrentGame().getNPCs().get(2)).remove(a);
             }
+            return "You have successfully completed the quest!";
         }
     }
 
     @Override
-    public void quest2() {
-        if(isQuest2()){
-            GameMenu.printResult("This quest is completed.");
-            return;
+    public String quest2() {
+        if (isQuest2()) {
+            return "This quest is completed.";
         }
 
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Item request = Item.findItemByName("salmon",player.getBackPack().getItems());
+        Item request = Item.findItemByName("salmon", player.getBackPack().getItems());
         int rate = 1;
-        if(player.getFriendshipsNPC().get(App.getCurrentGame().getNPCs().get(2)) == 2){
+        if (player.getFriendshipsNPC().get(App.getCurrentGame().getNPCs().get(2)) == 2) {
             rate = 2;
         }
-        if(request == null) {
-            GameMenu.printResult("You don't have salmon!");
+
+        if (request == null) {
+            return "You don't have salmon!";
         } else {
-            if(request.getCount() == 1){
+            if (request.getCount() == 1) {
                 player.getBackPack().getItems().remove(request);
             } else {
                 request.setCount(request.getCount() - 1);
             }
 
             NPC npc = App.getCurrentGame().getNPCs().get(1);
-            player.getFriendshipsNPC().put(npc,player.getFriendshipsNPC().get(npc) + 200);
-            if(player.getFriendshipsNPC().get(npc) >= 200 && player.getFriendshipsNPC().get(npc) < 400
-                    && !npc.isQuest2()){
+            player.getFriendshipsNPC().put(npc, player.getFriendshipsNPC().get(npc) + 200);
+
+            if (player.getFriendshipsNPC().get(npc) >= 200 &&
+                player.getFriendshipsNPC().get(npc) < 400 &&
+                !npc.isQuest2()) {
                 player.getActivatedQuestNPC().get(npc).add(2);
             }
 
-            GameMenu.printResult("Congratulations! You have successfully completed the quest!");
             this.setQuest2(true);
-            for(Player player1 :App.getCurrentGame().getPlayers()){
+            for (Player player1 : App.getCurrentGame().getPlayers()) {
                 Integer a = 2;
                 player1.getActivatedQuestNPC().get(App.getCurrentGame().getNPCs().get(2)).remove(a);
             }
+            return "You have successfully completed the quest!";
         }
     }
 
     @Override
-    public void quest3() {
-        if(isQuest3()){
-            GameMenu.printResult("This quest is completed.");
-            return;
+    public String quest3() {
+        if (isQuest3()) {
+            return "This quest is completed.";
         }
 
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Item request = Item.findItemByName("wine",player.getBackPack().getItems());
+        Item request = Item.findItemByName("wine", player.getBackPack().getItems());
         int rate = 1;
-        if(player.getFriendshipsNPC().get(App.getCurrentGame().getNPCs().get(2)) == 2){
+        if (player.getFriendshipsNPC().get(App.getCurrentGame().getNPCs().get(2)) == 2) {
             rate = 2;
         }
-        if(request == null) {
-            GameMenu.printResult("You don't have wine!");
+
+        if (request == null) {
+            return "You don't have wine!";
         } else {
-           if(request.getCount() == 1){
+            if (request.getCount() == 1) {
                 player.getBackPack().getItems().remove(request);
             } else {
-                request.setCount(request.getCount() - 150);
+                request.setCount(request.getCount() - 1);
             }
+
             int count = 5 * rate;
             Item reward = new Food(count, FoodType.SALAD);
-            Item newItem = Item.findItemByName("salad",player.getBackPack().getItems());
-            if(newItem == null) {
+            Item newItem = Item.findItemByName("salad", player.getBackPack().getItems());
+            if (newItem == null) {
                 player.getBackPack().getItems().add(reward);
             } else {
                 newItem.setCount(newItem.getCount() + count);
             }
 
-            GameMenu.printResult("Congratulations! You have successfully completed the quest!");
             this.setQuest3(true);
-            for(Player player1 :App.getCurrentGame().getPlayers()){
+            for (Player player1 : App.getCurrentGame().getPlayers()) {
                 Integer a = 3;
                 player1.getActivatedQuestNPC().get(App.getCurrentGame().getNPCs().get(2)).remove(a);
             }
+            return "You have successfully completed the quest!";
         }
     }
 
+
     @Override
-    public void talk() {
+    public String talk() {
         Player player = App.getCurrentGame().getCurrentPlayer();
         NPC npc = App.getCurrentGame().getNPCs().get(2);
         int friendship = player.getFriendshipsNPC().get(npc) / 200;
@@ -137,49 +160,60 @@ public class Harvey extends NPC {
         if (friendship == 0) {
             switch (weather) {
                 case SUNNY:
-                    GameMenu.printResult("Nice weather. Good for keeping people healthy.");
-                    break;
+                    return "Nice weather. Good for keeping people healthy.";
                 case RAIN:
-                    GameMenu.printResult("Be careful out here in the wet—it’s flu season.");
-                    break;
+                    return "Be careful out here in the wet—it’s flu season.";
                 case SNOW:
-                    GameMenu.printResult("Wrap up warm, alright?");
-                    break;
+                    return "Wrap up warm, alright?";
                 case STORM:
-                    GameMenu.printResult("Try not to go outside in this. Stay safe.");
-                    break;
+                    return "Try not to go outside in this. Stay safe.";
             }
         } else if (friendship == 1) {
             switch (weather) {
                 case SUNNY:
-                    GameMenu.printResult("A sunny day helps with morale. Mental health matters too.");
-                    break;
+                    return "A sunny day helps with morale. Mental health matters too.";
                 case RAIN:
-                    GameMenu.printResult("Rain is relaxing... as long as you're not on call.");
-                    break;
+                    return "Rain is relaxing... as long as you're not on call.";
                 case SNOW:
-                    GameMenu.printResult("Snow slows everything down. It's oddly calming.");
-                    break;
+                    return "Snow slows everything down. It's oddly calming.";
                 case STORM:
-                    GameMenu.printResult("My equipment might get fried today. Yikes.");
-                    break;
+                    return "My equipment might get fried today. Yikes.";
             }
         } else if (friendship >= 2) {
             switch (weather) {
                 case SUNNY:
-                    GameMenu.printResult("Let's take a walk in the sun, just the two of us.");
-                    break;
+                    return "Let's take a walk in the sun, just the two of us.";
                 case RAIN:
-                    GameMenu.printResult("Want to listen to the rain from my clinic?");
-                    break;
+                    return "Want to listen to the rain from my clinic?";
                 case SNOW:
-                    GameMenu.printResult("Snowed in with you? That doesn’t sound so bad.");
-                    break;
+                    return "Snowed in with you? That doesn’t sound so bad.";
                 case STORM:
-                    GameMenu.printResult("You came out in this weather just to see me? You're incredible.");
-                    break;
+                    return "You came out in this weather just to see me? You're incredible.";
             }
+        }
+
+        return "";
+    }
+
+    @Override
+    public void showDialog(SpriteBatch batch, BitmapFont font, Camera camera) {
+        batch.draw(GameAssetManager.assetManager.get(GameAssetManager.chatBox), camera.position.x - Gdx.graphics.getWidth() / 3.8f,
+            camera.position.y - Gdx.graphics.getHeight() / 2.2f,this.getRectangle().width * 60,this.getRectangle().height * 8f);
+        font.draw(batch,"Harvey: " + talk(), camera.position.x - Gdx.graphics.getWidth() / 4.2f, camera.position.y - Gdx.graphics.getHeight() / 4f);
+        if(dialogueTimer <= 0){
+            dialogueTimer = 3f;
         }
     }
 
+    @Override
+    public void showQuest() {
+
+    }
+
+    public static void render(SpriteBatch batch, float stateTime) {
+        TextureRegion currentFrame;
+        currentFrame = animation.getKeyFrame(stateTime);
+        TextureRegion playerRegion = currentFrame;
+        batch.draw(currentFrame, x, y, playerRegion.getRegionWidth() * 2f , playerRegion.getRegionHeight() * 2f);
+    }
 }
