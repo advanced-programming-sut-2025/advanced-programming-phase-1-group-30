@@ -1,21 +1,16 @@
 package AP.group30.StardewValley.views.InGameMenus;
 
-import AP.group30.StardewValley.controllers.GameMenuController;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameAssetManager;
-import AP.group30.StardewValley.models.Items.Foods.FoodType;
 import AP.group30.StardewValley.models.Items.IndustrialProducts.IndustrialProductType;
-import AP.group30.StardewValley.models.Items.Item;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -38,17 +33,11 @@ public class ArtisanScreen extends InGameMenuScreen{
     private ArtisanScreen artisanScreen;
 
     public ArtisanScreen(SpriteBatch batch, Skin skin) {
-        super(new Stage(new ScreenViewport(), batch), skin, new Table(), GameAssetManager.refrigerator);
+        super(new Stage(new ScreenViewport(), batch), skin, new Table(), GameAssetManager.refrigerator, 2, 200);
 
         backgroundItemTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryItem);
         deviceScreen = new DeviceScreen(batch, skin);
         artisanScreen = this;
-
-        table.setSize(800, 300);
-        table.setPosition(
-            (Gdx.graphics.getWidth() - table.getWidth()) / 2f,
-            (Gdx.graphics.getHeight() - table.getHeight()) / 2f + 200
-        );
 
         infoButton = new TextButton("Products", skin);
         infoButton.setPosition(table.getX() + table.getWidth() / 2f - infoButton.getWidth() / 2f - 50,

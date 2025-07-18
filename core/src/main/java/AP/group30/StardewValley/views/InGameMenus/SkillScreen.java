@@ -17,30 +17,19 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 public class SkillScreen extends InGameMenuScreen{
     private final Texture backgroundItemTexture;
 
-    private final int positionX;
-    private final int positionY;
-
     public SkillScreen(SpriteBatch batch, Skin skin) {
-        super(new Stage(new ScreenViewport(), batch), skin, new Table(), GameAssetManager.skill);
+        super(new Stage(new ScreenViewport(), batch), skin, new Table(), GameAssetManager.skill, 2, 0);
 
         backgroundItemTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryItem);
 
-        table.setSize(800, 300);
-        table.setPosition(
-            (Gdx.graphics.getWidth() - table.getWidth()) / 2,
-            (Gdx.graphics.getHeight() - table.getHeight()) / 2
-        );
-
-        positionX = (int) ((Gdx.graphics.getWidth() - table.getWidth()) / 2);
-        positionY = (int) ((Gdx.graphics.getHeight() - table.getHeight()) / 2);
         stage.addActor(table);
 
         createPlayerImage();
 
-        createImage(ItemTexture.FARMING_ICON, positionX + 350, positionY + 220);
-        createImage(ItemTexture.FISHING_ICON, positionX + 350, positionY + 160);
-        createImage(ItemTexture.FORAGING_ICON, positionX + 350, positionY + 100);
-        createImage(ItemTexture.MINING_ICON, positionX + 350, positionY + 40);
+        createImage(ItemTexture.FARMING_ICON, positionX + 300, positionY + 70);
+        createImage(ItemTexture.FISHING_ICON, positionX + 300, positionY + 10);
+        createImage(ItemTexture.FORAGING_ICON, positionX + 300, positionY - 50);
+        createImage(ItemTexture.MINING_ICON, positionX + 300, positionY - 110);
     }
 
     @Override
@@ -110,7 +99,7 @@ public class SkillScreen extends InGameMenuScreen{
     private void createPlayerImage() {
         Texture playerTexture = GameAssetManager.assetManager.get(GameAssetManager.playerInfo);
         Image playerImage = new Image(new TextureRegionDrawable(new TextureRegion(playerTexture)));
-        playerImage.setPosition(positionX + 55, positionY + 60);
+        playerImage.setPosition(positionX + 5, positionY - 70);
 
         stage.addActor(playerImage);
     }

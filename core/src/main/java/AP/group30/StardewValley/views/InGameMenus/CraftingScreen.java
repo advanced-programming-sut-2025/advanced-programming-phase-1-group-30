@@ -6,9 +6,7 @@ import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.IndustrialProducts.IndustrialProductType;
 import AP.group30.StardewValley.models.Items.Item;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -36,15 +34,9 @@ public class CraftingScreen extends InGameMenuScreen {
     private final Label errorLabel;
 
     public CraftingScreen(SpriteBatch batch, Skin skin) {
-        super(new Stage(new ScreenViewport(), batch), skin, new Table(), GameAssetManager.crafting);
+        super(new Stage(new ScreenViewport(), batch), skin, new Table(), GameAssetManager.crafting, 2, 200);
 
         backgroundItemTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryItem);
-
-        table.setSize(800, 300);
-        table.setPosition(
-            (Gdx.graphics.getWidth() - table.getWidth()) / 2f,
-            (Gdx.graphics.getHeight() - table.getHeight()) / 2f + 200
-        );
 
         craftingButton = new TextButton("Craft", skin);
         craftingButton.setPosition(table.getX() + table.getWidth() / 2f - craftingButton.getWidth() / 2f - 50,

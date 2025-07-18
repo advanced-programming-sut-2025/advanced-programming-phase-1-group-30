@@ -23,7 +23,11 @@ abstract public class InGameMenuScreen {
     protected boolean visible = false;
     protected final Texture backgroundTexture;
 
-    protected InGameMenuScreen(Stage stage, Skin skin, Table table, AssetDescriptor<Texture> backgroundAssetDescriptor) {
+    protected final int positionX;
+    protected final int positionY;
+
+    protected InGameMenuScreen(Stage stage, Skin skin, Table table, AssetDescriptor<Texture> backgroundAssetDescriptor
+                                , int tableHeightDivider, int tableHorizonMove) {
         this.stage = stage;
         this.skin = skin;
         this.table = table;
@@ -33,6 +37,14 @@ abstract public class InGameMenuScreen {
 
         table.setVisible(false);
         table.setBackground(backgroundDrawable);
+        table.setSize(800, (float) 600 / tableHeightDivider);
+        table.setPosition(
+            (Gdx.graphics.getWidth() - table.getWidth()) / 2f,
+            (Gdx.graphics.getHeight() - table.getHeight()) / 2f + tableHorizonMove
+        );
+
+        positionX = (int) table.getX() + 85;
+        positionY = (int) (table.getY() + table.getHeight()) - 155;
     }
 
     public void show() {

@@ -10,7 +10,6 @@ import AP.group30.StardewValley.models.Items.Item;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -19,7 +18,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -29,9 +27,6 @@ import java.util.ArrayList;
 
 public class DeviceScreen extends InGameMenuScreen{
     private final Texture backgroundItemTexture;
-
-    private final int positionX = 645;
-    private final int positionY = 670;
 
     private final ArrayList<Image> itemImages = new ArrayList<>();
     private Image borderImage;
@@ -54,17 +49,11 @@ public class DeviceScreen extends InGameMenuScreen{
     private Label itemLabel;
 
     public DeviceScreen(SpriteBatch batch, Skin skin) {
-        super(new Stage(new ScreenViewport(), batch), skin, new Table(), GameAssetManager.inventoryScreen);
+        super(new Stage(new ScreenViewport(), batch), skin, new Table(), GameAssetManager.inventoryScreen, 1, 0);
 
         prosesBar = GameAssetManager.assetManager.get(GameAssetManager.energyBar);
 
         backgroundItemTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryItem);
-
-        table.setSize(800, 600);
-        table.setPosition(
-            (Gdx.graphics.getWidth() - table.getWidth()) / 2,
-            (Gdx.graphics.getHeight() - table.getHeight()) / 2
-        );
 
         errorLabel = new Label("", skin);
         errorLabel.setColor(Color.RED);

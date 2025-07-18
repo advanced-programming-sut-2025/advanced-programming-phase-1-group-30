@@ -28,9 +28,6 @@ public class InventoryScreen extends InGameMenuScreen{
     Label energy;
     Player player = App.getCurrentGame().getCurrentPlayer();
 
-    private final int positionX = 645;
-    private final int positionY = 670;
-
     private final ArrayList<Image> itemImages = new ArrayList<>();
     private Image borderImage;
 
@@ -42,7 +39,7 @@ public class InventoryScreen extends InGameMenuScreen{
     private final Label errorLabel;
 
     public InventoryScreen(SpriteBatch batch, Skin skin) {
-        super(new Stage(new ScreenViewport(), batch), skin, new Table(), GameAssetManager.inventoryScreen);
+        super(new Stage(new ScreenViewport(), batch), skin, new Table(), GameAssetManager.inventoryScreen, 1, 0);
 
         backgroundItemTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryItem);
 
@@ -50,12 +47,6 @@ public class InventoryScreen extends InGameMenuScreen{
         errorLabel.setColor(Color.RED);
         errorLabel.setPosition(positionX + 350, positionY - 400);
         errorLabel.setVisible(false);
-
-        table.setSize(800, 600);
-        table.setPosition(
-            (Gdx.graphics.getWidth() - table.getWidth()) / 2,
-            (Gdx.graphics.getHeight() - table.getHeight()) / 2
-        );
 
         Label info = new Label(player.getUsername() + " Farm", skin);
         info.setPosition(positionX + 250, positionY - 250);
