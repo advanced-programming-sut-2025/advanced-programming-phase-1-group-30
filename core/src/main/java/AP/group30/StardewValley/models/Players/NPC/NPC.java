@@ -1,31 +1,43 @@
 package AP.group30.StardewValley.models.Players.NPC;
 
 import AP.group30.StardewValley.models.Maps.Tile;
+import com.badlogic.gdx.Gdx;
 
+import java.awt.*;
 import java.util.ArrayList;
+
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 
 public abstract class NPC {
     private String name;
     private Tile tile;
-    private NPCDetail detail;
+    private NPCDetail detailNPC;
     private ArrayList<String> favoriteGifts = new ArrayList<>();
     private boolean quest1 = false;
     private boolean quest2 = false;
     private boolean quest3 = false;
     private int tillQuest3;
+    private Rectangle rectangle = new Rectangle();
+    protected float dialogueTimer = 0.0f;
 
     public NPC(NPCDetail detail) {
-        this.name = detail.name;
-        this.tile = detail.tile;
-        this.detail = detail;
-        this.favoriteGifts.addAll(detail.favoriteGiftsName);
-        this.tillQuest3 = detail.quest3Days;
+        name = detail.name;
+        tile = detail.tile;
+        detailNPC = detail;
+        favoriteGifts.addAll(detail.favoriteGiftsName);
+        tillQuest3 = detail.quest3Days;
+        rectangle.setSize(16, 32);
     }
 
-    public abstract void quest1();
-    public abstract void quest2();
-    public abstract void quest3();
-    public abstract void talk();
+    public abstract String quest1();
+    public abstract String quest2();
+    public abstract String quest3();
+    public abstract String talk();
+    public abstract void showDialog(SpriteBatch batch, BitmapFont font, Camera camera);
+    public abstract void showQuest();
 
     public String getName() {
         return name;
@@ -36,7 +48,7 @@ public abstract class NPC {
     }
 
     public NPCDetail getDetail() {
-        return detail;
+        return detailNPC;
     }
 
     public ArrayList<String> getFavoriteGifts() {
@@ -73,6 +85,18 @@ public abstract class NPC {
 
     public void setTillQuest3(int tillQuest3) {
         this.tillQuest3 = tillQuest3;
+    }
+
+    public Rectangle getRectangle() {
+        return rectangle;
+    }
+
+    public float getDialogueTimer() {
+        return dialogueTimer;
+    }
+
+    public void decreaseDialogueTimer(float delta) {
+        this.dialogueTimer -= delta;
     }
 }
 

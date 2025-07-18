@@ -143,7 +143,9 @@ public class Player implements GameObjects {
         this.buffs.put("dish o' the Sea", -1);
         this.buffs.put("seaform pudding", -1);
         this.buffs.put("miner's treat", -1);
+        this.recipes.addAll(Arrays.asList(FoodType.values()));
         this.craftingRecipes.addAll(Arrays.asList(IndustrialProductType.values()));
+        this.backPack.addItem(new Item(1, "egg", 10, ItemTexture.WOOD.getTexture()));
     }
 
     public String getUsername() {

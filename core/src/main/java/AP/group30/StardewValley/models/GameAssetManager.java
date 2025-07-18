@@ -5,6 +5,8 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
+import javax.swing.plaf.PanelUI;
+
 public class GameAssetManager {
     public static AssetManager assetManager = new AssetManager();
     public static final AssetDescriptor<Texture> background = new AssetDescriptor<>("menu assets/loading screen.png", Texture.class);
@@ -157,10 +159,32 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> mystic_tree_seed = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Mystic_Tree_Seed.png", Texture.class);
 
 
-
-
-
-
+    public static final AssetDescriptor<Texture> Abigail0 = new AssetDescriptor<>("NPC/Abi0.png", Texture.class);
+    public static final AssetDescriptor<Texture> Abigail1 = new AssetDescriptor<>("NPC/Abi1.png", Texture.class);
+    public static final AssetDescriptor<Texture> Abigail2 = new AssetDescriptor<>("NPC/Abi2.png", Texture.class);
+    public static final AssetDescriptor<Texture> Abigail3 = new AssetDescriptor<>("NPC/Abi3.png", Texture.class);
+    public static final AssetDescriptor<Texture> Harvey0 = new AssetDescriptor<>("NPC/Harvey0.png", Texture.class);
+    public static final AssetDescriptor<Texture> Harvey1 = new AssetDescriptor<>("NPC/Harvey1.png", Texture.class);
+    public static final AssetDescriptor<Texture> Harvey2 = new AssetDescriptor<>("NPC/Harvey2.png", Texture.class);
+    public static final AssetDescriptor<Texture> Harvey3 = new AssetDescriptor<>("NPC/Harvey3.png", Texture.class);
+    public static final AssetDescriptor<Texture> Leah0 = new AssetDescriptor<>("NPC/Leah0.png", Texture.class);
+    public static final AssetDescriptor<Texture> Leah1 = new AssetDescriptor<>("NPC/Leah1.png", Texture.class);
+    public static final AssetDescriptor<Texture> Leah2 = new AssetDescriptor<>("NPC/Leah2.png", Texture.class);
+    public static final AssetDescriptor<Texture> Leah3 = new AssetDescriptor<>("NPC/Leah3.png", Texture.class);
+    public static final AssetDescriptor<Texture> Robin0 = new AssetDescriptor<>("NPC/Robin0.png", Texture.class);
+    public static final AssetDescriptor<Texture> Robin1 = new AssetDescriptor<>("NPC/Robin1.png", Texture.class);
+    public static final AssetDescriptor<Texture> Robin2 = new AssetDescriptor<>("NPC/Robin2.png", Texture.class);
+    public static final AssetDescriptor<Texture> Robin3 = new AssetDescriptor<>("NPC/Robin3.png", Texture.class);
+    public static final AssetDescriptor<Texture> Sebastian0 = new AssetDescriptor<>("NPC/Seb0.png", Texture.class);
+    public static final AssetDescriptor<Texture> Sebastian1 = new AssetDescriptor<>("NPC/Seb1.png", Texture.class);
+    public static final AssetDescriptor<Texture> Sebastian2 = new AssetDescriptor<>("NPC/Seb2.png", Texture.class);
+    public static final AssetDescriptor<Texture> Sebastian3 = new AssetDescriptor<>("NPC/Seb3.png", Texture.class);
+    public static final AssetDescriptor<Texture> chatBox = new AssetDescriptor<>("Stardew_Valley_Images/Chat/chat.jpg", Texture.class);
+    public static final AssetDescriptor<Texture> gift = new AssetDescriptor<>("Stardew_Valley_Images/Sprites/gift Log.png", Texture.class);
+    public static final AssetDescriptor<Texture> heart = new AssetDescriptor<>("Stardew_Valley_Images/Heart/HeartIconLarge.png", Texture.class);
+    public static final AssetDescriptor<Texture> questCompleted = new AssetDescriptor<>("Stardew_Valley_Images/Achievement/Achievement_Danger_In_The_Deep.jpg", Texture.class);
+    public static final AssetDescriptor<Texture> questTodo = new AssetDescriptor<>("Stardew_Valley_Images/Achievement/Achievement_A_Big_Help.jpg", Texture.class);
+    public static final AssetDescriptor<Texture> questUnavailable = new AssetDescriptor<>("Stardew_Valley_Images/Achievement/Achievement_Treasure_Trove.jpg", Texture.class);
 
 
 
@@ -307,5 +331,32 @@ public class GameAssetManager {
         assetManager.load(grass_starter);
         assetManager.load(fish_smoker);
         assetManager.load(mystic_tree_seed);
+
+        assetManager.load(Abigail0);
+        assetManager.load(Abigail1);
+        assetManager.load(Abigail2);
+        assetManager.load(Abigail3);
+        assetManager.load(Harvey0);
+        assetManager.load(Harvey1);
+        assetManager.load(Harvey2);
+        assetManager.load(Harvey3);
+        assetManager.load(Leah0);
+        assetManager.load(Leah1);
+        assetManager.load(Leah2);
+        assetManager.load(Leah3);
+        assetManager.load(Robin0);
+        assetManager.load(Robin1);
+        assetManager.load(Robin2);
+        assetManager.load(Robin3);
+        assetManager.load(Sebastian0);
+        assetManager.load(Sebastian1);
+        assetManager.load(Sebastian2);
+        assetManager.load(Sebastian3);
+        assetManager.load(chatBox);
+        assetManager.load(gift);
+        assetManager.load(heart);
+        assetManager.load(questCompleted);
+        assetManager.load(questUnavailable);
+        assetManager.load(questTodo);
     }
 }

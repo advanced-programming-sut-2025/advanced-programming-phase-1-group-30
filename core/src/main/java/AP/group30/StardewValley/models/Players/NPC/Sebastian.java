@@ -1,137 +1,162 @@
 package AP.group30.StardewValley.models.Players.NPC;
 
 import AP.group30.StardewValley.models.App;
+import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.Item;
 import AP.group30.StardewValley.models.Items.Products.ForagingMineral;
 import AP.group30.StardewValley.models.Items.Products.ForagingMineralType;
 import AP.group30.StardewValley.models.Maps.Weather;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.views.GameMenu;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Sebastian extends NPC {
-
+    private static Animation<TextureRegion> animation;
+    private static int x;
+    private static int y;
     public Sebastian() {
         super(NPCDetail.SEBASTIAN);
+        TextureRegion[] Region = new TextureRegion[4];
+        Region[0] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.Sebastian0));
+        Region[1] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.Sebastian1));
+        Region[2] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.Sebastian2));
+        Region[3] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.Sebastian3));
+        animation = new Animation<TextureRegion>(0.3f, Region);
+        animation.setPlayMode(Animation.PlayMode.LOOP);
+        x = 18 * 32;
+        y = 16 * 32;
+        this.getRectangle().setPosition(x, y);
     }
 
     @Override
-    public void quest1() {
-        if(isQuest1()){
-            GameMenu.printResult("This quest is completed.");
-            return;
+    public String quest1() {
+        if (isQuest1()) {
+            return "This quest is completed.";
         }
 
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Item request = Item.findItemByName("iron ore",player.getBackPack().getItems());
+        Item request = Item.findItemByName("iron ore", player.getBackPack().getItems());
         int rate = 1;
-        if(player.getFriendshipsNPC().get(App.getCurrentGame().getNPCs().get(0)) == 2){
+        if (player.getFriendshipsNPC().get(App.getCurrentGame().getNPCs().get(0)) == 2) {
             rate = 2;
         }
-        if(request == null) {
-            GameMenu.printResult("You don't have iron ore!");
+
+        if (request == null) {
+            return "You don't have iron ore!";
         } else {
-            if(request.getCount() < 50){
-                GameMenu.printResult("You need at least 50 iron ore!");
-                return;
-            } else if(request.getCount() == 50){
+            if (request.getCount() < 50) {
+                return "You need at least 50 iron ore!";
+            } else if (request.getCount() == 50) {
                 player.getBackPack().getItems().remove(request);
             } else {
                 request.setCount(request.getCount() - 50);
             }
+
             int count = 2 * rate;
             Item reward = new ForagingMineral(count, ForagingMineralType.DIAMOND);
-            Item newItem = Item.findItemByName("diamond",player.getBackPack().getItems());
-            if(newItem == null) {
+            Item newItem = Item.findItemByName("diamond", player.getBackPack().getItems());
+            if (newItem == null) {
                 player.getBackPack().getItems().add(reward);
             } else {
                 newItem.setCount(newItem.getCount() + count);
             }
 
-            GameMenu.printResult("Congratulations! You have successfully completed the quest!");
             this.setQuest1(true);
-            for(Player player1 :App.getCurrentGame().getPlayers()){
+            for (Player player1 : App.getCurrentGame().getPlayers()) {
                 Integer a = 1;
                 player1.getActivatedQuestNPC().get(App.getCurrentGame().getNPCs().get(0)).remove(a);
             }
+
+            return "You have successfully completed the quest!";
         }
     }
 
     @Override
-    public void quest2() {
-        if(isQuest2()){
-            GameMenu.printResult("This quest is completed.");
-            return;
+    public String quest2() {
+        if (isQuest2()) {
+            return "This quest is completed.";
         }
 
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Item request = Item.findItemByName("pumpkin pie",player.getBackPack().getItems());
+        Item request = Item.findItemByName("pumpkin pie", player.getBackPack().getItems());
         int rate = 1;
-        if(player.getFriendshipsNPC().get(App.getCurrentGame().getNPCs().get(0)) == 2){
+        if (player.getFriendshipsNPC().get(App.getCurrentGame().getNPCs().get(0)) == 2) {
             rate = 2;
         }
-        if(request == null) {
-            GameMenu.printResult("You don't have pumpkin pie!");
+
+        if (request == null) {
+            return "You don't have pumpkin pie!";
         } else {
-            if(request.getCount() == 1){
+            if (request.getCount() == 1) {
                 player.getBackPack().getItems().remove(request);
             } else {
                 request.setCount(request.getCount() - 1);
             }
+
             int count = 5000 * rate;
             player.setMoney(player.getMoney() + count);
-            GameMenu.printResult("Congratulations! You have successfully completed the quest!");
+
             this.setQuest2(true);
-            for(Player player1 :App.getCurrentGame().getPlayers()){
+            for (Player player1 : App.getCurrentGame().getPlayers()) {
                 Integer a = 2;
                 player1.getActivatedQuestNPC().get(App.getCurrentGame().getNPCs().get(0)).remove(a);
             }
+
+            return "You have successfully completed the quest!";
         }
     }
 
     @Override
-    public void quest3() {
-        if(isQuest3()){
-            GameMenu.printResult("This quest is completed.");
-            return;
+    public String quest3() {
+        if (isQuest3()) {
+            return "This quest is completed.";
         }
 
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Item request = Item.findItemByName("stone",player.getBackPack().getItems());
+        Item request = Item.findItemByName("stone", player.getBackPack().getItems());
         int rate = 1;
-        if(player.getFriendshipsNPC().get(App.getCurrentGame().getNPCs().get(0)) == 2){
+        if (player.getFriendshipsNPC().get(App.getCurrentGame().getNPCs().get(0)) == 2) {
             rate = 2;
         }
-        if(request == null) {
-            GameMenu.printResult("You don't have stone!");
+
+        if (request == null) {
+            return "You don't have stone!";
         } else {
-            if(request.getCount() < 150){
-                GameMenu.printResult("You need at least 150 stone!");
-                return;
-            } else if(request.getCount() == 150){
+            if (request.getCount() < 150) {
+                return "You need at least 150 stone!";
+            } else if (request.getCount() == 150) {
                 player.getBackPack().getItems().remove(request);
             } else {
                 request.setCount(request.getCount() - 150);
             }
+
             int count = 50 * rate;
             Item reward = new ForagingMineral(count, ForagingMineralType.QUARTZ);
-            Item newItem = Item.findItemByName("quartz",player.getBackPack().getItems());
-            if(newItem == null) {
+            Item newItem = Item.findItemByName("quartz", player.getBackPack().getItems());
+            if (newItem == null) {
                 player.getBackPack().getItems().add(reward);
             } else {
                 newItem.setCount(newItem.getCount() + count);
             }
 
-            GameMenu.printResult("Congratulations! You have successfully completed the quest!");
             this.setQuest3(true);
-            for(Player player1 :App.getCurrentGame().getPlayers()){
+            for (Player player1 : App.getCurrentGame().getPlayers()) {
                 Integer a = 3;
                 player1.getActivatedQuestNPC().get(App.getCurrentGame().getNPCs().get(0)).remove(a);
             }
+
+            return "You have successfully completed the quest!";
         }
     }
 
+
     @Override
-    public void talk() {
+    public String talk() {
         Player player = App.getCurrentGame().getCurrentPlayer();
         NPC npc = App.getCurrentGame().getNPCs().get(0);
         int friendship = player.getFriendshipsNPC().get(npc) / 200;
@@ -140,64 +165,70 @@ public class Sebastian extends NPC {
         if (friendship == 0) {
             switch (weather) {
                 case SUNNY:
-                    GameMenu.printResult("Ugh... too bright out here. I miss my room already.");
-                    break;
+                    return "Ugh... too bright out here. I miss my room already.";
                 case RAIN:
-                    GameMenu.printResult("This weather suits me just fine.");
-                    break;
+                    return "This weather suits me just fine.";
                 case SNOW:
-                    GameMenu.printResult("Snow’s okay... as long as I don’t have to shovel it.");
-                    break;
+                    return "Snow’s okay... as long as I don’t have to shovel it.";
                 case STORM:
-                    GameMenu.printResult("Storms make the world feel alive. I like that.");
-                    break;
+                    return "Storms make the world feel alive. I like that.";
             }
         } else if (friendship == 1) {
             switch (weather) {
                 case SUNNY:
-                    GameMenu.printResult("It's kind of bright... but I’ll survive.");
-                    break;
+                    return "It's kind of bright... but I’ll survive.";
                 case RAIN:
-                    GameMenu.printResult("Rain fits my mood today.");
-                    break;
+                    return "Rain fits my mood today.";
                 case SNOW:
-                    GameMenu.printResult("Snow is calming... kinda nice.");
-                    break;
+                    return "Snow is calming... kinda nice.";
                 case STORM:
-                    GameMenu.printResult("Stormy skies are oddly comforting.");
-                    break;
+                    return "Stormy skies are oddly comforting.";
             }
         } else if (friendship == 2) {
             switch (weather) {
                 case SUNNY:
-                    GameMenu.printResult("I guess a sunny day isn’t the worst thing.");
-                    break;
+                    return "I guess a sunny day isn’t the worst thing.";
                 case RAIN:
-                    GameMenu.printResult("Kinda peaceful, right?");
-                    break;
+                    return "Kinda peaceful, right?";
                 case SNOW:
-                    GameMenu.printResult("Snow reminds me of home... quiet and cold.");
-                    break;
+                    return "Snow reminds me of home... quiet and cold.";
                 case STORM:
-                    GameMenu.printResult("Sometimes I think the storm gets how I feel inside.");
-                    break;
+                    return "Sometimes I think the storm gets how I feel inside.";
             }
         } else if (friendship == 3) {
             switch (weather) {
                 case SUNNY:
-                    GameMenu.printResult("I don’t mind the sun when you're around.");
-                    break;
+                    return "I don’t mind the sun when you're around.";
                 case RAIN:
-                    GameMenu.printResult("You ever just stand in the rain and think?");
-                    break;
+                    return "You ever just stand in the rain and think?";
                 case SNOW:
-                    GameMenu.printResult("Want to walk in the snow together?");
-                    break;
+                    return "Want to walk in the snow together?";
                 case STORM:
-                    GameMenu.printResult("If lightning hits us, at least we’ll be together. Kidding... mostly.");
-                    break;
+                    return "If lightning hits us, at least we’ll be together. Kidding... mostly.";
             }
+        }
+        return "";
+    }
+
+    @Override
+    public void showDialog(SpriteBatch batch, BitmapFont font, Camera camera) {
+        batch.draw(GameAssetManager.assetManager.get(GameAssetManager.chatBox), camera.position.x - Gdx.graphics.getWidth() / 3.8f,
+            camera.position.y - Gdx.graphics.getHeight() / 2.2f,this.getRectangle().width * 60,this.getRectangle().height * 8f);
+        font.draw(batch,"Sebastian: " + talk(), camera.position.x - Gdx.graphics.getWidth() / 4.2f, camera.position.y - Gdx.graphics.getHeight() / 4f);
+        if(dialogueTimer <= 0){
+            dialogueTimer = 3f;
         }
     }
 
+    @Override
+    public void showQuest() {
+
+    }
+
+    public static void render(SpriteBatch batch, float stateTime) {
+        TextureRegion currentFrame;
+        currentFrame = animation.getKeyFrame(stateTime);
+        TextureRegion playerRegion = currentFrame;
+        batch.draw(currentFrame, x, y, playerRegion.getRegionWidth() * 2f , playerRegion.getRegionHeight() * 2f);
+    }
 }

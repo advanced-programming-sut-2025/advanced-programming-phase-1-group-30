@@ -22,6 +22,7 @@ import AP.group30.StardewValley.models.Maps.Tile;
 import AP.group30.StardewValley.models.Maps.TileTexture;
 import AP.group30.StardewValley.models.Maps.TileTypes;
 import AP.group30.StardewValley.models.Players.Direction;
+import AP.group30.StardewValley.models.Players.NPC.*;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.views.Hut.HutScreen;
 import com.badlogic.gdx.Gdx;
@@ -37,6 +38,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import java.util.ArrayList;
@@ -82,11 +84,11 @@ public class GameScreen implements Screen {
     private float x;
     private float y;
     float speed = 150f;
-
     private InventoryScreen inventoryScreen;
     private SkillScreen skillScreen;
     private HutScreen hut;
     private CraftingScreen craftingScreen;
+    private QuestScreen questScreen;
 
     private final BitmapFont info = (Main.getMain().skin).getFont("font");
     private ShopScreen shopScreen;
@@ -142,6 +144,7 @@ public class GameScreen implements Screen {
         inventoryScreen = new InventoryScreen(batch, Main.getMain().skin);
         skillScreen = new SkillScreen(batch, Main.getMain().skin);
         craftingScreen = new CraftingScreen(batch, Main.getMain().skin);
+        questScreen = new QuestScreen(batch, Main.getMain().skin);
         hut = new HutScreen(batch, Main.getMain().skin);
         info.setColor(Color.BLACK);
 
@@ -156,18 +159,13 @@ public class GameScreen implements Screen {
         player.setStateTime(stateTime);
         isMoving = false;
 
-//        if (!inventoryScreen.isVisible() && !skillScreen.isVisible() && !shopScreen.isVisible()) {
-//            handleInput(delta);
-//            if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
-//            if (Gdx.input.isKeyPressed(Input.Keys.S)) camera.position.y -= speed * delta;
-//            if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
-//            if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
-//        }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) shopScreen.toggle();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) inventoryScreen.toggle();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.N)) skillScreen.toggle();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.B)) craftingScreen.toggle();
+        if(!questScreen.isVisible()){
+            if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) shopScreen.toggle();
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) inventoryScreen.toggle();
+            if (Gdx.input.isKeyJustPressed(Input.Keys.N)) skillScreen.toggle();
+            if (Gdx.input.isKeyJustPressed(Input.Keys.B)) craftingScreen.toggle();
+        }
 
         camera.position.set(x + playerRegion.getRegionWidth() / 2f, y + playerRegion.getRegionHeight() / 2f, 0);
         camera.update();
@@ -194,13 +192,32 @@ public class GameScreen implements Screen {
             if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
             if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
         }
+        if(player.isInCity()){
+            Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            camera.unproject(mousePos);
+            for(NPC npc: game.getNPCs()){
+                Rectangle bounds = npc.getRectangle();
+                if(Gdx.input.isButtonPressed(Input.Buttons.LEFT) && bounds.contains(mousePos.x, mousePos.y)
+                    || npc.getDialogueTimer() > 0){
+                    npc.showDialog(batch, font, camera);
+                    if (npc.getDialogueTimer() > 0) {
+                        npc.decreaseDialogueTimer(delta);
+                    }
+                } else if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT) && bounds.contains(mousePos.x, mousePos.y)){
+                    questScreen.setCurrentNPC(npc);
+                    questScreen.toggle();
+                }
+            }
+        }
         batch.end();
 
         findHut();
         currentTile = getTileUnderPlayer(x, y);
 
+
+
         if (currentTile.getX() == hutEntryTile.getX() &&
-            currentTile.getY() == hutEntryTile.getY() + 1) {
+            currentTile.getY() == hutEntryTile.getY() + 1 && !player.isInCity()) {
             batch.begin();
             info.draw(batch, "You reached Hut entry!\nPress 'H' to enter!",camera.position.x - 50,camera.position.y + 510);
             batch.end();
@@ -211,6 +228,7 @@ public class GameScreen implements Screen {
         inventoryScreen.render();
         skillScreen.render();
         craftingScreen.render();
+        questScreen.render();
         hut.render(batch, camera);
         shopScreen.render();
     }
@@ -259,6 +277,11 @@ public class GameScreen implements Screen {
                     g.render(batch, game.getCityMap());
                 }
             }
+            Leah.render(batch, stateTime);
+            Harvey.render(batch, stateTime);
+            Robin.render(batch, stateTime);
+            Sebastian.render(batch, stateTime);
+            Abigail.render(batch, stateTime);
         } else {
             for (GameObjects g : entities) {
                 if (!(g instanceof Building)) {
@@ -423,6 +446,7 @@ public class GameScreen implements Screen {
         font.draw(batch, String.format("5 0 0"),camera.position.x + 720, camera.position.y + 340);
     }
 
+
     @Override
     public void resize(int width, int height) {
         camera.setToOrtho(false, width, height);
@@ -519,6 +543,7 @@ public class GameScreen implements Screen {
                         break;
                     }
                 }
+
                 if (!collides) {
                     x = proposedX;
                     y = proposedY;
@@ -530,7 +555,7 @@ public class GameScreen implements Screen {
             player.setY((int)y);
         }
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !questScreen.isVisible()) {
             player.setInCity(!player.isInCity());
         }
 

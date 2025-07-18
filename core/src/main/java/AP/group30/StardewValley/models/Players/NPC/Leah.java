@@ -1,25 +1,46 @@
 package AP.group30.StardewValley.models.Players.NPC;
 
 import AP.group30.StardewValley.models.App;
+import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.Foods.FoodType;
 import AP.group30.StardewValley.models.Items.IndustrialProducts.IndustrialProduct;
 import AP.group30.StardewValley.models.Items.IndustrialProducts.IndustrialProductType;
 import AP.group30.StardewValley.models.Items.Item;
+import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Maps.Weather;
+import AP.group30.StardewValley.models.Players.Direction;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.views.GameMenu;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Leah extends NPC {
-
+    private static Animation<TextureRegion> animation;
+    private static int x;
+    private static int y;
     public Leah() {
         super(NPCDetail.LEAH);
+        TextureRegion[] Region = new TextureRegion[4];
+        Region[0] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.Leah0));
+        Region[1] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.Leah1));
+        Region[2] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.Leah2));
+        Region[3] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.Leah3));
+        animation = new Animation<TextureRegion>(0.3f, Region);
+        animation.setPlayMode(Animation.PlayMode.LOOP);
+        x = 20 * 32;
+        y = 40 * 32;
+        this.getRectangle().setPosition(x, y);
     }
 
     @Override
-    public void quest1() {
+    public String quest1() {
         if(isQuest1()){
-            GameMenu.printResult("This quest is completed.");
-            return;
+            return "This quest is completed";
         }
 
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -29,11 +50,10 @@ public class Leah extends NPC {
             rate = 2;
         }
         if(request == null) {
-            GameMenu.printResult("You don't have wood!");
+            return "You don't have wood!";
         } else {
             if(request.getCount() < 10){
-                GameMenu.printResult("You need at least 10 wood!");
-                return;
+                return "You need at least 10 wood!";
             } else if(request.getCount() == 10){
                 player.getBackPack().getItems().remove(request);
             } else {
@@ -42,20 +62,20 @@ public class Leah extends NPC {
             int count = 500 * rate;
             player.setMoney(player.getMoney() + count);
 
-            GameMenu.printResult("Congratulations! You have successfully completed the quest!");
+
             this.setQuest1(true);
             for(Player player1 :App.getCurrentGame().getPlayers()){
                 Integer a = 1;
                 player1.getActivatedQuestNPC().get(App.getCurrentGame().getNPCs().get(3)).remove(a);
             }
+            return "You have successfully completed the quest!";
         }
     }
 
     @Override
-    public void quest2() {
+    public String quest2() {
         if(isQuest2()){
-            GameMenu.printResult("This quest is completed.");
-            return;
+            return "This quest is completed";
         }
 
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -65,7 +85,7 @@ public class Leah extends NPC {
             rate = 2;
         }
         if(request == null) {
-            GameMenu.printResult("You don't have salmon!");
+            return "You don't have salmon!";
         } else {
             if(request.getCount() == 1){
                 player.getBackPack().getItems().remove(request);
@@ -76,20 +96,19 @@ public class Leah extends NPC {
                 player.getRecipes().add(FoodType.SALMON_DINNER);
             }
 
-            GameMenu.printResult("Congratulations! You have successfully completed the quest!");
             this.setQuest2(true);
             for(Player player1 :App.getCurrentGame().getPlayers()){
                 Integer a = 2;
                 player1.getActivatedQuestNPC().get(App.getCurrentGame().getNPCs().get(3)).remove(a);
             }
+            return "You have successfully completed the quest!";
         }
     }
 
     @Override
-    public void quest3() {
+    public String quest3() {
         if(isQuest3()){
-            GameMenu.printResult("This quest is completed.");
-            return;
+            return "This quest is completed";
         }
 
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -99,11 +118,10 @@ public class Leah extends NPC {
             rate = 2;
         }
         if(request == null) {
-            GameMenu.printResult("You don't have wood!");
+            return "You don't have wood!";
         } else {
             if(request.getCount() < 200){
-                GameMenu.printResult("You need at least 200 wood!");
-                return;
+                return "You need at least 200 wood!";
             } else if(request.getCount() == 200){
                 player.getBackPack().getItems().remove(request);
             } else {
@@ -118,17 +136,17 @@ public class Leah extends NPC {
                 newItem.setCount(newItem.getCount() + count);
             }
 
-            GameMenu.printResult("Congratulations! You have successfully completed the quest!");
             this.setQuest3(true);
             for(Player player1 :App.getCurrentGame().getPlayers()){
                 Integer a = 3;
                 player1.getActivatedQuestNPC().get(App.getCurrentGame().getNPCs().get(3)).remove(a);
             }
+            return "You have successfully completed the quest!";
         }
     }
 
     @Override
-    public void talk() {
+    public String talk() {
         Player player = App.getCurrentGame().getCurrentPlayer();
         NPC npc = App.getCurrentGame().getNPCs().get(3);
         int friendship = player.getFriendshipsNPC().get(npc) / 200;
@@ -137,49 +155,60 @@ public class Leah extends NPC {
         if (friendship == 0) {
             switch (weather) {
                 case SUNNY:
-                    GameMenu.printResult("Sunlight’s great for painting... but it gets hot.");
-                    break;
+                    return "Sunlight’s great for painting... but it gets hot.";
                 case RAIN:
-                    GameMenu.printResult("Rainy days are for tea and thinking.");
-                    break;
+                    return "Rainy days are for tea and thinking.";
                 case SNOW:
-                    GameMenu.printResult("Snow gives everything a kind of purity, don’t you think?");
-                    break;
+                    return "Snow gives everything a kind of purity, don’t you think?";
                 case STORM:
-                    GameMenu.printResult("Storms are wild... nature’s way of reminding us who’s in charge.");
-                    break;
+                    return "Storms are wild... nature’s way of reminding us who’s in charge.";
             }
         } else if (friendship == 1) {
             switch (weather) {
                 case SUNNY:
-                    GameMenu.printResult("This light is perfect for a landscape sketch.");
-                    break;
+                    return "This light is perfect for a landscape sketch.";
                 case RAIN:
-                    GameMenu.printResult("I like the sound of rain on the cabin roof.");
-                    break;
+                    return "I like the sound of rain on the cabin roof.";
                 case SNOW:
-                    GameMenu.printResult("Snow always inspires me to sculpt something new.");
-                    break;
+                    return "Snow always inspires me to sculpt something new.";
                 case STORM:
-                    GameMenu.printResult("Lightning... chaotic, but beautiful.");
-                    break;
+                    return "Lightning... chaotic, but beautiful.";
             }
         } else if (friendship >= 2) {
             switch (weather) {
                 case SUNNY:
-                    GameMenu.printResult("I saved a sunny spot by the river for us.");
-                    break;
+                    return "I saved a sunny spot by the river for us.";
                 case RAIN:
-                    GameMenu.printResult("Want to stay in and paint with me while it rains?");
-                    break;
+                    return "Want to stay in and paint with me while it rains?";
                 case SNOW:
-                    GameMenu.printResult("Let’s make art in the snow—our own little world.");
-                    break;
+                    return "Let’s make art in the snow—our own little world.";
                 case STORM:
-                    GameMenu.printResult("Storms make me want to hold onto someone special. Lucky me.");
-                    break;
+                    return "Storms make me want to hold onto someone special. Lucky me.";
             }
+        }
+        return "";
+    }
+
+    @Override
+    public void showDialog(SpriteBatch batch, BitmapFont font, Camera camera) {
+        batch.draw(GameAssetManager.assetManager.get(GameAssetManager.chatBox), camera.position.x - Gdx.graphics.getWidth() / 3.8f,
+            camera.position.y - Gdx.graphics.getHeight() / 2.2f,this.getRectangle().width * 60,this.getRectangle().height * 8f);
+        font.draw(batch,"Leah: " + talk(), camera.position.x - Gdx.graphics.getWidth() / 4.2f, camera.position.y - Gdx.graphics.getHeight() / 4f);
+        if(dialogueTimer <= 0){
+            dialogueTimer = 3f;
         }
     }
 
+    @Override
+    public void showQuest() {
+
+    }
+
+
+    public static void render(SpriteBatch batch, float stateTime) {
+        TextureRegion currentFrame;
+        currentFrame = animation.getKeyFrame(stateTime);
+        TextureRegion playerRegion = currentFrame;
+        batch.draw(currentFrame, x, y, playerRegion.getRegionWidth() * 2f , playerRegion.getRegionHeight() * 2f);
+    }
 }
