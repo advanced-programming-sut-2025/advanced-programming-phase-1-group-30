@@ -20,11 +20,10 @@ import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Maps.Tile;
 import AP.group30.StardewValley.models.Maps.TileTypes;
 import AP.group30.StardewValley.models.Players.Direction;
+import AP.group30.StardewValley.models.Players.NPC.*;
 import AP.group30.StardewValley.models.Players.Player;
-import AP.group30.StardewValley.views.InGameMenus.Hut.HutScreen;
-import AP.group30.StardewValley.views.InGameMenus.InventoryScreen;
-import AP.group30.StardewValley.views.InGameMenus.ShopScreen;
-import AP.group30.StardewValley.views.InGameMenus.SkillScreen;
+import AP.group30.StardewValley.views.InGameMenus.Hut.*;
+import AP.group30.StardewValley.views.InGameMenus.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -36,6 +35,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
@@ -69,6 +69,7 @@ public class CityScreen implements Screen {
     private SkillScreen skillScreen;
     private HutScreen hut;
     private ShopScreen shopScreen;
+    private QuestScreen questScreen;
     private SpriteBatch batch;
     private OrthographicCamera camera;
 
@@ -100,6 +101,7 @@ public class CityScreen implements Screen {
         grassMap = GameScreen.generateGrassMap(tiles, grassMap, random);
         inventoryScreen = new InventoryScreen(batch, Main.getMain().skin);
         skillScreen = new SkillScreen(batch, Main.getMain().skin);
+        questScreen = new QuestScreen(batch, Main.getMain().skin);
     }
 
     @Override
@@ -131,6 +133,7 @@ public class CityScreen implements Screen {
                 shopScreen = null;
             }
         }
+
         batch.begin();
         GameScreen.renderBackground(camera, grassMap, batch);
         GameScreen.renderWallsAroundMap(tiles, batch);
@@ -138,6 +141,7 @@ public class CityScreen implements Screen {
         GameScreen.renderEntities(batch, map, entities);
         GameScreen.renderEnergyBar(player, camera, energyBar, batch, shapeRenderer);
         GameScreen.renderTime(batch, camera, clock, font, game);
+        renderNPCs(batch, stateTime);
         if (!isAnyMenuOpened()) {
             handleInput(delta);
             if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
@@ -145,8 +149,25 @@ public class CityScreen implements Screen {
             if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
             if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
         }
+
+        Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+        camera.unproject(mousePos);
+        for(NPC npc: game.getNPCs()){
+            Rectangle bounds = npc.getRectangle();
+            if(Gdx.input.isButtonPressed(Input.Buttons.LEFT) && bounds.contains(mousePos.x, mousePos.y)
+                || npc.getDialogueTimer() > 0){
+                npc.showDialog(batch, font, camera);
+                if (npc.getDialogueTimer() > 0) {
+                    npc.decreaseDialogueTimer(delta);
+                }
+            } else if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT) && bounds.contains(mousePos.x, mousePos.y)){
+                questScreen.setCurrentNPC(npc);
+                questScreen.toggle();
+            }
+        }
         batch.end();
 
+        questScreen.render();
         if (shopScreen != null) {
             shopScreen.render(batch, camera);
         }
@@ -174,7 +195,7 @@ public class CityScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        questScreen.dispose();
     }
 
     private void handleInput(float delta) {
@@ -268,7 +289,8 @@ public class CityScreen implements Screen {
 
     private boolean isAnyMenuOpened() {
         return inventoryScreen.isVisible() ||
-            skillScreen.isVisible();
+            skillScreen.isVisible() ||
+            questScreen.isVisible();
     }
 
     public OrthographicCamera getCamera() {
@@ -314,5 +336,13 @@ public class CityScreen implements Screen {
         shopRect.width = building.getRectangle().width;
         shopRect.height = building.getRectangle().height;
         return shopRect;
+    }
+
+    static void renderNPCs(SpriteBatch batch, float stateTime) {
+        Leah.render(batch, stateTime);
+        Harvey.render(batch, stateTime);
+        Robin.render(batch, stateTime);
+        Sebastian.render(batch, stateTime);
+        Abigail.render(batch, stateTime);
     }
 }
