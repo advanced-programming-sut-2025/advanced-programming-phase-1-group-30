@@ -101,7 +101,33 @@ public enum ItemTexture {
     Dehydrator(GameAssetManager.assetManager.get(GameAssetManager.dehydrator)),
     Grass_Starter(GameAssetManager.assetManager.get(GameAssetManager.grass_starter)),
     Fish_Smoker(GameAssetManager.assetManager.get(GameAssetManager.fish_smoker)),
-    Mystic_Tree_Seed(GameAssetManager.assetManager.get(GameAssetManager.mystic_tree_seed));
+    Mystic_Tree_Seed(GameAssetManager.assetManager.get(GameAssetManager.mystic_tree_seed)),
+
+    HONEY(GameAssetManager.assetManager.get(GameAssetManager.honey)),
+    CHEESE(GameAssetManager.assetManager.get(GameAssetManager.cheese)),
+    GOAT_CHEESE(GameAssetManager.assetManager.get(GameAssetManager.goatCheese)),
+    BEER(GameAssetManager.assetManager.get(GameAssetManager.beer)),
+    VINEGAR(GameAssetManager.assetManager.get(GameAssetManager.vinegar)),
+    COFFEE(GameAssetManager.assetManager.get(GameAssetManager.coffee)),
+    JUICE(GameAssetManager.assetManager.get(GameAssetManager.juice)),
+    MEAD(GameAssetManager.assetManager.get(GameAssetManager.mead)),
+    PALE_ALE(GameAssetManager.assetManager.get(GameAssetManager.paleAle)),
+    WINE(GameAssetManager.assetManager.get(GameAssetManager.wine)),
+    DRIED_MUSHROOMS(GameAssetManager.assetManager.get(GameAssetManager.driedMushrooms)),
+    DRIED_FRUIT(GameAssetManager.assetManager.get(GameAssetManager.driedFruit)),
+    RAISINS(GameAssetManager.assetManager.get(GameAssetManager.raisins)),
+    COAL(GameAssetManager.assetManager.get(GameAssetManager.coal)),
+    CLOTH(GameAssetManager.assetManager.get(GameAssetManager.cloth)),
+    MAYONNAISE(GameAssetManager.assetManager.get(GameAssetManager.mayonnaise)),
+    DUCK_MAYONNAISE(GameAssetManager.assetManager.get(GameAssetManager.duckMayonnaise)),
+    DINOSAUR_MAYONNAISE(GameAssetManager.assetManager.get(GameAssetManager.dinosaurMayonnaise)),
+    TRUFFLE_OIL(GameAssetManager.assetManager.get(GameAssetManager.truffleOil)),
+    OIL(GameAssetManager.assetManager.get(GameAssetManager.oil)),
+    PICKLES(GameAssetManager.assetManager.get(GameAssetManager.pickles)),
+    JELLY(GameAssetManager.assetManager.get(GameAssetManager.jelly)),
+    SMOKED_FISH(GameAssetManager.assetManager.get(GameAssetManager.smokedFish)),
+    METAL_BAR(GameAssetManager.assetManager.get(GameAssetManager.metalBar));
+
 
     private final Texture TEXTURE;
 

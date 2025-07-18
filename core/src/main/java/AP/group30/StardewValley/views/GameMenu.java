@@ -330,16 +330,16 @@ public class GameMenu implements AppMenu {
             GameMenuController.sell(matcher.group("productName"), matcher.group("count"));
             return;
         }
-        matcher = GameMenuCommands.ARTISAN_USE.regexMatcher(command);
-        if (matcher.matches()) {
-            GameMenuController.artisanUse(matcher.group("artisanName"), matcher.group("itemName"));
-            return;
-        }
-        matcher = GameMenuCommands.ARTISAN_GET.regexMatcher(command);
-        if (matcher.matches()) {
-            GameMenuController.artisanGet(matcher.group("artisanName"));
-            return;
-        }
+//        matcher = GameMenuCommands.ARTISAN_USE.regexMatcher(command);
+//        if (matcher.matches()) {
+//            GameMenuController.artisanUse(matcher.group("artisanName"), matcher.group("itemName"));
+//            return;
+//        }
+//        matcher = GameMenuCommands.ARTISAN_GET.regexMatcher(command);
+//        if (matcher.matches()) {
+//            GameMenuController.artisanGet(matcher.group("artisanName"));
+//            return;
+//        }
 
         matcher = GameMenuCommands.MEET_NPC.regexMatcher(command);
         if (matcher.matches()) {

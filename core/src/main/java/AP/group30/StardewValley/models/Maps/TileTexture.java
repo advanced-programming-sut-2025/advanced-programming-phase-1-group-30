@@ -11,6 +11,7 @@ public enum TileTexture {
     DIRT_3(GameAssetManager.assetManager.get(GameAssetManager.dirt3)),
     DIRT_4(GameAssetManager.assetManager.get(GameAssetManager.dirt4)),
     PLANTABLE(GameAssetManager.assetManager.get(GameAssetManager.plantable)),
+    WATERED(GameAssetManager.assetManager.get(GameAssetManager.wateredTile)),
     RIVER(GameAssetManager.assetManager.get(GameAssetManager.river)),
     LEFT_WALL(GameAssetManager.assetManager.get(GameAssetManager.leftWall)),
     RIGHT_WALL(GameAssetManager.assetManager.get(GameAssetManager.rightWall)),

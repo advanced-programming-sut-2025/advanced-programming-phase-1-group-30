@@ -60,6 +60,7 @@ public class Player implements GameObjects {
     java.util.Map<Item, Integer> itemsBoughtToday = new HashMap<>();
     private final ArrayList<Animal> playerAnimals = new ArrayList<>();
     private ArrayList<IndustrialProductType> craftingRecipes = new ArrayList<>();
+    private ArrayList<IndustrialProductType> devices = new ArrayList<>();
     private Building building;
     private ArrayList<FoodType> recipes;
     private HashMap<NPC,Integer> friendshipsNPC = new HashMap<>();
@@ -118,7 +119,7 @@ public class Player implements GameObjects {
         this.backPack.addItem(new Item(1000, "wood", 10, ItemTexture.WOOD.getTexture()));
         this.backPack.addItem(new Item(1000, "stone", 20, ItemTexture.STONE.getTexture()));
         this.backPack.addItem(new Item(50, "hay", 50, ItemTexture.WOOD.getTexture()));
-        this.backPack.addItem(new ForagingSeed(1, ForagingSeedType.CARROT_SEEDS));
+        this.backPack.addItem(new ForagingSeed(10, ForagingSeedType.CARROT_SEEDS));
         this.backPack.addItem(new Item(50, "speed-gro", 50, ItemTexture.WOOD.getTexture()));
         this.backPack.addItem(new Item(50, "deluxe retaining soil", 50, ItemTexture.WOOD.getTexture()));
         this.backPack.addItem(new Item(50, "copper bar", 50, ItemTexture.WOOD.getTexture()));
@@ -143,9 +144,11 @@ public class Player implements GameObjects {
         this.buffs.put("dish o' the Sea", -1);
         this.buffs.put("seaform pudding", -1);
         this.buffs.put("miner's treat", -1);
-        this.recipes.addAll(Arrays.asList(FoodType.values()));
         this.craftingRecipes.addAll(Arrays.asList(IndustrialProductType.values()));
-        this.backPack.addItem(new Item(1, "egg", 10, ItemTexture.WOOD.getTexture()));
+
+        this.devices.add(IndustrialProductType.BEE_HOUSE);
+        this.devices.add(IndustrialProductType.KEG);
+        this.devices.add(IndustrialProductType.LOOM);
     }
 
     public String getUsername() {
@@ -397,6 +400,12 @@ public class Player implements GameObjects {
     }
     public void addCraftingRecipe(IndustrialProductType craftingRecipe) {
         this.craftingRecipes.add(craftingRecipe);
+    }
+    public ArrayList<IndustrialProductType> getDevices() {
+        return this.devices;
+    }
+    public void addDevice(IndustrialProductType craftingRecipe) {
+        this.devices.add(craftingRecipe);
     }
     public Building getBuilding() {
         return building;

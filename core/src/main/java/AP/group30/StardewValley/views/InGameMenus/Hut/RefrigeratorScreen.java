@@ -1,13 +1,10 @@
-package AP.group30.StardewValley.views;
+package AP.group30.StardewValley.views.InGameMenus.Hut;
 
 import AP.group30.StardewValley.controllers.GameMenuController;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameAssetManager;
-import AP.group30.StardewValley.models.Items.Foods.FoodType;
-import AP.group30.StardewValley.models.Items.IndustrialProducts.IndustrialProductType;
 import AP.group30.StardewValley.models.Items.Item;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -23,29 +20,29 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
 
-public class CraftingScreen implements Screen {
+public class RefrigeratorScreen {
     private final Stage stage;
     private final Skin skin;
     private final Table table1;
+    private final Table table2;
     private boolean visible = false;
     private final Texture backgroundTexture;
     private final Texture backgroundItemTexture;
 
-    private TextButton craftingButton;
+    private TextButton moveButton;
 
     private final ArrayList<Image> itemImages = new ArrayList<>();
-    private Image borderImage;
-
-    private ArrayList<IndustrialProductType> recipes = App.getCurrentGame().getCurrentPlayer().getCraftingRecipes();
-    private IndustrialProductType currentRecipe = null;
+    private ArrayList<Item> backPackItems = App.getCurrentGame().getCurrentPlayer().getBackPack().getItems();
+    private ArrayList<Item> refrigeratorItems = App.getCurrentGame().getCurrentPlayer().getRefrigerator().getItems();
+    private Item currentItem = null;
 
     private final Label errorLabel;
 
-    public CraftingScreen(SpriteBatch batch, Skin skin) {
+    public RefrigeratorScreen(SpriteBatch batch, Skin skin) {
         this.skin = skin;
         this.stage = new Stage(new ScreenViewport(), batch);
 
-        backgroundTexture = GameAssetManager.assetManager.get(GameAssetManager.crafting);
+        backgroundTexture = GameAssetManager.assetManager.get(GameAssetManager.refrigerator);
         Drawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
 
         backgroundItemTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryItem);
@@ -59,11 +56,20 @@ public class CraftingScreen implements Screen {
             (Gdx.graphics.getHeight() - table1.getHeight()) / 2f + 200
         );
 
-        craftingButton = new TextButton("Craft", skin);
-        craftingButton.setPosition(table1.getX() + table1.getWidth() / 2f - craftingButton.getWidth() / 2f - 50,
-            table1.getY() - craftingButton.getHeight());
-        craftingButton.setVisible(false);
-        craftingButton.addListener(new ClickListener() {
+        table2 = new Table();
+        table2.setVisible(false);
+        table2.setBackground(backgroundDrawable);
+        table2.setSize(800, 300);
+        table2.setPosition(
+            (Gdx.graphics.getWidth() - table2.getWidth()) / 2f,
+            (Gdx.graphics.getHeight() - table2.getHeight()) / 2f - 200
+        );
+
+        moveButton = new TextButton("Move", skin);
+        moveButton.setPosition(table1.getX() + table1.getWidth() / 2f - moveButton.getWidth() / 2f - 50,
+            (table1.getY() + table2.getY() + table2.getHeight()) / 2f - moveButton.getHeight() / 2f);
+        moveButton.setVisible(false);
+        moveButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 handleMove();
@@ -72,13 +78,14 @@ public class CraftingScreen implements Screen {
 
         errorLabel = new Label("", skin);
         errorLabel.setColor(Color.RED);
-        errorLabel.setPosition(table1.getX() + 50 ,
-            table1.getY() + 70);
+        errorLabel.setPosition(table1.getX() + table1.getWidth() / 2f + 50,
+            (table1.getY() + table2.getY() + table2.getHeight()) / 2f);
         errorLabel.setVisible(false);
 
         stage.addActor(table1);
+        stage.addActor(table2);
         stage.addActor(errorLabel);
-        stage.addActor(craftingButton);
+        stage.addActor(moveButton);
 
         refresh();
     }
@@ -87,32 +94,14 @@ public class CraftingScreen implements Screen {
         refresh();
         visible = true;
         table1.setVisible(true);
+        table2.setVisible(true);
         Gdx.input.setInputProcessor(stage);
-    }
-
-    @Override
-    public void render(float v) {
-
-    }
-
-    @Override
-    public void resize(int i, int i1) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
     }
 
     public void hide() {
         visible = false;
         table1.setVisible(false);
+        table2.setVisible(false);
         Gdx.input.setInputProcessor(null);
     }
 
@@ -136,66 +125,74 @@ public class CraftingScreen implements Screen {
         for (Image img : itemImages) {
             img.remove();
         }
-        if (borderImage != null) borderImage.remove();
         stage.dispose();
         backgroundTexture.dispose();
         backgroundItemTexture.dispose();
     }
 
     private void handleMove() {
-        if (currentRecipe == null) return;
+        if (currentItem == null) return;
 
-        String result = GameMenuController.crafting(currentRecipe);
+        String result = null;
+        if (backPackItems.contains(currentItem)) {
+            result = GameMenuController.putRefrigerator(currentItem);
+        } else if (refrigeratorItems.contains(currentItem)) {
+            result = GameMenuController.pickRefrigerator(currentItem);
+        }
 
-        errorLabel.setText(result);
-        errorLabel.setVisible(true);
+        if (result != null) {
+            errorLabel.setText(result);
+            errorLabel.setVisible(true);
+        } else {
+            errorLabel.setText("");
+            errorLabel.setVisible(false);
+            currentItem = null;
+            moveButton.setVisible(false);
+        }
 
         refresh();
     }
 
-    private void renderItemsInGrid(float posX, float posY) {
+    private void renderItemsInGrid(float posX, float posY, ArrayList<Item> items) {
         int cellSizeX = 60;
         int cellSizeY1 = 78;
         int cellSizeY2 = 73;
         int cols = 12;
 
-        for (int i = 0; i < recipes.size(); i++) {
-            IndustrialProductType recipe = recipes.get(i);
-            if (recipe != null) {
+        for (int i = 0; i < items.size(); i++) {
+            Item item = items.get(i);
+            if (item != null) {
                 int row = i / cols;
                 int col = i % cols;
 
                 float x = posX + col * cellSizeX;
                 float y = (i < cols * 2) ? posY - row * cellSizeY1 : posY - row * cellSizeY2;
 
-                createItemImage(recipe, x, y);
+                createItemImage(item, x, y);
             }
         }
 
-        if (currentRecipe != null && borderImage != null) stage.addActor(borderImage);
         for (Image image : itemImages) {
             stage.addActor(image);
         }
     }
 
-    private void createItemImage(IndustrialProductType recipe, float x, float y) {
-        Texture itemTexture = recipe.getTexture();
+    private void createItemImage(Item item, float x, float y) {
+        Texture itemTexture = item.getTexture();
         Image itemImage = new Image(new TextureRegionDrawable(new TextureRegion(itemTexture)));
         itemImage.setSize(45, 45);
         itemImage.setPosition(x, y);
-
-        if (recipe == currentRecipe) {
-            borderImage = createBorderImage(50, 52, Color.BLUE);
-            borderImage.setPosition(x - 5, y - 5);
-        }
 
         Table tooltipTable = new Table(skin);
         Drawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundItemTexture));
         tooltipTable.setBackground(backgroundDrawable);
         tooltipTable.pad(10);
 
-        tooltipTable.add(new Label("Name: " + recipe.getName(), skin)).left().row();
-        tooltipTable.add(new Label("Ingredient: " + ingredients(recipe), skin)).left().row();
+        tooltipTable.add(new Label("Name: " + item.getName(), skin)).left().row();
+        tooltipTable.add(new Label("Count: " + item.getCount(), skin)).left().row();
+        if (item.getPrice() != 0) {
+            tooltipTable.add(new Label("Price: " + item.getPrice(), skin)).left();
+        }
 
         Tooltip<Table> tooltip = new Tooltip<>(tooltipTable);
         tooltip.setInstant(true);
@@ -205,12 +202,12 @@ public class CraftingScreen implements Screen {
         itemImage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float xOffset, float yOffset) {
-                if (currentRecipe != recipe) {
-                    currentRecipe = recipe;
+                if (currentItem != item) {
+                    currentItem = item;
                 } else {
-                    currentRecipe = null;
+                    currentItem = null;
                 }
-                craftingButton.setVisible(currentRecipe != null);
+                moveButton.setVisible(currentItem != null);
 
                 errorLabel.setText("");
                 errorLabel.setVisible(false);
@@ -244,24 +241,12 @@ public class CraftingScreen implements Screen {
             img.remove();
         }
         itemImages.clear();
-        if (borderImage != null) borderImage.remove();
 
-        recipes = App.getCurrentGame().getCurrentPlayer().getCraftingRecipes();
+        backPackItems = App.getCurrentGame().getCurrentPlayer().getBackPack().getItems();
+        refrigeratorItems = App.getCurrentGame().getCurrentPlayer().getRefrigerator().getItems();
 
-        renderItemsInGrid(table1.getX() + 50, table1.getY() + table1.getHeight() - 100);
-    }
-
-    private String ingredients(IndustrialProductType recipe) {
-        ArrayList<Item> ingredients = recipe.getIngredients();
-        StringBuilder ingredientsText = new StringBuilder();
-
-        for (Item ingredient : ingredients) {
-            if (ingredients.getLast().equals(ingredient))
-                ingredientsText.append(ingredient.getName() + " (x" + ingredient.getCount() + ")");
-            else
-                ingredientsText.append(ingredient.getName() + " (x" + ingredient.getCount() + ")\n");
-        }
-
-        return ingredientsText.toString();
+        renderItemsInGrid(table1.getX() + 50, table1.getY() + table1.getHeight() - 100, backPackItems);
+        renderItemsInGrid(table2.getX() + 50, table2.getY() + table2.getHeight() - 100, refrigeratorItems);
     }
 }
+

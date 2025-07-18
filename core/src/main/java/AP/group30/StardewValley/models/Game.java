@@ -101,7 +101,6 @@ public class Game {
         buildings.add(jojaMart);
         buildings.add(ranch);
         buildings.add(saloon);
-        buildings.add(hut);
     }
 
     public GreatMap getGreatMap() {

@@ -1,9 +1,10 @@
-package AP.group30.StardewValley.views.Hut;
+package AP.group30.StardewValley.views.InGameMenus;
 
 import AP.group30.StardewValley.controllers.GameMenuController;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.Foods.FoodType;
+import AP.group30.StardewValley.models.Items.IndustrialProducts.IndustrialProductType;
 import AP.group30.StardewValley.models.Items.Item;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -21,25 +23,26 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
 
-public class CookingScreen {
+public class ArtisanScreen {
     private final Stage stage;
     private final Skin skin;
-    private final Table table1;
+    private final Table table;
     private boolean visible = false;
     private final Texture backgroundTexture;
     private final Texture backgroundItemTexture;
 
-    private TextButton cookButton;
+    private TextButton infoButton;
 
     private final ArrayList<Image> itemImages = new ArrayList<>();
     private Image borderImage;
 
-    private ArrayList<FoodType> recipes = App.getCurrentGame().getCurrentPlayer().getRecipes();
-    private FoodType currentRecipe = null;
+    private ArrayList<IndustrialProductType> devices = App.getCurrentGame().getCurrentPlayer().getDevices();
+    public IndustrialProductType currentDevice = null;
 
-    private final Label errorLabel;
+    private DeviceScreen deviceScreen;
+    private ArtisanScreen artisanScreen;
 
-    public CookingScreen(SpriteBatch batch, Skin skin) {
+    public ArtisanScreen(SpriteBatch batch, Skin skin) {
         this.skin = skin;
         this.stage = new Stage(new ScreenViewport(), batch);
 
@@ -47,36 +50,31 @@ public class CookingScreen {
         Drawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
 
         backgroundItemTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryItem);
+        deviceScreen = new DeviceScreen(batch, skin);
+        artisanScreen = this;
 
-        table1 = new Table();
-        table1.setVisible(false);
-        table1.setBackground(backgroundDrawable);
-        table1.setSize(800, 300);
-        table1.setPosition(
-            (Gdx.graphics.getWidth() - table1.getWidth()) / 2f,
-            (Gdx.graphics.getHeight() - table1.getHeight()) / 2f + 200
+        table = new Table();
+        table.setVisible(false);
+        table.setBackground(backgroundDrawable);
+        table.setSize(800, 300);
+        table.setPosition(
+            (Gdx.graphics.getWidth() - table.getWidth()) / 2f,
+            (Gdx.graphics.getHeight() - table.getHeight()) / 2f + 200
         );
 
-        cookButton = new TextButton("Cook", skin);
-        cookButton.setPosition(table1.getX() + table1.getWidth() / 2f - cookButton.getWidth() / 2f - 50,
-            table1.getY() - cookButton.getHeight());
-        cookButton.setVisible(false);
-        cookButton.addListener(new ClickListener() {
+        infoButton = new TextButton("Products", skin);
+        infoButton.setPosition(table.getX() + table.getWidth() / 2f - infoButton.getWidth() / 2f - 50,
+            table.getY() - infoButton.getHeight());
+        infoButton.setVisible(false);
+        infoButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                handleMove();
+                deviceScreen.show(currentDevice, artisanScreen);
             }
         });
 
-        errorLabel = new Label("", skin);
-        errorLabel.setColor(Color.RED);
-        errorLabel.setPosition(table1.getX() + table1.getWidth() / 2f + 50,
-            table1.getY() - 20);
-        errorLabel.setVisible(false);
-
-        stage.addActor(table1);
-        stage.addActor(errorLabel);
-        stage.addActor(cookButton);
+        stage.addActor(table);
+        stage.addActor(infoButton);
 
         refresh();
     }
@@ -84,13 +82,13 @@ public class CookingScreen {
     public void show() {
         refresh();
         visible = true;
-        table1.setVisible(true);
+        table.setVisible(true);
         Gdx.input.setInputProcessor(stage);
     }
 
     public void hide() {
         visible = false;
-        table1.setVisible(false);
+        table.setVisible(false);
         Gdx.input.setInputProcessor(null);
     }
 
@@ -103,6 +101,8 @@ public class CookingScreen {
         if (visible) {
             stage.act();
             stage.draw();
+
+            deviceScreen.render();
         }
     }
 
@@ -118,24 +118,7 @@ public class CookingScreen {
         stage.dispose();
         backgroundTexture.dispose();
         backgroundItemTexture.dispose();
-    }
-
-    private void handleMove() {
-        if (currentRecipe == null) return;
-
-        String result = GameMenuController.cooking(currentRecipe);
-
-        if (result != null) {
-            errorLabel.setText(result);
-            errorLabel.setVisible(true);
-        } else {
-            errorLabel.setText("");
-            errorLabel.setVisible(false);
-            currentRecipe = null;
-            cookButton.setVisible(false);
-        }
-
-        refresh();
+        deviceScreen.dispose();
     }
 
     private void renderItemsInGrid(float posX, float posY) {
@@ -144,32 +127,32 @@ public class CookingScreen {
         int cellSizeY2 = 73;
         int cols = 12;
 
-        for (int i = 0; i < recipes.size(); i++) {
-            FoodType recipe = recipes.get(i);
-            if (recipe != null) {
+        for (int i = 0; i < devices.size(); i++) {
+            IndustrialProductType device = devices.get(i);
+            if (device != null) {
                 int row = i / cols;
                 int col = i % cols;
 
                 float x = posX + col * cellSizeX;
                 float y = (i < cols * 2) ? posY - row * cellSizeY1 : posY - row * cellSizeY2;
 
-                createItemImage(recipe, x, y);
+                createItemImage(device, x, y);
             }
         }
 
-        if (currentRecipe != null && borderImage != null) stage.addActor(borderImage);
+        if (currentDevice != null && borderImage != null) stage.addActor(borderImage);
         for (Image image : itemImages) {
             stage.addActor(image);
         }
     }
 
-    private void createItemImage(FoodType recipe, float x, float y) {
-        Texture itemTexture = recipe.getTexture();
+    private void createItemImage(IndustrialProductType device, float x, float y) {
+        Texture itemTexture = device.getTexture();
         Image itemImage = new Image(new TextureRegionDrawable(new TextureRegion(itemTexture)));
         itemImage.setSize(45, 45);
         itemImage.setPosition(x, y);
 
-        if (recipe == currentRecipe) {
+        if (device == currentDevice) {
             borderImage = createBorderImage(50, 52, Color.BLUE);
             borderImage.setPosition(x - 5, y - 5);
         }
@@ -179,9 +162,8 @@ public class CookingScreen {
         tooltipTable.setBackground(backgroundDrawable);
         tooltipTable.pad(10);
 
-        tooltipTable.add(new Label("Name: " + recipe.getName(), skin)).left().row();
-        tooltipTable.add(new Label("Ingredient: " + ingredients(recipe), skin)).left().row();
-        tooltipTable.add(new Label("Price: " + recipe.getEnergy(), skin)).left();
+        tooltipTable.add(new Label("Name: " + device.getName(), skin)).left().row();
+        tooltipTable.add(new Label("Description: " + device.getDescription(), skin)).left().row();
 
         Tooltip<Table> tooltip = new Tooltip<>(tooltipTable);
         tooltip.setInstant(true);
@@ -191,21 +173,33 @@ public class CookingScreen {
         itemImage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float xOffset, float yOffset) {
-                if (currentRecipe != recipe) {
-                    currentRecipe = recipe;
+                if (currentDevice != device) {
+                    currentDevice = device;
                 } else {
-                    currentRecipe = null;
+                    currentDevice = null;
                 }
-                cookButton.setVisible(currentRecipe != null);
-
-                errorLabel.setText("");
-                errorLabel.setVisible(false);
+                infoButton.setVisible(currentDevice != null);
 
                 refresh();
             }
         });
 
         itemImages.add(itemImage);
+    }
+
+    private void refresh() {
+        for (Image img : itemImages) {
+            img.remove();
+        }
+        itemImages.clear();
+        if (borderImage != null) {
+            borderImage.remove();
+            borderImage = null;
+        }
+
+        devices = App.getCurrentGame().getCurrentPlayer().getDevices();
+
+        renderItemsInGrid(table.getX() + 50, table.getY() + table.getHeight() - 100);
     }
 
     private Image createBorderImage(int width, int height, Color color) {
@@ -222,20 +216,18 @@ public class CookingScreen {
 
         Texture texture = new Texture(pixmap);
         pixmap.dispose();
-        return new Image(new TextureRegionDrawable(new TextureRegion(texture)));
+
+        Image border = new Image(new TextureRegionDrawable(new TextureRegion(texture)));
+        border.addListener(new ActorGestureListener() {
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                texture.dispose();
+            }
+        });
+
+        return border;
     }
 
-    private void refresh() {
-        for (Image img : itemImages) {
-            img.remove();
-        }
-        itemImages.clear();
-        if (borderImage != null) borderImage.remove();
-
-        recipes = App.getCurrentGame().getCurrentPlayer().getRecipes();
-
-        renderItemsInGrid(table1.getX() + 50, table1.getY() + table1.getHeight() - 100);
-    }
 
     private String ingredients(FoodType recipe) {
         ArrayList<Item> ingredients = recipe.getIngredients();
@@ -249,5 +241,9 @@ public class CookingScreen {
         }
 
         return ingredientsText.toString();
+    }
+
+    public Stage getStage() {
+        return stage;
     }
 }
