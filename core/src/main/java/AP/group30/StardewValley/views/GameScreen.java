@@ -24,7 +24,7 @@ import AP.group30.StardewValley.models.Players.Direction;
 import AP.group30.StardewValley.models.Players.NPC.*;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.views.InGameMenus.*;
-import AP.group30.StardewValley.views.InGameMenus.Hut.HutScreen;
+import AP.group30.StardewValley.views.InGameMenus.Hut.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -85,7 +85,6 @@ public class GameScreen implements Screen {
     private SkillScreen skillScreen;
     private HutScreen hut;
     private CraftingScreen craftingScreen;
-    private QuestScreen questScreen;
     private ArtisanScreen artisanScreen;
 
     private final BitmapFont info = (Main.getMain().skin).getFont("font");
@@ -142,7 +141,6 @@ public class GameScreen implements Screen {
         inventoryScreen = new InventoryScreen(batch, Main.getMain().skin);
         skillScreen = new SkillScreen(batch, Main.getMain().skin);
         craftingScreen = new CraftingScreen(batch, Main.getMain().skin);
-        questScreen = new QuestScreen(batch, Main.getMain().skin);
         hut = new HutScreen(batch, Main.getMain().skin);
         artisanScreen = new ArtisanScreen(batch, Main.getMain().skin);
         info.setColor(Color.BLACK);
@@ -159,13 +157,12 @@ public class GameScreen implements Screen {
         isMoving = false;
 
 
-        if(!questScreen.isVisible()){
-            if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) shopScreen.toggle();
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) inventoryScreen.toggle();
-            if (Gdx.input.isKeyJustPressed(Input.Keys.N)) skillScreen.toggle();
-            if (Gdx.input.isKeyJustPressed(Input.Keys.B)) craftingScreen.toggle();
-            if (Gdx.input.isKeyJustPressed(Input.Keys.I)) artisanScreen.toggle();
-        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) shopScreen.toggle();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) inventoryScreen.toggle();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.N)) skillScreen.toggle();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.B)) craftingScreen.toggle();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.I)) artisanScreen.toggle();
+
         camera.position.set(x + playerRegion.getRegionWidth() / 2f, y + playerRegion.getRegionHeight() / 2f, 0);
         camera.update();
 
@@ -186,23 +183,6 @@ public class GameScreen implements Screen {
             if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
             if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
         }
-        if(player.isInCity()){
-            Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-            camera.unproject(mousePos);
-            for(NPC npc: game.getNPCs()){
-                Rectangle bounds = npc.getRectangle();
-                if(Gdx.input.isButtonPressed(Input.Buttons.LEFT) && bounds.contains(mousePos.x, mousePos.y)
-                    || npc.getDialogueTimer() > 0){
-                    npc.showDialog(batch, font, camera);
-                    if (npc.getDialogueTimer() > 0) {
-                        npc.decreaseDialogueTimer(delta);
-                    }
-                } else if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT) && bounds.contains(mousePos.x, mousePos.y)){
-                    questScreen.setCurrentNPC(npc);
-                    questScreen.toggle();
-                }
-            }
-        }
         batch.end();
 
         findHut();
@@ -211,7 +191,7 @@ public class GameScreen implements Screen {
 
 
         if (currentTile.getX() == hutEntryTile.getX() &&
-            currentTile.getY() == hutEntryTile.getY() + 1 && !player.isInCity()) {
+            currentTile.getY() == hutEntryTile.getY() + 1) {
             batch.begin();
             info.draw(batch, "You reached Hut entry!\nPress 'H' to enter!",camera.position.x - 50,camera.position.y + 510);
             batch.end();
@@ -221,7 +201,6 @@ public class GameScreen implements Screen {
         inventoryScreen.render();
         skillScreen.render();
         craftingScreen.render();
-        questScreen.render();
         hut.render(batch, camera);
         shopScreen.render(batch, camera);
         artisanScreen.render();
@@ -274,12 +253,9 @@ public class GameScreen implements Screen {
         for (GameObjects gameObjects : entities) {
             gameObjects.render(batch, map);
         }
-        Leah.render(batch, stateTime);
-        Harvey.render(batch, stateTime);
-        Robin.render(batch, stateTime);
-        Sebastian.render(batch, stateTime);
-        Abigail.render(batch, stateTime);
     }
+
+
 
     static void renderWallsAroundMap(Tile[][] tiles, SpriteBatch batch) {
         int tileSize = 32;
@@ -452,7 +428,6 @@ public class GameScreen implements Screen {
         craftingScreen.dispose();
         hut.dispose();
         clock.dispose();
-        questScreen.dispose();
         artisanScreen.dispose();
     }
 
