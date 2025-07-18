@@ -14,29 +14,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class SkillScreen {
-    private final Stage stage;
-    private final Skin skin;
-    private final Table table;
-    private boolean visible = false;
-    private final Texture backgroundTexture;
+public class SkillScreen extends InGameMenuScreen{
     private final Texture backgroundItemTexture;
 
     private final int positionX;
     private final int positionY;
 
     public SkillScreen(SpriteBatch batch, Skin skin) {
-        this.skin = skin;
-        this.stage = new Stage(new ScreenViewport(), batch);
-
-        backgroundTexture = GameAssetManager.assetManager.get(GameAssetManager.skill);
-        Drawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
+        super(new Stage(new ScreenViewport(), batch), skin, new Table(), GameAssetManager.skill);
 
         backgroundItemTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryItem);
 
-        table = new Table();
-        table.setVisible(false);
-        table.setBackground(backgroundDrawable);
         table.setSize(800, 300);
         table.setPosition(
             (Gdx.graphics.getWidth() - table.getWidth()) / 2,
@@ -55,37 +43,15 @@ public class SkillScreen {
         createImage(ItemTexture.MINING_ICON, positionX + 350, positionY + 40);
     }
 
-    public void show() {
-        visible = true;
-        table.setVisible(true);
-        Gdx.input.setInputProcessor(stage);
-    }
-
-    public void hide() {
-        visible = false;
-        table.setVisible(false);
-        Gdx.input.setInputProcessor(null);
-    }
-
-    public void toggle() {
-        if (visible) hide();
-        else show();
-    }
-
-    public void render() {
-        if (visible) {
-            stage.act();
-            stage.draw();
-        }
-    }
-
-    public boolean isVisible() {
-        return visible;
-    }
-
+    @Override
     public void dispose() {
         stage.dispose();
         backgroundTexture.dispose();
+    }
+
+    @Override
+    protected void refresh() {
+
     }
 
     private void createImage(ItemTexture item, double x, float y) {

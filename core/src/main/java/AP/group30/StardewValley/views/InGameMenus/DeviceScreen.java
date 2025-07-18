@@ -27,12 +27,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
 
-public class DeviceScreen {
-    private final Stage stage;
-    private final Skin skin;
-    private final Table table;
-    private boolean visible = false;
-    private final Texture backgroundTexture;
+public class DeviceScreen extends InGameMenuScreen{
     private final Texture backgroundItemTexture;
 
     private final int positionX = 645;
@@ -59,18 +54,12 @@ public class DeviceScreen {
     private Label itemLabel;
 
     public DeviceScreen(SpriteBatch batch, Skin skin) {
-        this.skin = skin;
-        this.stage = new Stage(new ScreenViewport(), batch);
+        super(new Stage(new ScreenViewport(), batch), skin, new Table(), GameAssetManager.inventoryScreen);
 
-        backgroundTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryScreen);
-        Drawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
         prosesBar = GameAssetManager.assetManager.get(GameAssetManager.energyBar);
 
         backgroundItemTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryItem);
 
-        table = new Table();
-        table.setVisible(false);
-        table.setBackground(backgroundDrawable);
         table.setSize(800, 600);
         table.setPosition(
             (Gdx.graphics.getWidth() - table.getWidth()) / 2,
@@ -170,6 +159,7 @@ public class DeviceScreen {
         Gdx.input.setInputProcessor(stage);
     }
 
+    @Override
     public void hide() {
         visible = false;
         table.setVisible(false);
@@ -177,18 +167,13 @@ public class DeviceScreen {
     }
 
     public void render() {
+        super.render();
         if (visible) {
-            stage.act();
-            stage.draw();
-
             if (itemInProses) renderProsesBar();
         }
     }
 
-    public boolean isVisible() {
-        return visible;
-    }
-
+    @Override
     public void dispose() {
         stage.dispose();
         backgroundTexture.dispose();
@@ -275,7 +260,8 @@ public class DeviceScreen {
         itemImages.add(itemImage);
     }
 
-    private void refresh() {
+    @Override
+    protected void refresh() {
         for (Image img : itemImages) {
             img.remove();
         }
@@ -295,32 +281,6 @@ public class DeviceScreen {
                 items.add(artisanGood);
             }
         }
-    }
-
-    private Image createBorderImage(int width, int height, Color color) {
-        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
-        pixmap.setColor(0, 0, 0, 0);
-        pixmap.fill();
-
-        pixmap.setColor(color);
-        int thickness = 3;
-        pixmap.fillRectangle(0, 0, width, thickness);
-        pixmap.fillRectangle(0, height - thickness, width, thickness);
-        pixmap.fillRectangle(0, 0, thickness, height);
-        pixmap.fillRectangle(width - thickness, 0, thickness, height);
-
-        Texture texture = new Texture(pixmap);
-        pixmap.dispose();
-
-        Image border = new Image(new TextureRegionDrawable(new TextureRegion(texture)));
-        border.addListener(new ActorGestureListener() {
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                texture.dispose();
-            }
-        });
-
-        return border;
     }
 
     private void handleMove() {

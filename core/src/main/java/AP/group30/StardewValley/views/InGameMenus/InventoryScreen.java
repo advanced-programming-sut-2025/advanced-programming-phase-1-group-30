@@ -22,12 +22,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
 
-public class InventoryScreen {
-    private final Stage stage;
-    private final Skin skin;
-    private final Table table;
-    private boolean visible = false;
-    private final Texture backgroundTexture;
+public class InventoryScreen extends InGameMenuScreen{
     private final Texture backgroundItemTexture;
     Label money;
     Label energy;
@@ -47,27 +42,20 @@ public class InventoryScreen {
     private final Label errorLabel;
 
     public InventoryScreen(SpriteBatch batch, Skin skin) {
-        this.skin = skin;
-        this.stage = new Stage(new ScreenViewport(), batch);
-
-        backgroundTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryScreen);
-        Drawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
+        super(new Stage(new ScreenViewport(), batch), skin, new Table(), GameAssetManager.inventoryScreen);
 
         backgroundItemTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryItem);
-
-        table = new Table();
-        table.setVisible(false);
-        table.setBackground(backgroundDrawable);
-        table.setSize(800, 600);
-        table.setPosition(
-            (Gdx.graphics.getWidth() - table.getWidth()) / 2,
-            (Gdx.graphics.getHeight() - table.getHeight()) / 2
-        );
 
         errorLabel = new Label("You can't sell this Item!", skin);
         errorLabel.setColor(Color.RED);
         errorLabel.setPosition(positionX + 350, positionY - 400);
         errorLabel.setVisible(false);
+
+        table.setSize(800, 600);
+        table.setPosition(
+            (Gdx.graphics.getWidth() - table.getWidth()) / 2,
+            (Gdx.graphics.getHeight() - table.getHeight()) / 2
+        );
 
         Label info = new Label(player.getUsername() + " Farm", skin);
         info.setPosition(positionX + 250, positionY - 250);
@@ -87,36 +75,7 @@ public class InventoryScreen {
         renderItemsInGrid();
     }
 
-    public void show() {
-        refresh();
-
-        visible = true;
-        table.setVisible(true);
-        Gdx.input.setInputProcessor(stage);
-    }
-
-    public void hide() {
-        visible = false;
-        table.setVisible(false);
-        Gdx.input.setInputProcessor(null);
-    }
-
-    public void toggle() {
-        if (visible) hide();
-        else show();
-    }
-
-    public void render() {
-        if (visible) {
-            stage.act();
-            stage.draw();
-        }
-    }
-
-    public boolean isVisible() {
-        return visible;
-    }
-
+    @Override
     public void dispose() {
         stage.dispose();
         backgroundTexture.dispose();
@@ -205,26 +164,8 @@ public class InventoryScreen {
         });
     }
 
-    private Image createBorderImage(int width, int height, Color color) {
-        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
-        pixmap.setColor(0, 0, 0, 0);
-        pixmap.fill();
-
-        pixmap.setColor(color);
-        int thickness = 3;
-
-        pixmap.fillRectangle(0, 0, width, thickness);
-        pixmap.fillRectangle(0, height - thickness, width, thickness);
-
-        pixmap.fillRectangle(0, 0, thickness, height);
-        pixmap.fillRectangle(width - thickness, 0, thickness, height);
-
-        Texture texture = new Texture(pixmap);
-        pixmap.dispose();
-        return new Image(new TextureRegionDrawable(new TextureRegion(texture)));
-    }
-
-    private void refresh() {
+    @Override
+    protected void refresh() {
         for (Image img : itemImages) {
             img.remove();
         }
@@ -233,17 +174,6 @@ public class InventoryScreen {
         itemImages.clear();
         borderImage.remove();
         renderItemsInGrid();
-    }
-
-    private Drawable createBackground(Color color, int width, int height) {
-        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
-        pixmap.setColor(color);
-        pixmap.fill();
-
-        Texture texture = new Texture(pixmap);
-        pixmap.dispose();
-
-        return new TextureRegionDrawable(new TextureRegion(texture));
     }
 
     private void createTrashCanImage() {
@@ -277,7 +207,6 @@ public class InventoryScreen {
                 else errorLabel.setVisible(true);
             }
         });
-
     }
 }
 
