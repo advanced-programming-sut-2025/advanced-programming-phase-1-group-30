@@ -148,12 +148,12 @@ public class GameMenu implements AppMenu {
 //            GameMenuController.toolUse(direction);
             return;
         }
-        matcher = GameMenuCommands.UPGRADE_TOOL.regexMatcher(command);
-        if (matcher.matches()) {
-            String name = matcher.group("name");
-            GameMenuController.upgradeTools(name);
-            return;
-        }
+//        matcher = GameMenuCommands.UPGRADE_TOOL.regexMatcher(command);
+//        if (matcher.matches()) {
+//            String name = matcher.group("name");
+//            GameMenuController.upgradeTools(name);
+//            return;
+//        }
 //        matcher = GameMenuCommands.PLANT.regexMatcher(command);
 //        if (matcher.matches()) {
 //            String seed = matcher.group("seed");
@@ -250,11 +250,11 @@ public class GameMenu implements AppMenu {
             GameMenuController.fishing(matcher.group("fishingPole"));
             return;
         }
-        matcher = GameMenuCommands.BUILD.regexMatcher(command);
-        if (matcher.matches()) {
-            GameMenuController.build(matcher.group("buildingName"), matcher.group("x"), matcher.group("y"));
-            return;
-        }
+//        matcher = GameMenuCommands.BUILD.regexMatcher(command);
+//        if (matcher.matches()) {
+//            GameMenuController.build(matcher.group("buildingName"), matcher.group("x"), matcher.group("y"));
+//            return;
+//        }
         matcher = GameMenuCommands.BUY_ANIMAL.regexMatcher(command);
         if (matcher.matches()) {
             GameMenuController.buyAnimal(matcher.group("animal"), matcher.group("name"));
@@ -461,11 +461,11 @@ public class GameMenu implements AppMenu {
             return;
         }
 
-        matcher = GameMenuCommands.FERTILIZE.regexMatcher(command);
-        if (matcher.matches()) {
-            GameMenuController.fertilize(matcher.group("fertilizer"), matcher.group("direction"));
-            return;
-        }
+//        matcher = GameMenuCommands.FERTILIZE.regexMatcher(command);
+//        if (matcher.matches()) {
+//            GameMenuController.fertilize(matcher.group("fertilizer"), matcher.group("direction"));
+//            return;
+//        }
 
         matcher = GameMenuCommands.TRADE.regexMatcher(command);
         if (matcher.matches()) {

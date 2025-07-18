@@ -12,11 +12,16 @@ public class Barn extends Building {
     private final String type;
     private ArrayList<Animal> animals = new ArrayList<>();
 
-    public Barn(int length, int width, int startX, int startY, int capacity, String type) {
-        super(length, width, startX, startY, 9, 21, TileTypes.BARN, ItemTexture.PIERRES.getTexture()); // TODO
+    public Barn(int height, int width, int startX, int startY, int capacity, String type) {
+        super(height, width, startX, startY, 9, 21, TileTypes.BARN, BuildingTexture.BARN.getTexture()); // TODO
         this.capacity = capacity;
         this.currentNumberOfAnimals = 0;
         this.type = type;
+        switch (type) {
+            case "regular": this.texture = BuildingTexture.BARN.getTexture(); break;
+            case "big": this.texture = BuildingTexture.BIG_BARN.getTexture(); break;
+            case "deluxe": this.texture = BuildingTexture.DELUXE_BARN.getTexture(); break;
+        }
     }
     public int getCapacity() {
         return capacity;

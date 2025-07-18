@@ -5,7 +5,7 @@ import AP.group30.StardewValley.models.Maps.TileTypes;
 
 public class Ranch extends Building {
     public Ranch(int height, int width, int startX, int startY) {
-        super(height, width, startX, startY, 9, 16, TileTypes.MARINES_RANCH, ItemTexture.RANCH.getTexture());
+        super(height, width, startX, startY, 9, 16, TileTypes.MARINES_RANCH, BuildingTexture.RANCH.getTexture());
     }
     private final int startHour = 9;
     private final int endHour = 16;

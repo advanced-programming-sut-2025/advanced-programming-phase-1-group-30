@@ -1,7 +1,9 @@
 package AP.group30.StardewValley.models.Maps;
 
+import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Items.Item;
 import AP.group30.StardewValley.models.Items.Products.*;
+import AP.group30.StardewValley.models.TimeAndDate.Season;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -22,18 +24,20 @@ public class Tile {
     private boolean giantCropCheck = false;
     private Crop crop;
     private Texture texture;
+    private Texture winterTexture;
 
-    public Tile(int x, int y, TileTypes type, boolean walkable, boolean isHarvestable, int id, Texture texture) {
+    public Tile(int x, int y, TileTypes type, boolean walkable, boolean isHarvestable, int id, Texture texture, Texture winterTexture) {
         this.type = type;
         this.x = x;
         this.y = y;
         this.walkable = walkable;
         if (id != -1){
-            Tile.putItemInTile(this);
+//            Tile.putItemInTile(this);
         }
         this.isHarvestable = isHarvestable;
         this.isPlanted = false;
         this.texture = texture;
+        this.winterTexture = winterTexture;
     }
     public static Tile createTileFromType(int x, int y, String tileType, int id) {
         Random random = new Random();
@@ -41,39 +45,39 @@ public class Tile {
         switch (tileType.toLowerCase()) {
             case "dirt": {
                 if (rand < 27) {
-                    return new Tile(x, y, TileTypes.DIRT, true, true, id, TileTexture.DIRT.getTexture());
+                    return new Tile(x, y, TileTypes.DIRT, true, true, id, TileTexture.DIRT.getTexture(), TileTexture.DIRT.getWinterTexture());
                 } else if (rand == 27) {
-                    return new Tile(x, y, TileTypes.DIRT, true, true, id, TileTexture.DIRT_2.getTexture());
+                    return new Tile(x, y, TileTypes.DIRT, true, true, id, TileTexture.DIRT_2.getTexture(), TileTexture.DIRT_2.getWinterTexture());
                 } else if (rand == 28) {
-                    return new Tile(x, y, TileTypes.DIRT, true, true, id, TileTexture.DIRT_3.getTexture());
+                    return new Tile(x, y, TileTypes.DIRT, true, true, id, TileTexture.DIRT_3.getTexture(), TileTexture.DIRT_3.getWinterTexture());
                 } else {
-                    return new Tile(x, y, TileTypes.DIRT, true, true, id, TileTexture.DIRT_4.getTexture());
+                    return new Tile(x, y, TileTypes.DIRT, true, true, id, TileTexture.DIRT_4.getTexture(), TileTexture.DIRT_4.getWinterTexture());
                 }
             }
             case "grass":
-                return new Tile(x, y, TileTypes.GRASS, true, true, id, TileTexture.GRASS.getTexture());
+                return new Tile(x, y, TileTypes.GRASS, true, true, id, TileTexture.GRASS.getTexture(), TileTexture.GRASS.getWinterTexture());
             case "river":
-                return new Tile(x, y, TileTypes.WATER, false, false, id, TileTexture.RIVER.getTexture());
+                return new Tile(x, y, TileTypes.WATER, false, false, id, TileTexture.RIVER.getTexture(), TileTexture.RIVER.getWinterTexture());
             case "hut":
-                return new Tile(x, y, TileTypes.HUT, false, false, id, TileTexture.DIRT.getTexture());
+                return new Tile(x, y, TileTypes.HUT, false, false, id, TileTexture.DIRT.getTexture(), TileTexture.DIRT.getWinterTexture());
             case "greenhouse":
-                return new Tile(x, y, TileTypes.GREENHOUSE, false, false, id, TileTexture.DIRT.getTexture());
+                return new Tile(x, y, TileTypes.GREENHOUSE, false, false, id, TileTexture.DIRT.getTexture(), TileTexture.DIRT.getWinterTexture());
             case "quarry":
-                return new Tile(x, y, TileTypes.QUARRY, true, false, id, TileTexture.DIRT.getTexture());
+                return new Tile(x, y, TileTypes.QUARRY, true, false, id, TileTexture.DIRT.getTexture(), TileTexture.DIRT.getWinterTexture());
             case "blacksmith":
-                return new Tile(x, y, TileTypes.BLACKSMITH, true, true, id, TileTexture.DIRT.getTexture());
+                return new Tile(x, y, TileTypes.BLACKSMITH, true, true, id, TileTexture.DIRT.getTexture(), TileTexture.DIRT.getWinterTexture());
             case "carpenters-shop":
-                return new Tile(x, y, TileTypes.CARPENTERS_SHOP, true, true, id, TileTexture.DIRT.getTexture());
+                return new Tile(x, y, TileTypes.CARPENTERS_SHOP, true, true, id, TileTexture.DIRT.getTexture(), TileTexture.DIRT.getWinterTexture());
             case "jojomart":
-                return new Tile(x, y, TileTypes.JOJAMART, true, false, id, TileTexture.DIRT.getTexture());
+                return new Tile(x, y, TileTypes.JOJAMART, true, false, id, TileTexture.DIRT.getTexture(), TileTexture.DIRT.getWinterTexture());
             case "pierres-store":
-                return new Tile(x, y, TileTypes.PIERRES_GENERAL_STORE, true, false, id, TileTexture.DIRT.getTexture());
+                return new Tile(x, y, TileTypes.PIERRES_GENERAL_STORE, true, false, id, TileTexture.DIRT.getTexture(), TileTexture.DIRT.getWinterTexture());
             case "fish-shop":
-                return new Tile(x, y, TileTypes.FISH_SHOP, true, false, id, TileTexture.DIRT.getTexture());
+                return new Tile(x, y, TileTypes.FISH_SHOP, true, false, id, TileTexture.DIRT.getTexture(), TileTexture.DIRT.getWinterTexture());
             case "marnies-ranch":
-                return new Tile(x, y, TileTypes.MARINES_RANCH, true, false, id, TileTexture.DIRT.getTexture());
+                return new Tile(x, y, TileTypes.MARINES_RANCH, true, false, id, TileTexture.DIRT.getTexture(), TileTexture.DIRT.getWinterTexture());
             case "stardrop-saloon":
-                return new Tile(x, y, TileTypes.THE_STARDROP_SALOON, true, false, id, TileTexture.DIRT.getTexture());
+                return new Tile(x, y, TileTypes.THE_STARDROP_SALOON, true, false, id, TileTexture.DIRT.getTexture(), TileTexture.DIRT.getWinterTexture());
             default:
                 throw new IllegalArgumentException("Unknown tile type: " + tileType);
         }
@@ -136,10 +140,10 @@ public class Tile {
         if (tile.getType().equals(TileTypes.DIRT)) {
             Random random = new Random();
             int randomItem = random.nextInt(75);
-            if (randomItem <= 43 || randomItem >= 47) {
+            if (randomItem <= 43 || randomItem >= 50) {
                 // Empty
             }
-            else if (randomItem <= 45) {
+            else if (randomItem <= 47) {
                 int x = random.nextInt(13);
                 tile.setItem(new Tree(1, TreeType.getRandomTreeType(x), tile.getX() * 32 - 32, (60 - tile.getY()) * 32));
                 tile.changeWalkable();
@@ -264,6 +268,10 @@ public class Tile {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(this.texture, x * 32, (60 - y) * 32, 32, 32);
+        if (App.getCurrentGame().getCurrentTime().getSeason().equals(Season.WINTER)) {
+            batch.draw(this.winterTexture, x * 32, (60 - y) * 32, 32, 32);
+        } else {
+            batch.draw(this.texture, x * 32, (60 - y) * 32, 32, 32);
+        }
     }
 }

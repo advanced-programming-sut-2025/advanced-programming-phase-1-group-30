@@ -60,6 +60,7 @@ import AP.group30.StardewValley.models.Items.Products.ShopProducts.SaloonProduct
 import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.views.GameMenu;
+import AP.group30.StardewValley.views.RegisterMenu;
 
 public class MaintainerController {
     private static final List<Pair<Class<? extends Enum<?>>, ItemFactory<?>>> ITEM_TYPES = Arrays.asList(
@@ -142,9 +143,10 @@ public class MaintainerController {
                     if (tile.isPlanted()) {
                         randomNumber = random.nextInt(10);
                         if (randomNumber == 0) {
-                            GameMenu.printResult("You loose " + tile.getItem().getName());
+                            GameMenu.printResult("You lose " + tile.getItem().getName());
                             tile.setPlanted(false);
                             tile.setReadyToHarvest(false);
+                            RegisterMenu.gameScreen.entities.remove(tile.getCrop());
                             tile.setCrop(null);
                             tile.setItem(null);
                             tile.setType(TileTypes.DIRT);
@@ -253,10 +255,10 @@ public class MaintainerController {
         Collections.shuffle(items);
         Random rand = new Random();
 
-        for (int i = 0; i < rand.nextInt(items.size()); i++) {
+        for (int i = 0; i < items.size(); i++) {
             CarpenterCosts type = items.get(i);
-            int count = 1 + Math.max(rand.nextInt(type.getDailyLimit()), 10);
-            carpenter.addItem(new CarpenterProducts(count, type));
+//            int count = 1 + Math.max(rand.nextInt(type.getDailyLimit()), 10);
+            carpenter.addItem(new CarpenterProducts(type.getDailyLimit(), type));
         }
     }
 

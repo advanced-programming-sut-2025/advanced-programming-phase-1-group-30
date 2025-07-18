@@ -27,6 +27,7 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> nightBackground = new AssetDescriptor<>("menu assets/sebastianRideTiles.png", Texture.class);
     public static final AssetDescriptor<Skin> menuSkin = new AssetDescriptor<>("skin/pixthulhu-ui.json", Skin.class);
     public static final AssetDescriptor<Texture> grass = new AssetDescriptor<>("tile/grass.png", Texture.class);
+    public static final AssetDescriptor<Texture> winterGrass = new AssetDescriptor<>("tile/winter_grass.png", Texture.class);
     public static final AssetDescriptor<Texture> dirt = new AssetDescriptor<>("tile/dirt.png", Texture.class);
 
     public static final AssetDescriptor<Texture> player00 = new AssetDescriptor<>("player/00.png", Texture.class);
@@ -44,6 +45,9 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> dirt2 = new AssetDescriptor<>("tile/dirt2.png", Texture.class);
     public static final AssetDescriptor<Texture> dirt3 = new AssetDescriptor<>("tile/dirt3.png", Texture.class);
     public static final AssetDescriptor<Texture> dirt4 = new AssetDescriptor<>("tile/dirt4.png", Texture.class);
+    public static final AssetDescriptor<Texture> winterDirt2 = new AssetDescriptor<>("tile/winter_dirt2.png", Texture.class);
+    public static final AssetDescriptor<Texture> winterDirt3 = new AssetDescriptor<>("tile/winter_dirt3.png", Texture.class);
+    public static final AssetDescriptor<Texture> winterDirt = new AssetDescriptor<>("tile/winter_dirt.png", Texture.class);
 
     public static final AssetDescriptor<Texture> insideHouse = new AssetDescriptor<>("Building/InsideHut.png", Texture.class);
 
@@ -127,6 +131,16 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> blacksmith = new AssetDescriptor<>("buildings/BlackSmith.png", Texture.class);
     public static final AssetDescriptor<Texture> house = new AssetDescriptor<>("buildings/Hut.png", Texture.class);
     public static final AssetDescriptor<Texture> ruinedGreenhouse = new AssetDescriptor<>("buildings/ruined_greenhouse.png", Texture.class);
+    public static final AssetDescriptor<Texture> barn = new AssetDescriptor<>("buildings/Barn.png", Texture.class);
+    public static final AssetDescriptor<Texture> bigBarn = new AssetDescriptor<>("buildings/Big_Barn.png", Texture.class);
+    public static final AssetDescriptor<Texture> deluxeBarn = new AssetDescriptor<>("buildings/Deluxe_Barn.png", Texture.class);
+    public static final AssetDescriptor<Texture> coop = new AssetDescriptor<>("buildings/Coop.png", Texture.class);
+    public static final AssetDescriptor<Texture> bigCoop = new AssetDescriptor<>("buildings/Big_Coop.png", Texture.class);
+    public static final AssetDescriptor<Texture> deluxeCoop = new AssetDescriptor<>("buildings/Deluxe_Coop.png", Texture.class);
+
+    // *** Fertilizers ***
+    public static final AssetDescriptor<Texture> deluxeRetainingSoil = new AssetDescriptor<>("Stardew_Valley_Images/Fertilizer/Deluxe_Retaining_Soil.png", Texture.class);
+    public static final AssetDescriptor<Texture> speedGro = new AssetDescriptor<>("Stardew_Valley_Images/Fertilizer/Speed-Gro.png", Texture.class);
 
     // *** Seeds And Crops ***
     public static final AssetDescriptor<Texture> carrotSeeds = new AssetDescriptor<>("Stardew_Valley_Images/Crops/Carrot_Seeds.png", Texture.class);
@@ -135,6 +149,18 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> carrotStage2 = new AssetDescriptor<>("Stardew_Valley_Images/Crops/Carrot_Stage_2.png", Texture.class);
     public static final AssetDescriptor<Texture> carrotStage3 = new AssetDescriptor<>("Stardew_Valley_Images/Crops/Carrot_Stage_3.png", Texture.class);
     public static final AssetDescriptor<Texture> carrotStage4 = new AssetDescriptor<>("Stardew_Valley_Images/Crops/Carrot_Stage_4.png", Texture.class);
+
+    public static final AssetDescriptor<Texture> pumpkinSeeds = new AssetDescriptor<>("Stardew_Valley_Images/Crops/Pumpkin_Seeds.png", Texture.class);
+    public static final AssetDescriptor<Texture> pumpkin = new AssetDescriptor<>("Stardew_Valley_Images/Crops/Pumpkin.png", Texture.class);
+    public static final AssetDescriptor<Texture> pumpkinStage1 = new AssetDescriptor<>("Stardew_Valley_Images/Crops/Pumpkin_Stage_1.png", Texture.class);
+    public static final AssetDescriptor<Texture> pumpkinStage2 = new AssetDescriptor<>("Stardew_Valley_Images/Crops/Pumpkin_Stage_2.png", Texture.class);
+    public static final AssetDescriptor<Texture> pumpkinStage3 = new AssetDescriptor<>("Stardew_Valley_Images/Crops/Pumpkin_Stage_3.png", Texture.class);
+    public static final AssetDescriptor<Texture> pumpkinStage4 = new AssetDescriptor<>("Stardew_Valley_Images/Crops/Pumpkin_Stage_4.png", Texture.class);
+    public static final AssetDescriptor<Texture> pumpkinStage5 = new AssetDescriptor<>("Stardew_Valley_Images/Crops/Pumpkin_Stage_5.png", Texture.class);
+    public static final AssetDescriptor<Texture> pumpkinStage6 = new AssetDescriptor<>("Stardew_Valley_Images/Crops/Pumpkin_Stage_6.png", Texture.class);
+    public static final AssetDescriptor<Texture> giantPumpkin = new AssetDescriptor<>("Stardew_Valley_Images/Crops/Giant_Pumpkin.png", Texture.class);
+
+
 
     public static final AssetDescriptor<Texture> crafting = new AssetDescriptor<>("Inventory/Crafting.png", Texture.class);
     public static final AssetDescriptor<Texture> cherry_bomb = new AssetDescriptor<>("Stardew_Valley_Images/Crafting/Cherry_Bomb.png", Texture.class);
@@ -240,6 +266,9 @@ public class GameAssetManager {
         assetManager.load(dirt2);
         assetManager.load(dirt3);
         assetManager.load(dirt4);
+        assetManager.load(winterDirt);
+        assetManager.load(winterDirt2);
+        assetManager.load(winterDirt3);
         assetManager.load(plantable);
         assetManager.load(wateredTile);
         assetManager.load(house);
@@ -327,6 +356,15 @@ public class GameAssetManager {
         assetManager.load(ranch);
         assetManager.load(fishShop);
         assetManager.load(saloon);
+        assetManager.load(barn);
+        assetManager.load(bigBarn);
+        assetManager.load(deluxeBarn);
+        assetManager.load(coop);
+        assetManager.load(bigCoop);
+        assetManager.load(deluxeCoop);
+
+        assetManager.load(deluxeRetainingSoil);
+        assetManager.load(speedGro);
 
         assetManager.load(carrotSeeds);
         assetManager.load(carrot);
@@ -334,6 +372,16 @@ public class GameAssetManager {
         assetManager.load(carrotStage2);
         assetManager.load(carrotStage3);
         assetManager.load(carrotStage4);
+
+        assetManager.load(pumpkin);
+        assetManager.load(pumpkinSeeds);
+        assetManager.load(pumpkinStage1);
+        assetManager.load(pumpkinStage2);
+        assetManager.load(pumpkinStage3);
+        assetManager.load(pumpkinStage4);
+        assetManager.load(pumpkinStage5);
+        assetManager.load(pumpkinStage6);
+        assetManager.load(giantPumpkin);
 
         assetManager.load(crafting);
         assetManager.load(cherry_bomb);

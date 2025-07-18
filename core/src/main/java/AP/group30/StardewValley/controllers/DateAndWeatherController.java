@@ -54,6 +54,18 @@ public class DateAndWeatherController {
             MaintainerController.crowAttack();
             App.getCurrentGame().getCurrentTime().setHour((x - (22 - App.getCurrentGame().getCurrentTime().getHour())) + 9);
             for (Player player : App.getCurrentGame().getPlayers()) {
+                Tile[][] tiles = player.getMap().getTiles();
+                for (int i = 0; i < tiles.length; i++) {
+                    for (int j = 0; j < tiles[i].length; j++) {
+                        if (tiles[i][j].isPlanted()) {
+                            if (tiles[i][j].getCrop() instanceof GiantCrop) {
+                                for (Tile tile : ((GiantCrop)tiles[i][j].getCrop()).getTiles()) {
+                                    ((GiantCrop)tile.getCrop()).setChecked(false);
+                                }
+                            }
+                        }
+                    }
+                }
                 player.setEnergy(player.getMaxEnergy());
                 if (player.isPassedOut()) {
                     player.setEnergy((player.getMaxEnergy() * 3) / 4);
@@ -66,7 +78,7 @@ public class DateAndWeatherController {
                         player.setGotRejected(false);
                     }
                 }
-                Tile[][] tiles = player.getMap().getTiles();
+
 
                 if (App.getCurrentGame().getCurrentWeather().equals(Weather.STORM)) {
                     Random rand = new Random();
@@ -93,13 +105,13 @@ public class DateAndWeatherController {
                             if (!(tiles[i][j].getCrop() instanceof GiantCrop)) {
                                 if (!tiles[i][j].isReadyToHarvest()) {
                                     tiles[i][j].getCrop().setDaysPassed(tiles[i][j].getCrop().getDaysPassed() + 1);
-                                    if (tiles[i][j].getCrop().isWateredToday() && !tiles[i][j].getCrop().isNotNeedWaterAnymore()) {
+                                    if (tiles[i][j].getCrop().isWateredToday() || tiles[i][j].getCrop().isNotNeedWaterAnymore()) {
                                         tiles[i][j].getCrop().setDaysNotWatered(0);
                                     }
                                     if (!tiles[i][j].getCrop().isWateredToday()) {
                                         tiles[i][j].getCrop().setDaysNotWatered(tiles[i][j].getCrop().getDaysNotWatered() + 1);
                                         if (tiles[i][j].getCrop().getDaysNotWatered() >= 2) {
-                                            RegisterMenu.gameScreen.getEntities().remove(((ForagingSeed)tiles[i][j].getItem()).getCrop());
+                                            RegisterMenu.gameScreen.getEntities().remove(tiles[i][j].getCrop());
                                             tiles[i][j].setCrop(null);
                                             tiles[i][j].setPlanted(false);
                                             tiles[i][j].setReadyToHarvest(false);
@@ -133,18 +145,15 @@ public class DateAndWeatherController {
                                     }
                                 }
                             } else {
-                                if (!tiles[i][j].isGiantCropCheck()) {
-                                    Tile[] tiles1 = ((GiantCrop) tiles[i][j].getCrop()).getTiles();
-                                    for (Tile tile : tiles1) {
-                                        tile.setGiantCropCheck(true);
-                                    }
+                                Tile[] tiles1 = ((GiantCrop) tiles[i][j].getCrop()).getTiles();
+                                if (!((GiantCrop)tiles[i][j].getCrop()).isChecked()) {
                                     v = i;
                                     u = j;
                                     if (!tiles[i][j].isReadyToHarvest()) {
                                         tiles[i][j].getCrop().setDaysPassed(tiles[i][j].getCrop().getDaysPassed() + 1);
                                         if (tiles[i][j].getCrop().getCurrentStage() <= tiles[i][j].getCrop().getStages().size()) {
                                             if (tiles[i][j].getCrop().getStages().get(tiles[i][j].getCrop().getCurrentStage()) == tiles[i][j].getCrop().getDaysPassed()) {
-                                                if (tiles[i][j].getCrop().getCurrentStage() == tiles[i][j].getCrop().getStages().size()) {
+                                                if (tiles[i][j].getCrop().getCurrentStage() == tiles[i][j].getCrop().getStages().size() - 1) {
                                                     tiles[i][j].setReadyToHarvest(true);
                                                     for (Tile tile : tiles1) {
                                                         tile.setReadyToHarvest(true);
@@ -157,8 +166,14 @@ public class DateAndWeatherController {
                                         }
                                         if (tiles[i][j].getCrop().getCurrentStage() == tiles[i][j].getCrop().getStages().size()) {
                                             tiles[i][j].setReadyToHarvest(true);
+                                            for (Tile tile : tiles1) {
+                                                tile.setReadyToHarvest(true);
+                                            }
                                         }
                                     }
+                                }
+                                for (Tile tile1 : tiles1) {
+                                    ((GiantCrop)tile1.getCrop()).setChecked(true);
                                 }
                             }
                         }

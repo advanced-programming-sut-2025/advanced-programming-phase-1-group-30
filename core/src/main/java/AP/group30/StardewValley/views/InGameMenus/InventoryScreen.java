@@ -205,7 +205,7 @@ public class InventoryScreen {
         });
     }
 
-    private Image createBorderImage(int width, int height, Color color) {
+    public static Image createBorderImage(int width, int height, Color color) {
         Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
         pixmap.setColor(0, 0, 0, 0);
         pixmap.fill();
