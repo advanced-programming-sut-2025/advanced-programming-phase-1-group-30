@@ -1,37 +1,23 @@
 package AP.group30.StardewValley.views.InGameMenus;
 
-import AP.group30.StardewValley.controllers.GameMenuController;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameAssetManager;
-import AP.group30.StardewValley.models.Items.Foods.FoodType;
 import AP.group30.StardewValley.models.Items.IndustrialProducts.IndustrialProductType;
-import AP.group30.StardewValley.models.Items.Item;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
 
-public class ArtisanScreen {
-    private final Stage stage;
-    private final Skin skin;
-    private final Table table;
-    private boolean visible = false;
-    private final Texture backgroundTexture;
-    private final Texture backgroundItemTexture;
-
-    private TextButton infoButton;
+public class ArtisanScreen extends InGameMenuScreen{
+    private final TextButton infoButton;
 
     private final ArrayList<Image> itemImages = new ArrayList<>();
     private Image borderImage;
@@ -39,28 +25,14 @@ public class ArtisanScreen {
     private ArrayList<IndustrialProductType> devices = App.getCurrentGame().getCurrentPlayer().getDevices();
     public IndustrialProductType currentDevice = null;
 
-    private DeviceScreen deviceScreen;
-    private ArtisanScreen artisanScreen;
+    private final DeviceScreen deviceScreen;
+    private final ArtisanScreen artisanScreen;
 
     public ArtisanScreen(SpriteBatch batch, Skin skin) {
-        this.skin = skin;
-        this.stage = new Stage(new ScreenViewport(), batch);
+        super(batch, skin, GameAssetManager.refrigerator, 2, 200);
 
-        backgroundTexture = GameAssetManager.assetManager.get(GameAssetManager.refrigerator);
-        Drawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
-
-        backgroundItemTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryItem);
         deviceScreen = new DeviceScreen(batch, skin);
         artisanScreen = this;
-
-        table = new Table();
-        table.setVisible(false);
-        table.setBackground(backgroundDrawable);
-        table.setSize(800, 300);
-        table.setPosition(
-            (Gdx.graphics.getWidth() - table.getWidth()) / 2f,
-            (Gdx.graphics.getHeight() - table.getHeight()) / 2f + 200
-        );
 
         infoButton = new TextButton("Products", skin);
         infoButton.setPosition(table.getX() + table.getWidth() / 2f - infoButton.getWidth() / 2f - 50,
@@ -79,37 +51,12 @@ public class ArtisanScreen {
         refresh();
     }
 
-    public void show() {
-        refresh();
-        visible = true;
-        table.setVisible(true);
-        Gdx.input.setInputProcessor(stage);
-    }
-
-    public void hide() {
-        visible = false;
-        table.setVisible(false);
-        Gdx.input.setInputProcessor(null);
-    }
-
-    public void toggle() {
-        if (visible) hide();
-        else show();
-    }
-
     public void render() {
-        if (visible) {
-            stage.act();
-            stage.draw();
-
-            deviceScreen.render();
-        }
+        super.render();
+        if (visible) deviceScreen.render();
     }
 
-    public boolean isVisible() {
-        return visible;
-    }
-
+    @Override
     public void dispose() {
         for (Image img : itemImages) {
             img.remove();
@@ -187,7 +134,8 @@ public class ArtisanScreen {
         itemImages.add(itemImage);
     }
 
-    private void refresh() {
+    @Override
+    protected void refresh() {
         for (Image img : itemImages) {
             img.remove();
         }
@@ -200,47 +148,6 @@ public class ArtisanScreen {
         devices = App.getCurrentGame().getCurrentPlayer().getDevices();
 
         renderItemsInGrid(table.getX() + 50, table.getY() + table.getHeight() - 100);
-    }
-
-    private Image createBorderImage(int width, int height, Color color) {
-        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
-        pixmap.setColor(0, 0, 0, 0);
-        pixmap.fill();
-
-        pixmap.setColor(color);
-        int thickness = 3;
-        pixmap.fillRectangle(0, 0, width, thickness);
-        pixmap.fillRectangle(0, height - thickness, width, thickness);
-        pixmap.fillRectangle(0, 0, thickness, height);
-        pixmap.fillRectangle(width - thickness, 0, thickness, height);
-
-        Texture texture = new Texture(pixmap);
-        pixmap.dispose();
-
-        Image border = new Image(new TextureRegionDrawable(new TextureRegion(texture)));
-        border.addListener(new ActorGestureListener() {
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                texture.dispose();
-            }
-        });
-
-        return border;
-    }
-
-
-    private String ingredients(FoodType recipe) {
-        ArrayList<Item> ingredients = recipe.getIngredients();
-        StringBuilder ingredientsText = new StringBuilder();
-
-        for (Item ingredient : ingredients) {
-            if (ingredients.getLast().equals(ingredient))
-                ingredientsText.append(ingredient.getName() + " (x" + ingredient.getCount() + ")");
-            else
-                ingredientsText.append(ingredient.getName() + " (x" + ingredient.getCount() + ")\n");
-        }
-
-        return ingredientsText.toString();
     }
 
     public Stage getStage() {
