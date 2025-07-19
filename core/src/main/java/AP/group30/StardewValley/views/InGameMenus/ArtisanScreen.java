@@ -3,7 +3,6 @@ package AP.group30.StardewValley.views.InGameMenus;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.IndustrialProducts.IndustrialProductType;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,14 +13,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
 
 public class ArtisanScreen extends InGameMenuScreen{
-    private final Texture backgroundItemTexture;
-
-    private TextButton infoButton;
+    private final TextButton infoButton;
 
     private final ArrayList<Image> itemImages = new ArrayList<>();
     private Image borderImage;
@@ -29,13 +25,12 @@ public class ArtisanScreen extends InGameMenuScreen{
     private ArrayList<IndustrialProductType> devices = App.getCurrentGame().getCurrentPlayer().getDevices();
     public IndustrialProductType currentDevice = null;
 
-    private DeviceScreen deviceScreen;
-    private ArtisanScreen artisanScreen;
+    private final DeviceScreen deviceScreen;
+    private final ArtisanScreen artisanScreen;
 
     public ArtisanScreen(SpriteBatch batch, Skin skin) {
-        super(new Stage(new ScreenViewport(), batch), skin, new Table(), GameAssetManager.refrigerator, 2, 200);
+        super(batch, skin, GameAssetManager.refrigerator, 2, 200);
 
-        backgroundItemTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryItem);
         deviceScreen = new DeviceScreen(batch, skin);
         artisanScreen = this;
 

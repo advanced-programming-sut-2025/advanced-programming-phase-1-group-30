@@ -10,29 +10,23 @@ import AP.group30.StardewValley.models.Items.Item;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
 
 public class DeviceScreen extends InGameMenuScreen{
-    private final Texture backgroundItemTexture;
-
     private final ArrayList<Image> itemImages = new ArrayList<>();
     private Image borderImage;
-    private TextButton makeButton;
-    private TextButton exitButton;
-    private TextButton claimButton;
+    private final TextButton makeButton;
+    private final TextButton claimButton;
 
     private final ArrayList<ArtisanGoodType> items = new ArrayList<>();
     private ArtisanGoodType currentItem;
@@ -44,16 +38,11 @@ public class DeviceScreen extends InGameMenuScreen{
 
     private boolean itemInProses;
     private ArtisanItemProsses artisanGood;
-    private Texture prosesBar;
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
-    private Label itemLabel;
+    private final Label itemLabel;
 
     public DeviceScreen(SpriteBatch batch, Skin skin) {
-        super(new Stage(new ScreenViewport(), batch), skin, new Table(), GameAssetManager.inventoryScreen, 1, 0);
-
-        prosesBar = GameAssetManager.assetManager.get(GameAssetManager.energyBar);
-
-        backgroundItemTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryItem);
+        super(batch, skin, GameAssetManager.inventoryScreen, 1, 0);
 
         errorLabel = new Label("", skin);
         errorLabel.setColor(Color.RED);
@@ -63,7 +52,7 @@ public class DeviceScreen extends InGameMenuScreen{
         infoLabel = new Label("Ingredients:", skin);
         infoLabel.setPosition(positionX + 250, positionY - 250);
 
-        makeButton = new TextButton("Cook", skin);
+        makeButton = new TextButton("Make", skin);
         makeButton.setPosition(table.getX() + table.getWidth() / 2f - makeButton.getWidth() / 2f + 100,
             table.getY() - makeButton.getHeight());
         makeButton.setVisible(false);
@@ -85,7 +74,7 @@ public class DeviceScreen extends InGameMenuScreen{
             }
         });
 
-        exitButton = new TextButton("Exit", skin);
+        TextButton exitButton = new TextButton("Exit", skin);
         exitButton.setPosition(table.getX() + table.getWidth() / 2f - exitButton.getWidth() / 2f - 100,
             table.getY() - exitButton.getHeight());
         exitButton.addListener(new ClickListener() {
@@ -294,9 +283,9 @@ public class DeviceScreen extends InGameMenuScreen{
 
         for (Item ingredient : ingredients) {
             if (ingredients.getLast().equals(ingredient))
-                ingredientsText.append(ingredient.getName() + " (x" + ingredient.getCount() + ")");
+                ingredientsText.append(ingredient.getName()).append(" (x").append(ingredient.getCount()).append(")");
             else
-                ingredientsText.append(ingredient.getName() + " (x" + ingredient.getCount() + ")\n");
+                ingredientsText.append(ingredient.getName()).append(" (x").append(ingredient.getCount()).append(")\n");
         }
 
         return ingredientsText.toString();

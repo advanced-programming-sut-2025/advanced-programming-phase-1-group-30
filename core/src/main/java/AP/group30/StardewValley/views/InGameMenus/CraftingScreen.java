@@ -5,25 +5,20 @@ import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.IndustrialProducts.IndustrialProductType;
 import AP.group30.StardewValley.models.Items.Item;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
 
 public class CraftingScreen extends InGameMenuScreen {
-    private final Texture backgroundItemTexture;
-
-    private TextButton craftingButton;
+    private final TextButton craftingButton;
 
     private final ArrayList<Image> itemImages = new ArrayList<>();
     private Image borderImage;
@@ -34,9 +29,7 @@ public class CraftingScreen extends InGameMenuScreen {
     private final Label errorLabel;
 
     public CraftingScreen(SpriteBatch batch, Skin skin) {
-        super(new Stage(new ScreenViewport(), batch), skin, new Table(), GameAssetManager.crafting, 2, 200);
-
-        backgroundItemTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryItem);
+        super(batch, skin, GameAssetManager.crafting, 2, 200);
 
         craftingButton = new TextButton("Craft", skin);
         craftingButton.setPosition(table.getX() + table.getWidth() / 2f - craftingButton.getWidth() / 2f - 50,
@@ -172,9 +165,9 @@ public class CraftingScreen extends InGameMenuScreen {
 
         for (Item ingredient : ingredients) {
             if (ingredients.getLast().equals(ingredient))
-                ingredientsText.append(ingredient.getName() + " (x" + ingredient.getCount() + ")");
+                ingredientsText.append(ingredient.getName()).append(" (x").append(ingredient.getCount()).append(")");
             else
-                ingredientsText.append(ingredient.getName() + " (x" + ingredient.getCount() + ")\n");
+                ingredientsText.append(ingredient.getName()).append(" (x").append(ingredient.getCount()).append(")\n");
         }
 
         return ingredientsText.toString();

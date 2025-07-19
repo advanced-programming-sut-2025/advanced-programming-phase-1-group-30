@@ -4,23 +4,16 @@ import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Players.Player;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class SkillScreen extends InGameMenuScreen{
-    private final Texture backgroundItemTexture;
-
     public SkillScreen(SpriteBatch batch, Skin skin) {
-        super(new Stage(new ScreenViewport(), batch), skin, new Table(), GameAssetManager.skill, 2, 0);
-
-        backgroundItemTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryItem);
+        super(batch, skin, GameAssetManager.skill, 2, 0);
 
         stage.addActor(table);
 

@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 abstract public class InGameMenuScreen {
     protected final Stage stage;
@@ -22,18 +24,21 @@ abstract public class InGameMenuScreen {
     protected final Table table;
     protected boolean visible = false;
     protected final Texture backgroundTexture;
+    protected final Texture backgroundItemTexture;
 
     protected final int positionX;
     protected final int positionY;
 
-    protected InGameMenuScreen(Stage stage, Skin skin, Table table, AssetDescriptor<Texture> backgroundAssetDescriptor
+    protected InGameMenuScreen(SpriteBatch batch, Skin skin, AssetDescriptor<Texture> backgroundAssetDescriptor
                                 , int tableHeightDivider, int tableHorizonMove) {
-        this.stage = stage;
+        this.stage = new Stage(new ScreenViewport(), batch);
         this.skin = skin;
-        this.table = table;
+        this.table = new Table();
 
         backgroundTexture = GameAssetManager.assetManager.get(backgroundAssetDescriptor);
         Drawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
+
+        backgroundItemTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryItem);
 
         table.setVisible(false);
         table.setBackground(backgroundDrawable);
@@ -45,6 +50,8 @@ abstract public class InGameMenuScreen {
 
         positionX = (int) table.getX() + 85;
         positionY = (int) (table.getY() + table.getHeight()) - 155;
+
+        stage.addActor(table);
     }
 
     public void show() {

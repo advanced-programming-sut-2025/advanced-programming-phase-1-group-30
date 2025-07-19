@@ -5,25 +5,20 @@ import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.Item;
 import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Players.Player;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
 
 public class InventoryScreen extends InGameMenuScreen{
-    private final Texture backgroundItemTexture;
     Label money;
     Label energy;
     Player player = App.getCurrentGame().getCurrentPlayer();
@@ -39,9 +34,7 @@ public class InventoryScreen extends InGameMenuScreen{
     private final Label errorLabel;
 
     public InventoryScreen(SpriteBatch batch, Skin skin) {
-        super(new Stage(new ScreenViewport(), batch), skin, new Table(), GameAssetManager.inventoryScreen, 1, 0);
-
-        backgroundItemTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryItem);
+        super(batch, skin, GameAssetManager.inventoryScreen, 1, 0);
 
         errorLabel = new Label("You can't sell this Item!", skin);
         errorLabel.setColor(Color.RED);
@@ -55,7 +48,6 @@ public class InventoryScreen extends InGameMenuScreen{
         money = new Label("Current Money: " + player.getMoney(), skin);
         money.setPosition(positionX + 250, positionY - 350);
 
-        stage.addActor(table);
         stage.addActor(info);
         stage.addActor(energy);
         stage.addActor(money);
