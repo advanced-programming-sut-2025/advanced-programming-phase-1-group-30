@@ -27,9 +27,7 @@ import AP.group30.StardewValley.views.InGameMenus.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -58,13 +56,14 @@ public class CityScreen implements Screen {
     private final Random random = new Random();
     private final Player player;
     private TextureRegion playerRegion;
+    Texture whitePixelTexture;
     private Texture playerTexture = GameAssetManager.assetManager.get(GameAssetManager.player21);
     BitmapFont font = (new Skin(Gdx.files.internal("skin/pixthulhu-ui.json")).getFont("font"));
     private float stateTime = 0;
 
     private float x;
     private float y;
-    float speed = 150f;
+    float speed = 450f;
     private InventoryScreen inventoryScreen;
     private SkillScreen skillScreen;
     private HutScreen hut;
@@ -88,6 +87,11 @@ public class CityScreen implements Screen {
         playerRect.setPosition(x, y);
         playerRect.setSize(playerTexture.getWidth() * 2f, playerTexture.getHeight() / 2f);
         batch = new SpriteBatch();
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(Color.WHITE);
+        pixmap.fill();
+        whitePixelTexture = new Texture(pixmap);
+        pixmap.dispose();
     }
 
 
@@ -110,7 +114,6 @@ public class CityScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stateTime += delta;
         player.setStateTime(stateTime);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.TAB)) shopScreen.toggle();
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) inventoryScreen.toggle();
         if (Gdx.input.isKeyJustPressed(Input.Keys.N)) skillScreen.toggle();
 
@@ -139,6 +142,11 @@ public class CityScreen implements Screen {
         GameScreen.renderWallsAroundMap(tiles, batch);
         GameScreen.renderMap(batch, map);
         GameScreen.renderEntities(batch, map, entities);
+        if (game.getCurrentTime().getHour() >= 18) {
+            batch.setColor(0, 0, 0, 0.6f);
+            batch.draw(whitePixelTexture, camera.position.x - Gdx.graphics.getWidth() / 2f, camera.position.y - Gdx.graphics.getHeight() / 2f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            batch.setColor(Color.WHITE);
+        }
         GameScreen.renderEnergyBar(player, camera, energyBar, batch, shapeRenderer);
         GameScreen.renderTime(batch, camera, clock, font, game);
         renderNPCs(batch, stateTime);
@@ -167,9 +175,15 @@ public class CityScreen implements Screen {
         }
         batch.end();
 
+        inventoryScreen.render();
+        skillScreen.render();
         questScreen.render();
         if (shopScreen != null) {
-            shopScreen.render(batch, camera);
+            if (!shopScreen.render(batch, camera)) {
+                shopScreen.hide();
+                shopScreen.dispose();
+                shopScreen = null;
+            }
         }
     }
 
@@ -288,6 +302,11 @@ public class CityScreen implements Screen {
     }
 
     private boolean isAnyMenuOpened() {
+        if (shopScreen != null) {
+            if (shopScreen.isVisible()) {
+                return true;
+            }
+        }
         return inventoryScreen.isVisible() ||
             skillScreen.isVisible() ||
             questScreen.isVisible();
@@ -323,7 +342,7 @@ public class CityScreen implements Screen {
         Skin skin = GameAssetManager.assetManager.get(GameAssetManager.menuSkin);
         for (Building building : game.getBuildings()) {
             if (playerRect.overlaps(shopRect(building))) {
-                shopScreen = new ShopScreen(batch, skin, building.getItems());
+                shopScreen = new ShopScreen(batch, skin, building.getItems(), building);
             }
         }
         return shopScreen;

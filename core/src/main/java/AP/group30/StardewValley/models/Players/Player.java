@@ -30,17 +30,19 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 
 import java.util.*;
 
 public class Player implements GameObjects {
     private int x;
     private int y;
+    private Rectangle playerRect = new Rectangle();
     private int cityX;
     private int cityY;
     private final String username;
     private Map map;
-    private int energy;
+    private float energy;
     private ShippingBin shippingBin;
     private BackPack backPack;
     private TrashCan trashCan;
@@ -113,15 +115,15 @@ public class Player implements GameObjects {
         this.backPack.addItem(new Scythe(1));
         wield = backPack.getItems().getFirst();
         this.trashCan = new TrashCan(TrashCanType.INITIAL_TRASHCAN);
-        this.backPack.addItem(new ForagingSeed(10, ForagingSeedType.MELON_SEEDS)); //TODO tile & initial seed
+        this.backPack.addItem(new ForagingSeed(10, ForagingSeedType.PUMPKIN_SEEDS)); //TODO tile & initial seed
         this.backPack.addItem(new Item(1, "bouquet", 10, ItemTexture.WOOD.getTexture()));
         this.backPack.addItem(new Item(1, "wedding ring", 10, ItemTexture.WOOD.getTexture()));
         this.backPack.addItem(new Item(1000, "wood", 10, ItemTexture.WOOD.getTexture()));
         this.backPack.addItem(new Item(1000, "stone", 20, ItemTexture.STONE.getTexture()));
         this.backPack.addItem(new Item(50, "hay", 50, ItemTexture.WOOD.getTexture()));
         this.backPack.addItem(new ForagingSeed(10, ForagingSeedType.CARROT_SEEDS));
-        this.backPack.addItem(new Item(50, "speed-gro", 50, ItemTexture.WOOD.getTexture()));
-        this.backPack.addItem(new Item(50, "deluxe retaining soil", 50, ItemTexture.WOOD.getTexture()));
+        this.backPack.addItem(new Item(50, "speed-gro", 50, ItemTexture.SPEED_GRO.getTexture()));
+        this.backPack.addItem(new Item(50, "deluxe retaining soil", 50, ItemTexture.DELUXE_RETAINING_SOIL.getTexture()));
         this.backPack.addItem(new Item(50, "copper bar", 50, ItemTexture.WOOD.getTexture()));
         this.money = 20000;
         this.selectionNumber = selectionNumber;
@@ -179,11 +181,11 @@ public class Player implements GameObjects {
         this.map = map;
     }
 
-    public int getEnergy() {
+    public float getEnergy() {
         return energy;
     }
 
-    public void setEnergy(int energy) {
+    public void setEnergy(float energy) {
         this.energy = energy;
     }
 
@@ -522,7 +524,7 @@ public class Player implements GameObjects {
     }
     public static void checkUsedEnergy(Player player, Scanner scanner) {
         if (player.lastEnergy - player.energy > 50) {
-            player.lastEnergy = player.energy;
+            player.lastEnergy = (int)player.energy;
             GameMenu.printResult("You used your maximum energy possible for your turn!");
             NewGameController.NextTurn(scanner);
         }
@@ -690,5 +692,13 @@ public class Player implements GameObjects {
 
         playerRegion = sWalkingRegion[1];
         playerTexture = GameAssetManager.assetManager.get(GameAssetManager.player21);
+    }
+
+    public Rectangle getPlayerRect() {
+        return playerRect;
+    }
+
+    public void setPlayerRect(Rectangle playerRect) {
+        this.playerRect = playerRect;
     }
 }

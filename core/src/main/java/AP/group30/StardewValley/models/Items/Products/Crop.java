@@ -10,14 +10,14 @@ import java.util.ArrayList;
 public class Crop extends Product implements GameObjects {
     private final CropType type;
     private ArrayList<Integer> stages;
-    private int currentStage = 0;
+    int currentStage = 0;
     private int daysPassed = 0;
     private boolean notNeedWaterAnymore = false;
     private boolean wateredToday = false;
     private int daysNotWatered = 0;
     private int regrowthTime = 0;
-    private int x, y;
-    private java.util.Map<Integer, Texture> stageTextureMap = new java.util.HashMap<>();
+    int x, y;
+    java.util.Map<Integer, Texture> stageTextureMap = new java.util.HashMap<>();
 
     public Crop(int count, CropType type) {
         super(count, type.getName(), type.getPrice(), type.getTexture());
@@ -61,6 +61,7 @@ public class Crop extends Product implements GameObjects {
     public boolean isWateredToday() {
         return wateredToday;
     }
+
     public void setWateredToday(boolean wateredToday) {
         this.wateredToday = wateredToday;
     }
@@ -87,9 +88,6 @@ public class Crop extends Product implements GameObjects {
     }
     @Override
     public void render(SpriteBatch batch, Map map) {
-        if (currentStage == 4) {
-            System.out.println(currentStage);
-        }
         batch.draw(stageTextureMap.get(currentStage), x * 32, y * 32, 32, 32);
     }
 

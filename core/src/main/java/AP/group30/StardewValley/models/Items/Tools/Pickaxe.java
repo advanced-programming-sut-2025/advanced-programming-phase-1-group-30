@@ -27,4 +27,17 @@ public class Pickaxe extends Tool{
             this.setType(PickaxeType.IRIDIUM);
         }
     }
+
+    public static PickaxeType getNextPickaxeType(PickaxeType pickaxeType) {
+        if (pickaxeType.equals(PickaxeType.NORMAL)) {
+            return PickaxeType.COPPER;
+        } else if (pickaxeType.equals(PickaxeType.COPPER)) {
+            return PickaxeType.IRON;
+        } else if (pickaxeType.equals(PickaxeType.IRON)) {
+            return PickaxeType.GOLD;
+        } else if (pickaxeType.equals(PickaxeType.GOLD)) {
+            return PickaxeType.IRIDIUM;
+        }
+        else return null;
+    }
 }

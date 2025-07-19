@@ -42,7 +42,7 @@ public enum ForagingSeedType implements ItemsInteface {
     EGGPLANT_SEEDS("eggplant seeds", Season.FALL, CropType.EGGPLANT, null, 0, ItemTexture.WOOD.getTexture()),
     FAIRY_SEEDS("fairy seeds", Season.FALL, CropType.FAIRY_ROSE, null, 0, ItemTexture.WOOD.getTexture()),
     GRAPE_STARTER("grape starter", Season.FALL, CropType.GRAPE, null, 0, ItemTexture.WOOD.getTexture()),
-    PUMPKIN_SEEDS("pumpkin seeds", Season.FALL, CropType.PUMPKIN, null, 0, ItemTexture.WOOD.getTexture()),
+    PUMPKIN_SEEDS("pumpkin seeds", Season.FALL, CropType.PUMPKIN, null, 0, ItemTexture.PUMPKIN_SEEDS.getTexture()),
     YAM_SEEDS("yam seeds", Season.FALL, CropType.YAM, null, 0, ItemTexture.WOOD.getTexture()),
     RARE_SEED("rare seed", Season.FALL, CropType.SWEET_GEM_BERRY, null, 0, ItemTexture.WOOD.getTexture()),
     POWDERMELON_SEEDS("powdermelon seeds", Season.WINTER, CropType.POWDERMELON, null, 0, ItemTexture.WOOD.getTexture()),

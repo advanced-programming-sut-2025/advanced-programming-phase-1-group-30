@@ -27,4 +27,17 @@ public class Axe extends Tool {
             this.setType(AxeType.IRIDIUM);
         }
     }
+
+    public static AxeType getNextAxeType(AxeType axeType) {
+        if (axeType.equals(AxeType.NORMAL)) {
+            return AxeType.COPPER;
+        } else if (axeType.equals(AxeType.COPPER)) {
+            return AxeType.IRON;
+        } else if (axeType.equals(AxeType.IRON)) {
+            return AxeType.GOLD;
+        } else if (axeType.equals(AxeType.GOLD)) {
+            return AxeType.IRIDIUM;
+        }
+        else return null;
+    }
 }

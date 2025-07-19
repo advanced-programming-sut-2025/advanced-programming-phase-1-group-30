@@ -23,7 +23,7 @@ public class Building implements GameObjects {
 
     private final int startHour;
     private final int endHour;
-    private Texture texture;
+    Texture texture;
 
     private ArrayList<Item> items;
 
@@ -32,7 +32,11 @@ public class Building implements GameObjects {
         this.width = width;
         this.startX = startX;
         this.startY = startY;
-        this.rectangle = new Rectangle(startX * 32, startY * 32, width * 32, height * 32);
+        if (this instanceof Hut) {
+            this.rectangle = new Rectangle(startX * 32, startY * 32, width * 32, height * 32);
+        } else {
+            this.rectangle = new Rectangle((startX - 1) * 32, startY * 32, (width + 3) * 32, height * 32);
+        }
         this.tileType = tileType;
         this.startHour = startHour;
         this.endHour = endHour;
@@ -118,12 +122,22 @@ public class Building implements GameObjects {
             }
         }
 
-        batch.draw(texture,
-            map.getTiles()[startTIleX - 1][startTIleY + 1].getX() * 32,
-            map.getTiles()[startTIleX][startTIleY].getY() * 32,
-            (endTIleX - startTIleX + 3) * 32,
-            (endTIleY - startTIleY + 4) * 32
-        );
-
+        if (this instanceof Hut) {
+            batch.draw(texture,
+                map.getTiles()[startTIleX - 1][startTIleY + 1].getX() * 32,
+                map.getTiles()[startTIleX][startTIleY].getY() * 32,
+                (endTIleX - startTIleX + 3) * 32,
+                (endTIleY - startTIleY + 4) * 32
+            );
+        } else {
+            batch.draw(texture,
+                map.getTiles()[startTIleX - 1][startTIleY + 1].getX() * 32,
+                map.getTiles()[startTIleX][startTIleY].getY() * 32,
+                (endTIleX - startTIleX + 3) * 32,
+                (endTIleY - startTIleY + 4) * 32
+            );
+        }
     }
+
+
 }

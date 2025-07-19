@@ -12,7 +12,7 @@ public class Item implements ItemsInteface {
     private String quality;
     private double cof;
     private int price;
-    private final Texture texture;
+    private Texture texture;
 
     public Item(int count, String name, int price, Texture texture) {
         this.name = name;
@@ -64,6 +64,10 @@ public class Item implements ItemsInteface {
 
     public Texture getTexture() {
         return texture;
+    }
+
+    public void setTexture(Texture texture) {
+        this.texture = texture;
     }
 
     public static Item findItemByName(String name, ArrayList<Item> items) {

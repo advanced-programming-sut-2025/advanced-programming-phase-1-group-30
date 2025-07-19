@@ -27,4 +27,17 @@ public class Hoe extends Tool {
             this.setType(HoeType.IRIDIUM);
         }
     }
+
+    public static HoeType getNextHoeType(HoeType hoeType) {
+        if (hoeType.equals(HoeType.NORMAL)) {
+            return HoeType.COPPER;
+        } else if (hoeType.equals(HoeType.COPPER)) {
+            return HoeType.IRON;
+        } else if (hoeType.equals(HoeType.IRON)) {
+            return HoeType.GOLD;
+        } else if (hoeType.equals(HoeType.GOLD)) {
+            return HoeType.IRIDIUM;
+        }
+        else return null;
+    }
 }

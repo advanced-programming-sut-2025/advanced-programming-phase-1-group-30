@@ -37,4 +37,17 @@ public class Basket extends Tool {
             this.setType(BasketType.IRIDIUM);
         }
     }
+
+    public static BasketType getNextBasketType(BasketType basketType) {
+        if (basketType.equals(BasketType.NORMAL)) {
+            return BasketType.COPPER;
+        } else if (basketType.equals(BasketType.COPPER)) {
+            return BasketType.IRON;
+        } else if (basketType.equals(BasketType.IRON)) {
+            return BasketType.GOLD;
+        } else if (basketType.equals(BasketType.GOLD)) {
+            return BasketType.IRIDIUM;
+        }
+        else return null;
+    }
 }
