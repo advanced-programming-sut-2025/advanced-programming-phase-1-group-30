@@ -5,32 +5,20 @@ import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.IndustrialProducts.IndustrialProductType;
 import AP.group30.StardewValley.models.Items.Item;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
 
-public class CraftingScreen implements Screen {
-    private final Stage stage;
-    private final Skin skin;
-    private final Table table1;
-    private boolean visible = false;
-    private final Texture backgroundTexture;
-    private final Texture backgroundItemTexture;
-
-    private TextButton craftingButton;
+public class CraftingScreen extends InGameMenuScreen {
+    private final TextButton craftingButton;
 
     private final ArrayList<Image> itemImages = new ArrayList<>();
     private Image borderImage;
@@ -41,26 +29,11 @@ public class CraftingScreen implements Screen {
     private final Label errorLabel;
 
     public CraftingScreen(SpriteBatch batch, Skin skin) {
-        this.skin = skin;
-        this.stage = new Stage(new ScreenViewport(), batch);
-
-        backgroundTexture = GameAssetManager.assetManager.get(GameAssetManager.crafting);
-        Drawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
-
-        backgroundItemTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryItem);
-
-        table1 = new Table();
-        table1.setVisible(false);
-        table1.setBackground(backgroundDrawable);
-        table1.setSize(800, 300);
-        table1.setPosition(
-            (Gdx.graphics.getWidth() - table1.getWidth()) / 2f,
-            (Gdx.graphics.getHeight() - table1.getHeight()) / 2f + 200
-        );
+        super(batch, skin, GameAssetManager.crafting, 2, 200);
 
         craftingButton = new TextButton("Craft", skin);
-        craftingButton.setPosition(table1.getX() + table1.getWidth() / 2f - craftingButton.getWidth() / 2f - 50,
-            table1.getY() - craftingButton.getHeight());
+        craftingButton.setPosition(table.getX() + table.getWidth() / 2f - craftingButton.getWidth() / 2f - 50,
+            table.getY() - craftingButton.getHeight());
         craftingButton.setVisible(false);
         craftingButton.addListener(new ClickListener() {
             @Override
@@ -71,66 +44,18 @@ public class CraftingScreen implements Screen {
 
         errorLabel = new Label("", skin);
         errorLabel.setColor(Color.RED);
-        errorLabel.setPosition(table1.getX() + 50 ,
-            table1.getY() + 70);
+        errorLabel.setPosition(table.getX() + 50 ,
+            table.getY() + 70);
         errorLabel.setVisible(false);
 
-        stage.addActor(table1);
+        stage.addActor(table);
         stage.addActor(errorLabel);
         stage.addActor(craftingButton);
 
         refresh();
     }
 
-    public void show() {
-        refresh();
-        visible = true;
-        table1.setVisible(true);
-        Gdx.input.setInputProcessor(stage);
-    }
-
     @Override
-    public void render(float v) {
-
-    }
-
-    @Override
-    public void resize(int i, int i1) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    public void hide() {
-        visible = false;
-        table1.setVisible(false);
-        Gdx.input.setInputProcessor(null);
-    }
-
-    public void toggle() {
-        if (visible) hide();
-        else show();
-    }
-
-    public void render() {
-        if (visible) {
-            stage.act();
-            stage.draw();
-        }
-    }
-
-    public boolean isVisible() {
-        return visible;
-    }
-
     public void dispose() {
         for (Image img : itemImages) {
             img.remove();
@@ -221,24 +146,8 @@ public class CraftingScreen implements Screen {
         itemImages.add(itemImage);
     }
 
-    private Image createBorderImage(int width, int height, Color color) {
-        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
-        pixmap.setColor(0, 0, 0, 0);
-        pixmap.fill();
-
-        pixmap.setColor(color);
-        int thickness = 3;
-        pixmap.fillRectangle(0, 0, width, thickness);
-        pixmap.fillRectangle(0, height - thickness, width, thickness);
-        pixmap.fillRectangle(0, 0, thickness, height);
-        pixmap.fillRectangle(width - thickness, 0, thickness, height);
-
-        Texture texture = new Texture(pixmap);
-        pixmap.dispose();
-        return new Image(new TextureRegionDrawable(new TextureRegion(texture)));
-    }
-
-    private void refresh() {
+    @Override
+    protected void refresh() {
         for (Image img : itemImages) {
             img.remove();
         }
@@ -247,7 +156,7 @@ public class CraftingScreen implements Screen {
 
         recipes = App.getCurrentGame().getCurrentPlayer().getCraftingRecipes();
 
-        renderItemsInGrid(table1.getX() + 50, table1.getY() + table1.getHeight() - 100);
+        renderItemsInGrid(table.getX() + 50, table.getY() + table.getHeight() - 100);
     }
 
     private String ingredients(IndustrialProductType recipe) {
@@ -256,9 +165,9 @@ public class CraftingScreen implements Screen {
 
         for (Item ingredient : ingredients) {
             if (ingredients.getLast().equals(ingredient))
-                ingredientsText.append(ingredient.getName() + " (x" + ingredient.getCount() + ")");
+                ingredientsText.append(ingredient.getName()).append(" (x").append(ingredient.getCount()).append(")");
             else
-                ingredientsText.append(ingredient.getName() + " (x" + ingredient.getCount() + ")\n");
+                ingredientsText.append(ingredient.getName()).append(" (x").append(ingredient.getCount()).append(")\n");
         }
 
         return ingredientsText.toString();

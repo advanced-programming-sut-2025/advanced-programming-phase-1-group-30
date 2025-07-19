@@ -21,7 +21,7 @@ import AP.group30.StardewValley.models.Players.NPC.NPC;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.models.Users.User;
 import AP.group30.StardewValley.views.GameMenu;
-import AP.group30.StardewValley.views.PreGameMenu;
+import AP.group30.StardewValley.views.StartMenus.PreGameMenu;
 
 public class NewGameController {
     public static Game NewGame(int numberOfPlayers, String username1, String username2, String username3,

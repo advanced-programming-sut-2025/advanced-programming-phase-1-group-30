@@ -4,17 +4,13 @@ import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.controllers.DateAndWeatherController;
 import AP.group30.StardewValley.controllers.GameMenuController;
 import AP.group30.StardewValley.models.App;
-import AP.group30.StardewValley.models.Buildings.Blacksmith;
 import AP.group30.StardewValley.models.Buildings.Building;
-import AP.group30.StardewValley.models.Buildings.Carpenter;
 import AP.group30.StardewValley.models.Buildings.Hut;
 import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.GameObjects;
 import AP.group30.StardewValley.models.Items.Products.Crop;
 import AP.group30.StardewValley.models.Items.Products.ForagingSeed;
-import AP.group30.StardewValley.models.Items.Products.Stone;
-import AP.group30.StardewValley.models.Items.Products.Tree;
 import AP.group30.StardewValley.models.Items.Tools.Tool;
 import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Maps.Tile;
@@ -24,6 +20,7 @@ import AP.group30.StardewValley.models.Players.NPC.*;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.views.InGameMenus.Hut.*;
 import AP.group30.StardewValley.views.InGameMenus.*;
+import AP.group30.StardewValley.views.StartMenus.RegisterMenu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -42,22 +39,20 @@ import java.util.Comparator;
 import java.util.Random;
 
 public class CityScreen implements Screen {
-    private Map map = App.getCurrentGame().getCityMap();
+    private final Map map = App.getCurrentGame().getCityMap();
     private Stage stage;
     private Game game;
     public ArrayList<GameObjects> entities = new ArrayList<>();
-    private Texture clock;
-    private Texture energyBar;
-    private Rectangle playerRect = new Rectangle();
+    private final Texture clock;
+    private final Texture energyBar;
+    private final Rectangle playerRect = new Rectangle();
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
     private final Tile[][] tiles;
-    private Tile currentTile;
     private int[][] grassMap;
     private final Random random = new Random();
     private final Player player;
-    private TextureRegion playerRegion;
+    private final TextureRegion playerRegion;
     Texture whitePixelTexture;
-    private Texture playerTexture = GameAssetManager.assetManager.get(GameAssetManager.player21);
     BitmapFont font = (new Skin(Gdx.files.internal("skin/pixthulhu-ui.json")).getFont("font"));
     private float stateTime = 0;
 
@@ -69,7 +64,7 @@ public class CityScreen implements Screen {
     private HutScreen hut;
     private ShopScreen shopScreen;
     private QuestScreen questScreen;
-    private SpriteBatch batch;
+    private final SpriteBatch batch;
     private OrthographicCamera camera;
 
     public CityScreen(Game game) {
@@ -79,6 +74,7 @@ public class CityScreen implements Screen {
         this.game = game;
         clock = GameAssetManager.assetManager.get(GameAssetManager.clock);
         energyBar = GameAssetManager.assetManager.get(GameAssetManager.energyBar);
+        Texture playerTexture = GameAssetManager.assetManager.get(GameAssetManager.player21);
         playerRegion = new TextureRegion(playerTexture);
         entities.addAll(game.getBuildings());
         entities.add(player);

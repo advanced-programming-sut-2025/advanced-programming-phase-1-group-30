@@ -4,7 +4,6 @@ import AP.group30.StardewValley.models.Animals.Animal;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Items.Item;
 import AP.group30.StardewValley.models.Items.ItemTexture;
-import AP.group30.StardewValley.models.Items.Products.ForagingSeed;
 import AP.group30.StardewValley.models.Items.Products.GiantCrop;
 import AP.group30.StardewValley.models.Items.Products.Tree;
 import AP.group30.StardewValley.models.Maps.Tile;
@@ -16,8 +15,7 @@ import AP.group30.StardewValley.models.Players.NPC.NPC;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.models.TimeAndDate.Season;
 import AP.group30.StardewValley.views.GameMenu;
-import AP.group30.StardewValley.views.GameScreen;
-import AP.group30.StardewValley.views.RegisterMenu;
+import AP.group30.StardewValley.views.StartMenus.RegisterMenu;
 
 import java.util.Random;
 

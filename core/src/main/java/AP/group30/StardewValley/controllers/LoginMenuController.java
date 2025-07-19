@@ -1,14 +1,10 @@
 package AP.group30.StardewValley.controllers;
 
 import AP.group30.StardewValley.models.App;
-import AP.group30.StardewValley.models.Users.RegisterQuestions;
 import AP.group30.StardewValley.models.Users.User;
-import AP.group30.StardewValley.views.ChangePassMenu;
-import AP.group30.StardewValley.views.LoginMenu;
-import AP.group30.StardewValley.views.RegisterMenu;
+import AP.group30.StardewValley.views.StartMenus.ChangePassMenu;
+import AP.group30.StardewValley.views.StartMenus.LoginMenu;
 
-import java.util.Scanner;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LoginMenuController {

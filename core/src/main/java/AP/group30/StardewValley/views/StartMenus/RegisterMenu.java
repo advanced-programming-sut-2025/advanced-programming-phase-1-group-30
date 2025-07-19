@@ -1,4 +1,4 @@
-package AP.group30.StardewValley.views;
+package AP.group30.StardewValley.views.StartMenus;
 
 import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.controllers.NewGameController;
@@ -8,6 +8,9 @@ import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Users.RegisterQuestions;
 import AP.group30.StardewValley.models.Users.User;
+import AP.group30.StardewValley.views.CityScreen;
+import AP.group30.StardewValley.views.GameScreen;
+import AP.group30.StardewValley.views.LoadingScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;

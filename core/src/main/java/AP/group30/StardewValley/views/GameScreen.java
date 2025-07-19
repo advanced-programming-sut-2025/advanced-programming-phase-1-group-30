@@ -3,15 +3,13 @@ package AP.group30.StardewValley.views;
 import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.controllers.DateAndWeatherController;
 import AP.group30.StardewValley.controllers.GameMenuController;
-import AP.group30.StardewValley.controllers.NewGameController;
 import AP.group30.StardewValley.models.App;
-import AP.group30.StardewValley.models.Buildings.BlacksmithCosts;
 import AP.group30.StardewValley.models.Buildings.Building;
 import AP.group30.StardewValley.models.Buildings.Hut;
 import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.GameObjects;
-import AP.group30.StardewValley.models.Items.Products.Crop;
+import AP.group30.StardewValley.models.Items.Item;
 import AP.group30.StardewValley.models.Items.Products.ForagingSeed;
 import AP.group30.StardewValley.models.Items.Products.Stone;
 import AP.group30.StardewValley.models.Items.Products.Tree;
@@ -21,15 +19,14 @@ import AP.group30.StardewValley.models.Maps.Tile;
 import AP.group30.StardewValley.models.Maps.TileTexture;
 import AP.group30.StardewValley.models.Maps.TileTypes;
 import AP.group30.StardewValley.models.Players.Direction;
-import AP.group30.StardewValley.models.Players.NPC.*;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.views.InGameMenus.*;
 import AP.group30.StardewValley.views.InGameMenus.Hut.*;
+import AP.group30.StardewValley.views.StartMenus.RegisterMenu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -38,9 +35,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -55,26 +54,23 @@ public class GameScreen implements Screen {
     public ArrayList<GameObjects> entities = new ArrayList<>();
 
     private OrthographicCamera camera;
-    private Game game;
-    private Player player;
-    private Texture playerTexture = GameAssetManager.assetManager.get(GameAssetManager.player21);
+    private final Game game;
+    private final Player player;
     Texture whitePixelTexture;
     private float stateTime = 0f;
-    private boolean isMoving = false;
 
 
-    private Texture house;
-    private Texture clock;
-    private Texture energyBar;
-    private TextureRegion playerRegion;
+    private final Texture house;
+    private final Texture clock;
+    private final Texture energyBar;
+    private final TextureRegion playerRegion;
     BitmapFont font = (new Skin(Gdx.files.internal("skin/pixthulhu-ui.json")).getFont("font"));
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
 
 
 
-    private Map map;
+    private final Map map;
     private final Tile[][] tiles;
-    private Tile currentTile;
     private Tile hutEntryTile = null;
 
 
@@ -92,6 +88,10 @@ public class GameScreen implements Screen {
 
     private final BitmapFont info = (Main.getMain().skin).getFont("font");
 
+    private static float toolRotation = 0f;
+    private float toolRotationSpeed = 0f;
+    private boolean toolAnimating = false;
+
     public GameScreen(Game game) {
         this.game = game;
 
@@ -99,27 +99,13 @@ public class GameScreen implements Screen {
         house = GameAssetManager.assetManager.get(GameAssetManager.house);
         clock = GameAssetManager.assetManager.get(GameAssetManager.clock);
         energyBar = GameAssetManager.assetManager.get(GameAssetManager.energyBar);
+        Texture playerTexture = GameAssetManager.assetManager.get(GameAssetManager.player21);
         playerRegion = new TextureRegion(playerTexture);
 
         map = game.getCurrentPlayer().getMap();
         tiles = map.getTiles();
-        for (int i = map.getTiles().length - 1; i >= 0; i--) {
-            for (int j = 0; j < map.getTiles()[i].length; j++) {
-                Tile tile = map.getTiles()[i][j];
-                if (tile.getItem() != null) {
-                    if (tile.getItem().getClass().equals(Tree.class)) {
-                        Tree tree = (Tree) tile.getItem();
-                        trees.add(tree);
-                        entities.add(tree);
-                    } else if (tile.getItem().getClass().equals(Stone.class)) {
-                        Stone stone = (Stone) tile.getItem();
-                        stones.add(stone);
-                        entities.add(stone);
-                    }
-                }
-            }
-        }
-//        entities.addAll(game.getBuildings());
+        findEntities();
+
         entities.add(player);
         entities.add(game.getHut());
 
@@ -133,6 +119,8 @@ public class GameScreen implements Screen {
         pixmap.fill();
         whitePixelTexture = new Texture(pixmap);
         pixmap.dispose();
+
+        info.setColor(Color.BLACK);
     }
 
     @Override
@@ -146,12 +134,8 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(null);
         grassMap = generateGrassMap(tiles, grassMap, random);
 
-        inventoryScreen = new InventoryScreen(batch, Main.getMain().skin);
-        skillScreen = new SkillScreen(batch, Main.getMain().skin);
-        craftingScreen = new CraftingScreen(batch, Main.getMain().skin);
-        hut = new HutScreen(batch, Main.getMain().skin);
-        artisanScreen = new ArtisanScreen(batch, Main.getMain().skin);
-        info.setColor(Color.BLACK);
+        makeInGameMenus();
+        findHut();
     }
 
     @Override
@@ -160,20 +144,6 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stateTime += delta;
         player.setStateTime(stateTime);
-        isMoving = false;
-
-//        if (!inventoryScreen.isVisible() && !skillScreen.isVisible() && !shopScreen.isVisible()) {
-//            handleInput(delta);
-//            if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
-//            if (Gdx.input.isKeyPressed(Input.Keys.S)) camera.position.y -= speed * delta;
-//            if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
-//            if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
-//        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) inventoryScreen.toggle();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.N)) skillScreen.toggle();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.B)) craftingScreen.toggle();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.I)) artisanScreen.toggle();
 
         camera.position.set(x + playerRegion.getRegionWidth() / 2f, y + playerRegion.getRegionHeight() / 2f, 0);
         camera.update();
@@ -181,7 +151,9 @@ public class GameScreen implements Screen {
         batch.setProjectionMatrix(camera.combined);
 
         entities.sort(Comparator.comparing(GameObjects::getRenderY).reversed());
+
         batch.begin();
+
         renderBackground(camera, grassMap, batch);
         renderWallsAroundMap(tiles, batch);
         renderMap(batch, map);
@@ -193,6 +165,11 @@ public class GameScreen implements Screen {
         }
         renderEnergyBar(player, camera, energyBar, batch, shapeRenderer);
         renderTime(batch, camera, clock, font, game);
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && openMenu(inventoryScreen)) inventoryScreen.toggle();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.N) && openMenu(skillScreen)) skillScreen.toggle();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.B) && openMenu(craftingScreen)) craftingScreen.toggle();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.I) && openMenu(artisanScreen)) artisanScreen.toggle();
         if (!isAnyMenuOpened()) {
             handleInput(delta);
             if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
@@ -203,10 +180,7 @@ public class GameScreen implements Screen {
 
         batch.end();
 
-        findHut();
-        currentTile = getTileUnderPlayer(x, y);
-
-
+        Tile currentTile = getTileUnderPlayer(x, y);
 
         if (currentTile.getX() == hutEntryTile.getX() &&
             currentTile.getY() == hutEntryTile.getY() + 1) {
@@ -267,11 +241,50 @@ public class GameScreen implements Screen {
     }
 
     static void renderEntities(SpriteBatch batch, Map map, ArrayList<GameObjects> entities) {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+
         for (GameObjects gameObjects : entities) {
-            gameObjects.render(batch, map);
+            renderObject(batch, map, gameObjects, player);
         }
     }
 
+    private static void renderObject(SpriteBatch batch, Map map, GameObjects gameObjects, Player player) {
+        if (gameObjects instanceof Player) {
+            if (player.getDirection() == Direction.NORTH) {
+                float currentX = player.getX() + 5;
+                float currentY = player.getY() + 20;
+
+                batch.draw(player.getWield().getTexture(), currentX, currentY, 32, 32);
+            }
+        }
+        gameObjects.render(batch, map);
+        if (gameObjects instanceof Player) {
+            if (player.getDirection() == Direction.EAST) {
+                Texture itemTexture = player.getWield().getTexture();
+                float currentX = player.getX() + 10;
+                float currentY = player.getY() + 20;
+                float originX = 10;
+                float originY = 5;
+
+                batch.draw(itemTexture, currentX, currentY, originX, originY, 32, 32, 1f, 1f, -toolRotation, 0, 0, itemTexture.getWidth(), itemTexture.getHeight(), false, false);
+            }
+            if (player.getDirection() == Direction.WEST) {
+                Texture itemTexture = player.getWield().getTexture();
+                float currentX = player.getX() - 10;
+                float currentY = player.getY() + 20;
+                float originX = 20;
+                float originY = 5;
+
+                batch.draw(player.getWield().getTexture(), currentX, currentY, originX, originY, 32, 32, 1f, 1f, toolRotation, 0, 0, itemTexture.getWidth(), itemTexture.getHeight(), true, false);
+            }
+            if (player.getDirection() == Direction.SOUTH) {
+                float currentX = player.getX() + 5;
+                float currentY = player.getY() + 20;
+
+                batch.draw(player.getWield().getTexture(), currentX, currentY, 32, 32);
+            }
+        }
+    }
 
 
     static void renderWallsAroundMap(Tile[][] tiles, SpriteBatch batch) {
@@ -367,17 +380,6 @@ public class GameScreen implements Screen {
         }
     }
 
-    private void renderItems() {
-        Tile[][] tiles = map.getTiles();
-        for (int i = tiles.length - 1; i >= 0; i--) {
-            for (int j = 0; j < tiles[i].length; j++) {
-                Tile tile = tiles[i][j];
-                if (tile.getItem() != null)
-                    tile.getItem().renderItem(batch, tile.getX() * 32, (60 - tile.getY()) * 32);
-            }
-        }
-    }
-
     static void renderEnergyBar(Player player, OrthographicCamera camera, Texture energyBar, SpriteBatch batch, ShapeRenderer shapeRenderer) {
 
         float maxEnergy = player.getMaxEnergy();
@@ -389,10 +391,8 @@ public class GameScreen implements Screen {
         float barX = camera.position.x + Gdx.graphics.getWidth() / 2f - barWidth * 1.5f;
         float barY = camera.position.y - barHeight * 3.3f;
 
-        // Calculate filled height
         float filledHeight = barHeight * energyRatio;
 
-        // Determine color
         Color barColor;
         if (energyRatio >= 0.66f) {
             barColor = Color.GREEN;
@@ -401,10 +401,8 @@ public class GameScreen implements Screen {
         } else {
             barColor = Color.RED;
         }
-        // Draw the energy bar frame (border image)
         batch.draw(energyBar, barX, barY);
 
-        // Disable batch temporarily to use ShapeRenderer
         batch.end();
 
         shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
@@ -423,7 +421,7 @@ public class GameScreen implements Screen {
         font.draw(batch, String.format("%s %d",game.getCurrentTime().getDayOfWeek(),game.getCurrentTime().getDay()),camera.position.x + 760,camera.position.y + 510);
         font.draw(batch, String.format("%02d : %02d",game.getCurrentTime().getHour(),game.getCurrentTime().getMinute()),camera.position.x +800, camera.position.y + 420);
         //TODO
-        font.draw(batch, String.format("5 0 0"),camera.position.x + 720, camera.position.y + 340);
+        font.draw(batch, "5 0 0",camera.position.x + 720, camera.position.y + 340);
     }
 
 
@@ -491,8 +489,8 @@ public class GameScreen implements Screen {
             }
 
             player.getPlayerRect().setPosition(proposedX, proposedY);
+            boolean collides = false;
             if (!player.isInCity()) {
-                boolean collides = false;
 
                 if (player.getPlayerRect().overlaps(game.getHut().getRectangle())) {
                     collides = true;
@@ -525,22 +523,17 @@ public class GameScreen implements Screen {
                         }
                     }
                 }
-                if (!collides) {
-                    x = proposedX;
-                    y = proposedY;
-                }
             } else {
-                boolean collides = false;
                 for (Building building : game.getBuildings()) {
                     if (player.getPlayerRect().overlaps(building.getRectangle()) && !(building instanceof Hut)) {
                         collides = true;
                         break;
                     }
                 }
-                if (!collides) {
-                    x = proposedX;
-                    y = proposedY;
-                }
+            }
+            if (!collides) {
+                x = proposedX;
+                y = proposedY;
             }
 
             player.getPlayerRect().setPosition(x, y);
@@ -556,9 +549,11 @@ public class GameScreen implements Screen {
             Main.getMain().setScreen(RegisterMenu.cityScreen);
         }
 
+        updateToolAnimation(delta);
         if (Gdx.input.isKeyJustPressed(Input.Keys.C) || Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             if (player.getWield() instanceof Tool) {
                 GameMenuController.toolUse(player.getDirection(), (int) (x), (int) (y + playerRegion.getRegionHeight() / 8f), batch);
+                toolAnimation();
             } else if (player.getWield() instanceof ForagingSeed) {
                 GameMenuController.plant(player.getWield().getName(), player.getDirection());
             } else if (player.getWield().getName().equals("speed-gro") || player.getWield().getName().equals("deluxe retaining soil")) {
@@ -570,21 +565,28 @@ public class GameScreen implements Screen {
         }
     }
 
+    private void toolAnimation() {
+        if (toolAnimating) return;
 
-    private boolean isWalkableTile(float nextX, float nextY, float changeX, float changeY) {
-        int tileSize = 32;
+        toolAnimating = true;
+        toolRotationSpeed = 600f;
+    }
 
-        int tileX = (int)((nextX + changeX) / tileSize);
-        int tileY = map.getTiles()[0].length - (int)((nextY + changeY) / tileSize);
+    private void updateToolAnimation(float delta) {
+        if (toolAnimating) {
+            toolRotation += toolRotationSpeed * delta;
 
-        if (tileX >= 0 && tileX < map.getTiles().length &&
-            tileY >= 0 && tileY < map.getTiles()[0].length) {
+            if (toolRotationSpeed > 0 && toolRotation >= 45f) {
+                toolRotation = 45f;
+                toolRotationSpeed = -600f;
+            }
 
-            Tile destinationTile = map.getTiles()[tileX][tileY];
-            return destinationTile.isWalkable();
+            if (toolRotationSpeed < 0 && toolRotation <= 0f) {
+                toolRotation = 0f;
+                toolRotationSpeed = 0f;
+                toolAnimating = false;
+            }
         }
-
-        return false;
     }
 
     private Tile getTileUnderPlayer(float playerX, float playerY) {
@@ -596,42 +598,51 @@ public class GameScreen implements Screen {
         return tiles[tileX][60 - tileY];
     }
 
-    private void resolvePlayerCollision(Rectangle player, Rectangle obstacle) {
-        if (player.x < obstacle.x) {
-            // player is to the left of obstacle
-            player.x = obstacle.x - player.width;
-            x = obstacle.x - player.width;
-        } else if (player.x > obstacle.x) {
-            // player is to the right of obstacle
-            player.x = obstacle.x + obstacle.width;
-            x = obstacle.x + obstacle.width;
-        }
-
-        if (player.y < obstacle.y) {
-            player.y = obstacle.y - player.height;
-            y = obstacle.y - player.height;
-        } else if (player.y > obstacle.y) {
-            player.y = obstacle.y + obstacle.height;
-            y = obstacle.y + obstacle.height;
-        }
-    }
-
-    public ArrayList<Tree> getTrees() {
-        return trees;
-    }
-
-    public ArrayList<Stone> getStones() {
-        return stones;
-    }
-
     private boolean isAnyMenuOpened() {
         return inventoryScreen.isVisible() ||
                skillScreen.isVisible() ||
                hut.isVisible() ||
-               craftingScreen.isVisible();
+               craftingScreen.isVisible() ||
+               artisanScreen.isVisible();
+    }
+
+    private boolean openMenu(InGameMenuScreen menuScreen) {
+        if (menuScreen.isVisible()) return true;
+
+        return !artisanScreen.isVisible() &&
+            !inventoryScreen.isVisible() &&
+            !craftingScreen.isVisible() &&
+            !skillScreen.isVisible();
+    }
+
+    private void findEntities() {
+        for (int i = map.getTiles().length - 1; i >= 0; i--) {
+            for (int j = 0; j < map.getTiles()[i].length; j++) {
+                Tile tile = map.getTiles()[i][j];
+                if (tile.getItem() != null) {
+                    if (tile.getItem().getClass().equals(Tree.class)) {
+                        Tree tree = (Tree) tile.getItem();
+                        trees.add(tree);
+                        entities.add(tree);
+                    } else if (tile.getItem().getClass().equals(Stone.class)) {
+                        Stone stone = (Stone) tile.getItem();
+                        stones.add(stone);
+                        entities.add(stone);
+                    }
+                }
+            }
+        }
     }
 
     public ArrayList<GameObjects> getEntities() {
         return entities;
+    }
+
+    private void makeInGameMenus() {
+        inventoryScreen = new InventoryScreen(batch, Main.getMain().skin);
+        skillScreen = new SkillScreen(batch, Main.getMain().skin);
+        craftingScreen = new CraftingScreen(batch, Main.getMain().skin);
+        hut = new HutScreen(batch, Main.getMain().skin);
+        artisanScreen = new ArtisanScreen(batch, Main.getMain().skin);
     }
 }

@@ -22,11 +22,9 @@ public class LoadingScreen implements Screen {
     public static LocalTime time = LocalTime.now();
     private Texture background;
 
-    private Texture logo = new Texture(Gdx.files.internal("menu assets/PC Computer - Stardew Valley - Logo No Background.png"));
+    private final Texture logo = new Texture(Gdx.files.internal("menu assets/PC Computer - Stardew Valley - Logo No Background.png"));
     private Stage stage;
-    private Skin skin;
     private ProgressBar progressBar;
-    private Label loadingLabel;
     private float delay = 0f;
 
     public LoadingScreen(Screen nextScreen) {
@@ -43,22 +41,20 @@ public class LoadingScreen implements Screen {
             background = new Texture(Gdx.files.internal("menu assets/sebastianRideTiles.png"));
         }
 
-        // Load UI skin first to show progress
         if (!GameAssetManager.assetManager.isLoaded("skin/pixthulhu-ui.json")) {
             GameAssetManager.assetManager.load("skin/pixthulhu-ui.json", Skin.class);
             GameAssetManager.assetManager.finishLoadingAsset("skin/pixthulhu-ui.json");
         }
 
-        skin = GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class);
+        Skin skin = GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class);
 
-        // UI Layout
         Table table = new Table();
         table.setFillParent(true);
         table.setY(Gdx.graphics.getHeight() - Gdx.graphics.getHeight() * 1.25f);
         table.center();
         stage.addActor(table);
 
-        loadingLabel = new Label("Loading...", skin);
+        Label loadingLabel = new Label("Loading...", skin);
         progressBar = new ProgressBar(0, 1, 0.01f, false, skin);
         progressBar.setValue(0);
         progressBar.setAnimateDuration(0.25f);
@@ -66,7 +62,6 @@ public class LoadingScreen implements Screen {
         table.add(loadingLabel).padBottom(20).row();
         table.add(progressBar).width(300).height(20);
 
-        // Start loading assets
         GameAssetManager.queueAsset();
     }
 

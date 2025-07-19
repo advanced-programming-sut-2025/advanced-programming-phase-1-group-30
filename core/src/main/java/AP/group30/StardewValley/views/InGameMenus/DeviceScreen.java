@@ -10,39 +10,23 @@ import AP.group30.StardewValley.models.Items.Item;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
 
-public class DeviceScreen {
-    private final Stage stage;
-    private final Skin skin;
-    private final Table table;
-    private boolean visible = false;
-    private final Texture backgroundTexture;
-    private final Texture backgroundItemTexture;
-
-    private final int positionX = 645;
-    private final int positionY = 670;
-
+public class DeviceScreen extends InGameMenuScreen{
     private final ArrayList<Image> itemImages = new ArrayList<>();
     private Image borderImage;
-    private TextButton makeButton;
-    private TextButton exitButton;
-    private TextButton claimButton;
+    private final TextButton makeButton;
+    private final TextButton claimButton;
 
     private final ArrayList<ArtisanGoodType> items = new ArrayList<>();
     private ArtisanGoodType currentItem;
@@ -54,28 +38,11 @@ public class DeviceScreen {
 
     private boolean itemInProses;
     private ArtisanItemProsses artisanGood;
-    private Texture prosesBar;
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
-    private Label itemLabel;
+    private final Label itemLabel;
 
     public DeviceScreen(SpriteBatch batch, Skin skin) {
-        this.skin = skin;
-        this.stage = new Stage(new ScreenViewport(), batch);
-
-        backgroundTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryScreen);
-        Drawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
-        prosesBar = GameAssetManager.assetManager.get(GameAssetManager.energyBar);
-
-        backgroundItemTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryItem);
-
-        table = new Table();
-        table.setVisible(false);
-        table.setBackground(backgroundDrawable);
-        table.setSize(800, 600);
-        table.setPosition(
-            (Gdx.graphics.getWidth() - table.getWidth()) / 2,
-            (Gdx.graphics.getHeight() - table.getHeight()) / 2
-        );
+        super(batch, skin, GameAssetManager.inventoryScreen, 1, 0);
 
         errorLabel = new Label("", skin);
         errorLabel.setColor(Color.RED);
@@ -85,7 +52,7 @@ public class DeviceScreen {
         infoLabel = new Label("Ingredients:", skin);
         infoLabel.setPosition(positionX + 250, positionY - 250);
 
-        makeButton = new TextButton("Cook", skin);
+        makeButton = new TextButton("Make", skin);
         makeButton.setPosition(table.getX() + table.getWidth() / 2f - makeButton.getWidth() / 2f + 100,
             table.getY() - makeButton.getHeight());
         makeButton.setVisible(false);
@@ -107,7 +74,7 @@ public class DeviceScreen {
             }
         });
 
-        exitButton = new TextButton("Exit", skin);
+        TextButton exitButton = new TextButton("Exit", skin);
         exitButton.setPosition(table.getX() + table.getWidth() / 2f - exitButton.getWidth() / 2f - 100,
             table.getY() - exitButton.getHeight());
         exitButton.addListener(new ClickListener() {
@@ -170,6 +137,7 @@ public class DeviceScreen {
         Gdx.input.setInputProcessor(stage);
     }
 
+    @Override
     public void hide() {
         visible = false;
         table.setVisible(false);
@@ -177,18 +145,13 @@ public class DeviceScreen {
     }
 
     public void render() {
+        super.render();
         if (visible) {
-            stage.act();
-            stage.draw();
-
             if (itemInProses) renderProsesBar();
         }
     }
 
-    public boolean isVisible() {
-        return visible;
-    }
-
+    @Override
     public void dispose() {
         stage.dispose();
         backgroundTexture.dispose();
@@ -275,7 +238,8 @@ public class DeviceScreen {
         itemImages.add(itemImage);
     }
 
-    private void refresh() {
+    @Override
+    protected void refresh() {
         for (Image img : itemImages) {
             img.remove();
         }
@@ -295,32 +259,6 @@ public class DeviceScreen {
                 items.add(artisanGood);
             }
         }
-    }
-
-    private Image createBorderImage(int width, int height, Color color) {
-        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
-        pixmap.setColor(0, 0, 0, 0);
-        pixmap.fill();
-
-        pixmap.setColor(color);
-        int thickness = 3;
-        pixmap.fillRectangle(0, 0, width, thickness);
-        pixmap.fillRectangle(0, height - thickness, width, thickness);
-        pixmap.fillRectangle(0, 0, thickness, height);
-        pixmap.fillRectangle(width - thickness, 0, thickness, height);
-
-        Texture texture = new Texture(pixmap);
-        pixmap.dispose();
-
-        Image border = new Image(new TextureRegionDrawable(new TextureRegion(texture)));
-        border.addListener(new ActorGestureListener() {
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                texture.dispose();
-            }
-        });
-
-        return border;
     }
 
     private void handleMove() {
@@ -345,9 +283,9 @@ public class DeviceScreen {
 
         for (Item ingredient : ingredients) {
             if (ingredients.getLast().equals(ingredient))
-                ingredientsText.append(ingredient.getName() + " (x" + ingredient.getCount() + ")");
+                ingredientsText.append(ingredient.getName()).append(" (x").append(ingredient.getCount()).append(")");
             else
-                ingredientsText.append(ingredient.getName() + " (x" + ingredient.getCount() + ")\n");
+                ingredientsText.append(ingredient.getName()).append(" (x").append(ingredient.getCount()).append(")\n");
         }
 
         return ingredientsText.toString();

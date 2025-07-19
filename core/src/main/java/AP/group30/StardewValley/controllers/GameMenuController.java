@@ -31,7 +31,7 @@ import AP.group30.StardewValley.models.Players.Trade;
 import AP.group30.StardewValley.models.Users.User;
 import AP.group30.StardewValley.views.GameMenu;
 import AP.group30.StardewValley.views.GameScreen;
-import AP.group30.StardewValley.views.RegisterMenu;
+import AP.group30.StardewValley.views.StartMenus.RegisterMenu;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
@@ -382,9 +382,6 @@ public class GameMenuController {
 
         int newX = x + dx;
         int newY = y + dy;
-
-        batch.draw(GameAssetManager.assetManager.get(GameAssetManager.axe), newX * 32, (60 - newY) * 32);
-
 
         if (newX < 0 || newX >= tiles.length || newY < 0 || newY >= tiles[0].length) {
             GameMenu.printResult("Out of bounds!");

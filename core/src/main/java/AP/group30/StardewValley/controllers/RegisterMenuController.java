@@ -3,7 +3,7 @@ package AP.group30.StardewValley.controllers;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Users.RegisterQuestions;
 import AP.group30.StardewValley.models.Users.User;
-import AP.group30.StardewValley.views.RegisterMenu;
+import AP.group30.StardewValley.views.StartMenus.RegisterMenu;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
