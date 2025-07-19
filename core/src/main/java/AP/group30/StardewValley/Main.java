@@ -1,12 +1,10 @@
 package AP.group30.StardewValley;
 
-import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.views.*;
 
+import AP.group30.StardewValley.views.StartMenus.RegisterMenu;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetDescriptor;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 

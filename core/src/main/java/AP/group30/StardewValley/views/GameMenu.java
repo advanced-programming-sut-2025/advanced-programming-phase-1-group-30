@@ -13,12 +13,11 @@ import AP.group30.StardewValley.models.Players.Player;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
-public class GameMenu implements AppMenu {
+public class GameMenu {
     public static void printResult(String result) {
         System.out.println(result);
     }
 
-    @Override
     public void check(String command, Scanner scanner) {
         Matcher matcher;
         matcher = GameMenuCommands.GAME_NEW.regexMatcher(command);

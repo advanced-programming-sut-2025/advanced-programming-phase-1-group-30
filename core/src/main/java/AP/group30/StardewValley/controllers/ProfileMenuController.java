@@ -2,7 +2,7 @@ package AP.group30.StardewValley.controllers;
 
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Users.User;
-import AP.group30.StardewValley.views.ProfileMenu;
+import AP.group30.StardewValley.views.StartMenus.ProfileMenu;
 
 import java.util.regex.Pattern;
 

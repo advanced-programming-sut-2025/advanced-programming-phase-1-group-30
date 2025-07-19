@@ -1,4 +1,4 @@
-package AP.group30.StardewValley.views;
+package AP.group30.StardewValley.views.StartMenus;
 
 
 import AP.group30.StardewValley.Main;

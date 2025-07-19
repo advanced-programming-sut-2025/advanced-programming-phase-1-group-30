@@ -60,7 +60,7 @@ import AP.group30.StardewValley.models.Items.Products.ShopProducts.SaloonProduct
 import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.views.GameMenu;
-import AP.group30.StardewValley.views.RegisterMenu;
+import AP.group30.StardewValley.views.StartMenus.RegisterMenu;
 
 public class MaintainerController {
     private static final List<Pair<Class<? extends Enum<?>>, ItemFactory<?>>> ITEM_TYPES = Arrays.asList(

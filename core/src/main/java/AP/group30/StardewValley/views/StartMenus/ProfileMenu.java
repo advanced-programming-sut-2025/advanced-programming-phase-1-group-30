@@ -1,10 +1,11 @@
-package AP.group30.StardewValley.views;
+package AP.group30.StardewValley.views.StartMenus;
 
 import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.controllers.ProfileMenuController;
 import AP.group30.StardewValley.controllers.RegisterMenuController;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameAssetManager;
+import AP.group30.StardewValley.views.LoadingScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
