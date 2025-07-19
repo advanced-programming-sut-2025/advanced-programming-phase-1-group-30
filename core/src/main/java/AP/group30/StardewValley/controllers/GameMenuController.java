@@ -768,7 +768,6 @@ public class GameMenuController {
                     targetTile.setType(TileTypes.DIRT);
                     GameMenu.printResult("Tile type changed to Dirt!");
                 } else {
-                    System.out.println(targetTile.getCrop().getName());
                     GameMenu.printResult("Nothing here to harvest!");
                 }
                 player.setEnergy(player.getEnergy() - 2 * (int) rate);
@@ -1057,7 +1056,6 @@ public class GameMenuController {
             if (item.getCount() == 0) {
                 player.getBackPack().getItems().remove(item);
             }
-            System.out.println();
         } else {
             GameMenu.printResult("There is no PLANT at (" + newX + ", " + newY + ")!!");
         }
