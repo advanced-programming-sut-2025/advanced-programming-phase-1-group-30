@@ -31,6 +31,10 @@ public enum ItemTexture {
     WATERING_CAN(GameAssetManager.assetManager.get(GameAssetManager.wateringCan)),
     MILK_PAIL(GameAssetManager.assetManager.get(GameAssetManager.milkPail)),
     TRASH_CAN(GameAssetManager.assetManager.get(GameAssetManager.trashCan)),
+    TRAINING_POLE(GameAssetManager.assetManager.get(GameAssetManager.trainingRod)),
+    BAMBOO_POLE(GameAssetManager.assetManager.get(GameAssetManager.bambooPole)),
+    FIBERGLASS_POLE(GameAssetManager.assetManager.get(GameAssetManager.fiberglassRod)),
+    IRIDIUM_POLE(GameAssetManager.assetManager.get(GameAssetManager.iridiumRod)),
 
     FARMING_ICON(GameAssetManager.assetManager.get(GameAssetManager.farmingIcon)),
     FISHING_ICON(GameAssetManager.assetManager.get(GameAssetManager.fishingIcon)),

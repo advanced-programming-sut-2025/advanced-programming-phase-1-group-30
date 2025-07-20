@@ -73,6 +73,10 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> wateringCan = new AssetDescriptor<>("Tools/Watering_Can/Watering_Can.png", Texture.class);
     public static final AssetDescriptor<Texture> milkPail = new AssetDescriptor<>("Tools/Milk_Pail/Milk_Pail.png", Texture.class);
     public static final AssetDescriptor<Texture> trashCan = new AssetDescriptor<>("Tools/Trash_Can/Trash_Can_Copper.png", Texture.class);
+    public static final AssetDescriptor<Texture> trainingRod = new AssetDescriptor<>("Tools/Fishing_Pole/Training_Rod.png", Texture.class);
+    public static final AssetDescriptor<Texture> iridiumRod = new AssetDescriptor<>("Tools/Fishing_Pole/Iridium_Rod.png", Texture.class);
+    public static final AssetDescriptor<Texture> fiberglassRod = new AssetDescriptor<>("Tools/Fishing_Pole/Fiberglass_Rod.png", Texture.class);
+    public static final AssetDescriptor<Texture> bambooPole = new AssetDescriptor<>("Tools/Fishing_Pole/Bamboo_Pole.png", Texture.class);
 
     public static final AssetDescriptor<Texture> wood = new AssetDescriptor<>("item/resource/Wood.png", Texture.class);
     public static final AssetDescriptor<Texture> stone = new AssetDescriptor<>("item/resource/Stone.png", Texture.class);
@@ -292,6 +296,10 @@ public class GameAssetManager {
         assetManager.load(hoe);
         assetManager.load(wateringCan);
         assetManager.load(milkPail);
+        assetManager.load(trainingRod);
+        assetManager.load(bambooPole);
+        assetManager.load(iridiumRod);
+        assetManager.load(fiberglassRod);
         assetManager.load(wood);
         assetManager.load(stones);
         assetManager.load(stone);
