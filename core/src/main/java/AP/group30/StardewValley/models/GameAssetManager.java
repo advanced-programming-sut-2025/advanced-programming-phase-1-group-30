@@ -73,6 +73,10 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> wateringCan = new AssetDescriptor<>("Tools/Watering_Can/Watering_Can.png", Texture.class);
     public static final AssetDescriptor<Texture> milkPail = new AssetDescriptor<>("Tools/Milk_Pail/Milk_Pail.png", Texture.class);
     public static final AssetDescriptor<Texture> trashCan = new AssetDescriptor<>("Tools/Trash_Can/Trash_Can_Copper.png", Texture.class);
+    public static final AssetDescriptor<Texture> trainingRod = new AssetDescriptor<>("Tools/Fishing_Pole/Training_Rod.png", Texture.class);
+    public static final AssetDescriptor<Texture> iridiumRod = new AssetDescriptor<>("Tools/Fishing_Pole/Iridium_Rod.png", Texture.class);
+    public static final AssetDescriptor<Texture> fiberglassRod = new AssetDescriptor<>("Tools/Fishing_Pole/Fiberglass_Rod.png", Texture.class);
+    public static final AssetDescriptor<Texture> bambooPole = new AssetDescriptor<>("Tools/Fishing_Pole/Bamboo_Pole.png", Texture.class);
 
     public static final AssetDescriptor<Texture> wood = new AssetDescriptor<>("item/resource/Wood.png", Texture.class);
     public static final AssetDescriptor<Texture> stone = new AssetDescriptor<>("item/resource/Stone.png", Texture.class);
@@ -239,6 +243,28 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> smokedFish = new AssetDescriptor<>("item/ArtisanGoods/Smoked_Fish.png", Texture.class);
     public static final AssetDescriptor<Texture> metalBar = new AssetDescriptor<>("item/ArtisanGoods/Metal_Bar.png", Texture.class);
 
+    public static final AssetDescriptor<Texture> angler = new AssetDescriptor<>("Fish/Angler.png", Texture.class);
+    public static final AssetDescriptor<Texture> blueDiscus = new AssetDescriptor<>("Fish/Blue_Discus.png", Texture.class);
+    public static final AssetDescriptor<Texture> crimsonfish = new AssetDescriptor<>("Fish/Crimsonfish.png", Texture.class);
+    public static final AssetDescriptor<Texture> dorado = new AssetDescriptor<>("Fish/Dorado.png", Texture.class);
+    public static final AssetDescriptor<Texture> flounder = new AssetDescriptor<>("Fish/Flounder.png", Texture.class);
+    public static final AssetDescriptor<Texture> ghostfish = new AssetDescriptor<>("Fish/Ghostfish.png", Texture.class);
+    public static final AssetDescriptor<Texture> glacierfish = new AssetDescriptor<>("Fish/Glacierfish.png", Texture.class);
+    public static final AssetDescriptor<Texture> herring = new AssetDescriptor<>("Fish/Herring.png", Texture.class);
+    public static final AssetDescriptor<Texture> legend = new AssetDescriptor<>("Fish/Legend.png", Texture.class);
+    public static final AssetDescriptor<Texture> lionfish = new AssetDescriptor<>("Fish/Lionfish.png", Texture.class);
+    public static final AssetDescriptor<Texture> midnightCarp = new AssetDescriptor<>("Fish/Midnight_Carp.png", Texture.class);
+    public static final AssetDescriptor<Texture> perch = new AssetDescriptor<>("Fish/Perch.png", Texture.class);
+    public static final AssetDescriptor<Texture> rainbowTrout = new AssetDescriptor<>("Fish/Rainbow_Trout.png", Texture.class);
+    public static final AssetDescriptor<Texture> salmon = new AssetDescriptor<>("Fish/Salmon.png", Texture.class);
+    public static final AssetDescriptor<Texture> sardine = new AssetDescriptor<>("Fish/Sardine.png", Texture.class);
+    public static final AssetDescriptor<Texture> shad = new AssetDescriptor<>("Fish/Shad.png", Texture.class);
+    public static final AssetDescriptor<Texture> squid = new AssetDescriptor<>("Fish/Squid.png", Texture.class);
+    public static final AssetDescriptor<Texture> sunfish = new AssetDescriptor<>("Fish/Sunfish.png", Texture.class);
+    public static final AssetDescriptor<Texture> tilapia = new AssetDescriptor<>("Fish/Tilapia.png", Texture.class);
+    public static final AssetDescriptor<Texture> tuna = new AssetDescriptor<>("Fish/Tuna.png", Texture.class);
+
+
     public static void queueAsset() {
         assetManager.load(background);
         assetManager.load(blackBackground);
@@ -292,6 +318,10 @@ public class GameAssetManager {
         assetManager.load(hoe);
         assetManager.load(wateringCan);
         assetManager.load(milkPail);
+        assetManager.load(trainingRod);
+        assetManager.load(bambooPole);
+        assetManager.load(iridiumRod);
+        assetManager.load(fiberglassRod);
         assetManager.load(wood);
         assetManager.load(stones);
         assetManager.load(stone);
@@ -457,5 +487,26 @@ public class GameAssetManager {
         assetManager.load(metalBar);
         assetManager.load(mead);
         assetManager.load(wine);
+
+        assetManager.load(angler);
+        assetManager.load(blueDiscus);
+        assetManager.load(crimsonfish);
+        assetManager.load(flounder);
+        assetManager.load(ghostfish);
+        assetManager.load(glacierfish);
+        assetManager.load(herring);
+        assetManager.load(legend);
+        assetManager.load(lionfish);
+        assetManager.load(midnightCarp);
+        assetManager.load(perch);
+        assetManager.load(rainbowTrout);
+        assetManager.load(salmon);
+        assetManager.load(sardine);
+        assetManager.load(shad);
+        assetManager.load(squid);
+        assetManager.load(sunfish);
+        assetManager.load(tilapia);
+        assetManager.load(tuna);
+        assetManager.load(dorado);
     }
 }
