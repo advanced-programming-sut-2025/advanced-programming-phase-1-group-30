@@ -2163,7 +2163,7 @@ public class GameMenuController {
                     GameMenu.printResult("Backpack upgraded to Large Backpack successfully");
                 }
                 else
-                    GameMenu.printResult("You can't update your backpack!");
+                    GameMenu.printResult("You can't updateGreenBar your backpack!");
                 return;
             }
             if (name.equals("Deluxe pack")) {
@@ -2174,7 +2174,7 @@ public class GameMenuController {
                     GameMenu.printResult("Backpack upgraded to Delux Backpack successfully");
                 }
                 else
-                    GameMenu.printResult("You can't update your backpack!");
+                    GameMenu.printResult("You can't updateGreenBar your backpack!");
                 return;
             }
 

@@ -9,7 +9,6 @@ import AP.group30.StardewValley.models.Buildings.Hut;
 import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.GameObjects;
-import AP.group30.StardewValley.models.Items.Item;
 import AP.group30.StardewValley.models.Items.Products.ForagingSeed;
 import AP.group30.StardewValley.models.Items.Products.Stone;
 import AP.group30.StardewValley.models.Items.Products.Tree;
@@ -36,11 +35,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Timer;
 
 import java.util.ArrayList;
@@ -95,7 +90,9 @@ public class GameScreen implements Screen {
     private boolean toolAnimating = false;
 
     private boolean isFishing = false;
+    private boolean fiveSecPassed = false;
     private Timer.Task fishingTimer;
+    private FishingMiniGame fishingMiniGame;
 
     public GameScreen(Game game) {
         this.game = game;
@@ -171,8 +168,11 @@ public class GameScreen implements Screen {
         renderEnergyBar(player, camera, energyBar, batch, shapeRenderer);
         renderTime(batch, camera, clock, font, game);
 
+        if (isFishing && fiveSecPassed && !fishingMiniGame.isVisible()) isFishing = false;
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q) && isFishing) {
             isFishing = false;
+            fiveSecPassed = false;
+            fishingMiniGame.hide();
 
             if (fishingTimer != null) {
                 fishingTimer.cancel();
@@ -212,6 +212,7 @@ public class GameScreen implements Screen {
         craftingScreen.render();
         hut.render(batch, camera);
         artisanScreen.render();
+        fishingMiniGame.render(delta);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
             System.out.println(entities.size());
@@ -460,6 +461,7 @@ public class GameScreen implements Screen {
         hut.dispose();
         clock.dispose();
         artisanScreen.dispose();
+        fishingMiniGame.dispose();
     }
 
     private void handleInput(float delta) {
@@ -569,12 +571,14 @@ public class GameScreen implements Screen {
             if (player.getWield() instanceof Tool) {
                 if (player.getWield() instanceof FishingPole && hasWaterNeighbour()) {
                     isFishing = true;
+                    fiveSecPassed = false;
 
                     if (fishingTimer != null) fishingTimer.cancel();
                     fishingTimer = new Timer.Task() {
                         @Override
                         public void run() {
-                            //TODO Mini-Game
+                            fiveSecPassed = true;
+                            fishingMiniGame.show();
                         }
                     };
                     Timer.schedule(fishingTimer, 5);
@@ -690,5 +694,6 @@ public class GameScreen implements Screen {
         craftingScreen = new CraftingScreen(batch, Main.getMain().skin);
         hut = new HutScreen(batch, Main.getMain().skin);
         artisanScreen = new ArtisanScreen(batch, Main.getMain().skin);
+        fishingMiniGame = new FishingMiniGame(batch, Main.getMain().skin);
     }
 }
