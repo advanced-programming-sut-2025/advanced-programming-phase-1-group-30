@@ -1,6 +1,8 @@
 package AP.group30.StardewValley.views;
 
 import AP.group30.StardewValley.controllers.GameMenuController;
+import AP.group30.StardewValley.models.Animals.Fish;
+import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -48,6 +50,8 @@ public class FishingMiniGame {
     private final SpriteBatch batch;
     private final Table table;
     private boolean visible = false;
+
+    private boolean perfect = true;
 
     public FishingMiniGame(SpriteBatch batch, Skin skin) {
         this.stage = new Stage(new ScreenViewport(), batch);
@@ -157,6 +161,8 @@ public class FishingMiniGame {
 
         greenBarY = greenBarMinY;
         fishY = greenBarMinY + (greenBarHeight / 2f) - (fishSize / 2f);
+
+        perfect = true;
     }
 
     public void updateGreenBar(float delta) {
@@ -198,17 +204,29 @@ public class FishingMiniGame {
             catchProgress += progressUpSpeed * delta;
         } else {
             catchProgress -= progressDownSpeed * delta;
+            perfect = false;
         }
 
         catchProgress = MathUtils.clamp(catchProgress, 0f, 1f);
 
         if (catchProgress >= 1f) {
-            GameMenuController.fishing("");
+            GameMenuController.fishing();
+            if (perfect) upgradeFish();
+
             hide();
         }
 
         if (catchProgress <= 0f) {
             hide();
         }
+    }
+
+    private void upgradeFish() {
+        try {
+            Fish fish = (Fish) App.getCurrentGame().getCurrentPlayer().getBackPack().getItems().getLast();
+            if (fish.getCof() == 1) fish.setCof(1.25);
+            else if (fish.getCof() == 1.25) fish.setCof(1.5);
+            else if (fish.getCof() == 1.5) fish.setCof(2);
+        } catch (Exception ignored) {}
     }
 }
