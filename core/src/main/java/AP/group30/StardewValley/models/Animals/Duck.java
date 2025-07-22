@@ -2,11 +2,13 @@ package AP.group30.StardewValley.models.Animals;
 
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Buildings.RanchCosts;
+import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.Item;
 import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Items.Products.AnimalProductType;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.views.GameMenu;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.Random;
 
@@ -16,6 +18,9 @@ public class Duck extends Animal {
     int daysPassed = 0;
     public Duck(int price, String name, int friendship, boolean fedToday, boolean petToday, int x, int y) {
         super(price, name, friendship, fedToday, petToday, x, y, RanchCosts.DUCK);
+        initAnimations(GameAssetManager.getBack("duck"), GameAssetManager.getFront("duck"), GameAssetManager.getLeft("duck"),
+            GameAssetManager.getRight("duck"), GameAssetManager.getEating("duck"), new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.duckFront1)));
+
     }
 
     @Override

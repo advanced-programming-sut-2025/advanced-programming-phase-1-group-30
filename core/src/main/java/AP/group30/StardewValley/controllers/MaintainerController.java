@@ -141,7 +141,7 @@ public class MaintainerController {
                 for (int j = 0; j < 60; j++) {
                     Tile tile = player.getMap().getTiles()[i][j];
                     if (tile.isPlanted()) {
-                        randomNumber = random.nextInt(10);
+                        randomNumber = random.nextInt(1000);
                         if (randomNumber == 0) {
                             GameMenu.printResult("You lose " + tile.getItem().getName());
                             tile.setPlanted(false);
@@ -311,7 +311,7 @@ public class MaintainerController {
         Collections.shuffle(items);
         Random rand = new Random();
 
-        for (int i = 0; i < rand.nextInt(items.size()); i++) {
+        for (int i = 0; i < items.size(); i++) {
             RanchCosts type = items.get(i);
             int count = 1 + Math.max(rand.nextInt(type.getDailyLimit()), 10);
             ranch.addItem(new RanchProducts(count, type));

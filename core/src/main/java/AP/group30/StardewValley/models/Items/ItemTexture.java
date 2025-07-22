@@ -134,6 +134,7 @@ public enum ItemTexture {
     JELLY(GameAssetManager.assetManager.get(GameAssetManager.jelly)),
     SMOKED_FISH(GameAssetManager.assetManager.get(GameAssetManager.smokedFish)),
     METAL_BAR(GameAssetManager.assetManager.get(GameAssetManager.metalBar)),
+    HAY(GameAssetManager.assetManager.get(GameAssetManager.hay)),
 
     SALMON(GameAssetManager.assetManager.get(GameAssetManager.salmon)),
     SARDINE(GameAssetManager.assetManager.get(GameAssetManager.sardine)),
@@ -155,6 +156,7 @@ public enum ItemTexture {
     GLACIERFISH(GameAssetManager.assetManager.get(GameAssetManager.glacierfish)),
     ANGLER(GameAssetManager.assetManager.get(GameAssetManager.angler)),
     CRIMSONFISH(GameAssetManager.assetManager.get(GameAssetManager.crimsonfish));
+
 
     private final Texture texture;
 

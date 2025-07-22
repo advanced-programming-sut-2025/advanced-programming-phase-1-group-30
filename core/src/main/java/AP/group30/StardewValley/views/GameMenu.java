@@ -18,7 +18,7 @@ public class GameMenu {
         System.out.println(result);
     }
 
-    public void check(String command, Scanner scanner) {
+    public static void check(String command, Scanner scanner) {
         Matcher matcher;
         matcher = GameMenuCommands.GAME_NEW.regexMatcher(command);
         if (matcher.matches()) {
@@ -299,11 +299,11 @@ public class GameMenu {
             GameMenuController.collectProduce(matcher.group("name"));
             return;
         }
-        matcher = GameMenuCommands.SELL_ANIMAL.regexMatcher(command);
-        if (matcher.matches()) {
-            GameMenuController.sellAnimal(matcher.group("name"));
-            return;
-        }
+//        matcher = GameMenuCommands.SELL_ANIMAL.regexMatcher(command);
+//        if (matcher.matches()) {
+//            GameMenuController.sellAnimal(matcher.group("name"));
+//            return;
+//        }
         matcher = GameMenuCommands.SHOW_ALL_PRODUCTS.regexMatcher(command);
         if (matcher.matches()) {
             GameMenuController.showAllProducts();

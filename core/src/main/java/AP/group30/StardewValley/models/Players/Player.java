@@ -92,6 +92,7 @@ public class Player implements GameObjects {
     private Animation<TextureRegion> walkingS;
     private Texture playerTexture;
     private TextureRegion playerRegion;
+    private Animal nearbyAnimal;
     private float stateTime = 0f;
     private boolean facingLeft = false;
 
@@ -120,12 +121,12 @@ public class Player implements GameObjects {
         this.backPack.addItem(new Item(1, "wedding ring", 10, ItemTexture.WOOD.getTexture()));
         this.backPack.addItem(new Item(1000, "wood", 10, ItemTexture.WOOD.getTexture()));
         this.backPack.addItem(new Item(1000, "stone", 20, ItemTexture.STONE.getTexture()));
-        this.backPack.addItem(new Item(50, "hay", 50, ItemTexture.WOOD.getTexture()));
+        this.backPack.addItem(new Item(50, "hay", 50, ItemTexture.HAY.getTexture()));
         this.backPack.addItem(new ForagingSeed(10, ForagingSeedType.CARROT_SEEDS));
         this.backPack.addItem(new Item(50, "speed-gro", 50, ItemTexture.SPEED_GRO.getTexture()));
         this.backPack.addItem(new Item(50, "deluxe retaining soil", 50, ItemTexture.DELUXE_RETAINING_SOIL.getTexture()));
         this.backPack.addItem(new Item(50, "copper bar", 50, ItemTexture.WOOD.getTexture()));
-        this.money = 20000;
+        this.money = 200000;
         this.selectionNumber = selectionNumber;
         this.maxEnergy = 1000;
         this.building = App.getCurrentGame().getBlacksmith(); // TODO !!!!!
@@ -702,5 +703,13 @@ public class Player implements GameObjects {
 
     public void setPlayerRect(Rectangle playerRect) {
         this.playerRect = playerRect;
+    }
+
+    public Animal getNearbyAnimal() {
+        return nearbyAnimal;
+    }
+
+    public void setNearbyAnimal(Animal nearbyAnimal) {
+        this.nearbyAnimal = nearbyAnimal;
     }
 }

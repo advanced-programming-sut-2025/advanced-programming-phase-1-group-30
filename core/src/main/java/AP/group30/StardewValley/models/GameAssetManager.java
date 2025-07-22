@@ -3,6 +3,8 @@ package AP.group30.StardewValley.models;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import javax.swing.plaf.PanelUI;
@@ -25,7 +27,8 @@ public class GameAssetManager {
 
     public static final AssetDescriptor<Texture> energyBar = new AssetDescriptor<>("EnergyBar/energy_bar.png", Texture.class);
     public static final AssetDescriptor<Texture> nightBackground = new AssetDescriptor<>("menu assets/sebastianRideTiles.png", Texture.class);
-    public static final AssetDescriptor<Skin> menuSkin = new AssetDescriptor<>("skin/pixthulhu-ui.json", Skin.class);
+    public static final AssetDescriptor<Skin> menuSkin = new AssetDescriptor<>("skin/LibGdx-Skin/NzSkin.json", Skin.class);
+    public static final AssetDescriptor<Skin> skin = new AssetDescriptor<>("skin/pixthulhu-ui.json", Skin.class);
     public static final AssetDescriptor<Texture> grass = new AssetDescriptor<>("tile/grass.png", Texture.class);
     public static final AssetDescriptor<Texture> winterGrass = new AssetDescriptor<>("tile/winter_grass.png", Texture.class);
     public static final AssetDescriptor<Texture> dirt = new AssetDescriptor<>("tile/dirt.png", Texture.class);
@@ -124,6 +127,7 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> dishOTheSea = new AssetDescriptor<>("item/FoodType/Dish_O_The_Sea.png", Texture.class);
     public static final AssetDescriptor<Texture> seafoamPudding = new AssetDescriptor<>("item/FoodType/Seafoam_Pudding.png", Texture.class);
     public static final AssetDescriptor<Texture> minersTreat = new AssetDescriptor<>("item/FoodType/Miner's_Treat.png", Texture.class);
+    public static final AssetDescriptor<Texture> hay = new AssetDescriptor<>("item/FoodType/Hay.png", Texture.class);
 
     // *** Buildings ***
     public static final AssetDescriptor<Texture> carpenter = new AssetDescriptor<>("buildings/Carpenter's_Shop.png", Texture.class);
@@ -141,6 +145,8 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> coop = new AssetDescriptor<>("buildings/Coop.png", Texture.class);
     public static final AssetDescriptor<Texture> bigCoop = new AssetDescriptor<>("buildings/Big_Coop.png", Texture.class);
     public static final AssetDescriptor<Texture> deluxeCoop = new AssetDescriptor<>("buildings/Deluxe_Coop.png", Texture.class);
+    public static final AssetDescriptor<Texture> coopInterior = new AssetDescriptor<>("buildings/Coop_Interior.png", Texture.class);
+    public static final AssetDescriptor<Texture> barnInterior = new AssetDescriptor<>("buildings/Barn_Interior.png", Texture.class);
 
     // *** Fertilizers ***
     public static final AssetDescriptor<Texture> deluxeRetainingSoil = new AssetDescriptor<>("Stardew_Valley_Images/Fertilizer/Deluxe_Retaining_Soil.png", Texture.class);
@@ -243,6 +249,159 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> smokedFish = new AssetDescriptor<>("item/ArtisanGoods/Smoked_Fish.png", Texture.class);
     public static final AssetDescriptor<Texture> metalBar = new AssetDescriptor<>("item/ArtisanGoods/Metal_Bar.png", Texture.class);
 
+    public static final AssetDescriptor<Texture> cowFront1 = new AssetDescriptor<>("output_squares/Cow0.png", Texture.class);
+    public static final AssetDescriptor<Texture> cowFront2 = new AssetDescriptor<>("output_squares/Cow1.png", Texture.class);
+    public static final AssetDescriptor<Texture> cowFront3 = new AssetDescriptor<>("output_squares/Cow2.png", Texture.class);
+    public static final AssetDescriptor<Texture> cowFront4 = new AssetDescriptor<>("output_squares/Cow3.png", Texture.class);
+    public static final AssetDescriptor<Texture> cowRight1 = new AssetDescriptor<>("output_squares/Cow4.png", Texture.class);
+    public static final AssetDescriptor<Texture> cowRight2 = new AssetDescriptor<>("output_squares/Cow5.png", Texture.class);
+    public static final AssetDescriptor<Texture> cowRight3 = new AssetDescriptor<>("output_squares/Cow6.png", Texture.class);
+    public static final AssetDescriptor<Texture> cowRight4 = new AssetDescriptor<>("output_squares/Cow7.png", Texture.class);
+    public static final AssetDescriptor<Texture> cowBack1 = new AssetDescriptor<>("output_squares/Cow8.png", Texture.class);
+    public static final AssetDescriptor<Texture> cowBack2 = new AssetDescriptor<>("output_squares/Cow9.png", Texture.class);
+    public static final AssetDescriptor<Texture> cowBack3 = new AssetDescriptor<>("output_squares/Cow10.png", Texture.class);
+    public static final AssetDescriptor<Texture> cowBack4 = new AssetDescriptor<>("output_squares/Cow11.png", Texture.class);
+    public static final AssetDescriptor<Texture> cowEating1 = new AssetDescriptor<>("output_squares/Cow16.png", Texture.class);
+    public static final AssetDescriptor<Texture> cowEating2 = new AssetDescriptor<>("output_squares/Cow17.png", Texture.class);
+    public static final AssetDescriptor<Texture> cowEating3 = new AssetDescriptor<>("output_squares/Cow18.png", Texture.class);
+    public static final AssetDescriptor<Texture> cowEating4 = new AssetDescriptor<>("output_squares/Cow19.png", Texture.class);
+
+    public static final AssetDescriptor<Texture> pigFront1 = new AssetDescriptor<>("output_squares/Pig0.png", Texture.class);
+    public static final AssetDescriptor<Texture> pigFront2 = new AssetDescriptor<>("output_squares/Pig1.png", Texture.class);
+    public static final AssetDescriptor<Texture> pigFront3 = new AssetDescriptor<>("output_squares/Pig2.png", Texture.class);
+    public static final AssetDescriptor<Texture> pigFront4 = new AssetDescriptor<>("output_squares/Pig3.png", Texture.class);
+    public static final AssetDescriptor<Texture> pigRight1 = new AssetDescriptor<>("output_squares/Pig4.png", Texture.class);
+    public static final AssetDescriptor<Texture> pigRight2 = new AssetDescriptor<>("output_squares/Pig5.png", Texture.class);
+    public static final AssetDescriptor<Texture> pigRight3 = new AssetDescriptor<>("output_squares/Pig6.png", Texture.class);
+    public static final AssetDescriptor<Texture> pigRight4 = new AssetDescriptor<>("output_squares/Pig7.png", Texture.class);
+    public static final AssetDescriptor<Texture> pigBack1 = new AssetDescriptor<>("output_squares/Pig8.png", Texture.class);
+    public static final AssetDescriptor<Texture> pigBack2 = new AssetDescriptor<>("output_squares/Pig9.png", Texture.class);
+    public static final AssetDescriptor<Texture> pigBack3 = new AssetDescriptor<>("output_squares/Pig10.png", Texture.class);
+    public static final AssetDescriptor<Texture> pigBack4 = new AssetDescriptor<>("output_squares/Pig11.png", Texture.class);
+    public static final AssetDescriptor<Texture> pigEating1 = new AssetDescriptor<>("output_squares/Pig16.png", Texture.class);
+    public static final AssetDescriptor<Texture> pigEating2 = new AssetDescriptor<>("output_squares/Pig17.png", Texture.class);
+    public static final AssetDescriptor<Texture> pigEating3 = new AssetDescriptor<>("output_squares/Pig18.png", Texture.class);
+    public static final AssetDescriptor<Texture> pigEating4 = new AssetDescriptor<>("output_squares/Pig19.png", Texture.class);
+
+    public static final AssetDescriptor<Texture> goatFront1 = new AssetDescriptor<>("output_squares/Goat0.png", Texture.class);
+    public static final AssetDescriptor<Texture> goatFront2 = new AssetDescriptor<>("output_squares/Goat1.png", Texture.class);
+    public static final AssetDescriptor<Texture> goatFront3 = new AssetDescriptor<>("output_squares/Goat2.png", Texture.class);
+    public static final AssetDescriptor<Texture> goatFront4 = new AssetDescriptor<>("output_squares/Goat3.png", Texture.class);
+    public static final AssetDescriptor<Texture> goatRight1 = new AssetDescriptor<>("output_squares/Goat4.png", Texture.class);
+    public static final AssetDescriptor<Texture> goatRight2 = new AssetDescriptor<>("output_squares/Goat5.png", Texture.class);
+    public static final AssetDescriptor<Texture> goatRight3 = new AssetDescriptor<>("output_squares/Goat6.png", Texture.class);
+    public static final AssetDescriptor<Texture> goatRight4 = new AssetDescriptor<>("output_squares/Goat7.png", Texture.class);
+    public static final AssetDescriptor<Texture> goatBack1 = new AssetDescriptor<>("output_squares/Goat8.png", Texture.class);
+    public static final AssetDescriptor<Texture> goatBack2 = new AssetDescriptor<>("output_squares/Goat9.png", Texture.class);
+    public static final AssetDescriptor<Texture> goatBack3 = new AssetDescriptor<>("output_squares/Goat10.png", Texture.class);
+    public static final AssetDescriptor<Texture> goatBack4 = new AssetDescriptor<>("output_squares/Goat11.png", Texture.class);
+    public static final AssetDescriptor<Texture> goatEating1 = new AssetDescriptor<>("output_squares/Goat16.png", Texture.class);
+    public static final AssetDescriptor<Texture> goatEating2 = new AssetDescriptor<>("output_squares/Goat17.png", Texture.class);
+    public static final AssetDescriptor<Texture> goatEating3 = new AssetDescriptor<>("output_squares/Goat18.png", Texture.class);
+    public static final AssetDescriptor<Texture> goatEating4 = new AssetDescriptor<>("output_squares/Goat19.png", Texture.class);
+
+    public static final AssetDescriptor<Texture> sheepFront1 = new AssetDescriptor<>("output_squares/Sheep0.png", Texture.class);
+    public static final AssetDescriptor<Texture> sheepFront2 = new AssetDescriptor<>("output_squares/Sheep1.png", Texture.class);
+    public static final AssetDescriptor<Texture> sheepFront3 = new AssetDescriptor<>("output_squares/Sheep2.png", Texture.class);
+    public static final AssetDescriptor<Texture> sheepFront4 = new AssetDescriptor<>("output_squares/Sheep3.png", Texture.class);
+    public static final AssetDescriptor<Texture> sheepRight1 = new AssetDescriptor<>("output_squares/Sheep4.png", Texture.class);
+    public static final AssetDescriptor<Texture> sheepRight2 = new AssetDescriptor<>("output_squares/Sheep5.png", Texture.class);
+    public static final AssetDescriptor<Texture> sheepRight3 = new AssetDescriptor<>("output_squares/Sheep6.png", Texture.class);
+    public static final AssetDescriptor<Texture> sheepRight4 = new AssetDescriptor<>("output_squares/Sheep7.png", Texture.class);
+    public static final AssetDescriptor<Texture> sheepBack1 = new AssetDescriptor<>("output_squares/Sheep8.png", Texture.class);
+    public static final AssetDescriptor<Texture> sheepBack2 = new AssetDescriptor<>("output_squares/Sheep9.png", Texture.class);
+    public static final AssetDescriptor<Texture> sheepBack3 = new AssetDescriptor<>("output_squares/Sheep10.png", Texture.class);
+    public static final AssetDescriptor<Texture> sheepBack4 = new AssetDescriptor<>("output_squares/Sheep11.png", Texture.class);
+    public static final AssetDescriptor<Texture> sheepEating1 = new AssetDescriptor<>("output_squares/Sheep16.png", Texture.class);
+    public static final AssetDescriptor<Texture> sheepEating2 = new AssetDescriptor<>("output_squares/Sheep17.png", Texture.class);
+    public static final AssetDescriptor<Texture> sheepEating3 = new AssetDescriptor<>("output_squares/Sheep18.png", Texture.class);
+    public static final AssetDescriptor<Texture> sheepEating4 = new AssetDescriptor<>("output_squares/Sheep19.png", Texture.class);
+
+    public static final AssetDescriptor<Texture> shearedSheepFront1 = new AssetDescriptor<>("output_squares/ShearedSheep0.png", Texture.class);
+    public static final AssetDescriptor<Texture> shearedSheepFront2 = new AssetDescriptor<>("output_squares/ShearedSheep1.png", Texture.class);
+    public static final AssetDescriptor<Texture> shearedSheepFront3 = new AssetDescriptor<>("output_squares/ShearedSheep2.png", Texture.class);
+    public static final AssetDescriptor<Texture> shearedSheepFront4 = new AssetDescriptor<>("output_squares/ShearedSheep3.png", Texture.class);
+    public static final AssetDescriptor<Texture> shearedSheepRight1 = new AssetDescriptor<>("output_squares/ShearedSheep4.png", Texture.class);
+    public static final AssetDescriptor<Texture> shearedSheepRight2 = new AssetDescriptor<>("output_squares/ShearedSheep5.png", Texture.class);
+    public static final AssetDescriptor<Texture> shearedSheepRight3 = new AssetDescriptor<>("output_squares/ShearedSheep6.png", Texture.class);
+    public static final AssetDescriptor<Texture> shearedSheepRight4 = new AssetDescriptor<>("output_squares/ShearedSheep7.png", Texture.class);
+    public static final AssetDescriptor<Texture> shearedSheepBack1 = new AssetDescriptor<>("output_squares/ShearedSheep8.png", Texture.class);
+    public static final AssetDescriptor<Texture> shearedSheepBack2 = new AssetDescriptor<>("output_squares/ShearedSheep9.png", Texture.class);
+    public static final AssetDescriptor<Texture> shearedSheepBack3 = new AssetDescriptor<>("output_squares/ShearedSheep10.png", Texture.class);
+    public static final AssetDescriptor<Texture> shearedSheepBack4 = new AssetDescriptor<>("output_squares/ShearedSheep11.png", Texture.class);
+    public static final AssetDescriptor<Texture> shearedSheepEating1 = new AssetDescriptor<>("output_squares/ShearedSheep16.png", Texture.class);
+    public static final AssetDescriptor<Texture> shearedSheepEating2 = new AssetDescriptor<>("output_squares/ShearedSheep17.png", Texture.class);
+    public static final AssetDescriptor<Texture> shearedSheepEating3 = new AssetDescriptor<>("output_squares/ShearedSheep18.png", Texture.class);
+    public static final AssetDescriptor<Texture> shearedSheepEating4 = new AssetDescriptor<>("output_squares/ShearedSheep19.png", Texture.class);
+
+    public static final AssetDescriptor<Texture> chickenFront1 = new AssetDescriptor<>("output_squares/Chicken0.png", Texture.class);
+    public static final AssetDescriptor<Texture> chickenFront2 = new AssetDescriptor<>("output_squares/Chicken1.png", Texture.class);
+    public static final AssetDescriptor<Texture> chickenFront3 = new AssetDescriptor<>("output_squares/Chicken2.png", Texture.class);
+    public static final AssetDescriptor<Texture> chickenFront4 = new AssetDescriptor<>("output_squares/Chicken3.png", Texture.class);
+    public static final AssetDescriptor<Texture> chickenRight1 = new AssetDescriptor<>("output_squares/Chicken4.png", Texture.class);
+    public static final AssetDescriptor<Texture> chickenRight2 = new AssetDescriptor<>("output_squares/Chicken5.png", Texture.class);
+    public static final AssetDescriptor<Texture> chickenRight3 = new AssetDescriptor<>("output_squares/Chicken6.png", Texture.class);
+    public static final AssetDescriptor<Texture> chickenRight4 = new AssetDescriptor<>("output_squares/Chicken7.png", Texture.class);
+    public static final AssetDescriptor<Texture> chickenBack1 = new AssetDescriptor<>("output_squares/Chicken8.png", Texture.class);
+    public static final AssetDescriptor<Texture> chickenBack2 = new AssetDescriptor<>("output_squares/Chicken9.png", Texture.class);
+    public static final AssetDescriptor<Texture> chickenBack3 = new AssetDescriptor<>("output_squares/Chicken10.png", Texture.class);
+    public static final AssetDescriptor<Texture> chickenBack4 = new AssetDescriptor<>("output_squares/Chicken11.png", Texture.class);
+    public static final AssetDescriptor<Texture> chickenEating1 = new AssetDescriptor<>("output_squares/Chicken24.png", Texture.class);
+    public static final AssetDescriptor<Texture> chickenEating2 = new AssetDescriptor<>("output_squares/Chicken25.png", Texture.class);
+    public static final AssetDescriptor<Texture> chickenEating3 = new AssetDescriptor<>("output_squares/Chicken26.png", Texture.class);
+    public static final AssetDescriptor<Texture> chickenEating4 = new AssetDescriptor<>("output_squares/Chicken27.png", Texture.class);
+
+    public static final AssetDescriptor<Texture> duckFront1 = new AssetDescriptor<>("output_squares/Duck0.png", Texture.class);
+    public static final AssetDescriptor<Texture> duckFront2 = new AssetDescriptor<>("output_squares/Duck1.png", Texture.class);
+    public static final AssetDescriptor<Texture> duckFront3 = new AssetDescriptor<>("output_squares/Duck2.png", Texture.class);
+    public static final AssetDescriptor<Texture> duckFront4 = new AssetDescriptor<>("output_squares/Duck3.png", Texture.class);
+    public static final AssetDescriptor<Texture> duckRight1 = new AssetDescriptor<>("output_squares/Duck4.png", Texture.class);
+    public static final AssetDescriptor<Texture> duckRight2 = new AssetDescriptor<>("output_squares/Duck5.png", Texture.class);
+    public static final AssetDescriptor<Texture> duckRight3 = new AssetDescriptor<>("output_squares/Duck6.png", Texture.class);
+    public static final AssetDescriptor<Texture> duckRight4 = new AssetDescriptor<>("output_squares/Duck7.png", Texture.class);
+    public static final AssetDescriptor<Texture> duckBack1 = new AssetDescriptor<>("output_squares/Duck8.png", Texture.class);
+    public static final AssetDescriptor<Texture> duckBack2 = new AssetDescriptor<>("output_squares/Duck9.png", Texture.class);
+    public static final AssetDescriptor<Texture> duckBack3 = new AssetDescriptor<>("output_squares/Duck10.png", Texture.class);
+    public static final AssetDescriptor<Texture> duckBack4 = new AssetDescriptor<>("output_squares/Duck11.png", Texture.class);
+    public static final AssetDescriptor<Texture> duckEating1 = new AssetDescriptor<>("output_squares/Duck24.png", Texture.class);
+    public static final AssetDescriptor<Texture> duckEating2 = new AssetDescriptor<>("output_squares/Duck25.png", Texture.class);
+    public static final AssetDescriptor<Texture> duckEating3 = new AssetDescriptor<>("output_squares/Duck26.png", Texture.class);
+    public static final AssetDescriptor<Texture> duckEating4 = new AssetDescriptor<>("output_squares/Duck27.png", Texture.class);
+
+    public static final AssetDescriptor<Texture> dinosaurFront1 = new AssetDescriptor<>("output_squares/Dinosaur0.png", Texture.class);
+    public static final AssetDescriptor<Texture> dinosaurFront2 = new AssetDescriptor<>("output_squares/Dinosaur1.png", Texture.class);
+    public static final AssetDescriptor<Texture> dinosaurFront3 = new AssetDescriptor<>("output_squares/Dinosaur2.png", Texture.class);
+    public static final AssetDescriptor<Texture> dinosaurFront4 = new AssetDescriptor<>("output_squares/Dinosaur3.png", Texture.class);
+    public static final AssetDescriptor<Texture> dinosaurRight1 = new AssetDescriptor<>("output_squares/Dinosaur4.png", Texture.class);
+    public static final AssetDescriptor<Texture> dinosaurRight2 = new AssetDescriptor<>("output_squares/Dinosaur5.png", Texture.class);
+    public static final AssetDescriptor<Texture> dinosaurRight3 = new AssetDescriptor<>("output_squares/Dinosaur6.png", Texture.class);
+    public static final AssetDescriptor<Texture> dinosaurRight4 = new AssetDescriptor<>("output_squares/Dinosaur7.png", Texture.class);
+    public static final AssetDescriptor<Texture> dinosaurBack1 = new AssetDescriptor<>("output_squares/Dinosaur8.png", Texture.class);
+    public static final AssetDescriptor<Texture> dinosaurBack2 = new AssetDescriptor<>("output_squares/Dinosaur9.png", Texture.class);
+    public static final AssetDescriptor<Texture> dinosaurBack3 = new AssetDescriptor<>("output_squares/Dinosaur10.png", Texture.class);
+    public static final AssetDescriptor<Texture> dinosaurBack4 = new AssetDescriptor<>("output_squares/Dinosaur11.png", Texture.class);
+    public static final AssetDescriptor<Texture> dinosaurEating1 = new AssetDescriptor<>("output_squares/Dinosaur24.png", Texture.class);
+    public static final AssetDescriptor<Texture> dinosaurEating2 = new AssetDescriptor<>("output_squares/Dinosaur25.png", Texture.class);
+    public static final AssetDescriptor<Texture> dinosaurEating3 = new AssetDescriptor<>("output_squares/Dinosaur26.png", Texture.class);
+    public static final AssetDescriptor<Texture> dinosaurEating4 = new AssetDescriptor<>("output_squares/Dinosaur27.png", Texture.class);
+
+    public static final AssetDescriptor<Texture> rabbitFront1 = new AssetDescriptor<>("output_squares/Rabbit0.png", Texture.class);
+    public static final AssetDescriptor<Texture> rabbitFront2 = new AssetDescriptor<>("output_squares/Rabbit1.png", Texture.class);
+    public static final AssetDescriptor<Texture> rabbitFront3 = new AssetDescriptor<>("output_squares/Rabbit2.png", Texture.class);
+    public static final AssetDescriptor<Texture> rabbitFront4 = new AssetDescriptor<>("output_squares/Rabbit3.png", Texture.class);
+    public static final AssetDescriptor<Texture> rabbitRight1 = new AssetDescriptor<>("output_squares/Rabbit4.png", Texture.class);
+    public static final AssetDescriptor<Texture> rabbitRight2 = new AssetDescriptor<>("output_squares/Rabbit5.png", Texture.class);
+    public static final AssetDescriptor<Texture> rabbitRight3 = new AssetDescriptor<>("output_squares/Rabbit6.png", Texture.class);
+    public static final AssetDescriptor<Texture> rabbitRight4 = new AssetDescriptor<>("output_squares/Rabbit7.png", Texture.class);
+    public static final AssetDescriptor<Texture> rabbitBack1 = new AssetDescriptor<>("output_squares/Rabbit8.png", Texture.class);
+    public static final AssetDescriptor<Texture> rabbitBack2 = new AssetDescriptor<>("output_squares/Rabbit9.png", Texture.class);
+    public static final AssetDescriptor<Texture> rabbitBack3 = new AssetDescriptor<>("output_squares/Rabbit10.png", Texture.class);
+    public static final AssetDescriptor<Texture> rabbitBack4 = new AssetDescriptor<>("output_squares/Rabbit11.png", Texture.class);
+    public static final AssetDescriptor<Texture> rabbitEating1 = new AssetDescriptor<>("output_squares/Rabbit24.png", Texture.class);
+    public static final AssetDescriptor<Texture> rabbitEating2 = new AssetDescriptor<>("output_squares/Rabbit25.png", Texture.class);
+    public static final AssetDescriptor<Texture> rabbitEating3 = new AssetDescriptor<>("output_squares/Rabbit26.png", Texture.class);
+    public static final AssetDescriptor<Texture> rabbitEating4 = new AssetDescriptor<>("output_squares/Rabbit27.png", Texture.class);
+
     public static final AssetDescriptor<Texture> angler = new AssetDescriptor<>("Fish/Angler.png", Texture.class);
     public static final AssetDescriptor<Texture> blueDiscus = new AssetDescriptor<>("Fish/Blue_Discus.png", Texture.class);
     public static final AssetDescriptor<Texture> crimsonfish = new AssetDescriptor<>("Fish/Crimsonfish.png", Texture.class);
@@ -264,7 +423,6 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> tilapia = new AssetDescriptor<>("Fish/Tilapia.png", Texture.class);
     public static final AssetDescriptor<Texture> tuna = new AssetDescriptor<>("Fish/Tuna.png", Texture.class);
 
-
     public static void queueAsset() {
         assetManager.load(background);
         assetManager.load(blackBackground);
@@ -275,6 +433,7 @@ public class GameAssetManager {
         assetManager.load(nightBackground);
         assetManager.load(grass);
         assetManager.load(dirt);
+        assetManager.load(skin);
 
         assetManager.load(player00);
         assetManager.load(player01);
@@ -354,6 +513,8 @@ public class GameAssetManager {
 
         assetManager.load(insideHouse);
         assetManager.load(refrigerator);
+        assetManager.load(barnInterior);
+        assetManager.load(coopInterior);
 
         assetManager.load(friedEgg);
         assetManager.load(bakedFish);
@@ -378,6 +539,7 @@ public class GameAssetManager {
         assetManager.load(cookie);
         assetManager.load(bread);
         assetManager.load(salad);
+        assetManager.load(hay);
 
         assetManager.load(carpenter);
         assetManager.load(blacksmith);
@@ -488,6 +650,142 @@ public class GameAssetManager {
         assetManager.load(mead);
         assetManager.load(wine);
 
+        assetManager.load(cowFront1);
+        assetManager.load(cowFront2);
+        assetManager.load(cowFront3);
+        assetManager.load(cowFront4);
+        assetManager.load(cowBack1);
+        assetManager.load(cowBack2);
+        assetManager.load(cowBack3);
+        assetManager.load(cowBack4);
+        assetManager.load(cowRight1);
+        assetManager.load(cowRight2);
+        assetManager.load(cowRight3);
+        assetManager.load(cowRight4);
+        assetManager.load(cowEating1);
+        assetManager.load(cowEating2);
+        assetManager.load(cowEating3);
+        assetManager.load(cowEating4);
+
+        assetManager.load(sheepFront1);
+        assetManager.load(sheepFront2);
+        assetManager.load(sheepFront3);
+        assetManager.load(sheepFront4);
+        assetManager.load(sheepBack1);
+        assetManager.load(sheepBack2);
+        assetManager.load(sheepBack3);
+        assetManager.load(sheepBack4);
+        assetManager.load(sheepRight1);
+        assetManager.load(sheepRight2);
+        assetManager.load(sheepRight3);
+        assetManager.load(sheepRight4);
+        assetManager.load(sheepEating1);
+        assetManager.load(sheepEating2);
+        assetManager.load(sheepEating3);
+        assetManager.load(sheepEating4);
+
+        assetManager.load(goatFront1);
+        assetManager.load(goatFront2);
+        assetManager.load(goatFront3);
+        assetManager.load(goatFront4);
+        assetManager.load(goatBack1);
+        assetManager.load(goatBack2);
+        assetManager.load(goatBack3);
+        assetManager.load(goatBack4);
+        assetManager.load(goatRight1);
+        assetManager.load(goatRight2);
+        assetManager.load(goatRight3);
+        assetManager.load(goatRight4);
+        assetManager.load(goatEating1);
+        assetManager.load(goatEating2);
+        assetManager.load(goatEating3);
+        assetManager.load(goatEating4);
+
+        assetManager.load(pigFront1);
+        assetManager.load(pigFront2);
+        assetManager.load(pigFront3);
+        assetManager.load(pigFront4);
+        assetManager.load(pigBack1);
+        assetManager.load(pigBack2);
+        assetManager.load(pigBack3);
+        assetManager.load(pigBack4);
+        assetManager.load(pigRight1);
+        assetManager.load(pigRight2);
+        assetManager.load(pigRight3);
+        assetManager.load(pigRight4);
+        assetManager.load(pigEating1);
+        assetManager.load(pigEating2);
+        assetManager.load(pigEating3);
+        assetManager.load(pigEating4);
+
+        assetManager.load(chickenFront1);
+        assetManager.load(chickenFront2);
+        assetManager.load(chickenFront3);
+        assetManager.load(chickenFront4);
+        assetManager.load(chickenBack1);
+        assetManager.load(chickenBack2);
+        assetManager.load(chickenBack3);
+        assetManager.load(chickenBack4);
+        assetManager.load(chickenRight1);
+        assetManager.load(chickenRight2);
+        assetManager.load(chickenRight3);
+        assetManager.load(chickenRight4);
+        assetManager.load(chickenEating1);
+        assetManager.load(chickenEating2);
+        assetManager.load(chickenEating3);
+        assetManager.load(chickenEating4);
+
+        assetManager.load(duckFront1);
+        assetManager.load(duckFront2);
+        assetManager.load(duckFront3);
+        assetManager.load(duckFront4);
+        assetManager.load(duckBack1);
+        assetManager.load(duckBack2);
+        assetManager.load(duckBack3);
+        assetManager.load(duckBack4);
+        assetManager.load(duckRight1);
+        assetManager.load(duckRight2);
+        assetManager.load(duckRight3);
+        assetManager.load(duckRight4);
+        assetManager.load(duckEating1);
+        assetManager.load(duckEating2);
+        assetManager.load(duckEating3);
+        assetManager.load(duckEating4);
+
+        assetManager.load(dinosaurFront1);
+        assetManager.load(dinosaurFront2);
+        assetManager.load(dinosaurFront3);
+        assetManager.load(dinosaurFront4);
+        assetManager.load(dinosaurBack1);
+        assetManager.load(dinosaurBack2);
+        assetManager.load(dinosaurBack3);
+        assetManager.load(dinosaurBack4);
+        assetManager.load(dinosaurRight1);
+        assetManager.load(dinosaurRight2);
+        assetManager.load(dinosaurRight3);
+        assetManager.load(dinosaurRight4);
+        assetManager.load(dinosaurEating1);
+        assetManager.load(dinosaurEating2);
+        assetManager.load(dinosaurEating3);
+        assetManager.load(dinosaurEating4);
+
+        assetManager.load(rabbitFront1);
+        assetManager.load(rabbitFront2);
+        assetManager.load(rabbitFront3);
+        assetManager.load(rabbitFront4);
+        assetManager.load(rabbitBack1);
+        assetManager.load(rabbitBack2);
+        assetManager.load(rabbitBack3);
+        assetManager.load(rabbitBack4);
+        assetManager.load(rabbitRight1);
+        assetManager.load(rabbitRight2);
+        assetManager.load(rabbitRight3);
+        assetManager.load(rabbitRight4);
+        assetManager.load(rabbitEating1);
+        assetManager.load(rabbitEating2);
+        assetManager.load(rabbitEating3);
+        assetManager.load(rabbitEating4);
+      
         assetManager.load(angler);
         assetManager.load(blueDiscus);
         assetManager.load(crimsonfish);
@@ -508,5 +806,338 @@ public class GameAssetManager {
         assetManager.load(tilapia);
         assetManager.load(tuna);
         assetManager.load(dorado);
+    }
+
+    public static TextureRegion[] getFront(String animal) {
+        TextureRegion[] front = null;
+        switch (animal) {
+            case "cow": front = new TextureRegion[] {
+                new TextureRegion(assetManager.get(cowFront1)),
+                new TextureRegion(assetManager.get(cowFront2)),
+                new TextureRegion(assetManager.get(cowFront3)),
+                new TextureRegion(assetManager.get(cowFront4))
+            }; break;
+            case "sheep": front = new TextureRegion[] {
+                new TextureRegion(assetManager.get(sheepFront1)),
+                new TextureRegion(assetManager.get(sheepFront2)),
+                new TextureRegion(assetManager.get(sheepFront3)),
+                new TextureRegion(assetManager.get(sheepFront4))
+            }; break;
+            case "goat": front = new TextureRegion[] {
+                new TextureRegion(assetManager.get(goatFront1)),
+                new TextureRegion(assetManager.get(goatFront2)),
+                new TextureRegion(assetManager.get(goatFront3)),
+                new TextureRegion(assetManager.get(goatFront4))
+            }; break;
+            case "pig": front = new TextureRegion[] {
+                new TextureRegion(assetManager.get(pigFront1)),
+                new TextureRegion(assetManager.get(pigFront2)),
+                new TextureRegion(assetManager.get(pigFront3)),
+                new TextureRegion(assetManager.get(pigFront4))
+            }; break;
+            case "chicken": front = new TextureRegion[] {
+                new TextureRegion(assetManager.get(chickenFront1)),
+                new TextureRegion(assetManager.get(chickenFront2)),
+                new TextureRegion(assetManager.get(chickenFront3)),
+                new TextureRegion(assetManager.get(chickenFront4))
+            }; break;
+            case "duck": front = new TextureRegion[] {
+                new TextureRegion(assetManager.get(duckFront1)),
+                new TextureRegion(assetManager.get(duckFront2)),
+                new TextureRegion(assetManager.get(duckFront3)),
+                new TextureRegion(assetManager.get(duckFront4))
+            }; break;
+            case "dinosaur": front = new TextureRegion[] {
+                new TextureRegion(assetManager.get(dinosaurFront1)),
+                new TextureRegion(assetManager.get(dinosaurFront2)),
+                new TextureRegion(assetManager.get(dinosaurFront3)),
+                new TextureRegion(assetManager.get(dinosaurFront4))
+            }; break;
+            case "rabbit": front = new TextureRegion[] {
+                new TextureRegion(assetManager.get(rabbitFront1)),
+                new TextureRegion(assetManager.get(rabbitFront2)),
+                new TextureRegion(assetManager.get(rabbitFront3)),
+                new TextureRegion(assetManager.get(rabbitFront4))
+            }; break;
+        }
+        return front;
+    }
+
+    public static TextureRegion[] getBack(String animal) {
+        TextureRegion[] back = null;
+        switch (animal) {
+            case "pig": back = new TextureRegion[] {
+                new TextureRegion(assetManager.get(pigBack1)),
+                new TextureRegion(assetManager.get(pigBack2)),
+                new TextureRegion(assetManager.get(pigBack3)),
+                new TextureRegion(assetManager.get(pigBack4))
+            }; break;
+            case "goat": back = new TextureRegion[] {
+                new TextureRegion(assetManager.get(goatBack1)),
+                new TextureRegion(assetManager.get(goatBack2)),
+                new TextureRegion(assetManager.get(goatBack3)),
+                new TextureRegion(assetManager.get(goatBack4))
+            }; break;
+            case "sheep": back = new TextureRegion[] {
+                new TextureRegion(assetManager.get(sheepBack1)),
+                new TextureRegion(assetManager.get(sheepBack2)),
+                new TextureRegion(assetManager.get(sheepBack3)),
+                new TextureRegion(assetManager.get(sheepBack4))
+            }; break;
+            case "cow": back = new TextureRegion[] {
+                new TextureRegion(assetManager.get(cowBack1)),
+                new TextureRegion(assetManager.get(cowBack2)),
+                new TextureRegion(assetManager.get(cowBack3)),
+                new TextureRegion(assetManager.get(cowBack4))
+            }; break;
+            case "chicken": back = new TextureRegion[] {
+                new TextureRegion(assetManager.get(chickenBack1)),
+                new TextureRegion(assetManager.get(chickenBack2)),
+                new TextureRegion(assetManager.get(chickenBack3)),
+                new TextureRegion(assetManager.get(chickenBack4))
+            }; break;
+            case "duck": back = new TextureRegion[] {
+                new TextureRegion(assetManager.get(duckBack1)),
+                new TextureRegion(assetManager.get(duckBack2)),
+                new TextureRegion(assetManager.get(duckBack3)),
+                new TextureRegion(assetManager.get(duckBack4))
+            }; break;
+            case "dinosaur": back = new TextureRegion[] {
+                new TextureRegion(assetManager.get(dinosaurBack1)),
+                new TextureRegion(assetManager.get(dinosaurBack2)),
+                new TextureRegion(assetManager.get(dinosaurBack3)),
+                new TextureRegion(assetManager.get(dinosaurBack4))
+            }; break;
+            case "rabbit": back = new TextureRegion[] {
+                new TextureRegion(assetManager.get(rabbitBack1)),
+                new TextureRegion(assetManager.get(rabbitBack2)),
+                new TextureRegion(assetManager.get(rabbitBack3)),
+                new TextureRegion(assetManager.get(rabbitBack4))
+            }; break;
+        }
+        return back;
+    }
+
+    public static TextureRegion[] getRight(String animal) {
+        TextureRegion[] right = null;
+        switch (animal) {
+            case "cow": right = new TextureRegion[] {
+                new TextureRegion(assetManager.get(cowRight1)),
+                new TextureRegion(assetManager.get(cowRight2)),
+                new TextureRegion(assetManager.get(cowRight3)),
+                new TextureRegion(assetManager.get(cowRight4))
+            }; break;
+            case "goat": right = new TextureRegion[] {
+                new TextureRegion(assetManager.get(goatRight1)),
+                new TextureRegion(assetManager.get(goatRight2)),
+                new TextureRegion(assetManager.get(goatRight3)),
+                new TextureRegion(assetManager.get(goatRight4))
+            }; break;
+            case "pig": right = new TextureRegion[] {
+                new TextureRegion(assetManager.get(pigRight1)),
+                new TextureRegion(assetManager.get(pigRight2)),
+                new TextureRegion(assetManager.get(pigRight3)),
+                new TextureRegion(assetManager.get(pigRight4))
+            }; break;
+            case "sheep": right = new TextureRegion[] {
+                new TextureRegion(assetManager.get(sheepRight1)),
+                new TextureRegion(assetManager.get(sheepRight2)),
+                new TextureRegion(assetManager.get(sheepRight3)),
+                new TextureRegion(assetManager.get(sheepRight4))
+            }; break;
+            case "chicken": right = new TextureRegion[] {
+                new TextureRegion(assetManager.get(chickenRight1)),
+                new TextureRegion(assetManager.get(chickenRight2)),
+                new TextureRegion(assetManager.get(chickenRight3)),
+                new TextureRegion(assetManager.get(chickenRight4))
+            }; break;
+            case "duck": right = new TextureRegion[] {
+                new TextureRegion(assetManager.get(duckRight1)),
+                new TextureRegion(assetManager.get(duckRight2)),
+                new TextureRegion(assetManager.get(duckRight3)),
+                new TextureRegion(assetManager.get(duckRight4))
+            }; break;
+            case "dinosaur": right = new TextureRegion[] {
+                new TextureRegion(assetManager.get(dinosaurRight1)),
+                new TextureRegion(assetManager.get(dinosaurRight2)),
+                new TextureRegion(assetManager.get(dinosaurRight3)),
+                new TextureRegion(assetManager.get(dinosaurRight4))
+            }; break;
+            case "rabbit": right = new TextureRegion[] {
+                new TextureRegion(assetManager.get(rabbitRight1)),
+                new TextureRegion(assetManager.get(rabbitRight2)),
+                new TextureRegion(assetManager.get(rabbitRight3)),
+                new TextureRegion(assetManager.get(rabbitRight4))
+            }; break;
+        }
+        return right;
+    }
+
+    public static TextureRegion[] getLeft(String animal) {
+        TextureRegion[] left = null;
+        switch (animal) {
+            case "cow"-> {
+                TextureRegion left1 = new TextureRegion(assetManager.get(cowRight1));
+                left1.flip(true, false);
+                TextureRegion left2 = new TextureRegion(assetManager.get(cowRight2));
+                left2.flip(true, false);
+                TextureRegion left3 = new TextureRegion(assetManager.get(cowRight3));
+                left3.flip(true, false);
+                TextureRegion left4 = new TextureRegion(assetManager.get(cowRight4));
+                left4.flip(true, false);
+                left = new TextureRegion[]{
+                    left1, left2, left3, left4
+                };
+                break;
+            }
+            case "sheep" -> {
+                TextureRegion left1 = new TextureRegion(assetManager.get(sheepRight1));
+                left1.flip(true, false);
+                TextureRegion left2 = new TextureRegion(assetManager.get(sheepRight2));
+                left2.flip(true, false);
+                TextureRegion left3 = new TextureRegion(assetManager.get(sheepRight3));
+                left3.flip(true, false);
+                TextureRegion left4 = new TextureRegion(assetManager.get(sheepRight4));
+                left4.flip(true, false);
+                left = new TextureRegion[]{
+                    left1, left2, left3, left4
+                };
+            }
+            case "pig" -> {
+                TextureRegion left1 = new TextureRegion(assetManager.get(pigRight1));
+                left1.flip(true, false);
+                TextureRegion left2 = new TextureRegion(assetManager.get(pigRight2));
+                left2.flip(true, false);
+                TextureRegion left3 = new TextureRegion(assetManager.get(pigRight3));
+                left3.flip(true, false);
+                TextureRegion left4 = new TextureRegion(assetManager.get(pigRight4));
+                left4.flip(true, false);
+                left = new TextureRegion[]{
+                    left1, left2, left3, left4
+                };
+                break;
+            }
+            case "goat" -> {
+                TextureRegion left1 = new TextureRegion(assetManager.get(goatRight1));
+                left1.flip(true, false);
+                TextureRegion left2 = new TextureRegion(assetManager.get(goatRight2));
+                left2.flip(true, false);
+                TextureRegion left3 = new TextureRegion(assetManager.get(goatRight3));
+                left3.flip(true, false);
+                TextureRegion left4 = new TextureRegion(assetManager.get(goatRight4));
+                left4.flip(true, false);
+                left = new TextureRegion[]{
+                    left1, left2, left3, left4
+                };
+            }
+            case "chicken" -> {
+                TextureRegion left1 = new TextureRegion(assetManager.get(chickenRight1));
+                left1.flip(true, false);
+                TextureRegion left2 = new TextureRegion(assetManager.get(chickenRight2));
+                left2.flip(true, false);
+                TextureRegion left3 = new TextureRegion(assetManager.get(chickenRight3));
+                left3.flip(true, false);
+                TextureRegion left4 = new TextureRegion(assetManager.get(chickenRight4));
+                left4.flip(true, false);
+                left = new TextureRegion[]{
+                    left1, left2, left3, left4
+                };
+            }
+            case "duck" -> {
+                TextureRegion left1 = new TextureRegion(assetManager.get(duckRight1));
+                left1.flip(true, false);
+                TextureRegion left2 = new TextureRegion(assetManager.get(duckRight2));
+                left2.flip(true, false);
+                TextureRegion left3 = new TextureRegion(assetManager.get(duckRight3));
+                left3.flip(true, false);
+                TextureRegion left4 = new TextureRegion(assetManager.get(duckRight4));
+                left4.flip(true, false);
+                left = new TextureRegion[]{
+                    left1, left2, left3, left4
+                };
+            }
+            case "dinosaur" -> {
+                TextureRegion left1 = new TextureRegion(assetManager.get(dinosaurRight1));
+                left1.flip(true, false);
+                TextureRegion left2 = new TextureRegion(assetManager.get(dinosaurRight2));
+                left2.flip(true, false);
+                TextureRegion left3 = new TextureRegion(assetManager.get(dinosaurRight3));
+                left3.flip(true, false);
+                TextureRegion left4 = new TextureRegion(assetManager.get(dinosaurRight4));
+                left4.flip(true, false);
+                left = new TextureRegion[]{
+                    left1, left2, left3, left4
+                };
+            }
+            case "rabbit" -> {
+                TextureRegion left1 = new TextureRegion(assetManager.get(rabbitRight1));
+                left1.flip(true, false);
+                TextureRegion left2 = new TextureRegion(assetManager.get(rabbitRight2));
+                left2.flip(true, false);
+                TextureRegion left3 = new TextureRegion(assetManager.get(rabbitRight3));
+                left3.flip(true, false);
+                TextureRegion left4 = new TextureRegion(assetManager.get(rabbitRight4));
+                left4.flip(true, false);
+                left = new TextureRegion[]{
+                    left1, left2, left3, left4
+                };
+            }
+        }
+        return left;
+    }
+
+    public static TextureRegion[] getEating(String animal) {
+        TextureRegion[] eating = null;
+        switch (animal) {
+            case "cow": eating = new TextureRegion[] {
+                new TextureRegion(assetManager.get(cowEating1)),
+                new TextureRegion(assetManager.get(cowEating2)),
+                new TextureRegion(assetManager.get(cowEating3)),
+                new TextureRegion(assetManager.get(cowEating4))
+            }; break;
+            case "goat": eating = new TextureRegion[] {
+                new TextureRegion(assetManager.get(goatEating1)),
+                new TextureRegion(assetManager.get(goatEating2)),
+                new TextureRegion(assetManager.get(goatEating3)),
+                new TextureRegion(assetManager.get(goatEating4))
+            }; break;
+            case "pig": eating = new TextureRegion[] {
+                new TextureRegion(assetManager.get(pigEating1)),
+                new TextureRegion(assetManager.get(pigEating2)),
+                new TextureRegion(assetManager.get(pigEating3)),
+                new TextureRegion(assetManager.get(pigEating4))
+            }; break;
+            case "sheep": eating = new TextureRegion[] {
+                new TextureRegion(assetManager.get(sheepEating1)),
+                new TextureRegion(assetManager.get(sheepEating2)),
+                new TextureRegion(assetManager.get(sheepEating3)),
+                new TextureRegion(assetManager.get(sheepEating4))
+            }; break;
+            case "chicken": eating = new TextureRegion[] {
+                new TextureRegion(assetManager.get(chickenEating1)),
+                new TextureRegion(assetManager.get(chickenEating2)),
+                new TextureRegion(assetManager.get(chickenEating3)),
+                new TextureRegion(assetManager.get(chickenEating4))
+            }; break;
+            case "duck": eating = new TextureRegion[] {
+                new TextureRegion(assetManager.get(duckEating1)),
+                new TextureRegion(assetManager.get(duckEating2)),
+                new TextureRegion(assetManager.get(duckEating3)),
+                new TextureRegion(assetManager.get(duckEating4))
+            }; break;
+            case "dinosaur": eating = new TextureRegion[] {
+                new TextureRegion(assetManager.get(dinosaurEating1)),
+                new TextureRegion(assetManager.get(dinosaurEating2)),
+                new TextureRegion(assetManager.get(dinosaurEating3)),
+                new TextureRegion(assetManager.get(dinosaurEating4))
+            }; break;
+            case "rabbit": eating = new TextureRegion[] {
+                new TextureRegion(assetManager.get(rabbitEating1)),
+                new TextureRegion(assetManager.get(rabbitEating2)),
+                new TextureRegion(assetManager.get(rabbitEating3)),
+                new TextureRegion(assetManager.get(rabbitEating4))
+            }; break;
+        }
+        return eating;
     }
 }
