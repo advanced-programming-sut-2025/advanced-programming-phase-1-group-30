@@ -12,10 +12,10 @@ import AP.group30.StardewValley.models.Buildings.Hut;
 import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.GameObjects;
-import AP.group30.StardewValley.models.Items.Item;
 import AP.group30.StardewValley.models.Items.Products.ForagingSeed;
 import AP.group30.StardewValley.models.Items.Products.Stone;
 import AP.group30.StardewValley.models.Items.Products.Tree;
+import AP.group30.StardewValley.models.Items.Tools.FishingPole;
 import AP.group30.StardewValley.models.Items.Tools.Tool;
 import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Maps.Tile;
@@ -49,7 +49,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Timer;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
@@ -104,6 +105,11 @@ public class GameScreen implements Screen {
     private static float toolRotation = 0f;
     private float toolRotationSpeed = 0f;
     private boolean toolAnimating = false;
+
+    private boolean isFishing = false;
+    private boolean fiveSecPassed = false;
+    private Timer.Task fishingTimer;
+    private FishingMiniGame fishingMiniGame;
 
     public GameScreen(Game game) {
         this.game = game;
@@ -235,17 +241,31 @@ public class GameScreen implements Screen {
         renderEnergyBar(player, camera, energyBar, batch, shapeRenderer);
         renderTime(batch, camera, clock, font, game);
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && openMenu(inventoryScreen)) inventoryScreen.toggle();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.N) && openMenu(skillScreen)) skillScreen.toggle();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.B) && openMenu(craftingScreen)) craftingScreen.toggle();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.I) && openMenu(artisanScreen)) artisanScreen.toggle();
-        if (!isAnyMenuOpened()) {
-            handleInput(delta);
-            if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
-            if (Gdx.input.isKeyPressed(Input.Keys.S)) camera.position.y -= speed * delta;
-            if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
+        if (isFishing && fiveSecPassed && !fishingMiniGame.isVisible()) isFishing = false;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Q) && isFishing) {
+            isFishing = false;
+            fiveSecPassed = false;
+            fishingMiniGame.hide();
+
+            if (fishingTimer != null) {
+                fishingTimer.cancel();
+                fishingTimer = null;
+            }
         }
+        if (!isFishing) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && openMenu(inventoryScreen)) inventoryScreen.toggle();
+            if (Gdx.input.isKeyJustPressed(Input.Keys.N) && openMenu(skillScreen)) skillScreen.toggle();
+            if (Gdx.input.isKeyJustPressed(Input.Keys.B) && openMenu(craftingScreen)) craftingScreen.toggle();
+            if (Gdx.input.isKeyJustPressed(Input.Keys.I) && openMenu(artisanScreen)) artisanScreen.toggle();
+            if (!isAnyMenuOpened()) {
+                handleInput(delta);
+                if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
+                if (Gdx.input.isKeyPressed(Input.Keys.S)) camera.position.y -= speed * delta;
+                if (Gdx.input.isKeyPressed(Input.Keys.A)) camera.position.x -= speed * delta;
+                if (Gdx.input.isKeyPressed(Input.Keys.D)) camera.position.x += speed * delta;
+            }
+        }
+        updateToolAnimation(delta);
 
         batch.end();
 
@@ -265,6 +285,7 @@ public class GameScreen implements Screen {
         craftingScreen.render();
         hut.render(batch, camera);
         artisanScreen.render();
+        fishingMiniGame.render(delta);
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
             System.out.println(entities.size());
@@ -480,6 +501,7 @@ public class GameScreen implements Screen {
         hut.dispose();
         clock.dispose();
         artisanScreen.dispose();
+        fishingMiniGame.dispose();
     }
 
     private void handleInput(float delta) {
@@ -586,9 +608,23 @@ public class GameScreen implements Screen {
             Main.getMain().setScreen(RegisterMenu.cityScreen);
         }
 
-        updateToolAnimation(delta);
         if (Gdx.input.isKeyJustPressed(Input.Keys.C) || Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             if (player.getWield() instanceof Tool) {
+                if (player.getWield() instanceof FishingPole && hasWaterNeighbour()) {
+                    isFishing = true;
+                    fiveSecPassed = false;
+
+                    if (fishingTimer != null) fishingTimer.cancel();
+                    fishingTimer = new Timer.Task() {
+                        @Override
+                        public void run() {
+                            fiveSecPassed = true;
+                            fishingMiniGame.show();
+                        }
+                    };
+                    Timer.schedule(fishingTimer, 5);
+                }
+
                 GameMenuController.toolUse(player.getDirection(), (int) (x), (int) (y + playerRegion.getRegionHeight() / 8f), batch);
                 toolAnimation();
             } else if (player.getWield() instanceof ForagingSeed) {
@@ -603,6 +639,22 @@ public class GameScreen implements Screen {
         }
     }
 
+    private boolean hasWaterNeighbour() {
+        Tile[][] tiles = player.getMap().getTiles();
+        Tile tile = getTileUnderPlayer(x, y);
+        int x = tile.getX();
+        int y = tile.getY();
+
+        try {
+            return tiles[x+1][y].getType().equals(TileTypes.WATER) ||
+                   tiles[x-1][y].getType().equals(TileTypes.WATER) ||
+                   tiles[x][y+1].getType().equals(TileTypes.WATER) ||
+                   tiles[x][y-1].getType().equals(TileTypes.WATER);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     private void toolAnimation() {
         if (toolAnimating) return;
 
@@ -614,9 +666,11 @@ public class GameScreen implements Screen {
         if (toolAnimating) {
             toolRotation += toolRotationSpeed * delta;
 
-            if (toolRotationSpeed > 0 && toolRotation >= 45f) {
+            if (toolRotationSpeed >= 0 && toolRotation >= 45f) {
+                if (isFishing) toolRotationSpeed = 0f;
+                else toolRotationSpeed = -600f;
+
                 toolRotation = 45f;
-                toolRotationSpeed = -600f;
             }
 
             if (toolRotationSpeed < 0 && toolRotation <= 0f) {
@@ -682,6 +736,7 @@ public class GameScreen implements Screen {
         craftingScreen = new CraftingScreen(batch, Main.getMain().skin);
         hut = new HutScreen(batch, Main.getMain().skin);
         artisanScreen = new ArtisanScreen(batch, Main.getMain().skin);
+        fishingMiniGame = new FishingMiniGame(batch, Main.getMain().skin);
     }
 
     private Building findBuilding() {

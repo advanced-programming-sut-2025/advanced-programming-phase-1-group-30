@@ -152,6 +152,8 @@ public class Player implements GameObjects {
         this.devices.add(IndustrialProductType.BEE_HOUSE);
         this.devices.add(IndustrialProductType.KEG);
         this.devices.add(IndustrialProductType.LOOM);
+
+        this.backPack.addItem(new FishingPole(1, FishingPoleType.TRAINING_POLE));
     }
 
     public String getUsername() {

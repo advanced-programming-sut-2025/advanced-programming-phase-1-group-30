@@ -31,6 +31,10 @@ public enum ItemTexture {
     WATERING_CAN(GameAssetManager.assetManager.get(GameAssetManager.wateringCan)),
     MILK_PAIL(GameAssetManager.assetManager.get(GameAssetManager.milkPail)),
     TRASH_CAN(GameAssetManager.assetManager.get(GameAssetManager.trashCan)),
+    TRAINING_POLE(GameAssetManager.assetManager.get(GameAssetManager.trainingRod)),
+    BAMBOO_POLE(GameAssetManager.assetManager.get(GameAssetManager.bambooPole)),
+    FIBERGLASS_POLE(GameAssetManager.assetManager.get(GameAssetManager.fiberglassRod)),
+    IRIDIUM_POLE(GameAssetManager.assetManager.get(GameAssetManager.iridiumRod)),
 
     FARMING_ICON(GameAssetManager.assetManager.get(GameAssetManager.farmingIcon)),
     FISHING_ICON(GameAssetManager.assetManager.get(GameAssetManager.fishingIcon)),
@@ -130,7 +134,29 @@ public enum ItemTexture {
     JELLY(GameAssetManager.assetManager.get(GameAssetManager.jelly)),
     SMOKED_FISH(GameAssetManager.assetManager.get(GameAssetManager.smokedFish)),
     METAL_BAR(GameAssetManager.assetManager.get(GameAssetManager.metalBar)),
-    HAY(GameAssetManager.assetManager.get(GameAssetManager.hay));
+    HAY(GameAssetManager.assetManager.get(GameAssetManager.hay)),
+
+    SALMON(GameAssetManager.assetManager.get(GameAssetManager.salmon)),
+    SARDINE(GameAssetManager.assetManager.get(GameAssetManager.sardine)),
+    SHAD(GameAssetManager.assetManager.get(GameAssetManager.shad)),
+    BLUE_DISCUS(GameAssetManager.assetManager.get(GameAssetManager.blueDiscus)),
+    MIDNIGHT_CARP(GameAssetManager.assetManager.get(GameAssetManager.midnightCarp)),
+    SQUID(GameAssetManager.assetManager.get(GameAssetManager.squid)),
+    TUNA(GameAssetManager.assetManager.get(GameAssetManager.tuna)),
+    PERCH(GameAssetManager.assetManager.get(GameAssetManager.peach_tree)),
+    FLOUNDER(GameAssetManager.assetManager.get(GameAssetManager.flounder)),
+    LIONFISH(GameAssetManager.assetManager.get(GameAssetManager.lionfish)),
+    HERRING(GameAssetManager.assetManager.get(GameAssetManager.herring)),
+    GHOSTFISH(GameAssetManager.assetManager.get(GameAssetManager.ghostfish)),
+    TILAPIA(GameAssetManager.assetManager.get(GameAssetManager.tilapia)),
+    DORADO(GameAssetManager.assetManager.get(GameAssetManager.dorado)),
+    SUNFISH(GameAssetManager.assetManager.get(GameAssetManager.sunfish)),
+    RAINBOW_TROUT(GameAssetManager.assetManager.get(GameAssetManager.rainbowTrout)),
+    LEGEND(GameAssetManager.assetManager.get(GameAssetManager.legend)),
+    GLACIERFISH(GameAssetManager.assetManager.get(GameAssetManager.glacierfish)),
+    ANGLER(GameAssetManager.assetManager.get(GameAssetManager.angler)),
+    CRIMSONFISH(GameAssetManager.assetManager.get(GameAssetManager.crimsonfish));
+
 
     private final Texture texture;
 

@@ -197,7 +197,7 @@ public class ShopScreen {
                     player.setMoney(player.getMoney() - cost);
                 }
                 App.getCurrentGame().incrementPurchase(shopItem);
-                refresh(); // update money label (and could update limit display)
+                refresh(); // updateGreenBar money label (and could updateGreenBar limit display)
             }
         });
 
@@ -239,7 +239,7 @@ public class ShopScreen {
 //                        new Item(1, shopItem.getName(), shopItem.getPrice(), shopItem.getTexture()));  // assume you have a copy-constructor
 //                }
 //                App.getCurrentGame().incrementPurchase(shopItem);
-//                refresh(); // update money label (and could update limit display)
+//                refresh(); // updateGreenBar money label (and could updateGreenBar limit display)
 //            }
 //        });
 //        cell.add(buy).padTop(6).row();
@@ -274,7 +274,7 @@ public class ShopScreen {
     }
 
     private void refresh() {
-        // update money
+        // updateGreenBar money
         moneyLabel.setText(String.valueOf(
             App.getCurrentGame().getCurrentPlayer().getMoney()));
         errorLabel.setVisible(false);

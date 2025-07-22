@@ -244,11 +244,11 @@ public class GameMenu {
             GameMenuController.eat(matcher.group("foodName"));
             return;
         }
-        matcher = GameMenuCommands.FISHING.regexMatcher(command);
-        if (matcher.matches()) {
-            GameMenuController.fishing(matcher.group("fishingPole"));
-            return;
-        }
+//        matcher = GameMenuCommands.FISHING.regexMatcher(command);
+//        if (matcher.matches()) {
+//            GameMenuController.fishing(matcher.group("fishingPole"));
+//            return;
+//        }
 //        matcher = GameMenuCommands.BUILD.regexMatcher(command);
 //        if (matcher.matches()) {
 //            GameMenuController.build(matcher.group("buildingName"), matcher.group("x"), matcher.group("y"));
