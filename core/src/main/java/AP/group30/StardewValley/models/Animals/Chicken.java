@@ -2,11 +2,14 @@ package AP.group30.StardewValley.models.Animals;
 
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Buildings.RanchCosts;
+import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.Item;
 import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Items.Products.AnimalProductType;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.views.GameMenu;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import java.util.Random;
 
 public class Chicken extends Animal {
@@ -15,6 +18,8 @@ public class Chicken extends Animal {
 
     public Chicken(int price, String name, int friendship, boolean fedToday, boolean petToday, int x, int y) {
         super(price, name, friendship, fedToday, petToday, x, y, RanchCosts.CHICKEN);
+        initAnimations(GameAssetManager.getBack("chicken"), GameAssetManager.getFront("chicken"), GameAssetManager.getLeft("chicken"),
+            GameAssetManager.getRight("chicken"), GameAssetManager.getEating("chicken"), new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.chickenFront1)));
     }
     @Override
     public void produceProduct() {

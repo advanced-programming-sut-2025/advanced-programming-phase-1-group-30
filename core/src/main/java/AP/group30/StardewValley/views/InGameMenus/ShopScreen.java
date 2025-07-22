@@ -3,10 +3,7 @@ package AP.group30.StardewValley.views.InGameMenus;
 import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.controllers.GameMenuController;
 import AP.group30.StardewValley.models.App;
-import AP.group30.StardewValley.models.Buildings.Blacksmith;
-import AP.group30.StardewValley.models.Buildings.Building;
-import AP.group30.StardewValley.models.Buildings.Carpenter;
-import AP.group30.StardewValley.models.Buildings.CarpenterCosts;
+import AP.group30.StardewValley.models.Buildings.*;
 import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.ItemTexture;
@@ -110,6 +107,12 @@ public class ShopScreen {
             rootTable.add(buildingY).padLeft(30);
             rootTable.add(new Label("Hut Coordinates: " + App.getCurrentGame().getHut().getStartX() * 32+ " " + (60 -App.getCurrentGame().getHut().getStartY()) * 32, skin)).padLeft(30);
         }
+
+        if (building instanceof Ranch) {
+            buildingX.setText("Animals Name");
+            buildingX.setWidth(100);
+            rootTable.add(buildingX).padLeft(30);
+        }
     }
 
     private Table createShopItemCell(ItemsInteface shopItem) {
@@ -180,7 +183,8 @@ public class ShopScreen {
                     if (success) {
                         player.setMoney(player.getMoney() - cost);
                     }
-
+                } else if (building instanceof Ranch) {
+                    GameMenuController.buyAnimal(shopItem.getName(), buildingX.getText());
                 } else {
                     Item inInv = Item.findItemByName(
                         shopItem.getName(), player.getBackPack().getItems());

@@ -129,7 +129,8 @@ public enum ItemTexture {
     PICKLES(GameAssetManager.assetManager.get(GameAssetManager.pickles)),
     JELLY(GameAssetManager.assetManager.get(GameAssetManager.jelly)),
     SMOKED_FISH(GameAssetManager.assetManager.get(GameAssetManager.smokedFish)),
-    METAL_BAR(GameAssetManager.assetManager.get(GameAssetManager.metalBar));
+    METAL_BAR(GameAssetManager.assetManager.get(GameAssetManager.metalBar)),
+    HAY(GameAssetManager.assetManager.get(GameAssetManager.hay));
 
     private final Texture texture;
 

@@ -276,11 +276,6 @@ public class CityScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.C) || Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             if (player.getWield() instanceof Tool) {
                 GameMenuController.toolUse(player.getDirection(), (int) (x), (int) (y + playerRegion.getRegionHeight() / 8f), batch);
-            } else if (player.getWield() instanceof ForagingSeed) {
-                Crop crop = GameMenuController.plant(player.getWield().getName(), player.getDirection());
-                if (crop != null) {
-                    entities.add(crop);
-                }
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
