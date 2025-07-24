@@ -452,6 +452,7 @@ public class GameMenuController {
                             }
                             GameMenu.printResult(targetTile.getItem().getName() + " successfully added to your backpack");
                             player.increaseMining(10);
+                            RegisterMenu.gameScreen.entities.remove(targetTile.getItem());
                             targetTile.setItem(null);
                         } else {
                             GameMenu.printResult("You swing your pickaxe... but there's nothing to mine here!");
@@ -765,7 +766,7 @@ public class GameMenuController {
                     targetTile.setType(TileTypes.DIRT);
                     GameMenu.printResult("Tile type changed to Dirt!");
                 } else {
-                    System.out.println(targetTile.getCrop().getName());
+//                    System.out.println(targetTile.getCrop().getName());
                     GameMenu.printResult("Nothing here to harvest!");
                 }
                 player.setEnergy(player.getEnergy() - 2 * (int) rate);

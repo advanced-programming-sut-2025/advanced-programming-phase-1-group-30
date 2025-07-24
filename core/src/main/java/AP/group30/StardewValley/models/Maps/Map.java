@@ -589,6 +589,6 @@ public class Map {
         return greenHouse;
     }
     public void createGreenHouse() {
-        this.greenHouse = new GreenHouse();
+        greenHouse.buildGreenhouse();
     }
 }

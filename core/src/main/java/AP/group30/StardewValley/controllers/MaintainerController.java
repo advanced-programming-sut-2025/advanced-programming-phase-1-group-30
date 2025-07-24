@@ -70,7 +70,7 @@ public class MaintainerController {
         new Pair<>(AnimalProductType.class, (ItemFactory<AnimalProductType>) (count, recipe) -> new AnimalProduct(count, recipe)),
         new Pair<>(CropType.class, (ItemFactory<CropType>) (count, recipe) -> new Crop(count, recipe)),
         new Pair<>(ForagingCropType.class, (ItemFactory<ForagingCropType>) (count, recipe) -> new ForagingCrop(count, recipe)),
-        new Pair<>(ForagingMineralType.class, (ItemFactory<ForagingMineralType>) (count, recipe) -> new ForagingMineral(count, recipe)),
+//        new Pair<>(ForagingMineralType.class, (ItemFactory<ForagingMineralType>) (count, recipe) -> new ForagingMineral(count, recipe)),
         new Pair<>(ForagingTreeType.class, (ItemFactory<ForagingTreeType>) (count, recipe) -> new ForagingTree(count, recipe)),
         new Pair<>(ForagingSeedType.class, (ItemFactory<ForagingSeedType>) (count, recipe) -> new ForagingSeed(count, recipe)),
         new Pair<>(FruitType.class, (ItemFactory<FruitType>) (count, recipe) -> new Fruit(count, recipe)),

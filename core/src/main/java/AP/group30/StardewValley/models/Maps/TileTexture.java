@@ -26,7 +26,11 @@ public enum TileTexture {
     OUTDOOR_GRASS1(GameAssetManager.assetManager.get(GameAssetManager.outdoorGrass1), GameAssetManager.assetManager.get(GameAssetManager.outdoorGrass1)),
     OUTDOOR_GRASS2(GameAssetManager.assetManager.get(GameAssetManager.outdoorGrass2), GameAssetManager.assetManager.get(GameAssetManager.outdoorGrass2)),
     OUTDOOR_GRASS3(GameAssetManager.assetManager.get(GameAssetManager.outdoorGrass3), GameAssetManager.assetManager.get(GameAssetManager.outdoorGrass3)),
-    OUTDOOR_GRASS4(GameAssetManager.assetManager.get(GameAssetManager.outdoorGrass4), GameAssetManager.assetManager.get(GameAssetManager.outdoorGrass4)),;
+    OUTDOOR_GRASS4(GameAssetManager.assetManager.get(GameAssetManager.outdoorGrass4), GameAssetManager.assetManager.get(GameAssetManager.outdoorGrass4)),
+    Stones(GameAssetManager.assetManager.get(GameAssetManager.stones), GameAssetManager.assetManager.get(GameAssetManager.stones)),
+    Stone(GameAssetManager.assetManager.get(GameAssetManager.stone), GameAssetManager.assetManager.get(GameAssetManager.stone)),
+    Stone1(GameAssetManager.assetManager.get(GameAssetManager.stone1), GameAssetManager.assetManager.get(GameAssetManager.stone1)),
+    Stone2(GameAssetManager.assetManager.get(GameAssetManager.stone2), GameAssetManager.assetManager.get(GameAssetManager.stone2));
 
 
     private final Texture texture;
