@@ -1,7 +1,9 @@
 package AP.group30.StardewValley.models.Items;
 
+import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.physics.box2d.joints.PrismaticJoint;
 
 public enum ItemTexture {
 
@@ -134,6 +136,25 @@ public enum ItemTexture {
     JELLY(GameAssetManager.assetManager.get(GameAssetManager.jelly)),
     SMOKED_FISH(GameAssetManager.assetManager.get(GameAssetManager.smokedFish)),
     METAL_BAR(GameAssetManager.assetManager.get(GameAssetManager.metalBar)),
+
+    QUARTZ(GameAssetManager.assetManager.get(GameAssetManager.quartz)),
+    EARTH_CRYSTAL(GameAssetManager.assetManager.get(GameAssetManager.earth_crystal)),
+    FROZEN_TEAR(GameAssetManager.assetManager.get(GameAssetManager.frozen_tear)),
+    FIRE_QUARTZ(GameAssetManager.assetManager.get(GameAssetManager.fire_quartz)),
+    EMERALD(GameAssetManager.assetManager.get(GameAssetManager.emerald)),
+    AQUAMARINE(GameAssetManager.assetManager.get(GameAssetManager.aquamarine)),
+    RUBY(GameAssetManager.assetManager.get(GameAssetManager.ruby)),
+    AMETHYST(GameAssetManager.assetManager.get(GameAssetManager.amethyst)),
+    TOPAZ(GameAssetManager.assetManager.get(GameAssetManager.topaz)),
+    JADE(GameAssetManager.assetManager.get(GameAssetManager.jade)),
+    DIAMOND(GameAssetManager.assetManager.get(GameAssetManager.diamond)),
+    PRISMATIC_SHARD(GameAssetManager.assetManager.get(GameAssetManager.prismatic_shard)),
+    COPPER(GameAssetManager.assetManager.get(GameAssetManager.copper)),
+    IRON(GameAssetManager.assetManager.get(GameAssetManager.iron)),
+    GOLD(GameAssetManager.assetManager.get(GameAssetManager.gold)),
+    IRIDIUM(GameAssetManager.assetManager.get(GameAssetManager.iridium)),
+    STONE2(GameAssetManager.assetManager.get(GameAssetManager.stone2));
+  
     HAY(GameAssetManager.assetManager.get(GameAssetManager.hay)),
 
     SALMON(GameAssetManager.assetManager.get(GameAssetManager.salmon)),

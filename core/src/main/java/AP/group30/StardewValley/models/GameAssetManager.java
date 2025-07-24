@@ -82,8 +82,29 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> bambooPole = new AssetDescriptor<>("Tools/Fishing_Pole/Bamboo_Pole.png", Texture.class);
 
     public static final AssetDescriptor<Texture> wood = new AssetDescriptor<>("item/resource/Wood.png", Texture.class);
-    public static final AssetDescriptor<Texture> stone = new AssetDescriptor<>("item/resource/Stone.png", Texture.class);
+    public static final AssetDescriptor<Texture> stone = new AssetDescriptor<>("Stardew_Valley_Images/Rock/Stone_Index760.png", Texture.class);
     public static final AssetDescriptor<Texture> stones = new AssetDescriptor<>("item/resource/Stones.png", Texture.class);
+    public static final AssetDescriptor<Texture> stone1 = new AssetDescriptor<>("Stardew_Valley_Images/Rock/Farm_Boulder.png", Texture.class);
+    public static final AssetDescriptor<Texture> stone2 = new AssetDescriptor<>("Stardew_Valley_Images/Rock/Quarry_Boulder.png", Texture.class);
+    public static final AssetDescriptor<Texture> quartz = new AssetDescriptor<>("Stardew_Valley_Images/Mineral/Quartz.png", Texture.class);
+    public static final AssetDescriptor<Texture> earth_crystal = new AssetDescriptor<>("Stardew_Valley_Images/Mineral/Earth_Crystal.png", Texture.class);
+    public static final AssetDescriptor<Texture> frozen_tear = new AssetDescriptor<>("Stardew_Valley_Images/Mineral/Frozen_Tear.png", Texture.class);
+    public static final AssetDescriptor<Texture> fire_quartz = new AssetDescriptor<>("Stardew_Valley_Images/Mineral/Fire_Quartz.png", Texture.class);
+    public static final AssetDescriptor<Texture> emerald = new AssetDescriptor<>("Stardew_Valley_Images/Gem/Emerald.png", Texture.class);
+    public static final AssetDescriptor<Texture> aquamarine = new AssetDescriptor<>("Stardew_Valley_Images/Gem/Aquamarine.png", Texture.class);
+    public static final AssetDescriptor<Texture> ruby = new AssetDescriptor<>("Stardew_Valley_Images/Gem/Ruby.png", Texture.class);
+    public static final AssetDescriptor<Texture> amethyst = new AssetDescriptor<>("Stardew_Valley_Images/Gem/Amethyst.png", Texture.class);
+    public static final AssetDescriptor<Texture> topaz = new AssetDescriptor<>("Stardew_Valley_Images/Gem/Topaz.png", Texture.class);
+    public static final AssetDescriptor<Texture> jade = new AssetDescriptor<>("Stardew_Valley_Images/Gem/Jade.png", Texture.class);
+    public static final AssetDescriptor<Texture> diamond = new AssetDescriptor<>("Stardew_Valley_Images/Gem/Diamond.png", Texture.class);
+    public static final AssetDescriptor<Texture> prismatic_shard = new AssetDescriptor<>("Stardew_Valley_Images/Gem/Prismatic_Shard.png", Texture.class);
+    public static final AssetDescriptor<Texture> copper = new AssetDescriptor<>("Stardew_Valley_Images/Resource/Copper_Ore.png", Texture.class);
+    public static final AssetDescriptor<Texture> iron = new AssetDescriptor<>("Stardew_Valley_Images/Resource/Iron_Ore.png", Texture.class);
+    public static final AssetDescriptor<Texture> gold = new AssetDescriptor<>("Stardew_Valley_Images/Resource/Gold_Ore.png", Texture.class);
+    public static final AssetDescriptor<Texture> iridium = new AssetDescriptor<>("Stardew_Valley_Images/Resource/Iridium_Ore.png", Texture.class);
+
+
+
 
     public static final AssetDescriptor<Texture> tree = new AssetDescriptor<>("tree/tree.png", Texture.class);
     public static final AssetDescriptor<Texture> apricot_tree = new AssetDescriptor<>("tree/Apricot.png", Texture.class);
@@ -248,6 +269,8 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> jelly = new AssetDescriptor<>("item/ArtisanGoods/Jelly.png", Texture.class);
     public static final AssetDescriptor<Texture> smokedFish = new AssetDescriptor<>("item/ArtisanGoods/Smoked_Fish.png", Texture.class);
     public static final AssetDescriptor<Texture> metalBar = new AssetDescriptor<>("item/ArtisanGoods/Metal_Bar.png", Texture.class);
+
+    public static final AssetDescriptor<Texture> builtGreenhouse = new AssetDescriptor<>("Stardew_Valley_Images/Greenhouse/GreenhouseBuilt.png", Texture.class);
 
     public static final AssetDescriptor<Texture> cowFront1 = new AssetDescriptor<>("output_squares/Cow0.png", Texture.class);
     public static final AssetDescriptor<Texture> cowFront2 = new AssetDescriptor<>("output_squares/Cow1.png", Texture.class);
@@ -649,6 +672,26 @@ public class GameAssetManager {
         assetManager.load(metalBar);
         assetManager.load(mead);
         assetManager.load(wine);
+        assetManager.load(stone1);
+        assetManager.load(stone2);
+
+        assetManager.load(quartz);
+        assetManager.load(earth_crystal);
+        assetManager.load(frozen_tear);
+        assetManager.load(fire_quartz);
+        assetManager.load(emerald);
+        assetManager.load(aquamarine);
+        assetManager.load(ruby);
+        assetManager.load(amethyst);
+        assetManager.load(topaz);
+        assetManager.load(jade);
+        assetManager.load(diamond);
+        assetManager.load(prismatic_shard);
+        assetManager.load(copper);
+        assetManager.load(iron);
+        assetManager.load(gold);
+        assetManager.load(iridium);
+        assetManager.load(builtGreenhouse);
 
         assetManager.load(cowFront1);
         assetManager.load(cowFront2);

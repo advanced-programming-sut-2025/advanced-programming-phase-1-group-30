@@ -12,6 +12,8 @@ import AP.group30.StardewValley.models.Buildings.Hut;
 import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.GameObjects;
+import AP.group30.StardewValley.models.Items.Item;
+import AP.group30.StardewValley.models.Items.Products.*;
 import AP.group30.StardewValley.models.Items.Products.ForagingSeed;
 import AP.group30.StardewValley.models.Items.Products.Stone;
 import AP.group30.StardewValley.models.Items.Products.Tree;
@@ -128,6 +130,7 @@ public class GameScreen implements Screen {
 
         entities.add(player);
         entities.add(game.getHut());
+        entities.add(game.getGreenHouse());
 
         x = Gdx.graphics.getWidth() * 1.2f;
         y = Gdx.graphics.getHeight() * 1.4f;
@@ -542,7 +545,7 @@ public class GameScreen implements Screen {
         if (moved) {
             player.setMoving(true);
             Tile tile = getTileUnderPlayer(proposedX, proposedY);
-            if (tile.getType().equals(TileTypes.WATER)) {
+            if (tile.getType().equals(TileTypes.WATER) || (tile.getType().equals(TileTypes.QUARRY) && tile.getItem() instanceof ForagingMineral)) {
                 return;
             }
 
@@ -553,6 +556,11 @@ public class GameScreen implements Screen {
                 if (player.getPlayerRect().overlaps(game.getHut().getRectangle())) {
                     collides = true;
                 }
+
+                if (player.getPlayerRect().overlaps(game.getGreenHouse().getRectangle())) {
+                    collides = true;
+                }
+
                 for (Tree tree : trees) {
                     if (player.getPlayerRect().overlaps(tree.getRect())) {
                         collides = true;
@@ -637,6 +645,10 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             DateAndWeatherController.cheatAdvanceTime("10");
         }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
+            game.getGreenHouse().buildGreenhouse();
+        }
     }
 
     private boolean hasWaterNeighbour() {
@@ -720,6 +732,8 @@ public class GameScreen implements Screen {
                         Stone stone = (Stone) tile.getItem();
                         stones.add(stone);
                         entities.add(stone);
+                    } else if (tile.getItem() instanceof ForagingMineral) {
+                        entities.add((ForagingMineral)tile.getItem());
                     }
                 }
             }

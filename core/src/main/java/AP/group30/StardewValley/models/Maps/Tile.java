@@ -1,6 +1,7 @@
 package AP.group30.StardewValley.models.Maps;
 
 import AP.group30.StardewValley.models.App;
+import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.Item;
 import AP.group30.StardewValley.models.Items.Products.*;
 import AP.group30.StardewValley.models.TimeAndDate.Season;
@@ -63,7 +64,7 @@ public class Tile {
             case "greenhouse":
                 return new Tile(x, y, TileTypes.GREENHOUSE, false, false, id, TileTexture.DIRT.getTexture(), TileTexture.DIRT.getWinterTexture());
             case "quarry":
-                return new Tile(x, y, TileTypes.QUARRY, true, false, id, TileTexture.DIRT.getTexture(), TileTexture.DIRT.getWinterTexture());
+                return new Tile(x, y, TileTypes.QUARRY, true, true, id, TileTexture.DIRT.getTexture(), TileTexture.DIRT.getWinterTexture());
             case "blacksmith":
                 return new Tile(x, y, TileTypes.BLACKSMITH, true, true, id, TileTexture.DIRT.getTexture(), TileTexture.DIRT.getWinterTexture());
             case "carpenters-shop":
@@ -156,66 +157,73 @@ public class Tile {
         if(tile.getType().equals(TileTypes.QUARRY)) {
             Random random = new Random();
             int randomItem = random.nextInt(67);
-            int randomItem1 = random.nextInt(10);
+            int randomItem1 = random.nextInt(2);
 
-            if(randomItem1 == 0) {
+            if (randomItem1 < 1) {
                 if (randomItem < 2) {
-                    tile.setItem(new ForagingMineral(1, ForagingMineralType.QUARTZ));
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.QUARTZ, tile.getX() * 32, (60 - tile.getY()) * 32, GameAssetManager.assetManager.get(GameAssetManager.quartz)));
                     //tile.changeWalkable();
                 } else if (randomItem < 4) {
-                    tile.setItem(new ForagingMineral(1, ForagingMineralType.EARTH_CRYSTAL));
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.EARTH_CRYSTAL, tile.getX() * 32, (60 - tile.getY()) * 32, GameAssetManager.assetManager.get(GameAssetManager.earth_crystal)));
                     //tile.changeWalkable();
                 } else if (randomItem < 6) {
-                    tile.setItem(new ForagingMineral(1, ForagingMineralType.FROZEN_TEAR));
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.FROZEN_TEAR, tile.getX() * 32, (60 - tile.getY()) * 32, GameAssetManager.assetManager.get(GameAssetManager.frozen_tear)));
                     //tile.changeWalkable();
                 } else if (randomItem < 8) {
-                    tile.setItem(new ForagingMineral(1, ForagingMineralType.FIRE_QUARTZ));
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.FIRE_QUARTZ, tile.getX() * 32, (60 - tile.getY()) * 32, GameAssetManager.assetManager.get(GameAssetManager.fire_quartz)));
                     //tile.changeWalkable();
                 } else if (randomItem < 10) {
-                    tile.setItem(new ForagingMineral(1, ForagingMineralType.EMERALD));
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.EMERALD, tile.getX() * 32, (60 - tile.getY()) * 32, GameAssetManager.assetManager.get(GameAssetManager.emerald)));
                     //tile.changeWalkable();
                 } else if (randomItem < 12) {
-                    tile.setItem(new ForagingMineral(1, ForagingMineralType.AQUAMARINE));
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.AQUAMARINE, tile.getX() * 32, (60 - tile.getY()) * 32, GameAssetManager.assetManager.get(GameAssetManager.aquamarine)));
                     //tile.changeWalkable();
                 } else if (randomItem < 14) {
-                    tile.setItem(new ForagingMineral(1, ForagingMineralType.RUBY));
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.RUBY, tile.getX() * 32, (60 - tile.getY()) * 32, GameAssetManager.assetManager.get(GameAssetManager.ruby)));
                     //tile.changeWalkable();
                 } else if (randomItem < 16) {
-                    tile.setItem(new ForagingMineral(1, ForagingMineralType.AMETHYST));
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.AMETHYST, tile.getX() * 32, (60 - tile.getY()) * 32, GameAssetManager.assetManager.get(GameAssetManager.amethyst)));
                     //tile.changeWalkable();
                 } else if (randomItem < 18) {
-                    tile.setItem(new ForagingMineral(1, ForagingMineralType.TOPAZ));
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.TOPAZ, tile.getX() * 32, (60 - tile.getY()) * 32, GameAssetManager.assetManager.get(GameAssetManager.topaz)));
                     //tile.changeWalkable();
                 } else if (randomItem < 20) {
-                    tile.setItem(new ForagingMineral(1, ForagingMineralType.JADE));
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.JADE, tile.getX() * 32, (60 - tile.getY()) * 32, GameAssetManager.assetManager.get(GameAssetManager.jade)));
                     //tile.changeWalkable();
                 } else if (randomItem < 21) {
-                    tile.setItem(new ForagingMineral(1, ForagingMineralType.DIAMOND));
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.DIAMOND, tile.getX() * 32, (60 - tile.getY()) * 32, GameAssetManager.assetManager.get(GameAssetManager.diamond)));
                     //tile.changeWalkable();
                 } else if (randomItem < 22) {
-                    tile.setItem(new ForagingMineral(1, ForagingMineralType.PRISMATIC_SHARED));
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.PRISMATIC_SHARED, tile.getX() * 32, (60 - tile.getY()) * 32, GameAssetManager.assetManager.get(GameAssetManager.prismatic_shard)));
                     //tile.changeWalkable();
                 } else if (randomItem < 32) {
-                    tile.setItem(new ForagingMineral(1, ForagingMineralType.COPPER));
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.COPPER, tile.getX() * 32, (60 - tile.getY()) * 32, GameAssetManager.assetManager.get(GameAssetManager.copper)));
                     //tile.changeWalkable();
                 } else if (randomItem < 37) {
-                    tile.setItem(new ForagingMineral(1, ForagingMineralType.IRON));
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.IRON, tile.getX() * 32, (60 - tile.getY()) * 32, GameAssetManager.assetManager.get(GameAssetManager.iron)));
                     //tile.changeWalkable();
                 } else if (randomItem < 40) {
-                    tile.setItem(new ForagingMineral(1, ForagingMineralType.GOLD));
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.GOLD, tile.getX() * 32, (60 - tile.getY()) * 32, GameAssetManager.assetManager.get(GameAssetManager.gold)));
                     //tile.changeWalkable();
                 } else if (randomItem < 42) {
-                    tile.setItem(new ForagingMineral(1, ForagingMineralType.IRIDIUM));
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.IRIDIUM, tile.getX() * 32, (60 - tile.getY()) * 32, GameAssetManager.assetManager.get(GameAssetManager.iridium)));
                     //tile.changeWalkable();
                 } else if (randomItem < 47) {
-                    tile.setItem(new ForagingMineral(1, ForagingMineralType.COAL));
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.COAL, tile.getX() * 32, (60 - tile.getY()) * 32, GameAssetManager.assetManager.get(GameAssetManager.coal)));
+                    //tile.changeWalkable();
+                } else if (randomItem < 52) {
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.STONE, tile.getX() * 32, (60 - tile.getY()) * 32, GameAssetManager.assetManager.get(GameAssetManager.stones)));
+                    //tile.changeWalkable();
+                } else if (randomItem < 57) {
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.STONE, tile.getX() * 32, (60 - tile.getY()) * 32, GameAssetManager.assetManager.get(GameAssetManager.stone1)));
                     //tile.changeWalkable();
                 } else if (randomItem < 67) {
-                    tile.setItem(new ForagingMineral(1, ForagingMineralType.STONE));
+                    tile.setItem(new ForagingMineral(1, ForagingMineralType.STONE, tile.getX() * 32, (60 - tile.getY()) * 32, GameAssetManager.assetManager.get(GameAssetManager.stone2)));
                     //tile.changeWalkable();
                 }
+            } else {
+                tile.setItem(new ForagingMineral(1, ForagingMineralType.STONE, tile.getX() * 32, (60 - tile.getY()) * 32, GameAssetManager.assetManager.get(GameAssetManager.stone2)));
             }
-
         }
     }
 

@@ -38,6 +38,7 @@ public class Game {
     private final Ranch ranch;
     private final Saloon saloon;
     private Hut hut;
+    private GreenHouse greenHouse;
     private java.util.Map<ItemsInteface, Integer> dailyShopCounter = new java.util.HashMap<>();
 
     public Blacksmith getBlacksmith() {
@@ -94,6 +95,7 @@ public class Game {
         this.ranch = new Ranch(5, 14, 32, 54);
         this.saloon = new Saloon(7, 6, 70, 52);
         this.hut = new Hut(5, 12, 63, 51);
+        this.greenHouse = new GreenHouse(8, 8, 31, 46);
         buildings.add(blacksmith);
         buildings.add(carpenter);
         buildings.add(fishShop);
@@ -180,5 +182,9 @@ public class Game {
 
     public Hut getHut() {
         return hut;
+    }
+
+    public GreenHouse getGreenHouse() {
+        return greenHouse;
     }
 }
