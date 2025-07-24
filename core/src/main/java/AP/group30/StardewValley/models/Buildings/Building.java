@@ -38,6 +38,8 @@ public class Building implements GameObjects {
         this.startY = startY;
         if (this instanceof Hut) {
             this.rectangle = new Rectangle(startX * 32, startY * 32, width * 32, height * 32);
+        } else if (this instanceof GreenHouse){
+            this.rectangle = new Rectangle(startX * 32, startY * 32, width * 32, height * 32);
         } else {
             this.rectangle = new Rectangle((startX - 1) * 32, startY * 32, (width + 3) * 32, height * 32);
         }
@@ -130,21 +132,13 @@ public class Building implements GameObjects {
                 }
             }
         }
-        Texture t = App.getCurrentGame().getCurrentTime().getSeason().equals(Season.WINTER) ? winterTexture : texture;
-        if (this instanceof Hut) {
-            batch.draw(texture,
-                map.getTiles()[startTIleX - 1][startTIleY + 1].getX() * 32,
-                map.getTiles()[startTIleX][startTIleY].getY() * 32,
-                (endTIleX - startTIleX + 3) * 32,
-                (endTIleY - startTIleY + 4) * 32
-            );
-        } else {
-            batch.draw(texture,
-                map.getTiles()[startTIleX - 1][startTIleY + 1].getX() * 32,
-                map.getTiles()[startTIleX][startTIleY].getY() * 32,
-                (endTIleX - startTIleX + 3) * 32,
-                (endTIleY - startTIleY + 4) * 32
-            );
-        }
+
+        batch.draw(texture,
+            map.getTiles()[startTIleX - 1][startTIleY + 1].getX() * 32,
+            map.getTiles()[startTIleX][startTIleY].getY() * 32,
+            (endTIleX - startTIleX + 3) * 32,
+            (endTIleY - startTIleY + 4) * 32
+        );
+
     }
 }

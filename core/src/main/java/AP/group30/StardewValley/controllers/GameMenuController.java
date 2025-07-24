@@ -452,6 +452,7 @@ public class GameMenuController {
                             }
                             GameMenu.printResult(targetTile.getItem().getName() + " successfully added to your backpack");
                             player.increaseMining(10);
+                            RegisterMenu.gameScreen.entities.remove(targetTile.getItem());
                             targetTile.setItem(null);
                         } else {
                             GameMenu.printResult("You swing your pickaxe... but there's nothing to mine here!");
