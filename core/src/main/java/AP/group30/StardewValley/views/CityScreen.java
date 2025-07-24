@@ -15,6 +15,7 @@ import AP.group30.StardewValley.models.Items.Tools.Tool;
 import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Maps.Tile;
 import AP.group30.StardewValley.models.Maps.TileTypes;
+import AP.group30.StardewValley.models.Maps.Weather;
 import AP.group30.StardewValley.models.Players.Direction;
 import AP.group30.StardewValley.models.Players.NPC.*;
 import AP.group30.StardewValley.models.Players.Player;
@@ -55,6 +56,7 @@ public class CityScreen implements Screen {
     Texture whitePixelTexture;
     BitmapFont font = (new Skin(Gdx.files.internal("skin/pixthulhu-ui.json")).getFont("font"));
     private float stateTime = 0;
+    private RainBackground rainBackground;
 
     private float x;
     private float y;
@@ -96,7 +98,7 @@ public class CityScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.zoom = 1f;
-
+        rainBackground = new RainBackground(camera);
         Gdx.input.setInputProcessor(null);
         grassMap = GameScreen.generateGrassMap(tiles, grassMap, random);
         inventoryScreen = new InventoryScreen(batch, Main.getMain().skin);
@@ -138,14 +140,12 @@ public class CityScreen implements Screen {
         GameScreen.renderWallsAroundMap(tiles, batch);
         GameScreen.renderMap(batch, map);
         GameScreen.renderEntities(batch, map, entities);
+        renderNPCs(batch, stateTime);
         if (game.getCurrentTime().getHour() >= 18) {
             batch.setColor(0, 0, 0, 0.6f);
-            batch.draw(whitePixelTexture, camera.position.x - Gdx.graphics.getWidth() / 2f, camera.position.y - Gdx.graphics.getHeight() / 2f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            batch.draw(whitePixelTexture, camera.position.x - Gdx.graphics.getWidth() / 2f - 50, camera.position.y - Gdx.graphics.getHeight() / 2f - 50, Gdx.graphics.getWidth() * 1.2f, Gdx.graphics.getHeight() * 1.2f);
             batch.setColor(Color.WHITE);
         }
-        GameScreen.renderEnergyBar(player, camera, energyBar, batch, shapeRenderer);
-        GameScreen.renderTime(batch, camera, clock, font, game);
-        renderNPCs(batch, stateTime);
         if (!isAnyMenuOpened()) {
             handleInput(delta);
             if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
@@ -169,6 +169,16 @@ public class CityScreen implements Screen {
                 questScreen.toggle();
             }
         }
+        if (App.getCurrentGame().getCurrentWeather().equals(Weather.RAIN)) {
+            rainBackground.updateAndRender(delta, batch);
+        } else if (App.getCurrentGame().getCurrentWeather().equals(Weather.STORM)) {
+            rainBackground.updateAndRender(delta, batch);
+            batch.setColor(0, 0, 0, 0.6f);
+            batch.draw(whitePixelTexture, camera.position.x - Gdx.graphics.getWidth() / 2f - 50, camera.position.y - Gdx.graphics.getHeight() / 2f - 50, Gdx.graphics.getWidth() * 1.2f, Gdx.graphics.getHeight() * 1.2f);
+            batch.setColor(Color.WHITE);
+        }
+        GameScreen.renderEnergyBar(player, camera, energyBar, batch, shapeRenderer);
+        GameScreen.renderTime(batch, camera, clock, font, game);
         batch.end();
 
         inventoryScreen.render();
@@ -333,7 +343,11 @@ public class CityScreen implements Screen {
         Skin skin = GameAssetManager.assetManager.get(GameAssetManager.menuSkin);
         for (Building building : game.getBuildings()) {
             if (playerRect.overlaps(shopRect(building))) {
-                shopScreen = new ShopScreen(batch, skin, building.getItems(), building);
+                if (game.getCurrentTime().getHour() >= building.getStartHour() && game.getCurrentTime().getHour() <= building.getEndHour()) {
+                    shopScreen = new ShopScreen(batch, skin, building.getItems(), building.getNotAvailableItems(), building);
+                } else {
+                    System.out.println("Shop is closed! return at " + building.getStartHour());
+                }
             }
         }
         return shopScreen;

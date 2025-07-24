@@ -307,17 +307,14 @@ public class DateAndWeatherController {
         GameMenu.printResult(App.getCurrentGame().getCurrentTime().getSeason().getName());
     }
 
-    public static void cheatThor(String x, String y) {
-        int x1 = Integer.parseInt(x);
-        int y1 = Integer.parseInt(y);
-        Tile[][] tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
-        Tile tile = tiles[x1][y1];
-
+    public static void cheatThor(Tile tile) {
         if (tile.isPlanted() && !tile.getType().equals(TileTypes.GREENHOUSE)) {
             tile.setPlanted(false);
-            tile.setItem(new Item(1, "coal", 15, ItemTexture.WOOD.getTexture()));
-            tile.setCrop(null);
+            tile.setItem(new Item(1, "coal", 15, ItemTexture.COAL.getTexture()));
             tile.setType(TileTypes.DIRT);
+            tile.setTexture(TileTexture.DIRT.getTexture());
+            RegisterMenu.gameScreen.entities.remove(tile.getCrop());
+            tile.setCrop(null);
             GameMenu.printResult("Your crop turned into coal by the power of odin's son!");
         }
         else if (tile.getItem() instanceof Tree) {
@@ -325,7 +322,6 @@ public class DateAndWeatherController {
             tile.setType(TileTypes.DIRT);
         }
         GameMenu.printResult("Cheat code activated: Thor hits you with a lightning bolt!");
-
     }
 
     public static void Weather() {

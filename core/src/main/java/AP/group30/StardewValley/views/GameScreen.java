@@ -17,10 +17,7 @@ import AP.group30.StardewValley.models.Items.Products.Stone;
 import AP.group30.StardewValley.models.Items.Products.Tree;
 import AP.group30.StardewValley.models.Items.Tools.FishingPole;
 import AP.group30.StardewValley.models.Items.Tools.Tool;
-import AP.group30.StardewValley.models.Maps.Map;
-import AP.group30.StardewValley.models.Maps.Tile;
-import AP.group30.StardewValley.models.Maps.TileTexture;
-import AP.group30.StardewValley.models.Maps.TileTypes;
+import AP.group30.StardewValley.models.Maps.*;
 import AP.group30.StardewValley.models.Players.Direction;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.views.InGameMenus.*;
@@ -34,10 +31,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -65,6 +64,7 @@ public class GameScreen implements Screen {
     public static ArrayList<Tree> trees = new ArrayList<>();
     public static ArrayList<Stone> stones = new ArrayList<>();
     public ArrayList<GameObjects> entities = new ArrayList<>();
+    private RainBackground rainBackground;
 
     private OrthographicCamera camera;
     private final Game game;
@@ -81,7 +81,11 @@ public class GameScreen implements Screen {
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
     private TextField cheatField;
 
-
+    private Animation<TextureRegion> lightningAnimation;
+    private float lightningTimer = 0.0f;
+    private boolean lightningHit = false;
+    private Tile lightningTargetTile;
+    private float lightningCooldown = 0f;
 
     private final Map map;
     private final Tile[][] tiles;
@@ -121,6 +125,7 @@ public class GameScreen implements Screen {
         energyBar = GameAssetManager.assetManager.get(GameAssetManager.energyBar);
         Texture playerTexture = GameAssetManager.assetManager.get(GameAssetManager.player21);
         playerRegion = new TextureRegion(playerTexture);
+        lightningAnimation = new Animation<>(0.1f, GameAssetManager.getFront("lightning"));
 
         map = game.getCurrentPlayer().getMap();
         tiles = map.getTiles();
@@ -180,6 +185,7 @@ public class GameScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.zoom = 1f;
+        rainBackground = new RainBackground(camera);
 
         Gdx.input.setInputProcessor(null);
         grassMap = generateGrassMap(tiles, grassMap, random);
@@ -190,6 +196,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        TextureRegion lightningFrame = null;
+
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stateTime += delta;
@@ -235,11 +243,11 @@ public class GameScreen implements Screen {
 
         if (game.getCurrentTime().getHour() >= 18) {
             batch.setColor(0, 0, 0, 0.6f);
-            batch.draw(whitePixelTexture, camera.position.x - Gdx.graphics.getWidth() / 2f, camera.position.y - Gdx.graphics.getHeight() / 2f, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            batch.draw(whitePixelTexture, camera.position.x - Gdx.graphics.getWidth() / 2f - 50, camera.position.y - Gdx.graphics.getHeight() / 2f - 50, Gdx.graphics.getWidth() * 1.2f, Gdx.graphics.getHeight() * 1.2f);
             batch.setColor(Color.WHITE);
         }
-        renderEnergyBar(player, camera, energyBar, batch, shapeRenderer);
-        renderTime(batch, camera, clock, font, game);
+
+        renderLightning(delta);
 
         if (isFishing && fiveSecPassed && !fishingMiniGame.isVisible()) isFishing = false;
         if (Gdx.input.isKeyJustPressed(Input.Keys.Q) && isFishing) {
@@ -266,7 +274,16 @@ public class GameScreen implements Screen {
             }
         }
         updateToolAnimation(delta);
-
+        if (App.getCurrentGame().getCurrentWeather().equals(Weather.RAIN)) {
+            rainBackground.updateAndRender(delta, batch);
+        } else if (App.getCurrentGame().getCurrentWeather().equals(Weather.STORM)) {
+            rainBackground.updateAndRender(delta, batch);
+            batch.setColor(0, 0, 0, 0.6f);
+            batch.draw(whitePixelTexture, camera.position.x - Gdx.graphics.getWidth() / 2f - 50, camera.position.y - Gdx.graphics.getHeight() / 2f - 50, Gdx.graphics.getWidth() * 1.2f, Gdx.graphics.getHeight() * 1.2f);
+            batch.setColor(Color.WHITE);
+        }
+        renderEnergyBar(player, camera, energyBar, batch, shapeRenderer);
+        renderTime(batch, camera, clock, font, game);
         batch.end();
 
         Tile currentTile = getTileUnderPlayer(x, y);
@@ -293,6 +310,39 @@ public class GameScreen implements Screen {
 
         stage.act(delta);
         stage.draw();
+    }
+
+    private void renderLightning(float delta) {
+        if (!game.getCurrentWeather().equals(Weather.STORM)) return;
+
+        lightningCooldown -= delta;
+
+        // Try triggering lightning (if not currently striking and cooldown passed)
+        if (!lightningHit && lightningCooldown <= 0f) {
+            int triggerChance = MathUtils.random(200); // 1 in 200 chance
+            if (triggerChance == 1) {
+                lightningTargetTile = map.getTiles()[MathUtils.random(79)][MathUtils.random(59)];
+                DateAndWeatherController.cheatThor(lightningTargetTile);
+                lightningHit = true;
+                lightningTimer = 0f;
+                lightningCooldown = 3f; // Wait 3 seconds before trying again
+            }
+        }
+
+        // Draw the lightning if active
+        if (lightningHit && lightningTargetTile != null) {
+            lightningTimer += delta;
+            TextureRegion lightningFrame = lightningAnimation.getKeyFrame(lightningTimer);
+            float drawX = lightningTargetTile.getX() * 32;
+            float drawY = (60 - lightningTargetTile.getY()) * 32;
+
+            batch.draw(lightningFrame, drawX, drawY,
+                lightningFrame.getRegionWidth() * 2f, lightningFrame.getRegionHeight() * 4f);
+
+            if (lightningTimer >= lightningAnimation.getAnimationDuration()) {
+                lightningHit = false;
+            }
+        }
     }
 
     static int[][] generateGrassMap(Tile[][] tiles, int[][] grassMap, Random random) {
@@ -755,5 +805,11 @@ public class GameScreen implements Screen {
         shopRect.width = building.getRectangle().width;
         shopRect.height = building.getRectangle().height;
         return shopRect;
+    }
+
+    // True for rain and false for snow
+    private void renderRain(boolean rainOrSnow, float delta) {
+        Texture rain = rainOrSnow ? GameAssetManager.assetManager.get(GameAssetManager.rain) : GameAssetManager.assetManager.get(GameAssetManager.snow);
+
     }
 }
