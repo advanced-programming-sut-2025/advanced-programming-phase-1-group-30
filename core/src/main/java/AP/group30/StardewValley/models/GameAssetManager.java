@@ -32,6 +32,8 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> grass = new AssetDescriptor<>("tile/grass.png", Texture.class);
     public static final AssetDescriptor<Texture> winterGrass = new AssetDescriptor<>("tile/winter_grass.png", Texture.class);
     public static final AssetDescriptor<Texture> dirt = new AssetDescriptor<>("tile/dirt.png", Texture.class);
+    public static final AssetDescriptor<Texture> rain = new AssetDescriptor<>("lightning pictures/rain_drops-01.png", Texture.class);
+    public static final AssetDescriptor<Texture> snow = new AssetDescriptor<>("lightning pictures/Rain-PNG-File.png", Texture.class);
 
     public static final AssetDescriptor<Texture> player00 = new AssetDescriptor<>("player/00.png", Texture.class);
     public static final AssetDescriptor<Texture> player01 = new AssetDescriptor<>("player/01.png", Texture.class);
@@ -51,6 +53,15 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> winterDirt2 = new AssetDescriptor<>("tile/winter_dirt2.png", Texture.class);
     public static final AssetDescriptor<Texture> winterDirt3 = new AssetDescriptor<>("tile/winter_dirt3.png", Texture.class);
     public static final AssetDescriptor<Texture> winterDirt = new AssetDescriptor<>("tile/winter_dirt.png", Texture.class);
+    public static final AssetDescriptor<Texture> lightning1 = new AssetDescriptor<>("lightning pictures/lightning0.png", Texture.class);
+    public static final AssetDescriptor<Texture> lightning2 = new AssetDescriptor<>("lightning pictures/lightning1.png", Texture.class);
+    public static final AssetDescriptor<Texture> lightning3 = new AssetDescriptor<>("lightning pictures/lightning2.png", Texture.class);
+    public static final AssetDescriptor<Texture> lightning4 = new AssetDescriptor<>("lightning pictures/lightning3.png", Texture.class);
+    public static final AssetDescriptor<Texture> lightning5 = new AssetDescriptor<>("lightning pictures/lightning4.png", Texture.class);
+    public static final AssetDescriptor<Texture> lightning6 = new AssetDescriptor<>("lightning pictures/lightning5.png", Texture.class);
+    public static final AssetDescriptor<Texture> lightning7 = new AssetDescriptor<>("lightning pictures/lightning6.png", Texture.class);
+    public static final AssetDescriptor<Texture> lightning8 = new AssetDescriptor<>("lightning pictures/lightning7.png", Texture.class);
+
 
     public static final AssetDescriptor<Texture> insideHouse = new AssetDescriptor<>("Building/InsideHut.png", Texture.class);
 
@@ -122,6 +133,18 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> mushroom_tree = new AssetDescriptor<>("tree/Mushroom.png", Texture.class);
     public static final AssetDescriptor<Texture> wild_tree = new AssetDescriptor<>("tree/Wild.png", Texture.class);
     public static final AssetDescriptor<Texture> mystic_tree = new AssetDescriptor<>("tree/Mystic.png", Texture.class);
+    public static final AssetDescriptor<Texture> tree00 = new AssetDescriptor<>("tree/tree0.png", Texture.class);
+    public static final AssetDescriptor<Texture> tree01 = new AssetDescriptor<>("tree/tree1.png", Texture.class);
+    public static final AssetDescriptor<Texture> tree02 = new AssetDescriptor<>("tree/tree2.png", Texture.class);
+    public static final AssetDescriptor<Texture> tree03 = new AssetDescriptor<>("tree/tree3.png", Texture.class);
+    public static final AssetDescriptor<Texture> tree10 = new AssetDescriptor<>("tree/tree(2)0.png", Texture.class);
+    public static final AssetDescriptor<Texture> tree11 = new AssetDescriptor<>("tree/tree(2)1.png", Texture.class);
+    public static final AssetDescriptor<Texture> tree12 = new AssetDescriptor<>("tree/tree(2)2.png", Texture.class);
+    public static final AssetDescriptor<Texture> tree13 = new AssetDescriptor<>("tree/tree(2)3.png", Texture.class);
+    public static final AssetDescriptor<Texture> tree20 = new AssetDescriptor<>("tree/tree(3)0.png", Texture.class);
+    public static final AssetDescriptor<Texture> tree21 = new AssetDescriptor<>("tree/tree(3)1.png", Texture.class);
+    public static final AssetDescriptor<Texture> tree22 = new AssetDescriptor<>("tree/tree(3)2.png", Texture.class);
+    public static final AssetDescriptor<Texture> tree23 = new AssetDescriptor<>("tree/tree(3)3.png", Texture.class);
 
     public static final AssetDescriptor<Texture> refrigerator = new AssetDescriptor<>("Inventory/Refrigerator.png", Texture.class);
 
@@ -534,6 +557,30 @@ public class GameAssetManager {
         assetManager.load(playerInfo);
         assetManager.load(tapperIcon);
 
+        assetManager.load(tree00);
+        assetManager.load(tree01);
+        assetManager.load(tree02);
+        assetManager.load(tree03);
+        assetManager.load(tree10);
+        assetManager.load(tree11);
+        assetManager.load(tree12);
+        assetManager.load(tree13);
+        assetManager.load(tree20);
+        assetManager.load(tree21);
+        assetManager.load(tree22);
+        assetManager.load(tree23);
+
+        assetManager.load(lightning1);
+        assetManager.load(lightning2);
+        assetManager.load(lightning3);
+        assetManager.load(lightning4);
+        assetManager.load(lightning5);
+        assetManager.load(lightning6);
+        assetManager.load(lightning7);
+        assetManager.load(lightning8);
+        assetManager.load(snow);
+        assetManager.load(rain);
+
         assetManager.load(insideHouse);
         assetManager.load(refrigerator);
         assetManager.load(barnInterior);
@@ -828,7 +875,7 @@ public class GameAssetManager {
         assetManager.load(rabbitEating2);
         assetManager.load(rabbitEating3);
         assetManager.load(rabbitEating4);
-      
+
         assetManager.load(angler);
         assetManager.load(blueDiscus);
         assetManager.load(crimsonfish);
@@ -901,6 +948,16 @@ public class GameAssetManager {
                 new TextureRegion(assetManager.get(rabbitFront2)),
                 new TextureRegion(assetManager.get(rabbitFront3)),
                 new TextureRegion(assetManager.get(rabbitFront4))
+            }; break;
+            case "lightning": front = new TextureRegion[] {
+                new TextureRegion(assetManager.get(lightning1)),
+                new TextureRegion(assetManager.get(lightning2)),
+                new TextureRegion(assetManager.get(lightning3)),
+                new TextureRegion(assetManager.get(lightning4)),
+                new TextureRegion(assetManager.get(lightning5)),
+                new TextureRegion(assetManager.get(lightning6)),
+                new TextureRegion(assetManager.get(lightning7)),
+                new TextureRegion(assetManager.get(lightning8)),
             }; break;
         }
         return front;

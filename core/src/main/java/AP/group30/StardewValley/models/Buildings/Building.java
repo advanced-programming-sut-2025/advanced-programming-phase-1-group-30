@@ -2,12 +2,14 @@ package AP.group30.StardewValley.models.Buildings;
 
 import java.util.ArrayList;
 
+import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameObjects;
 import AP.group30.StardewValley.models.Items.Item;
 import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Maps.Tile;
 import AP.group30.StardewValley.models.Maps.TileTypes;
 import AP.group30.StardewValley.models.Players.NPC.Leah;
+import AP.group30.StardewValley.models.TimeAndDate.Season;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -24,8 +26,10 @@ public class Building implements GameObjects {
     private final int startHour;
     private final int endHour;
     Texture texture;
+    Texture winterTexture;
 
     private ArrayList<Item> items;
+    private ArrayList<Item> notAvailableItems;
 
     public Building(int height, int width, int startX, int startY, int startHour, int endHour, TileTypes tileType, Texture texture) {
         this.height = height;
@@ -43,8 +47,10 @@ public class Building implements GameObjects {
         this.startHour = startHour;
         this.endHour = endHour;
         this.texture = texture;
+//        this.winterTexture = winterTexture;
 
         this.items = new ArrayList<>();
+        this.notAvailableItems = new ArrayList<>();
     }
 
     public int getHeight() {
@@ -75,6 +81,9 @@ public class Building implements GameObjects {
     }
     public void addItem(Item item) {
         this.items.add(item);
+    }
+    public ArrayList<Item> getNotAvailableItems() {
+        return notAvailableItems;
     }
     public void removeItem(Item item) {
         this.items.remove(item);
@@ -124,7 +133,6 @@ public class Building implements GameObjects {
             }
         }
 
-
         batch.draw(texture,
             map.getTiles()[startTIleX - 1][startTIleY + 1].getX() * 32,
             map.getTiles()[startTIleX][startTIleY].getY() * 32,
@@ -132,8 +140,5 @@ public class Building implements GameObjects {
             (endTIleY - startTIleY + 4) * 32
         );
 
-
     }
-
-
 }

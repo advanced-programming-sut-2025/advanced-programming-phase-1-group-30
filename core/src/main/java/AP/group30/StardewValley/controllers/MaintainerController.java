@@ -59,6 +59,7 @@ import AP.group30.StardewValley.models.Items.Products.ShopProducts.RanchProducts
 import AP.group30.StardewValley.models.Items.Products.ShopProducts.SaloonProducts;
 import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Players.Player;
+import AP.group30.StardewValley.models.TimeAndDate.Season;
 import AP.group30.StardewValley.views.GameMenu;
 import AP.group30.StardewValley.views.StartMenus.RegisterMenu;
 
@@ -293,14 +294,19 @@ public class MaintainerController {
     private static void updateJojaMart() {
         JojaMart jojaMart = App.getCurrentGame().getJojaMart();
         jojaMart.removeItems();
+        jojaMart.getNotAvailableItems().clear();
         ArrayList<JojaMartCosts> items = new ArrayList<>(List.of(JojaMartCosts.values()));
         Collections.shuffle(items);
         Random rand = new Random();
+        int x = rand.nextInt(items.size()) + 5;
 
-        for (int i = 0; i < Math.min(rand.nextInt(items.size()) + 5, items.size()); i++) {
+        for (int i = 0; i < Math.min(x, items.size()); i++) {
             JojaMartCosts type = items.get(i);
-            int count = 1 + Math.max(rand.nextInt(type.getDailyLimit()), 10);
-            if (type.getSeason().equals(App.getCurrentGame().getCurrentTime().getSeason())) jojaMart.addItem(new JojaMartProducts(count, type));
+            int count = type.getDailyLimit();
+            if (type.getSeason().equals(App.getCurrentGame().getCurrentTime().getSeason()) || type.getSeason().equals(Season.ALL)) jojaMart.addItem(new JojaMartProducts(count, type));
+        } for (int i = x; i < items.size(); i++) {
+            JojaMartCosts type = items.get(i);
+            jojaMart.getNotAvailableItems().add(new JojaMartProducts(0, type));
         }
     }
 
@@ -311,7 +317,7 @@ public class MaintainerController {
         Collections.shuffle(items);
         Random rand = new Random();
 
-        for (int i = 0; i < items.size(); i++) {
+        for (int i = 0; i < rand.nextInt(items.size()); i++) {
             RanchCosts type = items.get(i);
             int count = 1 + Math.max(rand.nextInt(type.getDailyLimit()), 10);
             ranch.addItem(new RanchProducts(count, type));

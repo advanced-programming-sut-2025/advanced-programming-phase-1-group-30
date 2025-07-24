@@ -1,5 +1,6 @@
 package AP.group30.StardewValley.models.Items.Products;
 
+import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameObjects;
 import AP.group30.StardewValley.models.Maps.Map;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,6 +11,10 @@ public class Tree extends Product implements GameObjects {
     private final TreeType type;
     private boolean isHitByThunder;
     private Texture texture;
+    private Texture summerTexture;
+    private Texture springTexture;
+    private Texture fallTexture;
+    private Texture winterTexture;
     private float width, height;
     private Rectangle rect = new Rectangle();
     private int x, y;
@@ -18,9 +23,12 @@ public class Tree extends Product implements GameObjects {
         super(count, type.getName(), 0, type.getTexture());
         this.type = type;
         this.isHitByThunder = false;
-        this.texture = type.getTexture();
-        width = texture.getWidth();
-        height = texture.getHeight();
+        this.springTexture = type.getSpringTexture();
+        this.fallTexture = type.getFallTexture();
+        this.winterTexture = type.getWinterTexture();
+        this.summerTexture = type.getSummerTexture();
+        width = 90;
+        height = 160;
         this.x = x;
         this.y = y;
         rect.x = x + width / 4;
@@ -71,6 +79,11 @@ public class Tree extends Product implements GameObjects {
 
     @Override
     public void render(SpriteBatch batch, Map map) {
-        batch.draw(texture, x, y, width, height);
+        switch (App.getCurrentGame().getCurrentTime().getSeason()) {
+            case SPRING -> batch.draw(springTexture, x, y, width, height);
+            case SUMMER -> batch.draw(summerTexture, x, y, width, height);
+            case FALL -> batch.draw(fallTexture, x, y, width, height);
+            case WINTER -> batch.draw(winterTexture, x, y, width, height);
+        }
     }
 }

@@ -9,7 +9,7 @@ public class Saloon extends Building {
         super(height, width, startX, startY, 12, 12, TileTypes.THE_STARDROP_SALOON, BuildingTexture.SALOON.getTexture());
     }
     private final int startHour = 12;
-    private final int endHour = 12;
+    private final int endHour = 20;
 
     public int getStartHour() {
         return startHour;
