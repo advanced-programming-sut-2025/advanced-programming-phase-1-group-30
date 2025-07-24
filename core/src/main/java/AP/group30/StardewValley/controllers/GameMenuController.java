@@ -766,7 +766,6 @@ public class GameMenuController {
                     targetTile.setType(TileTypes.DIRT);
                     GameMenu.printResult("Tile type changed to Dirt!");
                 } else {
-//                    System.out.println(targetTile.getCrop().getName());
                     GameMenu.printResult("Nothing here to harvest!");
                 }
                 player.setEnergy(player.getEnergy() - 2 * (int) rate);
@@ -1055,7 +1054,6 @@ public class GameMenuController {
             if (item.getCount() == 0) {
                 player.getBackPack().getItems().remove(item);
             }
-            System.out.println();
         } else {
             GameMenu.printResult("There is no PLANT at (" + newX + ", " + newY + ")!!");
         }
@@ -1491,7 +1489,6 @@ public class GameMenuController {
             }
             item1.setCount(item1.getCount() - item.getWood());
             item2.setCount(item2.getCount() - item.getStone());
-            player.setMoney(player.getMoney() - item.getPrice());
             for (int i = x; i < x + item.getWidth(); i++) {
                 for (int j = (60 - y) - item.getHeight(); j < (60 - y); j++) {
                     if (barnORcoop == 1) {
@@ -1503,8 +1500,10 @@ public class GameMenuController {
             }
             if (coop == null) {
                 RegisterMenu.gameScreen.getEntities().add(barn);
+                player.getMap().getBuildings().add(barn);
             } else {
                 RegisterMenu.gameScreen.getEntities().add(coop);
+                player.getMap().getBuildings().add(coop);
             }
             if (barnORcoop == 0) {
                 GameMenu.printResult("Coop bought successfully!");
@@ -1537,16 +1536,9 @@ public class GameMenuController {
                 return;
             }
         }
-        if (player.getMoney() < animal3.getPrice()) {
-            GameMenu.printResult("You don't have enough money!");
-            return;
-        }
-        else if (player.getMoney() >= animal3.getPrice()) {
-            player.setMoney(player.getMoney() - animal3.getPrice());
-        }
+        int check = 0;
         switch (animal3) {
             case CHICKEN -> {
-                int check = 0;
                 for (Coop coop : player.getMap().getCoops()) {
                     if (coop.getCapacity() > coop.getAnimals().size()) {
                         Animal animal = new Chicken(800, name, 0, false, false, coop.getStartX() + coop.getAnimals().size(), coop.getStartY() - coop.getAnimals().size() - 1);
@@ -1563,7 +1555,6 @@ public class GameMenuController {
                 }
             }
             case DUCK -> {
-                int check = 0;
                 for (Coop coop : player.getMap().getCoops()) {
                     if (!coop.getType().equals("regular") && coop.getCapacity() > coop.getAnimals().size()) {
                         Animal animal = new Duck(1200, name, 0, false, false, coop.getStartX() + coop.getAnimals().size(), coop.getStartY() - coop.getAnimals().size() - 1);
@@ -1580,7 +1571,6 @@ public class GameMenuController {
                 }
             }
             case RABBIT -> {
-                int check = 0;
                 for (Coop coop : player.getMap().getCoops()) {
                     if (!coop.getType().equals("regular") && !coop.getType().equals("big") && coop.getCapacity() > coop.getAnimals().size()) {
 
@@ -1598,7 +1588,6 @@ public class GameMenuController {
                 }
             }
             case DINOSAUR -> {
-                int check = 0;
                 for (Coop coop : player.getMap().getCoops()) {
                     if (!coop.getType().equals("regular") && !coop.getType().equals("deluxe") && coop.getCapacity() > coop.getAnimals().size()) {
 
@@ -1615,7 +1604,6 @@ public class GameMenuController {
                 }
             }
             case COW -> {
-                int check = 0;
                 for (Barn barn : player.getMap().getBarns()) {
                     if (barn.getCapacity() > barn.getAnimals().size()) {
                         Animal animal = new Cow(1500, name, 0, false, false, barn.getStartX() + barn.getAnimals().size(), barn.getStartY() - barn.getAnimals().size() - 1);
@@ -1632,7 +1620,6 @@ public class GameMenuController {
                 }
             }
             case GOAT -> {
-                int check = 0;
                 for (Barn barn : player.getMap().getBarns()) {
                     if (!barn.getType().equals("regular") && barn.getCapacity() > barn.getAnimals().size()) {
 
@@ -1650,7 +1637,6 @@ public class GameMenuController {
                 }
             }
             case SHEEP -> {
-                int check = 0;
                 for (Barn barn : player.getMap().getBarns()) {
                     if (!barn.getType().equals("regular") && !barn.getType().equals("big") && barn.getCapacity() > barn.getAnimals().size()) {
 
@@ -1668,11 +1654,10 @@ public class GameMenuController {
                 }
             }
             case PIG -> {
-                int check = 0;
                 for (Barn barn : player.getMap().getBarns()) {
                     if (!barn.getType().equals("regular") && !barn.getType().equals("big") && barn.getCapacity() > barn.getAnimals().size()) {
 
-                        Animal animal = new Cow(16000, name, 0, false, false, barn.getStartX() + barn.getAnimals().size(), barn.getStartY() - barn.getAnimals().size() - 1);
+                        Animal animal = new Pig(16000, name, 0, false, false, barn.getStartX() + barn.getAnimals().size(), barn.getStartY() - barn.getAnimals().size() - 1);
                         barn.getAnimals().add(animal);
                         animal.setBarn(barn);
                         player.getAnimals().add(animal);
@@ -1686,6 +1671,18 @@ public class GameMenuController {
                 }
             }
         }
+
+        if (player.getMoney() < animal3.getPrice()) {
+            GameMenu.printResult("You don't have enough money!");
+            return;
+        }
+        else if (player.getMoney() >= animal3.getPrice()) {
+            player.setMoney(player.getMoney() - animal3.getPrice());
+        }
+
+        if (check == 1) {
+            GameMenu.printResult("Animal bought successfully!");
+        }
     }
     public static void pet(String name) {
         Player player = App.getCurrentGame().getCurrentPlayer();
@@ -1694,8 +1691,8 @@ public class GameMenuController {
 
         for (Animal animal : player.getAnimals()) {
             if (animal.getName().equals(name)) {
-                int animalX = animal.getX();
-                int animalY = animal.getY();
+                float animalX = animal.getX();
+                float animalY = animal.getY();
 
 
                 boolean isAdjacent = Math.abs(playerX - animalX) <= 1 &&
@@ -1771,8 +1768,8 @@ public class GameMenuController {
                         GameMenu.printResult("Tile is not walkable!");
                     }
                 } else {
-                    animal.setX(animal.getFirstX());
-                    animal.setY(animal.getFirstY());
+                    animal.setX((int)animal.getFirstX());
+                    animal.setY((int)animal.getFirstY());
                     animal.setOut(false);
                     GameMenu.printResult("Animal back to safety!");
                 }
@@ -1820,61 +1817,20 @@ public class GameMenuController {
             }
         }
     }
-    public static void sellAnimal(String name){
+    public static void sellAnimal(Animal animal){
         Player player = App.getCurrentGame().getCurrentPlayer();
-        for (Animal animal : player.getAnimals()) {
-            if (animal.getName().equals(name)) {
-                float cost = (float) (animal.getPrice() * ((double) animal.getFriendship() / 1000 + 0.3));
-                player.setMoney(player.getMoney() + (int) cost);
-                player.getAnimals().remove(animal);
-                if (animal.getBarn() != null) {
-                    animal.getBarn().getAnimals().remove(animal);
-                } else if (animal.getCoop() != null) {
-                    animal.getCoop().getAnimals().remove(animal);
-                }
-                GameMenu.printResult("Sold " + animal.getName() + " for: " + cost);
-                break;
-            }
+        float cost = (float) (animal.getPrice() * ((double) animal.getFriendship() / 1000 + 0.3));
+        player.setMoney(player.getMoney() + (int) cost);
+        player.getAnimals().remove(animal);
+        if (animal.getBarn() != null) {
+            animal.getBarn().getAnimals().remove(animal);
+        } else if (animal.getCoop() != null) {
+            animal.getCoop().getAnimals().remove(animal);
         }
+        GameMenu.printResult("Sold " + animal.getName() + " for: " + cost);
     }
-    public static void fishing(String fishingPole){
+    public static void fishing(){
         Player player = App.getCurrentGame().getCurrentPlayer();
-
-        FishingPole fishingPole2 = null;
-        for (Item item : player.getBackPack().getItems()) {
-            if (item.getClass() == FishingPole.class) {
-                fishingPole2 = (FishingPole) item;
-                break;
-            }
-        }
-
-        if (fishingPole2 == null) {
-            GameMenu.printResult("You don't have any fishing pole");
-            return;
-        }
-
-        if (!fishingPole2.getName().equals(fishingPole)) {
-            GameMenu.printResult("You don't have THIS fishing pole");
-            return;
-        }
-
-        if(App.getCurrentGame().getCurrentPlayer().isInCity()){
-            GameMenu.printResult("You can't fish in city!");
-            return;
-        }
-
-         Tile[][] tiles = App.getCurrentGame().getCurrentMap().getTiles();
-         if (!tiles[player.getX() + 1][player.getY() + 1].getType().equals(TileTypes.WATER) &&
-             !tiles[player.getX() + 1][player.getY()].getType().equals(TileTypes.WATER) &&
-             !tiles[player.getX() + 1][player.getY() - 1].getType().equals(TileTypes.WATER) &&
-             !tiles[player.getX()][player.getY() + 1].getType().equals(TileTypes.WATER) &&
-             !tiles[player.getX()][player.getY() - 1].getType().equals(TileTypes.WATER) &&
-             !tiles[player.getX() - 1][player.getY() + 1].getType().equals(TileTypes.WATER) &&
-             !tiles[player.getX() - 1][player.getY()].getType().equals(TileTypes.WATER) &&
-             !tiles[player.getX() - 1][player.getY() - 1].getType().equals(TileTypes.WATER)) {
-             GameMenu.printResult("You are not near water!");
-             return;
-         }
 
         ArrayList<FishType> fishTypes = new ArrayList<>();
         for (FishType fishType : FishType.values()) {
@@ -1895,41 +1851,35 @@ public class GameMenuController {
         else if (App.getCurrentGame().getCurrentWeather().equals(Weather.STORM)) M = 0.5;
         else M = 1.0;
         int skill = player.getFishing() / 100;
-        double pole = fishingPole2.getType().getPole();
+        FishingPole fishingPole = (FishingPole) player.getWield();
+        double pole = fishingPole.getType().getPole();
 
         int count = (int) Math.floor(R * M * (skill + 2)) + 1;
         count = Math.min(count, 6);
 
         double fishQuality = Math.floor((R * (skill + 2) * pole) / (7 - M));
 
-        Item fish = new Fish(count, fishType);
+        Fish fish = new Fish(count, fishType);
 
-        String quality;
         if (fishQuality <= 0.5) {
             fish.setCof(1);
-            quality = "Normal";
         }
         else if (0.5 < fishQuality && fishQuality <= 0.7) {
             fish.setCof(1.25);
-            quality = "Silver";
         }
         else if (0.7 < fishQuality && fishQuality <= 0.9) {
             fish.setCof(1.5);
-            quality = "Gold";
         }
         else {
             fish.setCof(2);
-            quality = "Iridium";
         }
 
-        if (player.getBackPack().getItems().size() + 1 >player.getBackPack().getType().getCapacity()) {
-            GameMenu.printResult("Opps! Your backpack is full!");
+        if (player.getBackPack().getItems().size() + 1 > player.getBackPack().getType().getCapacity()) {
             return;
         }
         App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(fish);
-        App.getCurrentGame().getCurrentPlayer().changeEnergy(-1 * fishingPole2.getType().getEnergyUsed());
+        App.getCurrentGame().getCurrentPlayer().changeEnergy(-1 * fishingPole.getType().getEnergyUsed());
         App.getCurrentGame().getCurrentPlayer().increaseFishing(5);
-        GameMenu.printResult("Wow! You got " + count + " " + quality + " " + fishType.getDisplayName());
     }
 
     public static String artisanUse(ArtisanGoodType item) {
@@ -2164,7 +2114,7 @@ public class GameMenuController {
                     GameMenu.printResult("Backpack upgraded to Large Backpack successfully");
                 }
                 else
-                    GameMenu.printResult("You can't update your backpack!");
+                    GameMenu.printResult("You can't updateGreenBar your backpack!");
                 return;
             }
             if (name.equals("Deluxe pack")) {
@@ -2175,7 +2125,7 @@ public class GameMenuController {
                     GameMenu.printResult("Backpack upgraded to Delux Backpack successfully");
                 }
                 else
-                    GameMenu.printResult("You can't update your backpack!");
+                    GameMenu.printResult("You can't updateGreenBar your backpack!");
                 return;
             }
 

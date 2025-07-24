@@ -2,12 +2,14 @@ package AP.group30.StardewValley.models.Animals;
 
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Buildings.RanchCosts;
+import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.Item;
 import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Items.Products.AnimalProductType;
 import AP.group30.StardewValley.models.Items.Tools.Shear;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.views.GameMenu;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.Random;
 
@@ -16,6 +18,8 @@ public class Sheep extends Animal {
     int daysPassed = 0;
     public Sheep(int price, String name, int friendship, boolean fedToday, boolean petToday, int x, int y) {
         super(price, name, friendship, fedToday, petToday, x, y, RanchCosts.SHEEP);
+        initAnimations(GameAssetManager.getBack("sheep"), GameAssetManager.getFront("sheep"), GameAssetManager.getLeft("sheep"),
+            GameAssetManager.getRight("sheep"), GameAssetManager.getEating("sheep"), new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.sheepFront1)));
     }
     @Override
     public void produceProduct() {

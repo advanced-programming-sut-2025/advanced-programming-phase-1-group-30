@@ -20,7 +20,7 @@ public class Main extends Game {
     public void create() {
         main = this;
         batch = new SpriteBatch();
-        skin = new Skin(Gdx.files.internal("skin/pixthulhu-ui.json"));
+        skin = new Skin(Gdx.files.internal("skin/LibGdx-Skin/NzSkin.json"));
         main.setScreen(new LoadingScreen(new RegisterMenu(skin)));
     }
 

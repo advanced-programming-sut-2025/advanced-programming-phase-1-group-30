@@ -2,12 +2,14 @@ package AP.group30.StardewValley.models.Animals;
 
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Buildings.RanchCosts;
+import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.Item;
 import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Items.Products.AnimalProductType;
 import AP.group30.StardewValley.models.Items.Tools.MilkPail;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.views.GameMenu;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import java.util.Random;
 
@@ -17,6 +19,8 @@ public class Goat extends Animal {
     int daysPassed = 0;
     public Goat(int price, String name, int friendship, boolean fedToday, boolean petToday, int x, int y) {
         super(price, name, friendship, fedToday, petToday, x, y, RanchCosts.GOAT);
+        initAnimations(GameAssetManager.getBack("goat"), GameAssetManager.getFront("goat"), GameAssetManager.getLeft("goat"),
+            GameAssetManager.getRight("goat"), GameAssetManager.getEating("goat"), new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.goatFront1)));
     }
     @Override
     public void produceProduct() {
@@ -32,7 +36,7 @@ public class Goat extends Animal {
                 qualityAssign(quality);
             } else {
                 if (rand < chance) {
-                    this.bigGoatMilk = new Item(1, "big goat goatMilk", AnimalProductType.GOAT_BIG_MILK.getPrice(), ItemTexture.WOOD.getTexture());
+                    this.bigGoatMilk = new Item(1, "big goat milk", AnimalProductType.GOAT_BIG_MILK.getPrice(), ItemTexture.WOOD.getTexture());
                     if (quality >= 0 && quality < 0.5) {
                         this.bigGoatMilk.setQuality("regular");
                         this.bigGoatMilk.setCof(1);
@@ -56,7 +60,7 @@ public class Goat extends Animal {
     }
 
     private void qualityAssign(double quality) {
-        this.goatMilk = new Item(1, "goat goatMilk", AnimalProductType.GOAT_MILK.getPrice(), ItemTexture.WOOD.getTexture());
+        this.goatMilk = new Item(1, "goat milk", AnimalProductType.GOAT_MILK.getPrice(), ItemTexture.WOOD.getTexture());
         if (quality >= 0 && quality < 0.5) {
             this.goatMilk.setQuality("regular");
             this.goatMilk.setCof(1);
