@@ -10,8 +10,6 @@ public class FishBrainTimed {
 
     private float blendFactor = 0f;
     private float oldY;
-    private float newY;
-    private FishMove nextMove;
 
     public FishBrainTimed(FishState state) {
         this.state = state;
@@ -35,7 +33,7 @@ public class FishBrainTimed {
         timeLeft -= delta;
         if (timeLeft <= 0) {
             oldY = state.y;
-            nextMove = moves[state.random.nextInt(moves.length)];
+            FishMove nextMove = moves[state.random.nextInt(moves.length)];
             blendFactor = 0f;
             timeLeft = MathUtils.random(1f, 2f);
 

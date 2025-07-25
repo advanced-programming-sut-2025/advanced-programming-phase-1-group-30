@@ -5,79 +5,79 @@ import com.badlogic.gdx.math.MathUtils;
 public interface FishMove {
     float update(FishState state, float delta);
 
-    FishMove COS_SOFT = (s, delta) -> {
-        s.time +=delta;
-        float range = (s.maxY - s.minY - s.size);
-        float center = s.minY;
+    FishMove COS_SOFT = (state, delta) -> {
+        state.time +=delta;
+        float range = (state.maxY - state.minY - state.size);
+        float center = state.minY;
         float speed = 0.5f;
-        float normalizedCos = (-MathUtils.cos(s.time * speed) + 1f) / 2f;
-        s.y = center + normalizedCos * range;
+        float normalizedCos = (-MathUtils.cos(state.time * speed) + 1f) / 2f;
+        state.y = center + normalizedCos * range;
 
-        return s.y;
+        return state.y;
     };
 
-    FishMove COS_HARD = (s, delta) -> {
-        s.time +=delta;
-        float range = (s.maxY - s.minY - s.size);
-        float center = s.minY;
+    FishMove COS_HARD = (state, delta) -> {
+        state.time +=delta;
+        float range = (state.maxY - state.minY - state.size);
+        float center = state.minY;
         float speed = 1f;
-        float normalizedCos = (-MathUtils.cos(s.time * speed) + 1f) / 2f;
-        s.y = center + normalizedCos * range;
+        float normalizedCos = (-MathUtils.cos(state.time * speed) + 1f) / 2f;
+        state.y = center + normalizedCos * range;
 
-        return s.y;
+        return state.y;
     };
 
-    FishMove EASE_TO_TARGET = (s, delta) -> {
-        if (Math.abs(s.y - s.targetY) < 2f ||
-            s.targetY == 0f) {
-            s.targetY = MathUtils.random(s.minY, s.maxY - s.size);
+    FishMove EASE_TO_TARGET = (state, delta) -> {
+        if (Math.abs(state.y - state.targetY) < 2f ||
+            state.targetY == 0f) {
+            state.targetY = MathUtils.random(state.minY, state.maxY - state.size);
         }
 
         float speed = 1f;
-        s.y += (s.targetY - s.y) * speed * delta;
-        s.y = MathUtils.clamp(s.y, s.minY, s.maxY - s.size);
+        state.y += (state.targetY - state.y) * speed * delta;
+        state.y = MathUtils.clamp(state.y, state.minY, state.maxY - state.size);
 
-        return s.y;
+        return state.y;
     };
 
-    FishMove ZIGZAG = (s, delta) -> {
-        s.time +=delta;
+    FishMove ZIGZAG = (state, delta) -> {
+        state.time +=delta;
         float period = 1f;
-        float phase = (s.time % period) / period;
+        float phase = (state.time % period) / period;
         float speed = 250f;
 
-        if (phase < 0.5f) s.vy = speed;
-        else s.vy = -speed;
+        if (phase < 0.5f) state.ySpeed = speed;
+        else state.ySpeed = -speed;
 
-        s.y += s.vy * delta;
-        s.y = MathUtils.clamp(s.y, s.minY, s.maxY - s.size);
+        state.y += state.ySpeed * delta;
+        state.y = MathUtils.clamp(state.y, state.minY, state.maxY - state.size);
 
-        return s.y;
+        return state.y;
     };
 
-    FishMove JITTER = (s, delta) -> {
+    FishMove JITTER = (state, delta) -> {
         float amp = 40f;
-        s.y += MathUtils.random(-amp, amp) * delta * 10f;
-        s.y = MathUtils.clamp(s.y, s.minY, s.maxY - s.size);
+        state.y += MathUtils.random(-amp, amp) * delta * 10f;
+        state.y = MathUtils.clamp(state.y, state.minY, state.maxY - state.size);
 
-        return s.y;
+        return state.y;
     };
 
-    FishMove BOUNCE = (s, delta) -> {
+    FishMove BOUNCE = (state, delta) -> {
         float gravity = -400f;
         float bounce = 250f;
 
-        s.vy += gravity * delta;
-        s.y += s.vy * delta;
+        state.ySpeed += gravity * delta;
+        state.y += state.ySpeed * delta;
 
-        if (s.y < s.minY) {
-            s.y = s.minY;
-            s.vy = bounce;
-        } else if (s.y > s.maxY - s.size) {
-            s.y = s.maxY - s.size;
-            s.vy = -bounce;
+        if (state.y < state.minY) {
+            state.y = state.minY;
+            state.ySpeed = bounce;
+        } else if (state.y > state.maxY - state.size) {
+            state.y = state.maxY - state.size;
+            state.ySpeed = -bounce;
         }
 
-        return s.y;
+        return state.y;
     };
 }

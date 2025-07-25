@@ -791,7 +791,7 @@ public class GameScreen implements Screen {
         craftingScreen = new CraftingScreen(batch, Main.getMain().skin);
         hut = new HutScreen(batch, Main.getMain().skin);
         artisanScreen = new ArtisanScreen(batch, Main.getMain().skin);
-        fishingMiniGame = new FishingMiniGame(batch, Main.getMain().skin);
+        fishingMiniGame = new FishingMiniGame(batch);
     }
 
     private Building findBuilding() {

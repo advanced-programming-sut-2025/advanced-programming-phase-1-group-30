@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -37,7 +36,6 @@ public class FishingMiniGame {
     private final float progressBarX;
     private final float progressBarY;
 
-    private float fishOscillationTime;
     private float catchProgress;
     private final float progressUpSpeed = 0.25f;
     private final float progressDownSpeed = 0.125f;
@@ -56,7 +54,7 @@ public class FishingMiniGame {
     private FishState fishState = new FishState();
     private FishBrainTimed fishBrain = new FishBrainTimed(fishState);
 
-    public FishingMiniGame(SpriteBatch batch, Skin skin) {
+    public FishingMiniGame(SpriteBatch batch) {
         this.stage = new Stage(new ScreenViewport(), batch);
         this.batch = batch;
         this.table = new Table();
@@ -164,7 +162,6 @@ public class FishingMiniGame {
     }
 
     private void refresh() {
-        fishOscillationTime = 0f;
         catchProgress = 0.25f;
 
         greenBarY = greenBarMinY;
@@ -189,13 +186,6 @@ public class FishingMiniGame {
 
     public void updateFish(float delta) {
         if (!visible) return;
-
-//        fishOscillationTime += delta;
-//
-//        float oscillationRange = greenBarMaxY - greenBarMinY - fishSize;
-//        float oscillationCenter = greenBarMinY;
-//        float normalizedSin = (-MathUtils.cos(fishOscillationTime * 0.5f) + 1f) / 2f;
-//        fishY = oscillationCenter + normalizedSin * oscillationRange;
 
         fishBrain.update(delta);
 
@@ -230,9 +220,9 @@ public class FishingMiniGame {
             hide();
         }
 
-//        if (catchProgress <= 0f) {
-//            hide();
-//        }
+        if (catchProgress <= 0f) {
+            hide();
+        }
     }
 
     private void upgradeFish() {
