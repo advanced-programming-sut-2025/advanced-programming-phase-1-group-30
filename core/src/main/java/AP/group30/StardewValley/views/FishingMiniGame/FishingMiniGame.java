@@ -1,4 +1,4 @@
-package AP.group30.StardewValley.views;
+package AP.group30.StardewValley.views.FishingMiniGame;
 
 import AP.group30.StardewValley.controllers.GameMenuController;
 import AP.group30.StardewValley.models.Animals.Fish;
@@ -24,9 +24,9 @@ public class FishingMiniGame {
     private final float greenBarX;
     private final float greenBarMinY;
     private final float greenBarMaxY;
-    private final float greenBarHeight = 80f;
+    private final float greenBarHeight = 120f;
     private final float greenBarWidth = 40f;
-    private final float greenBarSpeed = 200f;
+    private final float greenBarSpeed = 300f;
 
     private float fishY;
     private final float fishX;
@@ -52,6 +52,9 @@ public class FishingMiniGame {
     private boolean visible = false;
 
     private boolean perfect = true;
+
+    private FishState fishState = new FishState();
+    private FishBrainTimed fishBrain = new FishBrainTimed(fishState);
 
     public FishingMiniGame(SpriteBatch batch, Skin skin) {
         this.stage = new Stage(new ScreenViewport(), batch);
@@ -81,6 +84,11 @@ public class FishingMiniGame {
         progressBarHeight = table.getHeight();
         progressBarX = table.getX() + table.getWidth() + 10f;
         progressBarY = table.getY();
+
+        fishState.minY = greenBarMinY;
+        fishState.maxY = greenBarMaxY;
+        fishState.size = fishSize;
+        fishState.y = greenBarMinY;
     }
 
     public void show() {
@@ -163,6 +171,7 @@ public class FishingMiniGame {
         fishY = greenBarMinY + (greenBarHeight / 2f) - (fishSize / 2f);
 
         perfect = true;
+        fishState.time = 0f;
     }
 
     public void updateGreenBar(float delta) {
@@ -181,12 +190,17 @@ public class FishingMiniGame {
     public void updateFish(float delta) {
         if (!visible) return;
 
-        fishOscillationTime += delta;
+//        fishOscillationTime += delta;
+//
+//        float oscillationRange = greenBarMaxY - greenBarMinY - fishSize;
+//        float oscillationCenter = greenBarMinY;
+//        float normalizedSin = (-MathUtils.cos(fishOscillationTime * 0.5f) + 1f) / 2f;
+//        fishY = oscillationCenter + normalizedSin * oscillationRange;
 
-        float oscillationRange = greenBarMaxY - greenBarMinY - fishSize;
-        float oscillationCenter = greenBarMinY;
-        float normalizedSin = (-MathUtils.cos(fishOscillationTime * 0.5f) + 1f) / 2f;
-        fishY = oscillationCenter + normalizedSin * oscillationRange;
+        fishBrain.update(delta);
+
+        if (fishState.y > greenBarMinY && fishState.y < greenBarMaxY)
+            fishY = fishState.y;
     }
 
     public void updateStatus(float delta) {
@@ -216,9 +230,9 @@ public class FishingMiniGame {
             hide();
         }
 
-        if (catchProgress <= 0f) {
-            hide();
-        }
+//        if (catchProgress <= 0f) {
+//            hide();
+//        }
     }
 
     private void upgradeFish() {

@@ -1877,7 +1877,16 @@ public class GameMenuController {
         if (player.getBackPack().getItems().size() + 1 > player.getBackPack().getType().getCapacity()) {
             return;
         }
-        App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(fish);
+
+        boolean exists = false;
+        for (Item item : player.getBackPack().getItems()) {
+            if (item.getName().equals(fish.getName())) {
+                item.setCount(item.getCount() + 1);
+                exists = true;
+            }
+        }
+        if (!exists) App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(fish);
+
         App.getCurrentGame().getCurrentPlayer().changeEnergy(-1 * fishingPole.getType().getEnergyUsed());
         App.getCurrentGame().getCurrentPlayer().increaseFishing(5);
     }
