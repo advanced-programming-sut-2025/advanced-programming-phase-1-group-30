@@ -2,8 +2,12 @@ package AP.group30.StardewValley.views.FishingMiniGame;
 
 import AP.group30.StardewValley.controllers.GameMenuController;
 import AP.group30.StardewValley.models.Animals.Fish;
+import AP.group30.StardewValley.models.Animals.FishType;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameAssetManager;
+import AP.group30.StardewValley.models.Items.Item;
+import AP.group30.StardewValley.models.Items.Tools.FishingPole;
+import AP.group30.StardewValley.models.Players.Player;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -23,7 +27,7 @@ public class FishingMiniGame {
     private final float greenBarX;
     private final float greenBarMinY;
     private final float greenBarMaxY;
-    private final float greenBarHeight = 120f;
+    private final float greenBarHeight = 100f;
     private final float greenBarWidth = 40f;
     private final float greenBarSpeed = 300f;
 
@@ -41,7 +45,8 @@ public class FishingMiniGame {
     private final float progressDownSpeed = 0.125f;
 
     private final ShapeRenderer greenBarShapeRenderer = new ShapeRenderer();
-    private final Texture fishTexture;
+    private Texture fishTexture;
+    private Fish fish;
     private final ShapeRenderer progressBarShapeRenderer = new ShapeRenderer();
 
     private final Stage stage;
@@ -77,7 +82,6 @@ public class FishingMiniGame {
         greenBarMaxY = greenBarMinY + table.getHeight();
 
         fishX = table.getX() + (table.getWidth() - fishSize) / 2f;
-        fishTexture = new Texture(Gdx.files.internal("Fish/Fish.png"));
 
         progressBarHeight = table.getHeight();
         progressBarX = table.getX() + table.getWidth() + 10f;
@@ -92,9 +96,18 @@ public class FishingMiniGame {
     public void show() {
         refresh();
 
+        findFish();
+
         visible = true;
         table.setVisible(true);
         Gdx.input.setInputProcessor(stage);
+    }
+
+    private void findFish() {
+        fish = GameMenuController.fishing();
+
+        if (fish.getType().isLegendary()) fishTexture = new Texture(Gdx.files.internal("Fish/LegendFish.png"));
+        else fishTexture = new Texture(Gdx.files.internal("Fish/Fish.png"));
     }
 
     public void hide() {
@@ -120,6 +133,8 @@ public class FishingMiniGame {
             drawGreenBar();
             drawFish();
             drawProgressBar();
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) fishTexture = fish.getTexture();
         }
     }
 
@@ -214,7 +229,7 @@ public class FishingMiniGame {
         catchProgress = MathUtils.clamp(catchProgress, 0f, 1f);
 
         if (catchProgress >= 1f) {
-            GameMenuController.fishing();
+            fishing();
             if (perfect) upgradeFish();
 
             hide();
@@ -223,6 +238,27 @@ public class FishingMiniGame {
         if (catchProgress <= 0f) {
             hide();
         }
+    }
+
+    private void fishing() {
+        Player player = App.getCurrentGame().getCurrentPlayer();
+
+        if (player.getBackPack().getItems().size() + 1 > player.getBackPack().getType().getCapacity()) {
+            return;
+        }
+
+        boolean exists = false;
+        for (Item item : player.getBackPack().getItems()) {
+            if (item.getName().equals(fish.getName())) {
+                item.setCount(item.getCount() + 1);
+                exists = true;
+            }
+        }
+        if (!exists) App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(fish);
+
+        FishingPole fishingPole = (FishingPole) player.getWield();
+        App.getCurrentGame().getCurrentPlayer().changeEnergy(-1 * fishingPole.getType().getEnergyUsed());
+        App.getCurrentGame().getCurrentPlayer().increaseFishing(5);
     }
 
     private void upgradeFish() {

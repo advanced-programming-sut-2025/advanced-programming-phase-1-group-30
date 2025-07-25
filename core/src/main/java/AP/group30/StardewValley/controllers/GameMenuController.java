@@ -1829,7 +1829,7 @@ public class GameMenuController {
         }
         GameMenu.printResult("Sold " + animal.getName() + " for: " + cost);
     }
-    public static void fishing(){
+    public static Fish fishing(){
         Player player = App.getCurrentGame().getCurrentPlayer();
 
         ArrayList<FishType> fishTypes = new ArrayList<>();
@@ -1874,21 +1874,7 @@ public class GameMenuController {
             fish.setCof(2);
         }
 
-        if (player.getBackPack().getItems().size() + 1 > player.getBackPack().getType().getCapacity()) {
-            return;
-        }
-
-        boolean exists = false;
-        for (Item item : player.getBackPack().getItems()) {
-            if (item.getName().equals(fish.getName())) {
-                item.setCount(item.getCount() + 1);
-                exists = true;
-            }
-        }
-        if (!exists) App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(fish);
-
-        App.getCurrentGame().getCurrentPlayer().changeEnergy(-1 * fishingPole.getType().getEnergyUsed());
-        App.getCurrentGame().getCurrentPlayer().increaseFishing(5);
+        return fish;
     }
 
     public static String artisanUse(ArtisanGoodType item) {
