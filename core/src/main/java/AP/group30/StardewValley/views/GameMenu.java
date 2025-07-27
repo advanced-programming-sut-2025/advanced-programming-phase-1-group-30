@@ -175,11 +175,11 @@ public class GameMenu {
             GameMenuController.cheatUnlimitedEnergySet();
             return;
         }
-        matcher = GameMenuCommands.CRAFT_INFO.regexMatcher(command);
-        if (matcher.matches()) {
-            GameMenuController.craftInfo(matcher.group("craftName"));
-            return;
-        }
+//        matcher = GameMenuCommands.CRAFT_INFO.regexMatcher(command);
+//        if (matcher.matches()) {
+//            GameMenuController.craftInfo(matcher.group("craftName"));
+//            return;
+//        }
 
         matcher = GameMenuCommands.HOWMUCH_WATER.regexMatcher(command);
         if (matcher.matches()) {

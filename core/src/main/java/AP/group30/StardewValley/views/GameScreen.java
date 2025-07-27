@@ -97,6 +97,7 @@ public class GameScreen implements Screen {
     private HutScreen hut;
     private CraftingScreen craftingScreen;
     private ArtisanScreen artisanScreen;
+    private CraftInfoScreen craftInfoScreen;
 
     private final BitmapFont info = GameAssetManager.assetManager.get(GameAssetManager.skin).getFont("font");
 
@@ -260,6 +261,7 @@ public class GameScreen implements Screen {
             if (Gdx.input.isKeyJustPressed(Input.Keys.N) && openMenu(skillScreen)) skillScreen.toggle();
             if (Gdx.input.isKeyJustPressed(Input.Keys.B) && openMenu(craftingScreen)) craftingScreen.toggle();
             if (Gdx.input.isKeyJustPressed(Input.Keys.I) && openMenu(artisanScreen)) artisanScreen.toggle();
+            if (Gdx.input.isKeyJustPressed(Input.Keys.R) && openMenu(craftInfoScreen)) craftInfoScreen.toggle();
             if (!isAnyMenuOpened()) {
                 handleInput(delta);
                 if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
@@ -298,6 +300,7 @@ public class GameScreen implements Screen {
         hut.render(batch, camera);
         artisanScreen.render();
         fishingMiniGame.render(delta);
+        craftInfoScreen.render();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
             System.out.println(entities.size());
@@ -547,6 +550,7 @@ public class GameScreen implements Screen {
         clock.dispose();
         artisanScreen.dispose();
         fishingMiniGame.dispose();
+        craftInfoScreen.dispose();
     }
 
     private void handleInput(float delta) {
@@ -751,7 +755,8 @@ public class GameScreen implements Screen {
                skillScreen.isVisible() ||
                hut.isVisible() ||
                craftingScreen.isVisible() ||
-               artisanScreen.isVisible();
+               artisanScreen.isVisible() ||
+               craftInfoScreen.isVisible();
     }
 
     private boolean openMenu(InGameMenuScreen menuScreen) {
@@ -760,7 +765,8 @@ public class GameScreen implements Screen {
         return !artisanScreen.isVisible() &&
             !inventoryScreen.isVisible() &&
             !craftingScreen.isVisible() &&
-            !skillScreen.isVisible();
+            !skillScreen.isVisible() &&
+            !craftInfoScreen.isVisible();
     }
 
     private void findEntities() {
@@ -795,6 +801,7 @@ public class GameScreen implements Screen {
         hut = new HutScreen(batch, Main.getMain().skin);
         artisanScreen = new ArtisanScreen(batch, Main.getMain().skin);
         fishingMiniGame = new FishingMiniGame(batch);
+        craftInfoScreen = new CraftInfoScreen(batch, Main.getMain().skin);
     }
 
     private Building findBuilding() {

@@ -5,7 +5,6 @@ import AP.group30.StardewValley.models.Animals.*;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Buildings.*;
 //import AP.group30.StardewValley.models.Commands.Menus;
-import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Inventory.BackPackType;
 import AP.group30.StardewValley.models.Items.Gift;
 import AP.group30.StardewValley.models.Items.ItemTexture;
@@ -33,7 +32,11 @@ import AP.group30.StardewValley.views.GameMenu;
 import AP.group30.StardewValley.views.GameScreen;
 import AP.group30.StardewValley.views.StartMenus.RegisterMenu;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import java.util.*;
 import java.util.List;
@@ -789,34 +792,37 @@ public class GameMenuController {
         }
     }
 
-    public static void craftInfo(String name) {
+    public static String craftInfo(Image itemImage, String name) {
         boolean isCraftAvailable = false;
-        CropType craft = null;
+        CropType crop = null;
         for (CropType cropType : CropType.values()) {
             if (cropType.getName().toLowerCase().equals(name)) {
-                craft = cropType;
+                crop = cropType;
                 isCraftAvailable = true;
             }
         }
         if (!isCraftAvailable) {
-            GameMenu.printResult("No craft with given name were found!");
-            return;
+            itemImage.setDrawable(new TextureRegionDrawable(new TextureRegion(ItemTexture.WOOD.getTexture())));
+            return null;
         }
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append("Name: " + craft.getName() + "\n");
-        sb.append(MaintainerController.arrayListToString("Stages", craft.getStages()));
-        sb.append("Total Harvest Time: " + craft.getTotalHarvestTime() + "\n");
-        sb.append("One Time: " + craft.isOneTime() + "\n");
-        sb.append("Regrowth Time: " + craft.getRegrowthTime() + "\n");
-        sb.append("Base Sell Price: " + craft.getPrice() + "\n");
-        sb.append("Is Edible: " + craft.isEdible() + "\n");
-        sb.append("Base Energy: " + craft.getEnergy() + "\n");
-        sb.append("Base Health: " + craft.getHealth() + "\n");
-        sb.append(MaintainerController.arrayListToString("Season", craft.getSeasons()));
-        sb.append("Can Become Giant: " + craft.isCanBecomeGiant());
-        RegisterMenu.printResult(sb.toString());
+        sb.append("Name: " + crop.getName() + "\n");
+        sb.append(MaintainerController.arrayListToString("Stages", crop.getStages()));
+        sb.append("Total Harvest Time: " + crop.getTotalHarvestTime() + "\n");
+        sb.append("One Time: " + crop.isOneTime() + "\n");
+        sb.append("Regrowth Time: " + crop.getRegrowthTime() + "\n");
+        sb.append("Base Sell Price: " + crop.getPrice() + "\n");
+        sb.append("Is Edible: " + crop.isEdible() + "\n");
+        sb.append("Base Energy: " + crop.getEnergy() + "\n");
+        sb.append("Base Health: " + crop.getHealth() + "\n");
+        sb.append(MaintainerController.arrayListToString("Season", crop.getSeasons()));
+        sb.append("Can Become Giant: " + crop.isCanBecomeGiant());
+
+        itemImage.setDrawable(new TextureRegionDrawable(new TextureRegion(crop.getTexture())));
+
+        return sb.toString();
     }
     public static Crop plant(String seed1, Direction direction) {
         ForagingSeed seed;
