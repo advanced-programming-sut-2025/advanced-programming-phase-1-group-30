@@ -12,7 +12,7 @@ import AP.group30.StardewValley.models.Buildings.Hut;
 import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.GameObjects;
-import AP.group30.StardewValley.models.Items.Item;
+import AP.group30.StardewValley.models.Items.Foods.Food;
 import AP.group30.StardewValley.models.Items.Products.*;
 import AP.group30.StardewValley.models.Items.Products.ForagingSeed;
 import AP.group30.StardewValley.models.Items.Products.Stone;
@@ -22,6 +22,7 @@ import AP.group30.StardewValley.models.Items.Tools.Tool;
 import AP.group30.StardewValley.models.Maps.*;
 import AP.group30.StardewValley.models.Players.Direction;
 import AP.group30.StardewValley.models.Players.Player;
+import AP.group30.StardewValley.views.FishingMiniGame.FishingMiniGame;
 import AP.group30.StardewValley.views.InGameMenus.*;
 import AP.group30.StardewValley.views.InGameMenus.Hut.*;
 import AP.group30.StardewValley.views.StartMenus.RegisterMenu;
@@ -40,22 +41,13 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Timer;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
-import java.util.Scanner;
 
 public class GameScreen implements Screen {
     private SpriteBatch batch;
@@ -105,6 +97,7 @@ public class GameScreen implements Screen {
     private HutScreen hut;
     private CraftingScreen craftingScreen;
     private ArtisanScreen artisanScreen;
+    private CraftInfoScreen craftInfoScreen;
 
     private final BitmapFont info = GameAssetManager.assetManager.get(GameAssetManager.skin).getFont("font");
 
@@ -268,6 +261,7 @@ public class GameScreen implements Screen {
             if (Gdx.input.isKeyJustPressed(Input.Keys.N) && openMenu(skillScreen)) skillScreen.toggle();
             if (Gdx.input.isKeyJustPressed(Input.Keys.B) && openMenu(craftingScreen)) craftingScreen.toggle();
             if (Gdx.input.isKeyJustPressed(Input.Keys.I) && openMenu(artisanScreen)) artisanScreen.toggle();
+            if (Gdx.input.isKeyJustPressed(Input.Keys.R) && openMenu(craftInfoScreen)) craftInfoScreen.toggle();
             if (!isAnyMenuOpened()) {
                 handleInput(delta);
                 if (Gdx.input.isKeyPressed(Input.Keys.W)) camera.position.y += speed * delta;
@@ -306,6 +300,7 @@ public class GameScreen implements Screen {
         hut.render(batch, camera);
         artisanScreen.render();
         fishingMiniGame.render(delta);
+        craftInfoScreen.render();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
             System.out.println(entities.size());
@@ -555,6 +550,7 @@ public class GameScreen implements Screen {
         clock.dispose();
         artisanScreen.dispose();
         fishingMiniGame.dispose();
+        craftInfoScreen.dispose();
     }
 
     private void handleInput(float delta) {
@@ -685,6 +681,8 @@ public class GameScreen implements Screen {
 
                 GameMenuController.toolUse(player.getDirection(), (int) (x), (int) (y + playerRegion.getRegionHeight() / 8f), batch);
                 toolAnimation();
+            } else if (player.getWield() instanceof Food food) {
+                GameMenuController.eat(food);
             } else if (player.getWield() instanceof ForagingSeed) {
                 GameMenuController.plant(player.getWield().getName(), player.getDirection());
             } else if (player.getWield().getName().equals("speed-gro") || player.getWield().getName().equals("deluxe retaining soil")) {
@@ -757,7 +755,8 @@ public class GameScreen implements Screen {
                skillScreen.isVisible() ||
                hut.isVisible() ||
                craftingScreen.isVisible() ||
-               artisanScreen.isVisible();
+               artisanScreen.isVisible() ||
+               craftInfoScreen.isVisible();
     }
 
     private boolean openMenu(InGameMenuScreen menuScreen) {
@@ -766,7 +765,8 @@ public class GameScreen implements Screen {
         return !artisanScreen.isVisible() &&
             !inventoryScreen.isVisible() &&
             !craftingScreen.isVisible() &&
-            !skillScreen.isVisible();
+            !skillScreen.isVisible() &&
+            !craftInfoScreen.isVisible();
     }
 
     private void findEntities() {
@@ -800,7 +800,8 @@ public class GameScreen implements Screen {
         craftingScreen = new CraftingScreen(batch, Main.getMain().skin);
         hut = new HutScreen(batch, Main.getMain().skin);
         artisanScreen = new ArtisanScreen(batch, Main.getMain().skin);
-        fishingMiniGame = new FishingMiniGame(batch, Main.getMain().skin);
+        fishingMiniGame = new FishingMiniGame(batch);
+        craftInfoScreen = new CraftInfoScreen(batch, Main.getMain().skin);
     }
 
     private Building findBuilding() {

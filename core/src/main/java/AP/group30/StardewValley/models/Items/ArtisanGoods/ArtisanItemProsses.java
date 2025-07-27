@@ -17,6 +17,10 @@ public class ArtisanItemProsses {
         return remainingTime;
     }
 
+    public void setRemainingTime(int remainingTime) {
+        this.remainingTime = remainingTime;
+    }
+
     public void changeRemainingTime(int amount) {
         this.remainingTime = Math.max(0, remainingTime - amount);
     }
