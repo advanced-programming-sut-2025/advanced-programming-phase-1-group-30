@@ -12,6 +12,7 @@ import AP.group30.StardewValley.models.Buildings.Hut;
 import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.GameObjects;
+import AP.group30.StardewValley.models.Items.Foods.Food;
 import AP.group30.StardewValley.models.Items.Products.*;
 import AP.group30.StardewValley.models.Items.Products.ForagingSeed;
 import AP.group30.StardewValley.models.Items.Products.Stone;
@@ -676,6 +677,14 @@ public class GameScreen implements Screen {
 
                 GameMenuController.toolUse(player.getDirection(), (int) (x), (int) (y + playerRegion.getRegionHeight() / 8f), batch);
                 toolAnimation();
+            } else if (player.getWield() instanceof Food) {
+                Food food = (Food) player.getWield();
+
+                player.setWield(player.getBackPack().getItems().getFirst());
+
+                player.getBackPack().removeItem(food);
+                player.changeEnergy(food.getType().getEnergy());
+                //TODO BUFF!!!
             } else if (player.getWield() instanceof ForagingSeed) {
                 GameMenuController.plant(player.getWield().getName(), player.getDirection());
             } else if (player.getWield().getName().equals("speed-gro") || player.getWield().getName().equals("deluxe retaining soil")) {
