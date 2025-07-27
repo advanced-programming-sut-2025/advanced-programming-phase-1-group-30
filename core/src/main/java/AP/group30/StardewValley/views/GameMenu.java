@@ -211,8 +211,8 @@ public class GameMenu {
             GameMenuController.cheatAddItem(matcher.group("itemName"), matcher.group("count"));
             return;
         }
-        matcher = GameMenuCommands.COOKING_REFRIGERATOR.regexMatcher(command);
-        if (matcher.matches()) {
+//        matcher = GameMenuCommands.COOKING_REFRIGERATOR.regexMatcher(command);
+//        if (matcher.matches()) {
 //            if (matcher.group("action").equals("put"))
 //                GameMenuController.putRefrigerator(matcher.group("item"));
 //            else if (matcher.group("action").equals("pick"))
@@ -220,30 +220,30 @@ public class GameMenu {
 //            else
 //                printResult("You should just put or pick!");
 //            return;
-        }
-        matcher = GameMenuCommands.COOKING_SHOW_RECIPES.regexMatcher(command);
-        if (matcher.matches()) {
-            if (matcher.group("all") == null)
-                GameMenuController.showCookingRecipe(true);
-            else
-                GameMenuController.showCookingRecipe(false);
-            return;
-        }
+//        }
+//        matcher = GameMenuCommands.COOKING_SHOW_RECIPES.regexMatcher(command);
+//        if (matcher.matches()) {
+//            if (matcher.group("all") == null)
+//                GameMenuController.showCookingRecipe(true);
+//            else
+//                GameMenuController.showCookingRecipe(false);
+//            return;
+//        }
         matcher = GameMenuCommands.COOKING_ADD_RECIPE.regexMatcher(command);
         if (matcher.matches()) {
             GameMenuController.addCookingRecipe(matcher.group("name"));
             return;
         }
-        matcher = GameMenuCommands.COOKING_PREPARE.regexMatcher(command);
-        if (matcher.matches()) {
-            //GameMenuController.cooking(matcher.group("recipeName"), scanner);
-            return;
-        }
-        matcher = GameMenuCommands.EAT.regexMatcher(command);
-        if (matcher.matches()) {
-            GameMenuController.eat(matcher.group("foodName"));
-            return;
-        }
+//        matcher = GameMenuCommands.COOKING_PREPARE.regexMatcher(command);
+//        if (matcher.matches()) {
+//            GameMenuController.cooking(matcher.group("recipeName"), scanner);
+//            return;
+//        }
+//        matcher = GameMenuCommands.EAT.regexMatcher(command);
+//        if (matcher.matches()) {
+//            GameMenuController.eat(matcher.group("foodName"));
+//            return;
+//        }
 //        matcher = GameMenuCommands.FISHING.regexMatcher(command);
 //        if (matcher.matches()) {
 //            GameMenuController.fishing(matcher.group("fishingPole"));

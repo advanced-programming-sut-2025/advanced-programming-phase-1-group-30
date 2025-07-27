@@ -1349,26 +1349,29 @@ public class GameMenuController {
                 backpackItem.changeCount(-1 * ingredient.getCount());
         }
 
-        App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(new Food(1, recipe));
+        boolean itemIsInBackpack = false;
+        for (Item item : player.getBackPack().getItems()) {
+            if (item.getName().equals(recipe.getName())) {
+                itemIsInBackpack = true;
+                item.setCount(item.getCount() + 1);
+                break;
+            }
+        }
+        if (!itemIsInBackpack)
+            App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(new Food(1, recipe));
         App.getCurrentGame().getCurrentPlayer().changeEnergy(-3);
+
         return null;
     }
 
-    public static void eat(String name) {
-        Food food = null;
+    public static void eat(Food food) {
         Player player = App.getCurrentGame().getCurrentPlayer();
-        for (Item foodItem : player.getBackPack().getItems()) {
-            if (foodItem.getClass() == Food.class && foodItem.getName().equals(name))
-                food = (Food) foodItem;
-        }
 
-        if (food == null) {
-            GameMenu.printResult("No food with given name were found!");
-            return;
-        }
         food.changeCount(-1);
-        if (food.getCount() == 0)
-            App.getCurrentGame().getCurrentPlayer().getBackPack().removeItem(food);
+        if (food.getCount() == 0) {
+            player.setWield(player.getBackPack().getItems().getFirst());
+            player.getBackPack().removeItem(food);
+        }
         GameMenu.printResult("Food eaten successfully");
         if (food.getName().equals("red plate")) {
             GameMenu.printResult("You got buffed for 3 hours! Max energy set to " + (player.getMaxEnergy() + 50));

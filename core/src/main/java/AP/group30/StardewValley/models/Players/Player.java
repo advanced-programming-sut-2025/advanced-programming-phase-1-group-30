@@ -154,6 +154,8 @@ public class Player implements GameObjects {
         this.devices.add(IndustrialProductType.LOOM);
 
         this.backPack.addItem(new FishingPole(1, FishingPoleType.TRAINING_POLE));
+        this.recipes.addAll(Arrays.asList(FoodType.values()));
+        this.getBackPack().addItem(new Item(5, "egg", 0, ItemTexture.WOOD.getTexture()));
     }
 
     public String getUsername() {
