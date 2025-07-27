@@ -2175,14 +2175,8 @@ public class GameMenuController {
         GameMenu.printResult("Cheart confirm successfully. Your money: " + App.getCurrentGame().getCurrentPlayer().getMoney());
     }
 
-    public static void sell(String name, String count){
+    public static String putShippingBin(Item item, String count){
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Item item = Item.findItemByName(name, player.getBackPack().getItems());
-
-        if (item == null) {
-            GameMenu.printResult("No item with given name found!");
-            return;
-        }
 
         if (item.getClass() == Axe.class ||
             item.getClass() == Basket.class ||
@@ -2192,32 +2186,67 @@ public class GameMenuController {
             item.getClass() == Pickaxe.class ||
             item.getClass() == Scythe.class ||
             item.getClass() == Shear.class) {
-            GameMenu.printResult("You can't sell any tool!!!");
-            return;
+            return "You can't sell any tool!!!";
         }
 
         int amount;
-        if (count != null) amount = Integer.parseInt(count);
-        else amount = item.getCount();
-
-        if (item.getCount() < amount) {
-            GameMenu.printResult("Not enough number of this Item. Only have + " + item.getCount());
-            return;
+        try {
+            if (count != null) amount = Integer.parseInt(count);
+            else amount = item.getCount();
+        } catch (NumberFormatException e) {
+            amount = item.getCount();
         }
 
-        int dx = Math.abs(player.getX() - player.getShippingBin().getX());
-        int dy = Math.abs(player.getY() - player.getShippingBin().getY());
-        if (!((dx <= 1 && dy <= 1) && !(dx == 0 && dy == 0))) {
-            GameMenu.printResult("You should be near the shipping bin!");
-            return;
+        if (item.getCount() < amount) {
+            return "Not enough number of this Item.";
         }
 
         if (item.getCount() == amount) player.getBackPack().removeItem(item);
         else item.changeCount(-1  * amount);
 
-        player.getShippingBin().addItem(item);
+        boolean itemInShippingBin = false;
+        for (Item itemShippingBin: App.getCurrentGame().getCurrentPlayer().getShippingBin().getItems()) {
+            if (itemShippingBin.getName().equals(item.getName())) {
+                itemShippingBin.changeCount(amount);
+                itemInShippingBin = true;
+            }
+        }
 
-        GameMenu.printResult("Item sold successfully!");
+        if (!itemInShippingBin)
+            player.getShippingBin().addItem(new Item(amount, item.getName(), item.getPrice(), item.getTexture()));
+
+        return null;
+    }
+
+    public static String pickShippingBin(Item item, String count){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+
+        int amount;
+        try {
+            if (count != null) amount = Integer.parseInt(count);
+            else amount = item.getCount();
+        } catch (NumberFormatException e) {
+            amount = item.getCount();
+        }
+
+        if (item.getCount() < amount) {
+            return "Not enough number of this Item";
+        }
+
+        if (item.getCount() == amount) player.getShippingBin().removeItem(item);
+        else item.changeCount(-1  * amount);
+
+        boolean itemInBackPack = false;
+        for (Item itemBackPack: App.getCurrentGame().getCurrentPlayer().getBackPack().getItems()) {
+            if (itemBackPack.getName().equals(item.getName())) {
+                itemBackPack.changeCount(amount);
+                itemInBackPack = true;
+            }
+        }
+        if (!itemInBackPack)
+            player.getBackPack().addItem(new Item(amount, item.getName(), item.getPrice(), item.getTexture()));
+
+        return null;
     }
 
     public static void friendships(){

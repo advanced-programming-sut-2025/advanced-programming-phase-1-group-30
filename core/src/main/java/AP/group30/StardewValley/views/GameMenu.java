@@ -324,11 +324,11 @@ public class GameMenu {
             GameMenuController.cheatAddMoney(Integer.parseInt(matcher.group("count")));
             return;
         }
-        matcher = GameMenuCommands.SELL.regexMatcher(command);
-        if (matcher.matches()) {
-            GameMenuController.sell(matcher.group("productName"), matcher.group("count"));
-            return;
-        }
+//        matcher = GameMenuCommands.SELL.regexMatcher(command);
+//        if (matcher.matches()) {
+//            GameMenuController.sell(matcher.group("productName"), matcher.group("count"));
+//            return;
+//        }
 //        matcher = GameMenuCommands.ARTISAN_USE.regexMatcher(command);
 //        if (matcher.matches()) {
 //            GameMenuController.artisanUse(matcher.group("artisanName"), matcher.group("itemName"));
