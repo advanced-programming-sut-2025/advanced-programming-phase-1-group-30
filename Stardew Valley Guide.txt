@@ -1,0 +1,38 @@
+Stardew Valley Guide
+
+Game Screen Keys:
+    W -> Move Up
+    D -> Move Right
+    A -> Move Left
+    S -> Move Down
+    
+    ------------------------
+
+    ESCAPE -> Inventory Menu
+    N -> Skill Menu
+    I -> Artisan Menu
+    R -> Crop Info Menu
+    Q -> Cancel Fishing
+    H -> Enter Hut
+    C -> Tool Use + Eat
+
+Hut Screen Keys:
+    C -> Cooking
+    R -> Refrigrator
+    S -> Shipping Bin
+
+Fishing Mini-Game:
+    UP -> Moves The Green Bar Up
+    DOWN -> Moves The Green Bar Down
+
+Developer Cheat Keys:
+    In Register Menu:
+        SPACE -> Starts The Game
+    In Game Screen:
+        P -> Cheat Time
+    In City Screen:
+        SPACE -> Back To Farm
+    In Fishing Mini-Game:
+        SPACE -> Shows The Fish Texture
+    In Device Screen:
+        SPACE -> Finishes All In-Progress Goods 
