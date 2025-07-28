@@ -6,9 +6,9 @@ import AP.group30.StardewValley.models.TimeAndDate.Season;
 import com.badlogic.gdx.graphics.Texture;
 
 public enum RanchCosts implements ItemsInteface {
-    HAY("hay", 50, 999999, null, 0, Season.ALL, ItemTexture.HAY.getTexture()),
-    MILK_PAIL("milk pail", 1000, 1, null, 0, Season.ALL, ItemTexture.WOOD.getTexture()),
-    SHEARS("shears", 1000, 1, null, 0, Season.ALL, ItemTexture.WOOD.getTexture()),
+    HAY("hay", 50, 999999, BuildingsInfo.Coop, 0, Season.ALL, ItemTexture.HAY.getTexture()),
+    MILK_PAIL("milk pail", 1000, 1, BuildingsInfo.Barn, 0, Season.ALL, ItemTexture.WOOD.getTexture()),
+    SHEARS("shears", 1000, 1, BuildingsInfo.Barn, 0, Season.ALL, ItemTexture.WOOD.getTexture()),
     CHICKEN("chicken", 800, 2, BuildingsInfo.Coop, 1, Season.ALL, ItemTexture.WOOD.getTexture()),
     COW("cow", 1500, 2, BuildingsInfo.Barn, 1, Season.ALL, ItemTexture.WOOD.getTexture()),
     GOAT("goat", 4000, 2, BuildingsInfo.Barn, 2, Season.ALL, ItemTexture.WOOD.getTexture()),

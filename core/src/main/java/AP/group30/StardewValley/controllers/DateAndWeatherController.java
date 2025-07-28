@@ -44,7 +44,7 @@ public class DateAndWeatherController {
             GameMenu.printResult("You can't cheat more than 13 hours");
             return;
         }
-        MaintainerController.artisanProssesTimeChanger(x);
+        MaintainerController.artisanProcessTimeChanger(x);
         if (x + App.getCurrentGame().getCurrentTime().getHour() > 22) {
             App.getCurrentGame().setCurrentWeather(App.getCurrentGame().getTomorrowWeather());
             MaintainerController.updateAllShops();
@@ -74,25 +74,6 @@ public class DateAndWeatherController {
                     player.setDaysGotRejected(player.getDaysGotRejected() - 1);
                     if (player.getDaysGotRejected() == 0) {
                         player.setGotRejected(false);
-                    }
-                }
-
-
-                if (App.getCurrentGame().getCurrentWeather().equals(Weather.STORM)) {
-                    Random rand = new Random();
-
-                    for (int i = 0; i < 3; i++) {
-                        int x1 = rand.nextInt(60);
-                        int y = rand.nextInt(60);
-
-                        Tile tile = tiles[x1][y];
-
-                        if (tile.isPlanted()) {
-                            tile.setPlanted(false);
-                            tile.setItem(new Item(1, "coal", 15, ItemTexture.WOOD.getTexture()));
-                            tile.setCrop(null);
-                            tile.setType(TileTypes.DIRT);
-                        }
                     }
                 }
                 int v = -1;
@@ -323,7 +304,7 @@ public class DateAndWeatherController {
             return;
         }
 
-        MaintainerController.artisanProssesTimeChanger(x * 13);
+        MaintainerController.artisanProcessTimeChanger(x * 13);
         if (x + App.getCurrentGame().getCurrentTime().getDay() > 28) {
             App.getCurrentGame().getCurrentTime().setDay(x - (28 - App.getCurrentGame().getCurrentTime().getDay()));
             ChangeSeason();
@@ -380,7 +361,7 @@ public class DateAndWeatherController {
         GameMenu.printResult(App.getCurrentGame().getTomorrowWeather().getName());
     }
 
-    public static void CheatWeatherSet(String weather) {
+    public static void cheatWeatherSet(String weather) {
         for(Weather weather1 :Weather.values()){
             if(weather1.name.equals(weather)){
                 App.getCurrentGame().setTomorrowWeather(weather1);
