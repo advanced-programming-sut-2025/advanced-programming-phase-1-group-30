@@ -112,6 +112,8 @@ public class CityScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stateTime += delta;
         player.setStateTime(stateTime);
+        RegisterMenu.gameScreen.passTime();
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) inventoryScreen.toggle();
         if (Gdx.input.isKeyJustPressed(Input.Keys.N)) skillScreen.toggle();
 
@@ -139,7 +141,7 @@ public class CityScreen implements Screen {
         GameScreen.renderBackground(camera, grassMap, batch);
         GameScreen.renderWallsAroundMap(tiles, batch);
         GameScreen.renderMap(batch, map);
-        GameScreen.renderEntities(batch, map, entities);
+        GameScreen.renderEntities(batch, entities);
         renderNPCs(batch, stateTime);
         if (game.getCurrentTime().getHour() >= 18) {
             batch.setColor(0, 0, 0, 0.6f);
@@ -268,6 +270,16 @@ public class CityScreen implements Screen {
                     break;
                 }
             }
+            if(!collides){
+                for(NPC npc: game.getNPCs()){
+                    if (playerRect.overlaps(npc.getRectangle())) {
+                        collides = true;
+                        break;
+                    }
+                }
+            }
+
+
             if (!collides) {
                 x = proposedX;
                 y = proposedY;
@@ -285,7 +297,7 @@ public class CityScreen implements Screen {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.C) || Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             if (player.getWield() instanceof Tool) {
-                GameMenuController.toolUse(player.getDirection(), (int) (x), (int) (y + playerRegion.getRegionHeight() / 8f), batch);
+                GameMenuController.toolUse(player.getDirection(), (int) (x), (int) (y + playerRegion.getRegionHeight() / 8f), batch, tiles);
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {

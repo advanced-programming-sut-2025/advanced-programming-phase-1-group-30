@@ -178,6 +178,54 @@ public class DateAndWeatherController {
                     }
                 }
 
+                Tile[][] greenhouseTile = RegisterMenu.gameScreen.getGreenhouseScreen().getTiles();
+                for (int i = 0; i < greenhouseTile.length; i++) {
+                    for (int j = 0; j < greenhouseTile[i].length; j++) {
+                        if (greenhouseTile[i][j].isPlanted()) {
+                            if (!(greenhouseTile[i][j].getCrop() instanceof GiantCrop)) {
+                                if (!greenhouseTile[i][j].isReadyToHarvest()) {
+                                    greenhouseTile[i][j].getCrop().setDaysPassed(greenhouseTile[i][j].getCrop().getDaysPassed() + 1);
+                                    if (greenhouseTile[i][j].getCrop().isWateredToday() || greenhouseTile[i][j].getCrop().isNotNeedWaterAnymore()) {
+                                        greenhouseTile[i][j].getCrop().setDaysNotWatered(0);
+                                    }
+                                    if (!greenhouseTile[i][j].getCrop().isWateredToday()) {
+                                        greenhouseTile[i][j].getCrop().setDaysNotWatered(greenhouseTile[i][j].getCrop().getDaysNotWatered() + 1);
+                                        if (greenhouseTile[i][j].getCrop().getDaysNotWatered() >= 2) {
+                                            RegisterMenu.gameScreen.getEntities().remove(greenhouseTile[i][j].getCrop());
+                                            greenhouseTile[i][j].setCrop(null);
+                                            greenhouseTile[i][j].setPlanted(false);
+                                            greenhouseTile[i][j].setReadyToHarvest(false);
+                                            greenhouseTile[i][j].setItem(null);
+                                            greenhouseTile[i][j].setType(TileTypes.DIRT);
+                                            continue;
+                                        }
+                                    }
+                                    if (greenhouseTile[i][j].getCrop().isWateredToday()) {
+                                        greenhouseTile[i][j].getCrop().setWateredToday(false);
+                                        greenhouseTile[i][j].setTexture(TileTexture.PLANTABLE.getTexture());
+                                    }
+
+                                    if (greenhouseTile[i][j].getCrop().getCurrentStage() < greenhouseTile[i][j].getCrop().getStages().size() - 1) {
+                                        if (greenhouseTile[i][j].getCrop().getStages().get(greenhouseTile[i][j].getCrop().getCurrentStage()) == greenhouseTile[i][j].getCrop().getDaysPassed()) {
+                                            if (greenhouseTile[i][j].getCrop().getCurrentStage() == greenhouseTile[i][j].getCrop().getStages().size()) {
+                                                greenhouseTile[i][j].setReadyToHarvest(true);
+                                            } else {
+                                                greenhouseTile[i][j].getCrop().setCurrentStage(greenhouseTile[i][j].getCrop().getCurrentStage() + 1);
+                                                greenhouseTile[i][j].getCrop().setDaysPassed(0);
+                                            }
+                                        }
+                                    } else if (greenhouseTile[i][j].getCrop().getCurrentStage() == greenhouseTile[i][j].getCrop().getStages().size() - 1) {
+                                        greenhouseTile[i][j].setReadyToHarvest(true);
+                                    }
+                                    if (greenhouseTile[i][j].getCrop().getCurrentStage() == greenhouseTile[i][j].getCrop().getStages().size()) {
+                                        greenhouseTile[i][j].setReadyToHarvest(true);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 if (v != -1) {
                     Tile[] tiles1 = tiles[v][u].getGiantCrop();
                     for (Tile tile : tiles1) {

@@ -40,7 +40,7 @@ public class ForagingMineral extends Product implements GameObjects {
     }
 
     @Override
-    public void render(SpriteBatch batch, Map map) {
+    public void render(SpriteBatch batch) {
         batch.draw(GameAssetManager.assetManager.get(GameAssetManager.stone2), x, y, width, height);
         batch.draw(texture, x, y, width, height);
     }

@@ -2,6 +2,8 @@ package AP.group30.StardewValley.models.Items.Products;
 import AP.group30.StardewValley.models.GameObjects;
 import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Maps.Map;
+import AP.group30.StardewValley.views.StartMenus.RegisterMenu;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -87,8 +89,13 @@ public class Crop extends Product implements GameObjects {
         return y * 32;
     }
     @Override
-    public void render(SpriteBatch batch, Map map) {
-        batch.draw(stageTextureMap.get(currentStage), x * 32, y * 32, 32, 32);
+    public void render(SpriteBatch batch) {
+        if(RegisterMenu.gameScreen.getGreenhouseScreen().isVisible()){
+            batch.draw(stageTextureMap.get(currentStage) , Gdx.graphics.getWidth() / 2.5f + x * 32,
+                Gdx.graphics.getHeight() / 3.93f + y * 32, 32, 32);
+        } else {
+            batch.draw(stageTextureMap.get(currentStage), x * 32, y * 32, 32, 32);
+        }
     }
 
     public void setPosition(int x, int y) {

@@ -29,7 +29,7 @@ public class GiantCrop extends Crop {
         return y * 32;
     }
     @Override
-    public void render(SpriteBatch batch, Map map) {
+    public void render(SpriteBatch batch) {
         batch.draw(stageTextureMap.get(currentStage), x * 32, y * 32, 32 * 2, 32 * 2);
     }
 }

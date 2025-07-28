@@ -32,6 +32,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
+import java.rmi.MarshalledObject;
 import java.util.*;
 
 public class Player implements GameObjects {
@@ -146,7 +147,6 @@ public class Player implements GameObjects {
         this.buffs.put("dish o' the Sea", -1);
         this.buffs.put("seaform pudding", -1);
         this.buffs.put("miner's treat", -1);
-        this.craftingRecipes.addAll(Arrays.asList(IndustrialProductType.values()));
 
         this.devices.add(IndustrialProductType.BEE_HOUSE);
         this.devices.add(IndustrialProductType.KEG);
@@ -615,7 +615,7 @@ public class Player implements GameObjects {
     }
 
     @Override
-    public void render(SpriteBatch batch, Map map) {
+    public void render(SpriteBatch batch) {
         TextureRegion currentFrame;
         if(isMoving){
             if(direction.equals(Direction.NORTH)){
