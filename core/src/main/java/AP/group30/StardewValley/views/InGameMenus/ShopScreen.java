@@ -13,6 +13,7 @@ import AP.group30.StardewValley.models.Items.Products.ShopProducts.*;
 import AP.group30.StardewValley.models.Items.Tools.Tool;
 import AP.group30.StardewValley.models.Players.Player;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -29,6 +30,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ShopScreen {
     private final Stage stage;
@@ -49,6 +51,11 @@ public class ShopScreen {
     private TextField buildingX;
     private TextField buildingY;
     private final Texture backgroundItemTexture;
+//    private ArrayList<Item> allItems;
+    private ShopProduct selectedProduct = null;
+    private TextButton buy;
+    private TextField count;
+//    private TextButton availableProducts;
 
     /**
      * @param batch     The SpriteBatch from your GameScreen
@@ -64,6 +71,12 @@ public class ShopScreen {
         this.building = building;
         this.buildingX = new TextField("X coordinate", skin);
         this.buildingY = new TextField("Y coordinate", skin);
+        this.buy = new TextButton("Buy", skin);
+        this.count = new TextField("", skin);
+//        this.availableProducts = new TextButton("Available Products", skin);
+//        allItems.addAll(shopItems);
+//        allItems.addAll(notAvailableItems);
+//        Collections.shuffle(allItems);
         backgroundItemTexture = GameAssetManager.assetManager.get(GameAssetManager.inventoryItem);
         // Root table
         rootTable = new Table(skin);
@@ -96,6 +109,28 @@ public class ShopScreen {
             itemsTable.add(createShopItemCell(shopItem, false)).width(150).height(300);
             itemsTable.row();
         }
+//        if (availableProducts.isChecked()) {
+//            for (int i = 0; i < shopItems.size(); i++) {
+//                ItemsInteface shopItem = shopItems.get(i);
+//                itemsTable.add(createShopItemCell(shopItem, true)).width(150).height(300);
+//                itemsTable.row();
+//            }
+//            for (int i = 0; i < notAvailableItems.size(); i++) {
+//                ItemsInteface shopItem = notAvailableItems.get(i);
+//                itemsTable.add(createShopItemCell(shopItem, false)).width(150).height(300);
+//                itemsTable.row();
+//            }
+//        } else {
+//            for (int i = 0; i < allItems.size(); i++) {
+//                Item shopItem = shopItems.get(i);
+//                if (shopItem.getCount() == 0) {
+//                    itemsTable.add(createShopItemCell(shopItem, false)).width(150).height(300);
+//                } else {
+//                    itemsTable.add(createShopItemCell(shopItem, true)).width(150).height(300);
+//                }
+//                itemsTable.row();
+//            }
+//        }
 
         scrollPane = new ScrollPane(itemsTable, skin);
         scrollPane.setFadeScrollBars(false);
@@ -120,6 +155,8 @@ public class ShopScreen {
             leftsideTable.add(buildingX).padLeft(30).width(400).row();
         }
         rootTable.add(leftsideTable).right();
+        rootTable.add(buy);
+        rootTable.add(count);
     }
 
     private Table createShopItemCell(ItemsInteface shopItem, boolean available) {
@@ -133,14 +170,14 @@ public class ShopScreen {
         Image img = new Image(tex);
         img.setScaling(Scaling.fit);
         img.setFillParent(false);
-            Table tooltipTable = new Table(skin);
-            Drawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundItemTexture));
-            tooltipTable.setBackground(backgroundDrawable);
+        Table tooltipTable = new Table(skin);
+        Drawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundItemTexture));
+        tooltipTable.setBackground(backgroundDrawable);
 
-            tooltipTable.pad(10);
+        tooltipTable.pad(10);
 
-            Label nameLabel = new Label("Name: " + shopItem.getName(), skin);
-            tooltipTable.add(nameLabel).left().row();
+        Label nameLabel = new Label("Name: " + shopItem.getName(), skin);
+        tooltipTable.add(nameLabel).left().row();
         if (shopItem instanceof CarpenterProducts) {
             Label stone = new Label("Required Stone: " + ((CarpenterProducts) shopItem).getType().getStone() + " stones", skin);
             Label wood = new Label("Required Wood: " + ((CarpenterProducts) shopItem).getType().getWood() + " woods", skin);
@@ -192,54 +229,138 @@ public class ShopScreen {
 
 
 
+//        img.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                errorLabel.setVisible(false);
+//                int cost = shopItem.getPrice();
+//                if (player.getMoney() < cost) {
+//                    errorLabel.setText("Not enough money!");
+//                    errorLabel.setVisible(true);
+//                    return;
+//                }
+//
+//                if (((ShopProduct)shopItem).getCount() == 0) {
+//                    errorLabel.setText("Out of stock!");
+//                    errorLabel.setVisible(true);
+//                } else {
+//
+//                    // perform purchase
+//                    if (building instanceof Carpenter) {
+//                        try {
+//                            carpenterX = Integer.parseInt(buildingX.getText());
+//                            carpenterY = Integer.parseInt(buildingY.getText());
+//                        } catch (NumberFormatException e) {
+//                            errorLabel.setText("invalid coordinates");
+//                            errorLabel.setVisible(true);
+//                        }
+//                        boolean success = GameMenuController.build(shopItem.getName(), carpenterX, carpenterY);
+//                        if (success) {
+//                            player.setMoney(player.getMoney() - cost);
+//                        }
+//                    } else if (building instanceof Ranch) {
+//                        GameMenuController.buyAnimal(shopItem.getName(), buildingX.getText());
+//                    } else {
+//                        Item inInv = Item.findItemByName(
+//                            shopItem.getName(), player.getBackPack().getItems());
+//                        if (inInv != null) {
+//                            inInv.setCount(inInv.getCount() + 1);
+//                        } else {
+//                            player.getBackPack().addItem(
+//                                new Item(1, shopItem.getName(), shopItem.getPrice(), shopItem.getTexture()));  // assume you have a copy-constructor
+//                        }
+//                        ((ShopProduct) shopItem).setCount(((ShopProduct) shopItem).getCount() - 1);
+//                        player.setMoney(player.getMoney() - cost);
+//                    }
+//                    App.getCurrentGame().incrementPurchase(shopItem);
+//                    refresh(); // updateGreenBar money label (and could updateGreenBar limit display)
+//                }
+//            }
+//        });
+
         img.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                selectedProduct = (ShopProduct) shopItem; // store reference
                 errorLabel.setVisible(false);
-                int cost = shopItem.getPrice();
+                errorLabel.setText("Selected: " + shopItem.getName());
+                errorLabel.setVisible(true);
+            }
+        });
+
+        buy.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                errorLabel.setVisible(false);
+
+                if (selectedProduct == null) {
+                    errorLabel.setText("No item selected!");
+                    errorLabel.setVisible(true);
+                    return;
+                }
+                int number = 0;
+                try {
+                    number = Integer.parseInt(count.getText());
+                } catch (Exception e) {
+                    errorLabel.setText("Invalid number!");
+                    errorLabel.setVisible(true);
+                    return;
+                }
+
+                if (number > selectedProduct.getCount()) {
+                    errorLabel.setText("Not enough products available!");
+                    errorLabel.setVisible(true);
+                    return;
+                }
+
+                int cost = selectedProduct.getPrice();
                 if (player.getMoney() < cost) {
                     errorLabel.setText("Not enough money!");
                     errorLabel.setVisible(true);
                     return;
                 }
 
-                if (((ShopProduct)shopItem).getCount() == 0) {
+                if (selectedProduct.getCount() == 0) {
                     errorLabel.setText("Out of stock!");
                     errorLabel.setVisible(true);
-                } else {
+                    return;
+                }
 
-                    // perform purchase
-                    if (building instanceof Carpenter) {
-                        try {
-                            carpenterX = Integer.parseInt(buildingX.getText());
-                            carpenterY = Integer.parseInt(buildingY.getText());
-                        } catch (NumberFormatException e) {
-                            errorLabel.setText("invalid coordinates");
-                            errorLabel.setVisible(true);
-                        }
-                        boolean success = GameMenuController.build(shopItem.getName(), carpenterX, carpenterY);
-                        if (success) {
-                            player.setMoney(player.getMoney() - cost);
-                        }
-                    } else if (building instanceof Ranch) {
-                        GameMenuController.buyAnimal(shopItem.getName(), buildingX.getText());
-                    } else {
-                        Item inInv = Item.findItemByName(
-                            shopItem.getName(), player.getBackPack().getItems());
-                        if (inInv != null) {
-                            inInv.setCount(inInv.getCount() + 1);
-                        } else {
-                            player.getBackPack().addItem(
-                                new Item(1, shopItem.getName(), shopItem.getPrice(), shopItem.getTexture()));  // assume you have a copy-constructor
-                        }
-                        ((ShopProduct) shopItem).setCount(((ShopProduct) shopItem).getCount() - 1);
+                // Perform the actual purchase
+                if (building instanceof Carpenter) {
+                    try {
+                        carpenterX = Integer.parseInt(buildingX.getText());
+                        carpenterY = Integer.parseInt(buildingY.getText());
+                    } catch (NumberFormatException e) {
+                        errorLabel.setText("Invalid coordinates");
+                        errorLabel.setVisible(true);
+                        return;
+                    }
+                    boolean success = GameMenuController.build(selectedProduct.getName(), carpenterX, carpenterY);
+                    if (success) {
                         player.setMoney(player.getMoney() - cost);
                     }
-                    App.getCurrentGame().incrementPurchase(shopItem);
-                    refresh(); // updateGreenBar money label (and could updateGreenBar limit display)
+                } else if (building instanceof Ranch) {
+                    GameMenuController.buyAnimal(selectedProduct.getName(), buildingX.getText());
+                } else {
+                    Item inInv = Item.findItemByName(
+                        selectedProduct.getName(), player.getBackPack().getItems());
+                    if (inInv != null) {
+                        inInv.setCount(inInv.getCount() + number);
+                    } else {
+                        player.getBackPack().addItem(
+                            new Item(number, selectedProduct.getName(), selectedProduct.getPrice(), selectedProduct.getTexture()));
+                    }
+                    selectedProduct.setCount(selectedProduct.getCount() - number);
+                    player.setMoney(player.getMoney() - cost);
                 }
+
+                App.getCurrentGame().incrementPurchase(selectedProduct);
+                selectedProduct = null;
+                refresh();
             }
         });
+
 
         cell.add(img).size(64).pad(20);
 
@@ -267,6 +388,10 @@ public class ShopScreen {
     public boolean render(SpriteBatch batch, OrthographicCamera camera) {
         if (!visible) return false;
         if (click) {
+            return false;
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            hide();
             return false;
         }
         batch.begin();

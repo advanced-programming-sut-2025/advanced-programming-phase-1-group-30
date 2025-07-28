@@ -40,8 +40,6 @@ import AP.group30.StardewValley.models.Items.Products.Crop;
 import AP.group30.StardewValley.models.Items.Products.CropType;
 import AP.group30.StardewValley.models.Items.Products.ForagingCrop;
 import AP.group30.StardewValley.models.Items.Products.ForagingCropType;
-import AP.group30.StardewValley.models.Items.Products.ForagingMineral;
-import AP.group30.StardewValley.models.Items.Products.ForagingMineralType;
 import AP.group30.StardewValley.models.Items.Products.ForagingSeed;
 import AP.group30.StardewValley.models.Items.Products.ForagingSeedType;
 import AP.group30.StardewValley.models.Items.Products.ForagingTree;
@@ -278,16 +276,22 @@ public class MaintainerController {
     }
 
     private static void updateGeneralStore() {
+        GeneralStore generalStore = App.getCurrentGame().getGeneralStore();
         GeneralStore store = App.getCurrentGame().getGeneralStore();
         store.removeItems();
         ArrayList<GeneralStoreCosts> items = new ArrayList<>(List.of(GeneralStoreCosts.values()));
         Collections.shuffle(items);
         Random rand = new Random();
 
-        for (int i = 0; i < rand.nextInt(items.size()); i++) {
+        int x = rand.nextInt(items.size()) + 5;
+
+        for (int i = 0; i < Math.min(x, items.size()); i++) {
             GeneralStoreCosts type = items.get(i);
-            int count = 1 + Math.max(rand.nextInt(type.getDailyLimit()), 10);
-            store.addItem(new GeneralStoreProducts(count, type));
+            int count = type.getDailyLimit();
+            if (type.getSeason().equals(App.getCurrentGame().getCurrentTime().getSeason()) || type.getSeason().equals(Season.ALL)) generalStore.addItem(new GeneralStoreProducts(count, type));
+        } for (int i = x; i < items.size(); i++) {
+            GeneralStoreCosts type = items.get(i);
+            generalStore.getNotAvailableItems().add(new GeneralStoreProducts(0, type));
         }
     }
 
@@ -331,10 +335,15 @@ public class MaintainerController {
         Collections.shuffle(items);
         Random rand = new Random();
 
-        for (int i = 0; i < rand.nextInt(items.size()); i++) {
+        int x = rand.nextInt(items.size()) + 5;
+
+        for (int i = 0; i < Math.min(x, items.size()); i++) {
             SaloonCosts type = items.get(i);
-            int count = 1 + Math.max(rand.nextInt(type.getDailyLimit()), 10);
-            saloon.addItem(new SaloonProducts(count, type));
+            int count = type.getDailyLimit();
+            if (type.getSeason().equals(App.getCurrentGame().getCurrentTime().getSeason()) || type.getSeason().equals(Season.ALL)) saloon.addItem(new SaloonProducts(count, type));
+        } for (int i = x; i < items.size(); i++) {
+            SaloonCosts type = items.get(i);
+            saloon.getNotAvailableItems().add(new SaloonProducts(0, type));
         }
     }
 
@@ -353,7 +362,7 @@ public class MaintainerController {
         GameMenu.printResult("Shipping Bins were emptied!");
     }
 
-    public static void artisanProssesTimeChanger(int amount) {
+    public static void artisanProcessTimeChanger(int amount) {
         for (Player player : App.getCurrentGame().getPlayers()) {
             for (ArtisanItemProsses artisanItemProsses : player.getArtisanItemsProsses()) {
                 artisanItemProsses.changeRemainingTime(amount);

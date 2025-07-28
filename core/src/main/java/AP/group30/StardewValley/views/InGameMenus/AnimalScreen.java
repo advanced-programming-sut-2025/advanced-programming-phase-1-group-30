@@ -70,7 +70,9 @@ public abstract class AnimalScreen implements Screen {
     public void render(float delta) {
         handleInput(delta);
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) inventoryScreen.toggle();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            inventoryScreen.toggle();
+        }
 
         mousePos.x = Gdx.input.getX();
         mousePos.y = Gdx.graphics.getHeight() - Gdx.input.getY();
@@ -107,7 +109,7 @@ public abstract class AnimalScreen implements Screen {
                 player.getNearbyAnimal().feed();
             } else if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
                 player.getNearbyAnimal().collectProduct();
-            } else if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
+            } else if (Gdx.input.isKeyJustPressed(Input.Keys.B)) {
                 player.getNearbyAnimal().shepherdAnimals();
             } else if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
                 GameMenuController.sellAnimal(player.getNearbyAnimal());
@@ -208,6 +210,7 @@ public abstract class AnimalScreen implements Screen {
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            player.setNearbyAnimal(null);
             Main.getMain().setScreen(gameScreen);
         }
     }

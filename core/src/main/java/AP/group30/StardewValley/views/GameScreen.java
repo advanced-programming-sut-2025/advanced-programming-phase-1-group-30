@@ -9,10 +9,10 @@ import AP.group30.StardewValley.models.Buildings.Barn;
 import AP.group30.StardewValley.models.Buildings.Building;
 import AP.group30.StardewValley.models.Buildings.Coop;
 import AP.group30.StardewValley.models.Buildings.Hut;
+import AP.group30.StardewValley.models.Commands.GameMenuCommands;
 import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.GameObjects;
-import AP.group30.StardewValley.models.Items.Item;
 import AP.group30.StardewValley.models.Items.Products.*;
 import AP.group30.StardewValley.models.Items.Products.ForagingSeed;
 import AP.group30.StardewValley.models.Items.Products.Stone;
@@ -40,22 +40,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Timer;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
-import java.util.Scanner;
+import java.util.regex.Matcher;
 
 public class GameScreen implements Screen {
     private SpriteBatch batch;
@@ -88,6 +80,7 @@ public class GameScreen implements Screen {
     private boolean lightningHit = false;
     private Tile lightningTargetTile;
     private float lightningCooldown = 0f;
+    private boolean cheatLightning = false;
 
     private final Map map;
     private final Tile[][] tiles;
@@ -173,14 +166,13 @@ public class GameScreen implements Screen {
 
         cheatField = new TextField("", GameAssetManager.assetManager.get(GameAssetManager.menuSkin));
         cheatField.setVisible(false);
-        cheatField.setWidth(Gdx.graphics.getWidth() * 0.5f);
     }
 
     @Override
     public void show() {
         batch = new SpriteBatch();
 
-        table.add(cheatField);
+        table.add(cheatField).width(600);
         table.setPosition(table.getX(), table.getY() - Gdx.graphics.getHeight() / 2.3f);
         table.setFillParent(true);
         stage.addActor(table);
@@ -199,8 +191,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        TextureRegion lightningFrame = null;
-
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stateTime += delta;
@@ -208,17 +198,70 @@ public class GameScreen implements Screen {
 
         camera.position.set(x + playerRegion.getRegionWidth() / 2f, y + playerRegion.getRegionHeight() / 2f, 0);
         camera.update();
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
-            Building building = findBuilding();
-            if (building instanceof Coop) {
-                Main.getMain().setScreen(new CoopScreen(GameAssetManager.assetManager.get(GameAssetManager.menuSkin), GameAssetManager.assetManager.get(GameAssetManager.coopInterior), building));
-            } else if (building instanceof Barn) {
-                Main.getMain().setScreen(new BarnScreen(GameAssetManager.assetManager.get(GameAssetManager.menuSkin), GameAssetManager.assetManager.get(GameAssetManager.barnInterior), building));
+        if (!(stage.getKeyboardFocus() instanceof TextField)) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
+                Building building = findBuilding();
+                if (building instanceof Coop) {
+                    Main.getMain().setScreen(new CoopScreen(GameAssetManager.assetManager.get(GameAssetManager.menuSkin), GameAssetManager.assetManager.get(GameAssetManager.coopInterior), building));
+                } else if (building instanceof Barn) {
+                    Main.getMain().setScreen(new BarnScreen(GameAssetManager.assetManager.get(GameAssetManager.menuSkin), GameAssetManager.assetManager.get(GameAssetManager.barnInterior), building));
+                }
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
-            cheatField.setVisible(!cheatField.isVisible());
+            if (!cheatField.isVisible()) {
+                Gdx.input.setInputProcessor(stage);
+                stage.setKeyboardFocus(cheatField);
+                cheatField.setVisible(!cheatField.isVisible());
+                cheatField.setText("");
+            }
+        }
+        if (cheatField.isVisible()) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+                cheatField.setVisible(false);
+                stage.setKeyboardFocus(null);
+                Gdx.input.setInputProcessor(null);
+            }
+            Matcher matcher;
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+                if (cheatField.getText().equals("cheat thor")) {
+                    cheatLightning = true;
+                }
+                matcher = GameMenuCommands.ENERGY_SET.regexMatcher(cheatField.getText());
+                if (matcher.matches()) {
+                    cheatField.setText("Cheat Code Activated!");
+                    GameMenuController.cheatEnergySet(matcher.group("value"));
+                }
+                matcher = GameMenuCommands.CHEAT_DATE.regexMatcher(cheatField.getText());
+                if (matcher.matches()) {
+                    cheatField.setText("Cheat Code Activated!");
+                    DateAndWeatherController.cheatAdvanceDate(matcher.group("X"));
+                }
+                matcher = GameMenuCommands.CHEAT_TIME.regexMatcher(cheatField.getText());
+                if (matcher.matches()) {
+                    cheatField.setText("Cheat Code Activated!");
+                    DateAndWeatherController.cheatAdvanceTime(matcher.group("X"));
+                }
+                matcher = GameMenuCommands.CheatWeather.regexMatcher(cheatField.getText());
+                if (matcher.matches()) {
+                    cheatField.setText("Cheat Code Activated!");
+                    DateAndWeatherController.cheatWeatherSet(matcher.group("type"));
+                }
+                matcher = GameMenuCommands.CHEAT_ADD_DOLLARS.regexMatcher(cheatField.getText());
+                if (matcher.matches()) {
+                    try {
+                        cheatField.setText("Cheat Code Activated!");
+                        GameMenuController.cheatAddMoney(Integer.parseInt(matcher.group("count")));
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid number format in cheat command: " + matcher.group("count"));
+                    }
+                }
+                matcher = GameMenuCommands.CHEAT_SET_FRIENDSHIP.regexMatcher(cheatField.getText());
+                if (matcher.matches()) {
+                    cheatField.setText("Cheat Code Activated!");
+                    GameMenuController.cheatSetFriendship(matcher.group("animalName"), matcher.group("amount"));
+                }
+            }
         }
 
         batch.setProjectionMatrix(camera.combined);
@@ -263,8 +306,8 @@ public class GameScreen implements Screen {
                 fishingTimer = null;
             }
         }
-        if (!isFishing) {
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && openMenu(inventoryScreen)) inventoryScreen.toggle();
+        if (!isFishing && !(stage.getKeyboardFocus() instanceof TextField)) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.E) && openMenu(inventoryScreen)) inventoryScreen.toggle();
             if (Gdx.input.isKeyJustPressed(Input.Keys.N) && openMenu(skillScreen)) skillScreen.toggle();
             if (Gdx.input.isKeyJustPressed(Input.Keys.B) && openMenu(craftingScreen)) craftingScreen.toggle();
             if (Gdx.input.isKeyJustPressed(Input.Keys.I) && openMenu(artisanScreen)) artisanScreen.toggle();
@@ -316,15 +359,19 @@ public class GameScreen implements Screen {
     }
 
     private void renderLightning(float delta) {
-        if (!game.getCurrentWeather().equals(Weather.STORM)) return;
+        if (!game.getCurrentWeather().equals(Weather.STORM) && !cheatLightning) return;
 
         lightningCooldown -= delta;
 
         // Try triggering lightning (if not currently striking and cooldown passed)
         if (!lightningHit && lightningCooldown <= 0f) {
             int triggerChance = MathUtils.random(200); // 1 in 200 chance
-            if (triggerChance == 1) {
-                lightningTargetTile = map.getTiles()[MathUtils.random(79)][MathUtils.random(59)];
+            if (triggerChance == 1 || cheatLightning) {
+                if (cheatLightning) {
+                    lightningTargetTile = map.getTiles()[player.getX() / 32][60 - player.getY() / 32];
+                } else {
+                    lightningTargetTile = map.getTiles()[MathUtils.random(79)][MathUtils.random(59)];
+                }
                 DateAndWeatherController.cheatThor(lightningTargetTile);
                 lightningHit = true;
                 lightningTimer = 0f;
@@ -344,6 +391,7 @@ public class GameScreen implements Screen {
 
             if (lightningTimer >= lightningAnimation.getAnimationDuration()) {
                 lightningHit = false;
+                cheatLightning = false;
             }
         }
     }
@@ -558,6 +606,7 @@ public class GameScreen implements Screen {
     }
 
     private void handleInput(float delta) {
+        if (stage.getKeyboardFocus() instanceof TextField) return;
         float moveAmount = speed * delta;
 
         float proposedX = x;

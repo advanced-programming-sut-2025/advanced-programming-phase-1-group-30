@@ -112,7 +112,7 @@ public class CityScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stateTime += delta;
         player.setStateTime(stateTime);
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) inventoryScreen.toggle();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) inventoryScreen.toggle();
         if (Gdx.input.isKeyJustPressed(Input.Keys.N)) skillScreen.toggle();
 
         camera.position.set(x + playerRegion.getRegionWidth() / 2f, y + playerRegion.getRegionHeight() / 2f, 0);
@@ -128,7 +128,10 @@ public class CityScreen implements Screen {
                 if (shopScreen != null) {
                     shopScreen.show();
                 }
-            } else {
+            }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            if (shopScreen != null) {
                 shopScreen.hide();
                 shopScreen.dispose();
                 shopScreen = null;
