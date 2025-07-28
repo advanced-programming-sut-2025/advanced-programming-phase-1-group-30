@@ -6,6 +6,7 @@ import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Buildings.*;
 import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
+import AP.group30.StardewValley.models.Items.IndustrialProducts.IndustrialProductType;
 import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Items.ItemsInteface;
 import AP.group30.StardewValley.models.Items.Item;
@@ -326,19 +327,48 @@ public class ShopScreen {
                     return;
                 }
 
-                // Perform the actual purchase
-                if (building instanceof Carpenter) {
-                    try {
-                        carpenterX = Integer.parseInt(buildingX.getText());
-                        carpenterY = Integer.parseInt(buildingY.getText());
-                    } catch (NumberFormatException e) {
-                        errorLabel.setText("Invalid coordinates");
-                        errorLabel.setVisible(true);
-                        return;
-                    }
-                    boolean success = GameMenuController.build(selectedProduct.getName(), carpenterX, carpenterY);
-                    if (success) {
-                        player.setMoney(player.getMoney() - cost);
+                    // perform purchase
+                    if (building instanceof Carpenter) {
+                        try {
+                            carpenterX = Integer.parseInt(buildingX.getText());
+                            carpenterY = Integer.parseInt(buildingY.getText());
+                        } catch (NumberFormatException e) {
+                            errorLabel.setText("invalid coordinates");
+                            errorLabel.setVisible(true);
+                        }
+                        boolean success = GameMenuController.build(shopItem.getName(), carpenterX, carpenterY);
+                        if (success) {
+                            player.setMoney(player.getMoney() - cost);
+                        }
+                    } else if (building instanceof Ranch) {
+                        GameMenuController.buyAnimal(shopItem.getName(), buildingX.getText());
+                    } else if (building instanceof Saloon) {
+                        addFoodRecipe(cost, shopItem, player);
+                    } else {
+                        if (shopItem.getName().equals("A recipe to make Fish Smoker")){
+                            if(!player.getCraftingRecipes().contains(IndustrialProductType.FISH_SMOKER)){
+                                player.getCraftingRecipes().add(IndustrialProductType.FISH_SMOKER);
+                            }
+                        } else if (shopItem.getName().equals("dehydrator recipe")){
+                            if(!player.getCraftingRecipes().contains(IndustrialProductType.DEHYDRATOR)){
+                                player.getCraftingRecipes().add(IndustrialProductType.DEHYDRATOR);
+                            }
+                        } else if (shopItem.getName().equals("grass starter recipe")){
+                            if(!player.getCraftingRecipes().contains(IndustrialProductType.GRASS_STARTER)){
+                                player.getCraftingRecipes().add(IndustrialProductType.GRASS_STARTER);
+                            }
+                        } else {
+                            Item inInv = Item.findItemByName(
+                                shopItem.getName(), player.getBackPack().getItems());
+                            if (inInv != null) {
+                                inInv.setCount(inInv.getCount() + 1);
+                            } else {
+                                player.getBackPack().addItem(
+                                    new Item(1, shopItem.getName(), shopItem.getPrice(), shopItem.getTexture()));  // assume you have a copy-constructor
+                            }
+                        }
+
+                        ((ShopProduct) shopItem).setCount(((ShopProduct) shopItem).getCount() - 1);
                     }
                 } else if (building instanceof Ranch) {
                     GameMenuController.buyAnimal(selectedProduct.getName(), buildingX.getText());
@@ -372,6 +402,27 @@ public class ShopScreen {
             cell.add(new Label("    (Not Available): ", skin)).padTop(4);
 
         return cell;
+    }
+
+    private static void addFoodRecipe(int cost, ItemsInteface shopItem, Player player) {
+        assert shopItem instanceof SaloonProducts;
+        SaloonCosts itemType = ((SaloonProducts) shopItem).getType();
+
+        ((ShopProduct) shopItem).setCount(((ShopProduct) shopItem).getCount() - 1);
+        player.setMoney(player.getMoney() - cost);
+        if (itemType.getRecipe() != null) {
+            if (!App.getCurrentGame().getCurrentPlayer().getRecipes().contains(itemType.getRecipe()))
+                App.getCurrentGame().getCurrentPlayer().addRecipe(itemType.getRecipe());
+        } else {
+            Item inInv = Item.findItemByName(
+                shopItem.getName(), player.getBackPack().getItems());
+            if (inInv != null) {
+                inInv.setCount(inInv.getCount() + 1);
+            } else {
+                player.getBackPack().addItem(
+                    new Item(1, shopItem.getName(), shopItem.getPrice(), shopItem.getTexture()));  // assume you have a copy-constructor
+            }
+        }
     }
 
     public void show() {

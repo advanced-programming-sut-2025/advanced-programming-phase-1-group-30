@@ -154,7 +154,7 @@ public enum ItemTexture {
     GOLD(GameAssetManager.assetManager.get(GameAssetManager.gold)),
     IRIDIUM(GameAssetManager.assetManager.get(GameAssetManager.iridium)),
     STONE2(GameAssetManager.assetManager.get(GameAssetManager.stone2)),
-  
+
     HAY(GameAssetManager.assetManager.get(GameAssetManager.hay)),
 
     SALMON(GameAssetManager.assetManager.get(GameAssetManager.salmon)),

@@ -32,6 +32,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
+import java.rmi.MarshalledObject;
 import java.util.*;
 
 public class Player implements GameObjects {
@@ -74,7 +75,6 @@ public class Player implements GameObjects {
     private boolean inCity;
     private Map savedMap;
     private int lastEnergy;
-    private ArrayList<Item> shippingBinItems = new ArrayList<>();
     private boolean energyBuff = false;
     private boolean levelBuff = false;
     private HashMap<String, Integer> buffs = new HashMap<>();
@@ -147,13 +147,14 @@ public class Player implements GameObjects {
         this.buffs.put("dish o' the Sea", -1);
         this.buffs.put("seaform pudding", -1);
         this.buffs.put("miner's treat", -1);
-        this.craftingRecipes.addAll(Arrays.asList(IndustrialProductType.values()));
 
         this.devices.add(IndustrialProductType.BEE_HOUSE);
         this.devices.add(IndustrialProductType.KEG);
         this.devices.add(IndustrialProductType.LOOM);
 
         this.backPack.addItem(new FishingPole(1, FishingPoleType.TRAINING_POLE));
+        this.recipes.addAll(Arrays.asList(FoodType.values()));
+        this.getBackPack().addItem(new Item(5, "egg", 0, ItemTexture.WOOD.getTexture()));
     }
 
     public String getUsername() {
@@ -532,17 +533,6 @@ public class Player implements GameObjects {
             NewGameController.NextTurn(scanner);
         }
     }
-    public ArrayList<Item> getShippingBinItems() {
-        return this.shippingBinItems;
-    }
-
-    public void resetShippingBinItems() {
-        this.shippingBinItems = new ArrayList<>();
-    }
-
-    public void addShippingBinItem(Item shippingBinItem) {
-        this.shippingBinItems.add(shippingBinItem);
-    }
 
     public boolean isEnergyBuff() {
         return energyBuff;
@@ -625,7 +615,7 @@ public class Player implements GameObjects {
     }
 
     @Override
-    public void render(SpriteBatch batch, Map map) {
+    public void render(SpriteBatch batch) {
         TextureRegion currentFrame;
         if(isMoving){
             if(direction.equals(Direction.NORTH)){

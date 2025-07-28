@@ -78,7 +78,7 @@ public class Tree extends Product implements GameObjects {
     }
 
     @Override
-    public void render(SpriteBatch batch, Map map) {
+    public void render(SpriteBatch batch) {
         switch (App.getCurrentGame().getCurrentTime().getSeason()) {
             case SPRING -> batch.draw(springTexture, x, y, width, height);
             case SUMMER -> batch.draw(summerTexture, x, y, width, height);

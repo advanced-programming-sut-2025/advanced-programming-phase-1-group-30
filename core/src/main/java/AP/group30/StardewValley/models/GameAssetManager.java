@@ -294,6 +294,7 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> metalBar = new AssetDescriptor<>("item/ArtisanGoods/Metal_Bar.png", Texture.class);
 
     public static final AssetDescriptor<Texture> builtGreenhouse = new AssetDescriptor<>("Stardew_Valley_Images/Greenhouse/GreenhouseBuilt.png", Texture.class);
+    public static final AssetDescriptor<Texture> greenhouseInterior = new AssetDescriptor<>("Stardew_Valley_Images/Greenhouse/greenhouse.png",Texture.class);
 
     public static final AssetDescriptor<Texture> cowFront1 = new AssetDescriptor<>("output_squares/Cow0.png", Texture.class);
     public static final AssetDescriptor<Texture> cowFront2 = new AssetDescriptor<>("output_squares/Cow1.png", Texture.class);
@@ -468,6 +469,15 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> sunfish = new AssetDescriptor<>("Fish/Sunfish.png", Texture.class);
     public static final AssetDescriptor<Texture> tilapia = new AssetDescriptor<>("Fish/Tilapia.png", Texture.class);
     public static final AssetDescriptor<Texture> tuna = new AssetDescriptor<>("Fish/Tuna.png", Texture.class);
+
+    public static final AssetDescriptor<Texture> spring = new AssetDescriptor<>("Stardew_Valley_Images/Clock/spring.png", Texture.class);
+    public static final AssetDescriptor<Texture> summer = new AssetDescriptor<>("Stardew_Valley_Images/Clock/summer.png", Texture.class);
+    public static final AssetDescriptor<Texture> fall = new AssetDescriptor<>("Stardew_Valley_Images/Clock/fall.png", Texture.class);
+    public static final AssetDescriptor<Texture> winter = new AssetDescriptor<>("Stardew_Valley_Images/Clock/winter.png", Texture.class);
+    public static final AssetDescriptor<Texture> sunny = new AssetDescriptor<>("Stardew_Valley_Images/Clock/sunny.png", Texture.class);
+    public static final AssetDescriptor<Texture> rainy = new AssetDescriptor<>("Stardew_Valley_Images/Clock/rainy.png", Texture.class);
+    public static final AssetDescriptor<Texture> stormy = new AssetDescriptor<>("Stardew_Valley_Images/Clock/stormy.png", Texture.class);
+    public static final AssetDescriptor<Texture> snowy = new AssetDescriptor<>("Stardew_Valley_Images/Clock/snowy.png", Texture.class);
 
     public static void queueAsset() {
         assetManager.load(background);
@@ -739,6 +749,7 @@ public class GameAssetManager {
         assetManager.load(gold);
         assetManager.load(iridium);
         assetManager.load(builtGreenhouse);
+        assetManager.load(greenhouseInterior);
 
         assetManager.load(cowFront1);
         assetManager.load(cowFront2);
@@ -896,6 +907,16 @@ public class GameAssetManager {
         assetManager.load(tilapia);
         assetManager.load(tuna);
         assetManager.load(dorado);
+
+        assetManager.load(spring);
+        assetManager.load(summer);
+        assetManager.load(fall);
+        assetManager.load(winter);
+        assetManager.load(sunny);
+        assetManager.load(rainy);
+        assetManager.load(stormy);
+        assetManager.load(snowy);
+
     }
 
     public static TextureRegion[] getFront(String animal) {

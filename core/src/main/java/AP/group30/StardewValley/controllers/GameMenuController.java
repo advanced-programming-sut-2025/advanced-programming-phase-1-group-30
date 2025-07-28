@@ -5,7 +5,6 @@ import AP.group30.StardewValley.models.Animals.*;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Buildings.*;
 //import AP.group30.StardewValley.models.Commands.Menus;
-import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Inventory.BackPackType;
 import AP.group30.StardewValley.models.Items.Gift;
 import AP.group30.StardewValley.models.Items.ItemTexture;
@@ -32,31 +31,34 @@ import AP.group30.StardewValley.models.Users.User;
 import AP.group30.StardewValley.views.GameMenu;
 import AP.group30.StardewValley.views.GameScreen;
 import AP.group30.StardewValley.views.StartMenus.RegisterMenu;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import java.util.*;
 import java.util.List;
 
 public class GameMenuController {
-    public static void greenHouseBuild() {
+    public static String greenHouseBuild() {
         Player player = App.getCurrentGame().getCurrentPlayer();
         Item wood = Item.findItemByName("wood", player.getBackPack().getItems());
         if (wood == null) {
-            GameMenu.printResult("Not enough wood!");
+            return "You need 50 woods!";
         }
         if (wood.getCount() < 500) {
-            GameMenu.printResult("Not enough wood!");
-            return;
+            return "You need 50 woods!";
         }
         if (player.getMoney() < 1000) {
-            GameMenu.printResult("Not enough money!");
-            return;
+            return "You need 1000 golds!";
         }
         player.setMoney(player.getMoney() - 1000);
         wood.setCount(wood.getCount() - 500);
-        player.getMap().createGreenHouse();
-        GameMenu.printResult("Congratulations! Your brand-new greenhouse is ready.");
+        App.getCurrentGame().getGreenHouse().buildGreenhouse();
+        return "";
     }
 
     public static void walk(String xStr, String yStr, Scanner scanner) {
@@ -324,10 +326,9 @@ public class GameMenuController {
         }
         return false;
     }
-    public static void toolUse(Direction direction, int playerX, int playerY, SpriteBatch batch) {
+    public static void toolUse(Direction direction, int playerX, int playerY, SpriteBatch batch, Tile[][] tiles) {
         Player player = App.getCurrentGame().getCurrentPlayer();
         Item wield = player.getWield();
-        Tile[][] tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
 
         if(player.isInCity()){
             GameMenu.printResult("You can't use tools in city!");
@@ -335,8 +336,21 @@ public class GameMenuController {
         }
 
 
+        int y;
+        if(RegisterMenu.gameScreen.getGreenhouseScreen().isVisible()) {
+            y = playerY / 32;
+            switch (direction) {
+                case NORTH:
+                    y += 2;
+                    break;
+                case SOUTH:
+                    y -= 2;
+                    break;
+            }
+        } else {
+            y = 60 - (playerY / 32);
+        }
         int x = playerX / 32;
-        int y = 60 - (playerY / 32);
         int dx = 0, dy = 0;
         if (player.getWield() instanceof Axe) {
             switch (direction) {
@@ -384,6 +398,7 @@ public class GameMenuController {
         int newY = y + dy;
 
         if (newX < 0 || newX >= tiles.length || newY < 0 || newY >= tiles[0].length) {
+            System.out.println(newX + " " + newY);
             GameMenu.printResult("Out of bounds!");
             return;
         }
@@ -452,7 +467,11 @@ public class GameMenuController {
                             }
                             GameMenu.printResult(targetTile.getItem().getName() + " successfully added to your backpack");
                             player.increaseMining(10);
-                            RegisterMenu.gameScreen.entities.remove(targetTile.getItem());
+                            if(RegisterMenu.gameScreen.getGreenhouseScreen().isVisible()){
+                                RegisterMenu.gameScreen.getGreenhouseScreen().entities.remove(targetTile.getItem());
+                            }   else {
+                                RegisterMenu.gameScreen.entities.remove(targetTile.getItem());
+                            }
                             targetTile.setItem(null);
                         } else {
                             GameMenu.printResult("You swing your pickaxe... but there's nothing to mine here!");
@@ -701,7 +720,11 @@ public class GameMenuController {
                         }
                         if (targetTile.getCrop().getType().getRegrowthTime() == targetTile.getCrop().getRegrowthTime()) {
                             targetTile.setReadyToHarvest(false);
-                            RegisterMenu.gameScreen.getEntities().remove(targetTile.getCrop());
+                            if (RegisterMenu.gameScreen.getGreenhouseScreen().isVisible()){
+                                RegisterMenu.gameScreen.getGreenhouseScreen().entities.remove(targetTile.getCrop());
+                            } else {
+                                RegisterMenu.gameScreen.getEntities().remove(targetTile.getCrop());
+                            }
                             targetTile.setTexture(TileTexture.PLANTABLE.getTexture());
                             targetTile.setType(TileTypes.PLANTABLE);
                             targetTile.setCrop(null);
@@ -745,7 +768,11 @@ public class GameMenuController {
                         } else {
                             if (targetTile.getCrop().getRegrowthTime() >= targetTile.getCrop().getType().getRegrowthTime() - 1) {
                                 targetTile.setReadyToHarvest(false);
-                                RegisterMenu.gameScreen.getEntities().remove(targetTile.getCrop());
+                                if (RegisterMenu.gameScreen.getGreenhouseScreen().isVisible()){
+                                    RegisterMenu.gameScreen.getGreenhouseScreen().entities.remove(targetTile.getCrop());
+                                } else {
+                                    RegisterMenu.gameScreen.getEntities().remove(targetTile.getCrop());
+                                }
                                 targetTile.setCrop(null);
                                 targetTile.setItem(null);
                                 targetTile.setGiantCrop(false);
@@ -789,43 +816,58 @@ public class GameMenuController {
         }
     }
 
-    public static void craftInfo(String name) {
+    public static String craftInfo(Image itemImage, String name) {
         boolean isCraftAvailable = false;
-        CropType craft = null;
+        CropType crop = null;
         for (CropType cropType : CropType.values()) {
             if (cropType.getName().toLowerCase().equals(name)) {
-                craft = cropType;
+                crop = cropType;
                 isCraftAvailable = true;
             }
         }
         if (!isCraftAvailable) {
-            GameMenu.printResult("No craft with given name were found!");
-            return;
+            itemImage.setDrawable(new TextureRegionDrawable(new TextureRegion(ItemTexture.WOOD.getTexture())));
+            return null;
         }
 
         StringBuilder sb = new StringBuilder();
 
-        sb.append("Name: " + craft.getName() + "\n");
-        sb.append(MaintainerController.arrayListToString("Stages", craft.getStages()));
-        sb.append("Total Harvest Time: " + craft.getTotalHarvestTime() + "\n");
-        sb.append("One Time: " + craft.isOneTime() + "\n");
-        sb.append("Regrowth Time: " + craft.getRegrowthTime() + "\n");
-        sb.append("Base Sell Price: " + craft.getPrice() + "\n");
-        sb.append("Is Edible: " + craft.isEdible() + "\n");
-        sb.append("Base Energy: " + craft.getEnergy() + "\n");
-        sb.append("Base Health: " + craft.getHealth() + "\n");
-        sb.append(MaintainerController.arrayListToString("Season", craft.getSeasons()));
-        sb.append("Can Become Giant: " + craft.isCanBecomeGiant());
-        RegisterMenu.printResult(sb.toString());
+        sb.append("Name: " + crop.getName() + "\n");
+        sb.append(MaintainerController.arrayListToString("Stages", crop.getStages()));
+        sb.append("Total Harvest Time: " + crop.getTotalHarvestTime() + "\n");
+        sb.append("One Time: " + crop.isOneTime() + "\n");
+        sb.append("Regrowth Time: " + crop.getRegrowthTime() + "\n");
+        sb.append("Base Sell Price: " + crop.getPrice() + "\n");
+        sb.append("Is Edible: " + crop.isEdible() + "\n");
+        sb.append("Base Energy: " + crop.getEnergy() + "\n");
+        sb.append("Base Health: " + crop.getHealth() + "\n");
+        sb.append(MaintainerController.arrayListToString("Season", crop.getSeasons()));
+        sb.append("Can Become Giant: " + crop.isCanBecomeGiant());
+
+        itemImage.setDrawable(new TextureRegionDrawable(new TextureRegion(crop.getTexture())));
+
+        return sb.toString();
     }
-    public static Crop plant(String seed1, Direction direction) {
+    public static Crop plant(String seed1, Direction direction, Tile[][] tiles) {
         ForagingSeed seed;
         Player player = App.getCurrentGame().getCurrentPlayer();
 
-        Tile[][] tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
-
-        int x = player.getX() / 32;
-        int y = 60 - (player.getY() / 32);
+        int x, y;
+        if(RegisterMenu.gameScreen.getGreenhouseScreen().isVisible()) {
+            y = (int) (player.getY() - Gdx.graphics.getHeight() / 3.93f) / 32;
+            x = (int) (player.getX() - Gdx.graphics.getWidth() / 2.5f) /32;
+            switch (direction) {
+                case NORTH:
+                    y += 2;
+                    break;
+                case SOUTH:
+                    y -= 2;
+                    break;
+            }
+        } else {
+            y = 60 - (player.getY() / 32);
+            x = player.getX() / 32;
+        }
         int dx = 0, dy = 0;
 
         switch (direction) {
@@ -844,6 +886,7 @@ public class GameMenuController {
 
         int newX = x + dx;
         int newY = y + dy;
+        System.out.println(newX + " " + newY);
 
         // Bounds check
         if (newX < 0 || newX >= tiles.length || newY < 0 || newY >= tiles[0].length) {
@@ -899,10 +942,18 @@ public class GameMenuController {
                 tiles[newX][newY].setReadyToHarvest(false);
                 CropType plantedCrop = seed.getCrop().getType();
                 Crop crop = new Crop(1, plantedCrop);
-                crop.setPosition(targetTile.getX(), 60 - targetTile.getY());
+                if (RegisterMenu.gameScreen.getGreenhouseScreen().isVisible()){
+                    crop.setPosition(targetTile.getX(), targetTile.getY());
+                } else {
+                    crop.setPosition(targetTile.getX(), 60 - targetTile.getY());
+                }
                 tiles[newX][newY].setCrop(crop);
                 GameMenu.printResult("Planted " + seed.getName() + " at (" + newX + ", " + newY + ")");
-                RegisterMenu.gameScreen.entities.add(tiles[newX][newY].getCrop());
+                if (RegisterMenu.gameScreen.getGreenhouseScreen().isVisible()){
+                    RegisterMenu.gameScreen.getGreenhouseScreen().entities.add(tiles[newX][newY].getCrop());
+                } else {
+                    RegisterMenu.gameScreen.entities.add(tiles[newX][newY].getCrop());
+                }
 
                 int[][] squareOffsets = {
                         {0, 0},       // current tile is top-left of square
@@ -997,7 +1048,7 @@ public class GameMenuController {
         }
     }
 
-    public static void fertilize(String fetilizer, Direction direction) {
+    public static void fertilize(String fetilizer, Direction direction, Tile[][] tiles) {
         Item item = Item.findItemByName(fetilizer, App.getCurrentGame().getCurrentPlayer().getBackPack().getItems());
         if (item == null) {
             GameMenu.printResult("No item with this name found in your backpack!");
@@ -1005,10 +1056,22 @@ public class GameMenuController {
         }
 
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Tile[][] tiles = App.getCurrentGame().getCurrentPlayer().getMap().getTiles();
-        int x = player.getX() / 32;
-        int y = player.getY() / 32;
-        y = 60 - y;
+        int x, y;
+        if(RegisterMenu.gameScreen.getGreenhouseScreen().isVisible()) {
+            y = (int) (player.getY() - Gdx.graphics.getHeight() / 3.93f) / 32;
+            x = (int) (player.getX() - Gdx.graphics.getWidth() / 2.5f) /32;
+            switch (direction) {
+                case NORTH:
+                    y += 2;
+                    break;
+                case SOUTH:
+                    y -= 2;
+                    break;
+            }
+        } else {
+            y = 60 - (player.getY() / 32);
+            x = player.getX() / 32;
+        }
         int dx = 0, dy = 0;
 
         if(player.isInCity()){
@@ -1349,26 +1412,29 @@ public class GameMenuController {
                 backpackItem.changeCount(-1 * ingredient.getCount());
         }
 
-        App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(new Food(1, recipe));
+        boolean itemIsInBackpack = false;
+        for (Item item : player.getBackPack().getItems()) {
+            if (item.getName().equals(recipe.getName())) {
+                itemIsInBackpack = true;
+                item.setCount(item.getCount() + 1);
+                break;
+            }
+        }
+        if (!itemIsInBackpack)
+            App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(new Food(1, recipe));
         App.getCurrentGame().getCurrentPlayer().changeEnergy(-3);
+
         return null;
     }
 
-    public static void eat(String name) {
-        Food food = null;
+    public static void eat(Food food) {
         Player player = App.getCurrentGame().getCurrentPlayer();
-        for (Item foodItem : player.getBackPack().getItems()) {
-            if (foodItem.getClass() == Food.class && foodItem.getName().equals(name))
-                food = (Food) foodItem;
-        }
 
-        if (food == null) {
-            GameMenu.printResult("No food with given name were found!");
-            return;
-        }
         food.changeCount(-1);
-        if (food.getCount() == 0)
-            App.getCurrentGame().getCurrentPlayer().getBackPack().removeItem(food);
+        if (food.getCount() == 0) {
+            player.setWield(player.getBackPack().getItems().getFirst());
+            player.getBackPack().removeItem(food);
+        }
         GameMenu.printResult("Food eaten successfully");
         if (food.getName().equals("red plate")) {
             GameMenu.printResult("You got buffed for 3 hours! Max energy set to " + (player.getMaxEnergy() + 50));
@@ -1829,7 +1895,7 @@ public class GameMenuController {
         }
         GameMenu.printResult("Sold " + animal.getName() + " for: " + cost);
     }
-    public static void fishing(){
+    public static Fish fishing(){
         Player player = App.getCurrentGame().getCurrentPlayer();
 
         ArrayList<FishType> fishTypes = new ArrayList<>();
@@ -1874,12 +1940,7 @@ public class GameMenuController {
             fish.setCof(2);
         }
 
-        if (player.getBackPack().getItems().size() + 1 > player.getBackPack().getType().getCapacity()) {
-            return;
-        }
-        App.getCurrentGame().getCurrentPlayer().getBackPack().addItem(fish);
-        App.getCurrentGame().getCurrentPlayer().changeEnergy(-1 * fishingPole.getType().getEnergyUsed());
-        App.getCurrentGame().getCurrentPlayer().increaseFishing(5);
+        return fish;
     }
 
     public static String artisanUse(ArtisanGoodType item) {
@@ -2177,14 +2238,8 @@ public class GameMenuController {
         GameMenu.printResult("Cheart confirm successfully. Your money: " + App.getCurrentGame().getCurrentPlayer().getMoney());
     }
 
-    public static void sell(String name, String count){
+    public static String putShippingBin(Item item, String count){
         Player player = App.getCurrentGame().getCurrentPlayer();
-        Item item = Item.findItemByName(name, player.getBackPack().getItems());
-
-        if (item == null) {
-            GameMenu.printResult("No item with given name found!");
-            return;
-        }
 
         if (item.getClass() == Axe.class ||
             item.getClass() == Basket.class ||
@@ -2194,32 +2249,67 @@ public class GameMenuController {
             item.getClass() == Pickaxe.class ||
             item.getClass() == Scythe.class ||
             item.getClass() == Shear.class) {
-            GameMenu.printResult("You can't sell any tool!!!");
-            return;
+            return "You can't sell any tool!!!";
         }
 
         int amount;
-        if (count != null) amount = Integer.parseInt(count);
-        else amount = item.getCount();
-
-        if (item.getCount() < amount) {
-            GameMenu.printResult("Not enough number of this Item. Only have + " + item.getCount());
-            return;
+        try {
+            if (count != null) amount = Integer.parseInt(count);
+            else amount = item.getCount();
+        } catch (NumberFormatException e) {
+            amount = item.getCount();
         }
 
-        int dx = Math.abs(player.getX() - player.getShippingBin().getX());
-        int dy = Math.abs(player.getY() - player.getShippingBin().getY());
-        if (!((dx <= 1 && dy <= 1) && !(dx == 0 && dy == 0))) {
-            GameMenu.printResult("You should be near the shipping bin!");
-            return;
+        if (item.getCount() < amount) {
+            return "Not enough number of this Item.";
         }
 
         if (item.getCount() == amount) player.getBackPack().removeItem(item);
         else item.changeCount(-1  * amount);
 
-        player.getShippingBin().addItem(item);
+        boolean itemInShippingBin = false;
+        for (Item itemShippingBin: App.getCurrentGame().getCurrentPlayer().getShippingBin().getItems()) {
+            if (itemShippingBin.getName().equals(item.getName())) {
+                itemShippingBin.changeCount(amount);
+                itemInShippingBin = true;
+            }
+        }
 
-        GameMenu.printResult("Item sold successfully!");
+        if (!itemInShippingBin)
+            player.getShippingBin().addItem(new Item(amount, item.getName(), item.getPrice(), item.getTexture()));
+
+        return null;
+    }
+
+    public static String pickShippingBin(Item item, String count){
+        Player player = App.getCurrentGame().getCurrentPlayer();
+
+        int amount;
+        try {
+            if (count != null) amount = Integer.parseInt(count);
+            else amount = item.getCount();
+        } catch (NumberFormatException e) {
+            amount = item.getCount();
+        }
+
+        if (item.getCount() < amount) {
+            return "Not enough number of this Item";
+        }
+
+        if (item.getCount() == amount) player.getShippingBin().removeItem(item);
+        else item.changeCount(-1  * amount);
+
+        boolean itemInBackPack = false;
+        for (Item itemBackPack: App.getCurrentGame().getCurrentPlayer().getBackPack().getItems()) {
+            if (itemBackPack.getName().equals(item.getName())) {
+                itemBackPack.changeCount(amount);
+                itemInBackPack = true;
+            }
+        }
+        if (!itemInBackPack)
+            player.getBackPack().addItem(new Item(amount, item.getName(), item.getPrice(), item.getTexture()));
+
+        return null;
     }
 
     public static void friendships(){

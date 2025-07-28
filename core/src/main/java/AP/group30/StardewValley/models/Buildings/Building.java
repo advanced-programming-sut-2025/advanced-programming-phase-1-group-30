@@ -106,7 +106,13 @@ public class Building implements GameObjects {
     }
 
     @Override
-    public void render(SpriteBatch batch, Map map) {
+    public void render(SpriteBatch batch) {
+        Map map;
+        if (App.getCurrentGame().getCurrentPlayer().isInCity()){
+            map = App.getCurrentGame().getCityMap();
+        } else {
+            map = App.getCurrentGame().getCurrentPlayer().getMap();
+        }
         int startTIleX = 60;
         int endTIleX = 65;
         int startTIleY = 40;

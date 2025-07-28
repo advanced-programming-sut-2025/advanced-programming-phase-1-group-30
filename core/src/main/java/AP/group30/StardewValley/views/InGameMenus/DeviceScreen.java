@@ -8,6 +8,7 @@ import AP.group30.StardewValley.models.Items.ArtisanGoods.ArtisanItemProsses;
 import AP.group30.StardewValley.models.Items.IndustrialProducts.IndustrialProductType;
 import AP.group30.StardewValley.models.Items.Item;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -27,6 +28,7 @@ public class DeviceScreen extends InGameMenuScreen{
     private Image borderImage;
     private final TextButton makeButton;
     private final TextButton claimButton;
+    private final TextButton cancelButton;
 
     private final ArrayList<ArtisanGoodType> items = new ArrayList<>();
     private ArtisanGoodType currentItem;
@@ -74,6 +76,17 @@ public class DeviceScreen extends InGameMenuScreen{
             }
         });
 
+        cancelButton = new TextButton("Cancel", skin);
+        cancelButton.setPosition(table.getX() + table.getWidth() / 2f - cancelButton.getWidth() / 2f + 100,
+            table.getY() - cancelButton.getHeight());
+        cancelButton.setVisible(false);
+        cancelButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                cancelTask();
+            }
+        });
+
         TextButton exitButton = new TextButton("Exit", skin);
         exitButton.setPosition(table.getX() + table.getWidth() / 2f - exitButton.getWidth() / 2f - 100,
             table.getY() - exitButton.getHeight());
@@ -93,6 +106,7 @@ public class DeviceScreen extends InGameMenuScreen{
         stage.addActor(makeButton);
         stage.addActor(exitButton);
         stage.addActor(claimButton);
+        stage.addActor(cancelButton);
         stage.addActor(itemLabel);
 
         renderItemsInGrid();
@@ -112,6 +126,7 @@ public class DeviceScreen extends InGameMenuScreen{
         artisanGood = null;
         itemLabel.setVisible(false);
         claimButton.setVisible(false);
+        cancelButton.setVisible(false);
         makeButton.setVisible(false);
 
         infoLabel.setText("Ingredients:");
@@ -128,7 +143,10 @@ public class DeviceScreen extends InGameMenuScreen{
             }
         }
 
-        if (itemInProses) infoLabel.setVisible(false);
+        if (itemInProses) {
+            infoLabel.setVisible(false);
+            cancelButton.setVisible(true);
+        }
 
         refresh();
 
@@ -148,6 +166,10 @@ public class DeviceScreen extends InGameMenuScreen{
         super.render();
         if (visible) {
             if (itemInProses) renderProsesBar();
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                artisanGood.setRemainingTime(0);
+            }
         }
     }
 
@@ -276,6 +298,13 @@ public class DeviceScreen extends InGameMenuScreen{
         refresh();
     }
 
+    private void cancelTask() {
+        itemInProses = false;
+
+        App.getCurrentGame().getCurrentPlayer().getArtisanItemsProsses().remove(artisanGood);
+        show(device, artisanScreen);
+    }
+
 
     private String ingredients(ArtisanGoodType recipe) {
         ArrayList<Item> ingredients = recipe.getIngredients();
@@ -320,6 +349,7 @@ public class DeviceScreen extends InGameMenuScreen{
 
         if (timeRatio == 1) {
             claimButton.setVisible(true);
+            cancelButton.setVisible(false);
             itemLabel.setText(artisanGood.getArtisanGood().getName() + " is ready!");
         }
     }
