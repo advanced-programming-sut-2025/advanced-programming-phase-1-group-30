@@ -75,7 +75,6 @@ public class Player implements GameObjects {
     private boolean inCity;
     private Map savedMap;
     private int lastEnergy;
-    private ArrayList<Item> shippingBinItems = new ArrayList<>();
     private boolean energyBuff = false;
     private boolean levelBuff = false;
     private HashMap<String, Integer> buffs = new HashMap<>();
@@ -154,6 +153,8 @@ public class Player implements GameObjects {
         this.devices.add(IndustrialProductType.LOOM);
 
         this.backPack.addItem(new FishingPole(1, FishingPoleType.TRAINING_POLE));
+        this.recipes.addAll(Arrays.asList(FoodType.values()));
+        this.getBackPack().addItem(new Item(5, "egg", 0, ItemTexture.WOOD.getTexture()));
     }
 
     public String getUsername() {
@@ -531,17 +532,6 @@ public class Player implements GameObjects {
             GameMenu.printResult("You used your maximum energy possible for your turn!");
             NewGameController.NextTurn(scanner);
         }
-    }
-    public ArrayList<Item> getShippingBinItems() {
-        return this.shippingBinItems;
-    }
-
-    public void resetShippingBinItems() {
-        this.shippingBinItems = new ArrayList<>();
-    }
-
-    public void addShippingBinItem(Item shippingBinItem) {
-        this.shippingBinItems.add(shippingBinItem);
     }
 
     public boolean isEnergyBuff() {

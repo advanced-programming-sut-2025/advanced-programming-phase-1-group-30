@@ -224,6 +224,8 @@ public class ShopScreen {
                         }
                     } else if (building instanceof Ranch) {
                         GameMenuController.buyAnimal(shopItem.getName(), buildingX.getText());
+                    } else if (building instanceof Saloon) {
+                        addFoodRecipe(cost, shopItem, player);
                     } else {
                         if (shopItem.getName().equals("A recipe to make Fish Smoker")){
                             if(!player.getCraftingRecipes().contains(IndustrialProductType.FISH_SMOKER)){
@@ -267,6 +269,27 @@ public class ShopScreen {
             cell.add(new Label("    (Not Available): ", skin)).padTop(4);
 
         return cell;
+    }
+
+    private static void addFoodRecipe(int cost, ItemsInteface shopItem, Player player) {
+        assert shopItem instanceof SaloonProducts;
+        SaloonCosts itemType = ((SaloonProducts) shopItem).getType();
+
+        ((ShopProduct) shopItem).setCount(((ShopProduct) shopItem).getCount() - 1);
+        player.setMoney(player.getMoney() - cost);
+        if (itemType.getRecipe() != null) {
+            if (!App.getCurrentGame().getCurrentPlayer().getRecipes().contains(itemType.getRecipe()))
+                App.getCurrentGame().getCurrentPlayer().addRecipe(itemType.getRecipe());
+        } else {
+            Item inInv = Item.findItemByName(
+                shopItem.getName(), player.getBackPack().getItems());
+            if (inInv != null) {
+                inInv.setCount(inInv.getCount() + 1);
+            } else {
+                player.getBackPack().addItem(
+                    new Item(1, shopItem.getName(), shopItem.getPrice(), shopItem.getTexture()));  // assume you have a copy-constructor
+            }
+        }
     }
 
     public void show() {

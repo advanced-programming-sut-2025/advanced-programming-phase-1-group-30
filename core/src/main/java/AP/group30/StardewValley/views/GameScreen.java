@@ -5,7 +5,10 @@ import AP.group30.StardewValley.controllers.DateAndWeatherController;
 import AP.group30.StardewValley.controllers.GameMenuController;
 import AP.group30.StardewValley.models.Animals.*;
 import AP.group30.StardewValley.models.App;
-import AP.group30.StardewValley.models.Buildings.*;
+import AP.group30.StardewValley.models.Buildings.Barn;
+import AP.group30.StardewValley.models.Buildings.Building;
+import AP.group30.StardewValley.models.Buildings.Coop;
+import AP.group30.StardewValley.models.Buildings.Hut;
 import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.GameObjects;
@@ -20,6 +23,7 @@ import AP.group30.StardewValley.models.Maps.*;
 import AP.group30.StardewValley.models.Players.Direction;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.models.TimeAndDate.Season;
+import AP.group30.StardewValley.views.FishingMiniGame.FishingMiniGame;
 import AP.group30.StardewValley.views.InGameMenus.*;
 import AP.group30.StardewValley.views.InGameMenus.Hut.*;
 import AP.group30.StardewValley.views.StartMenus.RegisterMenu;
@@ -51,8 +55,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
-
-import javax.management.MBeanRegistration;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
@@ -62,8 +64,6 @@ public class GameScreen implements Screen {
     private SpriteBatch batch;
     private Stage stage;
     private Table table;
-    private long lastTime = 0;
-    private long now = 0;
 
     // *** Game entities ***
     public static ArrayList<Tree> trees = new ArrayList<>();
@@ -95,7 +95,6 @@ public class GameScreen implements Screen {
     private final Map map;
     private final Tile[][] tiles;
     private Tile hutEntryTile = null;
-    private Tile GreenhouseEntryTile = null;
 
 
     private int[][] grassMap;
@@ -109,6 +108,7 @@ public class GameScreen implements Screen {
     private HutScreen hut;
     private CraftingScreen craftingScreen;
     private ArtisanScreen artisanScreen;
+    private CraftInfoScreen craftInfoScreen;
     private GreenhouseScreen greenhouseScreen;
 
     private final BitmapFont info = GameAssetManager.assetManager.get(GameAssetManager.skin).getFont("font");
@@ -137,6 +137,7 @@ public class GameScreen implements Screen {
         map = game.getCurrentPlayer().getMap();
         tiles = map.getTiles();
         findEntities();
+
         entities.add(player);
         entities.add(game.getHut());
         entities.add(game.getGreenHouse());
@@ -178,9 +179,6 @@ public class GameScreen implements Screen {
         cheatField = new TextField("", GameAssetManager.assetManager.get(GameAssetManager.menuSkin));
         cheatField.setVisible(false);
         cheatField.setWidth(Gdx.graphics.getWidth() * 0.5f);
-        lastTime = TimeUtils.millis();
-        greenhouseScreen = new GreenhouseScreen(GameAssetManager.assetManager.get(GameAssetManager.menuSkin),
-            GameAssetManager.assetManager.get(GameAssetManager.greenhouseInterior), this);
     }
 
     @Override
@@ -212,7 +210,6 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stateTime += delta;
         player.setStateTime(stateTime);
-        passTime();
 
         camera.position.set(x + playerRegion.getRegionWidth() / 2f, y + playerRegion.getRegionHeight() / 2f, 0);
         camera.update();
@@ -223,15 +220,6 @@ public class GameScreen implements Screen {
                 Main.getMain().setScreen(new CoopScreen(GameAssetManager.assetManager.get(GameAssetManager.menuSkin), GameAssetManager.assetManager.get(GameAssetManager.coopInterior), building));
             } else if (building instanceof Barn) {
                 Main.getMain().setScreen(new BarnScreen(GameAssetManager.assetManager.get(GameAssetManager.menuSkin), GameAssetManager.assetManager.get(GameAssetManager.barnInterior), building));
-            } else if(building instanceof GreenHouse){
-                if(game.getGreenHouse().isBuilt()) {
-                    greenhouseScreen.show();
-                    Main.getMain().setScreen(greenhouseScreen);
-                } else {
-                    batch.begin();
-                    info.draw(batch, "You need to pay 1000 gold and\n500 wood to rebuild greenhouse\nPress 'R' to pay!",camera.position.x - 50,camera.position.y + 510);
-                    batch.end();
-                }
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
@@ -247,7 +235,7 @@ public class GameScreen implements Screen {
         renderBackground(camera, grassMap, batch);
         renderWallsAroundMap(tiles, batch);
         renderMap(batch, map);
-        renderEntities(batch, entities);
+        renderEntities(batch, map, entities);
 
         for (Animal animal : player.getAnimals()) {
             if (animal.isOut()) {
@@ -315,17 +303,6 @@ public class GameScreen implements Screen {
             batch.end();
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.H)) hut.toggle();
-        }
-
-        if (32 <= currentTile.getX() && currentTile.getX() < 38 &&
-            currentTile.getY() == 15 && !game.getGreenHouse().isBuilt()) {
-            batch.begin();
-            info.setColor(Color.RED);
-            info.draw(batch, "You need to pay 1000 gold and\n500 wood to rebuild greenhouse\nPress 'R' to pay!",camera.position.x - 50,camera.position.y + 510);
-            batch.end();
-            if(Gdx.input.isKeyJustPressed(Input.Keys.R)){
-                GameMenuController.greenHouseBuild();
-            }
         }
 
         inventoryScreen.render();
@@ -414,15 +391,15 @@ public class GameScreen implements Screen {
         }
     }
 
-    public static void renderEntities(SpriteBatch batch, ArrayList<GameObjects> entities) {
+    static void renderEntities(SpriteBatch batch, Map map, ArrayList<GameObjects> entities) {
         Player player = App.getCurrentGame().getCurrentPlayer();
 
         for (GameObjects gameObjects : entities) {
-            renderObject(batch, gameObjects, player);
+            renderObject(batch, map, gameObjects, player);
         }
     }
 
-    private static void renderObject(SpriteBatch batch, GameObjects gameObjects, Player player) {
+    private static void renderObject(SpriteBatch batch, Map map, GameObjects gameObjects, Player player) {
         if (gameObjects instanceof Player) {
             if (player.getDirection() == Direction.NORTH) {
                 float currentX = player.getX() + 5;
@@ -433,34 +410,30 @@ public class GameScreen implements Screen {
         }
         gameObjects.render(batch);
         if (gameObjects instanceof Player) {
-            renderTool(batch, player);
-        }
-    }
+            if (player.getDirection() == Direction.EAST) {
+                Texture itemTexture = player.getWield().getTexture();
+                float currentX = player.getX() + 10;
+                float currentY = player.getY() + 20;
+                float originX = 10;
+                float originY = 5;
 
-    public static void renderTool (SpriteBatch batch, Player player){
-        if (player.getDirection() == Direction.EAST) {
-            Texture itemTexture = player.getWield().getTexture();
-            float currentX = player.getX() + 10;
-            float currentY = player.getY() + 20;
-            float originX = 10;
-            float originY = 5;
+                batch.draw(itemTexture, currentX, currentY, originX, originY, 32, 32, 1f, 1f, -toolRotation, 0, 0, itemTexture.getWidth(), itemTexture.getHeight(), false, false);
+            }
+            if (player.getDirection() == Direction.WEST) {
+                Texture itemTexture = player.getWield().getTexture();
+                float currentX = player.getX() - 10;
+                float currentY = player.getY() + 20;
+                float originX = 20;
+                float originY = 5;
 
-            batch.draw(itemTexture, currentX, currentY, originX, originY, 32, 32, 1f, 1f, -toolRotation, 0, 0, itemTexture.getWidth(), itemTexture.getHeight(), false, false);
-        }
-        if (player.getDirection() == Direction.WEST) {
-            Texture itemTexture = player.getWield().getTexture();
-            float currentX = player.getX() - 10;
-            float currentY = player.getY() + 20;
-            float originX = 20;
-            float originY = 5;
+                batch.draw(player.getWield().getTexture(), currentX, currentY, originX, originY, 32, 32, 1f, 1f, toolRotation, 0, 0, itemTexture.getWidth(), itemTexture.getHeight(), true, false);
+            }
+            if (player.getDirection() == Direction.SOUTH) {
+                float currentX = player.getX() + 5;
+                float currentY = player.getY() + 20;
 
-            batch.draw(player.getWield().getTexture(), currentX, currentY, originX, originY, 32, 32, 1f, 1f, toolRotation, 0, 0, itemTexture.getWidth(), itemTexture.getHeight(), true, false);
-        }
-        if (player.getDirection() == Direction.SOUTH) {
-            float currentX = player.getX() + 5;
-            float currentY = player.getY() + 20;
-
-            batch.draw(player.getWield().getTexture(), currentX, currentY, 32, 32);
+                batch.draw(player.getWield().getTexture(), currentX, currentY, 32, 32);
+            }
         }
     }
 
@@ -522,7 +495,7 @@ public class GameScreen implements Screen {
         }
     }
 
-    public static void renderEnergyBar(Player player, OrthographicCamera camera, Texture energyBar, SpriteBatch batch, ShapeRenderer shapeRenderer) {
+    static void renderEnergyBar(Player player, OrthographicCamera camera, Texture energyBar, SpriteBatch batch, ShapeRenderer shapeRenderer) {
 
         float maxEnergy = player.getMaxEnergy();
         float currentEnergy = player.getEnergy();
@@ -557,44 +530,13 @@ public class GameScreen implements Screen {
     }
 
 
-    public static void renderTime(SpriteBatch batch, OrthographicCamera camera, Texture clock, BitmapFont font, Game game) {
+    static void renderTime(SpriteBatch batch, OrthographicCamera camera, Texture clock, BitmapFont font, Game game) {
         batch.draw(clock,camera.position.x + Gdx.graphics.getWidth() / 2.96f, camera.position.y + Gdx.graphics.getHeight() / 3.7f);
         font.setColor(Color.BLACK);
-        font.draw(batch, String.format("%s %d",game.getCurrentTime().getDayOfWeek(),game.getCurrentTime().getDay()),camera.position.x + Gdx.graphics.getWidth() / 2.53f,camera.position.y + Gdx.graphics.getHeight() / 2.2f);
-        font.draw(batch, String.format("%02d : %02d",game.getCurrentTime().getHour(),game.getCurrentTime().getMinute()),camera.position.x + Gdx.graphics.getWidth() / 2.43f, camera.position.y + Gdx.graphics.getHeight() / 2.65f);
-        font.draw(batch, String.format("%d", game.getCurrentPlayer().getMoney()),camera.position.x + Gdx.graphics.getWidth() / 2.65f, camera.position.y + Gdx.graphics.getHeight() / 3.3f);
-        if(!game.getCurrentWeather().equals(Weather.SUNNY)){
-            Texture weather = null;
-            switch (game.getCurrentWeather()){
-                case Weather.RAIN -> {
-                    weather = GameAssetManager.assetManager.get(GameAssetManager.rainy);
-                }
-                case Weather.STORM -> {
-                    weather = GameAssetManager.assetManager.get(GameAssetManager.stormy);
-                }
-                case Weather.SNOW -> {
-                    weather = GameAssetManager.assetManager.get(GameAssetManager.snowy);
-                }
-
-            }
-            batch.draw(weather, camera.position.x + Gdx.graphics.getWidth() / 2.51f,camera.position.y + Gdx.graphics.getHeight() / 2.53f , 48, 32);
-        }
-
-        if(!game.getCurrentTime().getSeason().equals(Season.SPRING)){
-            Texture season = null;
-            switch (game.getCurrentTime().getSeason()){
-                case Season.SUMMER -> {
-                    season = GameAssetManager.assetManager.get(GameAssetManager.summer);
-                }
-                case Season.FALL -> {
-                    season = GameAssetManager.assetManager.get(GameAssetManager.fall);
-                }
-                case Season.WINTER -> {
-                    season = GameAssetManager.assetManager.get(GameAssetManager.winter);
-                }
-            }
-            batch.draw(season, camera.position.x + Gdx.graphics.getWidth() / 2.23f,camera.position.y + Gdx.graphics.getHeight() / 2.53f, 48, 32);
-        }
+        font.draw(batch, String.format("%s %d",game.getCurrentTime().getDayOfWeek(),game.getCurrentTime().getDay()),camera.position.x + 760,camera.position.y + 510);
+        font.draw(batch, String.format("%02d : %02d",game.getCurrentTime().getHour(),game.getCurrentTime().getMinute()),camera.position.x +800, camera.position.y + 420);
+        //TODO
+        font.draw(batch, "5 0 0",camera.position.x + 720, camera.position.y + 340);
     }
 
 
@@ -758,6 +700,10 @@ public class GameScreen implements Screen {
         if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             DateAndWeatherController.cheatAdvanceTime("10");
         }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
+            game.getGreenHouse().buildGreenhouse();
+        }
     }
 
     private boolean hasWaterNeighbour() {
@@ -776,14 +722,14 @@ public class GameScreen implements Screen {
         }
     }
 
-    public void toolAnimation() {
+    private void toolAnimation() {
         if (toolAnimating) return;
 
         toolAnimating = true;
         toolRotationSpeed = 600f;
     }
 
-    public void updateToolAnimation(float delta) {
+    private void updateToolAnimation(float delta) {
         if (toolAnimating) {
             toolRotation += toolRotationSpeed * delta;
 
@@ -884,38 +830,5 @@ public class GameScreen implements Screen {
     private void renderRain(boolean rainOrSnow, float delta) {
         Texture rain = rainOrSnow ? GameAssetManager.assetManager.get(GameAssetManager.rain) : GameAssetManager.assetManager.get(GameAssetManager.snow);
 
-    }
-
-    public GreenhouseScreen getGreenhouseScreen() {
-        return greenhouseScreen;
-    }
-
-    public OrthographicCamera getCamera() {
-        return camera;
-    }
-
-    public Game getGame() {
-        return game;
-    }
-
-    public BitmapFont getInfo() {
-        return info;
-    }
-
-    public static float getToolRotation() {
-        return toolRotation;
-    }
-
-    public void passTime (){
-        now = TimeUtils.millis();
-        if (now - lastTime >= 7000) {
-            if(game.getCurrentTime().getMinute() == 50){
-                game.getCurrentTime().setMinute(0);
-                DateAndWeatherController.cheatAdvanceTime("1");
-            } else {
-                game.getCurrentTime().setMinute(game.getCurrentTime().getMinute() + 10);
-            }
-            lastTime = now;
-        }
     }
 }
