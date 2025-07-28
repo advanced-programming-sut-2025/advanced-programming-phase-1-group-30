@@ -327,63 +327,50 @@ public class ShopScreen {
                     return;
                 }
 
-                    // perform purchase
-                    if (building instanceof Carpenter) {
-                        try {
-                            carpenterX = Integer.parseInt(buildingX.getText());
-                            carpenterY = Integer.parseInt(buildingY.getText());
-                        } catch (NumberFormatException e) {
-                            errorLabel.setText("invalid coordinates");
-                            errorLabel.setVisible(true);
-                        }
-                        boolean success = GameMenuController.build(shopItem.getName(), carpenterX, carpenterY);
-                        if (success) {
-                            player.setMoney(player.getMoney() - cost);
-                        }
-                    } else if (building instanceof Ranch) {
-                        GameMenuController.buyAnimal(shopItem.getName(), buildingX.getText());
-                    } else if (building instanceof Saloon) {
-                        addFoodRecipe(cost, shopItem, player);
-                    } else {
-                        if (shopItem.getName().equals("A recipe to make Fish Smoker")){
-                            if(!player.getCraftingRecipes().contains(IndustrialProductType.FISH_SMOKER)){
-                                player.getCraftingRecipes().add(IndustrialProductType.FISH_SMOKER);
-                            }
-                        } else if (shopItem.getName().equals("dehydrator recipe")){
-                            if(!player.getCraftingRecipes().contains(IndustrialProductType.DEHYDRATOR)){
-                                player.getCraftingRecipes().add(IndustrialProductType.DEHYDRATOR);
-                            }
-                        } else if (shopItem.getName().equals("grass starter recipe")){
-                            if(!player.getCraftingRecipes().contains(IndustrialProductType.GRASS_STARTER)){
-                                player.getCraftingRecipes().add(IndustrialProductType.GRASS_STARTER);
-                            }
-                        } else {
-                            Item inInv = Item.findItemByName(
-                                shopItem.getName(), player.getBackPack().getItems());
-                            if (inInv != null) {
-                                inInv.setCount(inInv.getCount() + 1);
-                            } else {
-                                player.getBackPack().addItem(
-                                    new Item(1, shopItem.getName(), shopItem.getPrice(), shopItem.getTexture()));  // assume you have a copy-constructor
-                            }
-                        }
-
-                        ((ShopProduct) shopItem).setCount(((ShopProduct) shopItem).getCount() - 1);
+                // perform purchase
+                if (building instanceof Carpenter) {
+                    try {
+                        carpenterX = Integer.parseInt(buildingX.getText());
+                        carpenterY = Integer.parseInt(buildingY.getText());
+                    } catch (NumberFormatException e) {
+                        errorLabel.setText("invalid coordinates");
+                        errorLabel.setVisible(true);
+                    }
+                    boolean success = GameMenuController.build(shopItem.getName(), carpenterX, carpenterY);
+                    if (success) {
+                        player.setMoney(player.getMoney() - cost);
                     }
                 } else if (building instanceof Ranch) {
-                    GameMenuController.buyAnimal(selectedProduct.getName(), buildingX.getText());
+                    GameMenuController.buyAnimal(shopItem.getName(), buildingX.getText());
+                } else if (building instanceof Saloon) {
+                    addFoodRecipe(cost, shopItem, player);
                 } else {
-                    Item inInv = Item.findItemByName(
-                        selectedProduct.getName(), player.getBackPack().getItems());
-                    if (inInv != null) {
-                        inInv.setCount(inInv.getCount() + number);
+                    if (shopItem.getName().equals("A recipe to make Fish Smoker")) {
+                        if (!player.getCraftingRecipes().contains(IndustrialProductType.FISH_SMOKER)) {
+                            player.getCraftingRecipes().add(IndustrialProductType.FISH_SMOKER);
+                        }
+                    } else if (shopItem.getName().equals("dehydrator recipe")) {
+                        if (!player.getCraftingRecipes().contains(IndustrialProductType.DEHYDRATOR)) {
+                            player.getCraftingRecipes().add(IndustrialProductType.DEHYDRATOR);
+                        }
+                    } else if (shopItem.getName().equals("grass starter recipe")) {
+                        if (!player.getCraftingRecipes().contains(IndustrialProductType.GRASS_STARTER)) {
+                            player.getCraftingRecipes().add(IndustrialProductType.GRASS_STARTER);
+                        }
                     } else {
-                        player.getBackPack().addItem(
-                            new Item(number, selectedProduct.getName(), selectedProduct.getPrice(), selectedProduct.getTexture()));
+                        Item inInv = Item.findItemByName(
+                            shopItem.getName(), player.getBackPack().getItems());
+                        if (inInv != null) {
+                            inInv.setCount(inInv.getCount() + number);
+                        } else {
+                            player.getBackPack().addItem(
+                                new Item(number, shopItem.getName(), shopItem.getPrice(), shopItem.getTexture()));  // assume you have a copy-constructor
+                        }
                     }
                     selectedProduct.setCount(selectedProduct.getCount() - number);
-                    player.setMoney(player.getMoney() - cost);
+                    player.setMoney(player.getMoney() - cost * number);
                 }
+
 
                 App.getCurrentGame().incrementPurchase(selectedProduct);
                 selectedProduct = null;
