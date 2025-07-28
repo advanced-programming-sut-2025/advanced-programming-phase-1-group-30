@@ -1,10 +1,13 @@
 package AP.group30.StardewValley.models.Maps;
 
 import AP.group30.StardewValley.models.App;
+import AP.group30.StardewValley.models.Buildings.GreenHouse;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.Item;
 import AP.group30.StardewValley.models.Items.Products.*;
 import AP.group30.StardewValley.models.TimeAndDate.Season;
+import AP.group30.StardewValley.views.StartMenus.RegisterMenu;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -276,10 +279,14 @@ public class Tile {
     }
 
     public void render(SpriteBatch batch) {
-        if (App.getCurrentGame().getCurrentTime().getSeason().equals(Season.WINTER)) {
-            batch.draw(this.winterTexture, x * 32, (60 - y) * 32, 32, 32);
+        if(RegisterMenu.gameScreen.getGreenhouseScreen().isVisible()){
+            batch.draw(texture , Gdx.graphics.getWidth() / 2.5f + x * 32, Gdx.graphics.getHeight() / 3.93f + y * 32, 32, 32);
         } else {
-            batch.draw(this.texture, x * 32, (60 - y) * 32, 32, 32);
+            if (App.getCurrentGame().getCurrentTime().getSeason().equals(Season.WINTER)) {
+                batch.draw(this.winterTexture, x * 32, (60 - y) * 32, 32, 32);
+            } else {
+                batch.draw(this.texture, x * 32, (60 - y) * 32, 32, 32);
+            }
         }
     }
 }

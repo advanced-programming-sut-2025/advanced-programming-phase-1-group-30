@@ -6,6 +6,7 @@ import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Buildings.*;
 import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
+import AP.group30.StardewValley.models.Items.IndustrialProducts.IndustrialProductType;
 import AP.group30.StardewValley.models.Items.ItemTexture;
 import AP.group30.StardewValley.models.Items.ItemsInteface;
 import AP.group30.StardewValley.models.Items.Item;
@@ -224,14 +225,29 @@ public class ShopScreen {
                     } else if (building instanceof Ranch) {
                         GameMenuController.buyAnimal(shopItem.getName(), buildingX.getText());
                     } else {
-                        Item inInv = Item.findItemByName(
-                            shopItem.getName(), player.getBackPack().getItems());
-                        if (inInv != null) {
-                            inInv.setCount(inInv.getCount() + 1);
+                        if (shopItem.getName().equals("A recipe to make Fish Smoker")){
+                            if(!player.getCraftingRecipes().contains(IndustrialProductType.FISH_SMOKER)){
+                                player.getCraftingRecipes().add(IndustrialProductType.FISH_SMOKER);
+                            }
+                        } else if (shopItem.getName().equals("dehydrator recipe")){
+                            if(!player.getCraftingRecipes().contains(IndustrialProductType.DEHYDRATOR)){
+                                player.getCraftingRecipes().add(IndustrialProductType.DEHYDRATOR);
+                            }
+                        } else if (shopItem.getName().equals("grass starter recipe")){
+                            if(!player.getCraftingRecipes().contains(IndustrialProductType.GRASS_STARTER)){
+                                player.getCraftingRecipes().add(IndustrialProductType.GRASS_STARTER);
+                            }
                         } else {
-                            player.getBackPack().addItem(
-                                new Item(1, shopItem.getName(), shopItem.getPrice(), shopItem.getTexture()));  // assume you have a copy-constructor
+                            Item inInv = Item.findItemByName(
+                                shopItem.getName(), player.getBackPack().getItems());
+                            if (inInv != null) {
+                                inInv.setCount(inInv.getCount() + 1);
+                            } else {
+                                player.getBackPack().addItem(
+                                    new Item(1, shopItem.getName(), shopItem.getPrice(), shopItem.getTexture()));  // assume you have a copy-constructor
+                            }
                         }
+
                         ((ShopProduct) shopItem).setCount(((ShopProduct) shopItem).getCount() - 1);
                         player.setMoney(player.getMoney() - cost);
                     }

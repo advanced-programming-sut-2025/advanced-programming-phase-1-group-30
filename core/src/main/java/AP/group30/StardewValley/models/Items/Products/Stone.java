@@ -59,7 +59,7 @@ public class Stone extends Item implements GameObjects {
     }
 
     @Override
-    public void render(SpriteBatch batch, Map map) {
+    public void render(SpriteBatch batch) {
         batch.draw(texture, x, y, width, height);
     }
 }
