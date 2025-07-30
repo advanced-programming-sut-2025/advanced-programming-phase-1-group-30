@@ -90,6 +90,7 @@ public class Player implements GameObjects {
     private Animation<TextureRegion> walkingW;
     private Animation<TextureRegion> walkingD;
     private Animation<TextureRegion> walkingS;
+    private Animation<TextureRegion> passingOut;
     private Texture playerTexture;
     private TextureRegion playerRegion;
     private Animal nearbyAnimal;
@@ -617,26 +618,31 @@ public class Player implements GameObjects {
     @Override
     public void render(SpriteBatch batch) {
         TextureRegion currentFrame;
-        if(isMoving){
-            if(direction.equals(Direction.NORTH)){
-                currentFrame = walkingW.getKeyFrame(stateTime);
-            } else if (direction.equals(Direction.SOUTH)){
-                currentFrame = walkingS.getKeyFrame(stateTime);
-            } else {
-                currentFrame = walkingD.getKeyFrame(stateTime);
-                if (facingLeft) {
-                    if (!currentFrame.isFlipX()) {
-                        currentFrame.flip(true, false);
-                    }
+
+        if (this.energy <= 0) {
+            currentFrame = passingOut.getKeyFrame(stateTime);
+        } else {
+            if (isMoving) {
+                if (direction.equals(Direction.NORTH)) {
+                    currentFrame = walkingW.getKeyFrame(stateTime);
+                } else if (direction.equals(Direction.SOUTH)) {
+                    currentFrame = walkingS.getKeyFrame(stateTime);
                 } else {
-                    if (currentFrame.isFlipX()) {
-                        currentFrame.flip(true, false);
+                    currentFrame = walkingD.getKeyFrame(stateTime);
+                    if (facingLeft) {
+                        if (!currentFrame.isFlipX()) {
+                            currentFrame.flip(true, false);
+                        }
+                    } else {
+                        if (currentFrame.isFlipX()) {
+                            currentFrame.flip(true, false);
+                        }
                     }
                 }
+                playerRegion = currentFrame;
+            } else {
+                currentFrame = playerRegion;
             }
-            playerRegion = currentFrame;
-        } else {
-            currentFrame = playerRegion;
         }
         batch.draw(currentFrame, x, y, playerRegion.getRegionWidth() * 2f , playerRegion.getRegionHeight() * 2f);
         isMoving = false;
@@ -682,6 +688,14 @@ public class Player implements GameObjects {
         wWalkingRegion[3] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.player23));
         walkingW = new Animation<TextureRegion>(0.15f, wWalkingRegion);
         walkingW.setPlayMode(Animation.PlayMode.LOOP);
+
+        TextureRegion[] passOut = new TextureRegion[4];
+        passOut[0] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.playerPassOut0));
+        passOut[1] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.playerPassOut1));
+        passOut[2] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.playerPassOut2));
+        passOut[3] = new TextureRegion(GameAssetManager.assetManager.get(GameAssetManager.playerPassOut3));
+        passingOut = new Animation<TextureRegion>(2, passOut);
+        passingOut.setPlayMode(Animation.PlayMode.LOOP);
 
         playerRegion = sWalkingRegion[1];
         playerTexture = GameAssetManager.assetManager.get(GameAssetManager.player21);
