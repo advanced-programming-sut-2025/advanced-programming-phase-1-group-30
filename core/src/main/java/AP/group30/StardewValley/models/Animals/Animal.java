@@ -99,8 +99,8 @@ public class Animal {
         this.fedToday = fedToday;
         this.petToday = petToday;
         this.productReady = false;
-        this.x = Gdx.graphics.getWidth() / 2f;
-        this.y = Gdx.graphics.getHeight() / 2f;
+        this.x = MathUtils.random(300) + 800;
+        this.y = MathUtils.random(200) + 400;
         this.type = type;
         this.targetX = x;
         this.targetY = y;
@@ -362,7 +362,8 @@ public class Animal {
                 targetX = MathUtils.random(barn.getStartX() * 32, barn.getStartX() * 32 + barn.getWidth() * 32);
                 targetY = MathUtils.random((60 - barn.getStartY()) * 32 + barn.getHeight() * 32, barn.getStartX() * 32);
             }
-        } else {
+        }
+        if (!isOut) {
             targetX = MathUtils.random(minX, maxX);
             targetY = MathUtils.random(minY, maxY);
         }

@@ -202,7 +202,7 @@ public class NewGameController {
     }
 
     public static void NextTurn(Scanner scanner) {
-        MaintainerController.artisanProssesTimeChanger(1);
+        MaintainerController.artisanProcessTimeChanger(1);
 
         List<Player> players = App.getCurrentGame().getPlayers();
         Player currentPlayer = App.getCurrentGame().getCurrentPlayer();

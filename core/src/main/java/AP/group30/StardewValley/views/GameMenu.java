@@ -92,7 +92,7 @@ public class GameMenu {
         }
         matcher = GameMenuCommands.CheatWeather.regexMatcher(command);
         if (matcher.matches()) {
-            DateAndWeatherController.CheatWeatherSet(matcher.group("type"));
+            DateAndWeatherController.cheatWeatherSet(matcher.group("type"));
             return;
         }
 //        matcher = GameMenuCommands.CHEAT_THOR.regexMatcher(command);
