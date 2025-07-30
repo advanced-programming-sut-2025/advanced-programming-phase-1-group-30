@@ -90,7 +90,7 @@ public class GreenhouseScreen implements Screen {
         handleInput(delta);
         RegisterMenu.gameScreen.passTime();
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) inventoryScreen.toggle();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) inventoryScreen.toggle();
 
         mousePos.x = Gdx.input.getX();
         mousePos.y = Gdx.graphics.getHeight() - Gdx.input.getY();

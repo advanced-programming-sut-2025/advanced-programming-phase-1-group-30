@@ -70,9 +70,8 @@ public abstract class AnimalScreen implements Screen {
     public void render(float delta) {
         handleInput(delta);
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            inventoryScreen.toggle();
-        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) inventoryScreen.toggle();
+
 
         mousePos.x = Gdx.input.getX();
         mousePos.y = Gdx.graphics.getHeight() - Gdx.input.getY();

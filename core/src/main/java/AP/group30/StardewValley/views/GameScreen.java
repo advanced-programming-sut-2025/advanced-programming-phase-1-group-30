@@ -82,7 +82,7 @@ public class GameScreen implements Screen {
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
     private TextField cheatField;
 
-    private Animation<TextureRegion> lightningAnimation;
+    private Animation<TextureRegion> lightningd;
     private float lightningTimer = 0.0f;
     private boolean lightningHit = false;
     private Tile lightningTargetTile;
