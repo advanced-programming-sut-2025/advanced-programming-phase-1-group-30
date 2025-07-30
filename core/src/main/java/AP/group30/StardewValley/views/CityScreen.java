@@ -114,7 +114,7 @@ public class CityScreen implements Screen {
         player.setStateTime(stateTime);
         RegisterMenu.gameScreen.passTime();
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) inventoryScreen.toggle();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) inventoryScreen.toggle();
         if (Gdx.input.isKeyJustPressed(Input.Keys.N)) skillScreen.toggle();
 
         camera.position.set(x + playerRegion.getRegionWidth() / 2f, y + playerRegion.getRegionHeight() / 2f, 0);

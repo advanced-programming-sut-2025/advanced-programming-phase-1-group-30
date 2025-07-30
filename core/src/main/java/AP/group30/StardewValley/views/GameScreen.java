@@ -86,7 +86,7 @@ public class GameScreen implements Screen {
     private final ShapeRenderer shapeRenderer = new ShapeRenderer();
     private TextField cheatField;
 
-    private Animation<TextureRegion> lightningAnimation;
+    private Animation<TextureRegion> lightningd;
     private float lightningTimer = 0.0f;
     private boolean lightningHit = false;
     private Tile lightningTargetTile;
@@ -281,7 +281,7 @@ public class GameScreen implements Screen {
             }
         }
         if (!isFishing) {
-            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && openMenu(inventoryScreen)) inventoryScreen.toggle();
+            if (Gdx.input.isKeyJustPressed(Input.Keys.E) && openMenu(inventoryScreen)) inventoryScreen.toggle();
             if (Gdx.input.isKeyJustPressed(Input.Keys.N) && openMenu(skillScreen)) skillScreen.toggle();
             if (Gdx.input.isKeyJustPressed(Input.Keys.B) && openMenu(craftingScreen)) craftingScreen.toggle();
             if (Gdx.input.isKeyJustPressed(Input.Keys.I) && openMenu(artisanScreen)) artisanScreen.toggle();
