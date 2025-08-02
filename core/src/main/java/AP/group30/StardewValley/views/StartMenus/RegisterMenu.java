@@ -8,6 +8,7 @@ import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Users.RegisterQuestions;
 import AP.group30.StardewValley.models.Users.User;
+import AP.group30.StardewValley.network.MessageClasses.PlayerJoin;
 import AP.group30.StardewValley.views.CityScreen;
 import AP.group30.StardewValley.views.GameScreen;
 import AP.group30.StardewValley.views.LoadingScreen;
@@ -304,6 +305,13 @@ public class RegisterMenu implements Screen {
             App.getAppUsers().add(user2);
             App.setCurrentUser(user1);
             Game game = NewGameController.NewGame(2, "2", "", "", 2, 3, 2, 3);
+            PlayerJoin playerJoin = new PlayerJoin();
+            playerJoin.playerId = String.valueOf(Main.getMain().id);
+            playerJoin.displayName = game.getCurrentPlayer().getUsername();
+            game.networkClient.send(playerJoin);
+
+            game.getModel().setMyPlayerId(String.valueOf(Main.getMain().id));
+
             gameScreen = new GameScreen(game);
             cityScreen = new CityScreen(game);
             Main.getMain().setScreen(new LoadingScreen(gameScreen));

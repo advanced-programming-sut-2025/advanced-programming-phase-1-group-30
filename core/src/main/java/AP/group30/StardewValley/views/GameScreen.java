@@ -20,6 +20,9 @@ import AP.group30.StardewValley.models.Maps.*;
 import AP.group30.StardewValley.models.Players.Direction;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.models.TimeAndDate.Season;
+import AP.group30.StardewValley.network.MessageClasses.MapTransfer;
+import AP.group30.StardewValley.network.MessageClasses.PlayerMove;
+import AP.group30.StardewValley.network.Ping;
 import AP.group30.StardewValley.views.FishingMiniGame.FishingMiniGame;
 import AP.group30.StardewValley.views.InGameMenus.*;
 import AP.group30.StardewValley.views.InGameMenus.Hut.*;
@@ -230,6 +233,7 @@ public class GameScreen implements Screen {
                 }
             }
         }
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.T)) {
             if (!cheatField.isVisible()) {
                 Gdx.input.setInputProcessor(stage);
@@ -382,10 +386,6 @@ public class GameScreen implements Screen {
         hut.render(batch, camera);
         artisanScreen.render();
         fishingMiniGame.render(delta);
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.M)) {
-            System.out.println(entities.size());
-        }
 
         stage.act(delta);
         stage.draw();
@@ -769,6 +769,11 @@ public class GameScreen implements Screen {
                 x = proposedX;
                 y = proposedY;
             }
+            PlayerMove pm = new PlayerMove();
+            pm.playerId = String.valueOf(Main.getMain().id);
+            pm.x = x;
+            pm.y = y;
+            App.getCurrentGame().networkClient.send(pm);
 
             player.getPlayerRect().setPosition(x, y);
             player.setX((int)x);
@@ -779,6 +784,11 @@ public class GameScreen implements Screen {
         if (player.getX() > tiles[78][55].getX() * 32 && player.getY() > tiles[78][55].getY() * 32) {
             player.setInCity(true);
             RegisterMenu.cityScreen.setPosition(game.getCityMap().getTiles()[3][55].getX() * 32, game.getCityMap().getTiles()[3][55].getY() * 32);
+
+            MapTransfer mt = new MapTransfer();
+            mt.playerId    = String.valueOf(Main.getMain().id);
+            mt.targetMapId = "city";  // or farm_<id>, etc.
+            App.getCurrentGame().networkClient.send(mt);
 
             Main.getMain().setScreen(RegisterMenu.cityScreen);
         }

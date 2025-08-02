@@ -36,6 +36,7 @@ import java.rmi.MarshalledObject;
 import java.util.*;
 
 public class Player implements GameObjects {
+    private int id;
     private int x;
     private int y;
     private Rectangle playerRect = new Rectangle();
@@ -701,5 +702,13 @@ public class Player implements GameObjects {
 
     public void setNearbyAnimal(Animal nearbyAnimal) {
         this.nearbyAnimal = nearbyAnimal;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
