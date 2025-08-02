@@ -1,7 +1,9 @@
 package AP.group30.StardewValley.models;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.models.Buildings.*;
 import AP.group30.StardewValley.models.Items.ItemsInteface;
 import AP.group30.StardewValley.models.Maps.GreatMap;
@@ -12,6 +14,8 @@ import AP.group30.StardewValley.models.Players.NPC.Sebastian;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.models.Players.Trade;
 import AP.group30.StardewValley.models.TimeAndDate.Time;
+import AP.group30.StardewValley.network.MessageClasses.PlayerJoin;
+import AP.group30.StardewValley.network.NetworkClient;
 import com.badlogic.gdx.assets.AssetManager;
 
 
@@ -78,6 +82,18 @@ public class Game {
         return saloon;
     }
 
+
+
+
+    public NetworkClient networkClient;
+    private GameModel model;
+
+    public GameModel getModel() {
+        return model;
+    }
+
+
+
     public Game() {
         this.id = App.getGames().size() + 1;
         this.currentTime = new Time();
@@ -103,8 +119,16 @@ public class Game {
         buildings.add(jojaMart);
         buildings.add(ranch);
         buildings.add(saloon);
-    }
 
+        networkClient = new NetworkClient();
+        try {
+            networkClient.connect("127.0.0.1", 54555, 54777); // adjust IP if needed
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        model = new GameModel();
+    }
     public GreatMap getGreatMap() {
         return map;
     }

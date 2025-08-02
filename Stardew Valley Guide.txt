@@ -8,7 +8,7 @@ Game Screen Keys:
     
     ------------------------
 
-    ESCAPE -> Inventory Menu
+    E -> Inventory Menu
     N -> Skill Menu
     I -> Artisan Menu
     R -> Crop Info Menu

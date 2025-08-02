@@ -36,7 +36,12 @@ dependencies {
   implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
   implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
 //  implementation "com.github.MrStahlfelge.gdx-websockets:common:$websocketVersion"
-  implementation project(':core')
+  implementation project(":core")
+  implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+  // → headless backend for your server
+  implementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+  // → KryoNet for networking
+  implementation "com.esotericsoftware:kryonet:2.22.0-RC1"
   implementation("com.badlogicgames.gdx:gdx-tools:$gdxVersion"){exclude group: 'com.badlogicgames.gdx', module: 'gdx-backend-lwjgl'}
 
   if(enableGraalNative == 'true') {

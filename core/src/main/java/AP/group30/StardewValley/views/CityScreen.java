@@ -19,6 +19,8 @@ import AP.group30.StardewValley.models.Maps.Weather;
 import AP.group30.StardewValley.models.Players.Direction;
 import AP.group30.StardewValley.models.Players.NPC.*;
 import AP.group30.StardewValley.models.Players.Player;
+import AP.group30.StardewValley.models.Players.RemotePlayer;
+import AP.group30.StardewValley.network.MessageClasses.PlayerMove;
 import AP.group30.StardewValley.views.InGameMenus.Hut.*;
 import AP.group30.StardewValley.views.InGameMenus.*;
 import AP.group30.StardewValley.views.StartMenus.RegisterMenu;
@@ -146,6 +148,9 @@ public class CityScreen implements Screen {
         GameScreen.renderMap(batch, map);
         GameScreen.renderEntities(batch, entities);
         renderNPCs(batch, stateTime);
+        for (RemotePlayer p : game.getModel().getOtherPlayers()) {
+            p.render(batch);
+        }
         if (game.getCurrentTime().getHour() >= 18) {
             batch.setColor(0, 0, 0, 0.6f);
             batch.draw(whitePixelTexture, camera.position.x - Gdx.graphics.getWidth() / 2f - 50, camera.position.y - Gdx.graphics.getHeight() / 2f - 50, Gdx.graphics.getWidth() * 1.2f, Gdx.graphics.getHeight() * 1.2f);
@@ -291,6 +296,12 @@ public class CityScreen implements Screen {
             playerRect.setPosition(x, y);
             player.setX((int)x);
             player.setY((int)y);
+
+            PlayerMove pm = new PlayerMove();
+            pm.playerId = String.valueOf(Main.getMain().id);
+            pm.x = x;
+            pm.y = y;
+            App.getCurrentGame().networkClient.send(pm);
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
