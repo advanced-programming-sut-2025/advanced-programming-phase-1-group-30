@@ -22,12 +22,8 @@ public class GameModel {
             WorldState.Position pos = entry.getValue();
             if (pid.equals(myPlayerId)) continue; // skip yourself
 
-            System.out.println("My id: " + myPlayerId);
-            System.out.println("Other player Id: " + pid);
-
-            RemotePlayer rp = new RemotePlayer(pid, pos.x, pos.y);
+            RemotePlayer rp = new RemotePlayer(pid, entry.getValue().username,pos.x, pos.y);
             otherPlayers.put(pid, rp);
-//            System.out.println("Added remote player: " + pid + " at (" + pos.x + ", " + pos.y + ")");
         }
     }
 

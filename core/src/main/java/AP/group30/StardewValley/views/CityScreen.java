@@ -38,6 +38,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Random;
 
@@ -62,7 +63,7 @@ public class CityScreen implements Screen {
 
     private float x;
     private float y;
-    float speed = 450f;
+    float speed = 150f;
     private InventoryScreen inventoryScreen;
     private SkillScreen skillScreen;
     private HutScreen hut;
@@ -70,6 +71,9 @@ public class CityScreen implements Screen {
     private QuestScreen questScreen;
     private final SpriteBatch batch;
     private OrthographicCamera camera;
+
+    private float timeSinceLastSend = 0;
+    private final float sendInterval = 1/10f;
 
     public CityScreen(Game game) {
         this.tiles = map.getTiles();
@@ -189,6 +193,9 @@ public class CityScreen implements Screen {
         }
         GameScreen.renderEnergyBar(player, camera, energyBar, batch, shapeRenderer);
         GameScreen.renderTime(batch, camera, clock, font, game);
+        if (Gdx.input.isKeyPressed(Input.Keys.TAB)) {
+            drawOtherPlayersList();
+        }
         batch.end();
 
         inventoryScreen.render();
@@ -293,15 +300,23 @@ public class CityScreen implements Screen {
                 y = proposedY;
             }
 
+//            playerRect.setPosition(x, y);
+//            player.setX((int)x);
+//            player.setY((int)y);
+            player.setX((int)proposedX);
+            player.setY((int)proposedY);
             playerRect.setPosition(x, y);
-            player.setX((int)x);
-            player.setY((int)y);
+            timeSinceLastSend += delta;
 
-            PlayerMove pm = new PlayerMove();
-            pm.playerId = String.valueOf(Main.getMain().id);
-            pm.x = x;
-            pm.y = y;
-            App.getCurrentGame().networkClient.send(pm);
+
+            if ((proposedX != player.getX() || proposedY != player.getY()) && timeSinceLastSend >= sendInterval) {
+                PlayerMove pm = new PlayerMove();
+                pm.playerId = String.valueOf(Main.getMain().id);
+                pm.x = proposedX;
+                pm.y = proposedY;
+                App.getCurrentGame().networkClient.send(pm);
+                timeSinceLastSend = 0;
+            }
         }
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
@@ -394,5 +409,39 @@ public class CityScreen implements Screen {
         Robin.render(batch, stateTime);
         Sebastian.render(batch, stateTime);
         Abigail.render(batch, stateTime);
+    }
+
+    private void drawOtherPlayersList() {
+        Collection<RemotePlayer> others = game.getModel().getOtherPlayers();
+        int count = others.size();
+        int padding = 15;
+        int lineHeight = 20;
+        int boxWidth = 200;
+        int boxHeight = padding * 2 + count * lineHeight;
+        int x = 10;
+        int y = Gdx.graphics.getHeight() - 10;    // start 10px down from top
+
+        // 1) draw background
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+//        shapeRenderer.setColor(0f, 0f, 0f, 0.7f);
+//        shapeRenderer.rect(camera.position.x + Gdx.graphics.getWidth() / 4.5f,camera.position.y + Gdx.graphics.getHeight() / 2.53f - boxHeight, boxWidth, boxHeight);
+//        shapeRenderer.end();
+//
+//        // 2) draw border (optional)
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+//        shapeRenderer.setColor(1f, 1f, 1f, 0.8f);
+//        shapeRenderer.rect(camera.position.x + Gdx.graphics.getWidth() / 4.5f,camera.position.y + Gdx.graphics.getHeight() / 2.53f - boxHeight, boxWidth, boxHeight);
+//        shapeRenderer.end();
+
+        // 3) draw each player ID
+        font.setColor(Color.WHITE);
+        int textX = x + padding;
+        int textY = -padding - lineHeight + (int)font.getLineHeight();
+        for (RemotePlayer p : others) {
+            String username = p.username;
+            font.draw(batch, String.format("%s", username), camera.position.x + padding - Gdx.graphics.getWidth() / 2f,camera.position.y + Gdx.graphics.getHeight() / 2.53f - textY);
+            textY -= lineHeight;
+        }
+        font.setColor(Color.BLACK);
     }
 }

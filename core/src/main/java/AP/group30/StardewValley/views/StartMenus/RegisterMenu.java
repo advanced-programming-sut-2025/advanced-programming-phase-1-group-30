@@ -299,7 +299,7 @@ public class RegisterMenu implements Screen {
 
         // TODO maintainer code block!
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            User user1 = new User("1", "1", "1", "1", RegisterQuestions.Your_Best_Friend, "1", "male");
+            User user1 = new User("QWERTY", "1", "1", "1", RegisterQuestions.Your_Best_Friend, "1", "male");
             User user2 = new User("2", "2", "2", "2", RegisterQuestions.Your_Best_Friend, "2", "male");
             App.getAppUsers().add(user1);
             App.getAppUsers().add(user2);

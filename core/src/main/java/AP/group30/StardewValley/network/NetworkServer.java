@@ -55,6 +55,32 @@ public class NetworkServer {
                     handleMapTransfer(connection, (MapTransfer) object);
                 }
             }
+
+            @Override
+            public void disconnected(Connection connection) {
+                String playerId = connToPlayerId.remove(connection); // remove from tracking
+                if (playerId != null) {
+                    playerIdToConn.remove(playerId); // clean reverse map
+                    ServerPlayer player = world.players.remove(playerId);
+                    if (player != null) {
+                        ServerMap map = world.maps.get(player.currentMapId);
+                        if (map != null) {
+                            map.removePlayer(playerId); // if you have this method
+                        }
+                        System.out.println("[Server] Player disconnected: " + playerId);
+
+                        // Optionally, send update to remaining players
+                        WorldState state = map.snapshot();
+                        for (Connection c : server.getConnections()) {
+                            String pid = connToPlayerId.get(c);
+                            ServerPlayer p = world.players.get(pid);
+                            if (p != null && p.currentMapId.equals(player.currentMapId)) {
+                                c.sendTCP(state);
+                            }
+                        }
+                    }
+                }
+            }
         });
 
         server.bind(tcpPort, udpPort);
@@ -84,7 +110,7 @@ public class NetworkServer {
         );
 
         world.players.put(sp.id, sp);
-        farmMap.addPlayer(sp.id, sp.x, sp.y);
+        farmMap.addPlayer(sp.id, sp.displayName,sp.x, sp.y);
 
         // Send initial snapshot
         conn.sendTCP(farmMap.snapshot());
@@ -116,7 +142,7 @@ public class NetworkServer {
                 world.maps.put("city", cityMap);
             }
             // Add player to city map at a default position
-            cityMap.addPlayer(player.id, 0, 0);
+            cityMap.addPlayer(player.id, player.displayName,0, 0);
             System.out.println(cityMap.getPlayers().size());
             player.currentMapId = "city";
             connection.sendTCP(cityMap.snapshot());
@@ -133,7 +159,7 @@ public class NetworkServer {
             msg.targetMapId,
             id -> new ServerMap(id)
         );
-        newMap.addPlayer(player.id, player.x, player.y);
+        newMap.addPlayer(player.id, player.displayName,player.x, player.y);
 
         // 5) Send the full snapshot of the new map back to this client only
         WorldState newMapState = newMap.snapshot();

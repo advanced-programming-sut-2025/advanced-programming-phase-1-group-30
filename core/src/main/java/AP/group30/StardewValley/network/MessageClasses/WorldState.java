@@ -10,5 +10,6 @@ public class WorldState {
 
     public static class Position {
         public float x, y;
+        public String username;
     }
 }

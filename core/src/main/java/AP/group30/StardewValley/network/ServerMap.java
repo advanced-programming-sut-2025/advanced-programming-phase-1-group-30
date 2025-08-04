@@ -14,9 +14,9 @@ public class ServerMap {
         this.mapId = mapId;
     }
 
-    public void addPlayer(String playerId, float startX, float startY) {
+    public void addPlayer(String playerId, String username, float startX, float startY) {
         WorldState.Position pos = new WorldState.Position();
-        pos.x = startX; pos.y = startY;
+        pos.x = startX; pos.y = startY; pos.username = username;
         players.put(playerId, pos);
     }
 

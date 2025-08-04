@@ -9,9 +9,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class RemotePlayer implements GameObjects {
     public Texture region;
     public final String id;
+    public final String username;
     public float x, y;
-    public RemotePlayer(String id, float x, float y) {
-        this.id = id; this.x = x; this.y = y;
+    public RemotePlayer(String id, String username, float x, float y) {
+        this.id = id; this.x = x; this.y = y; this.username = username;
         region = GameAssetManager.assetManager.get(GameAssetManager.player00);
     }
 
