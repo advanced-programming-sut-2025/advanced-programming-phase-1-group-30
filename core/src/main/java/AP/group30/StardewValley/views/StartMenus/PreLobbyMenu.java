@@ -1,7 +1,7 @@
 package AP.group30.StardewValley.views.StartMenus;
 
 import AP.group30.StardewValley.Main;
-import AP.group30.StardewValley.models.App;
+import AP.group30.StardewValley.controllers.LobbyManagerController;
 import AP.group30.StardewValley.models.GameAssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class PreLobby implements Screen {
+public class PreLobbyMenu implements Screen {
     private Stage stage;
     private final Table table;
     private final Label titleLabel;
@@ -27,7 +27,9 @@ public class PreLobby implements Screen {
     private final TextField lobbyIDField;
     private final TextButton findButton;
 
-    public PreLobby(Skin skin) {
+    private final Label errorLabel;
+
+    public PreLobbyMenu(Skin skin) {
         table = new Table(skin);
         titleLabel = new Label("Lobby", skin);
         creatLobbyButton = new TextButton("Creat Lobby", skin);
@@ -39,6 +41,10 @@ public class PreLobby implements Screen {
         lobbyIDField.setTextFieldFilter(new TextField.TextFieldFilter.DigitsOnlyFilter());
         findButton = new TextButton("Find Lobby", skin);
         findButton.setVisible(false);
+
+        errorLabel = new Label("Lobby Not Found!", skin);
+        errorLabel.setVisible(false);
+        errorLabel.setColor(Color.RED);
     }
 
     @Override
@@ -60,6 +66,8 @@ public class PreLobby implements Screen {
         table.add(findButton);
         table.row().pad(15);
         table.add(backButton);
+        table.row().pad(15);
+        table.add(errorLabel);
 
         table.center();
         stage.addActor(table);
@@ -98,15 +106,21 @@ public class PreLobby implements Screen {
         creatLobbyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Main.getMain().setScreen(new Lobby(Main.getMain().skin));
+                LobbyManagerController.createLobby();
+                Main.getMain().setScreen(new LobbyMenu(Main.getMain().skin));
             }
         });
 
         findButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //TODO Find Lobby
-                Main.getMain().setScreen(new Lobby(Main.getMain().skin));
+                if (LobbyManagerController.findLobby(Integer.parseInt(lobbyIDField.getText()))) {
+                    errorLabel.setVisible(false);
+
+                    Main.getMain().setScreen(new LobbyMenu(Main.getMain().skin));
+                }
+                else
+                    errorLabel.setVisible(true);
             }
         });
 

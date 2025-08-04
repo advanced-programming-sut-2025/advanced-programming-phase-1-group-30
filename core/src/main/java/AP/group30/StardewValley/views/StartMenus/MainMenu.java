@@ -63,7 +63,7 @@ public class MainMenu implements Screen {
         startGameButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Main.getMain().setScreen(new PreLobby(Main.getMain().skin));
+                Main.getMain().setScreen(new PreLobbyMenu(Main.getMain().skin));
             }
         });
 

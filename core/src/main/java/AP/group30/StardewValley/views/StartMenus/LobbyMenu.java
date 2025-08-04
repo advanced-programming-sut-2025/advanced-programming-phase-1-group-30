@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class Lobby implements Screen {
+public class LobbyMenu implements Screen {
     private Stage stage;
     private final Table table;
     private final Label titleLabel;
@@ -27,7 +27,7 @@ public class Lobby implements Screen {
     private final TextField lobbyIDField;
     private final TextButton findButton;
 
-    public Lobby(Skin skin) {
+    public LobbyMenu(Skin skin) {
         table = new Table(skin);
         titleLabel = new Label("Lobby", skin);
         creatLobbyButton = new TextButton("Creat Lobby", skin);
