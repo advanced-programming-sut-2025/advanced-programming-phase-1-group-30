@@ -13,6 +13,7 @@ public class Lobby {
     public Lobby(int lobbyID, User admin) {
         this.lobbyID = lobbyID;
         this.users = new ArrayList<>();
+        this.users.add(admin);
         this.admin = admin;
     }
 

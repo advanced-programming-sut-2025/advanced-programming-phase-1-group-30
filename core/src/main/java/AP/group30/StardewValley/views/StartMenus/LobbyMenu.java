@@ -3,6 +3,9 @@ package AP.group30.StardewValley.views.StartMenus;
 import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameAssetManager;
+import AP.group30.StardewValley.models.Lobby;
+import AP.group30.StardewValley.models.Users.RegisterQuestions;
+import AP.group30.StardewValley.models.Users.User;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -20,24 +23,26 @@ public class LobbyMenu implements Screen {
     private Stage stage;
     private final Table table;
     private final Label titleLabel;
-    private final TextButton creatLobbyButton;
-    private final TextButton joinLobbyButton;
     private final TextButton backButton;
+    private final TextButton startGameButton;
 
-    private final TextField lobbyIDField;
+    private final TextField userFindField;
     private final TextButton findButton;
 
-    public LobbyMenu(Skin skin) {
-        table = new Table(skin);
-        titleLabel = new Label("Lobby", skin);
-        creatLobbyButton = new TextButton("Creat Lobby", skin);
-        joinLobbyButton = new TextButton("Join a Lobby", skin);
-        backButton = new TextButton("Back", skin);
+    private final Lobby lobby;
 
-        lobbyIDField = new TextField("Lobby ID", skin);
-        lobbyIDField.setVisible(false);
-        findButton = new TextButton("Find Lobby", skin);
-        findButton.setVisible(false);
+    public LobbyMenu(Skin skin) {
+        lobby = App.getCurrentLobby();
+
+        table = new Table(skin);
+        titleLabel = new Label("Lobby: " + lobby.getLobbyID(), skin);
+
+        backButton = new TextButton("Back", skin);
+        startGameButton = new TextButton("Start", skin);
+        startGameButton.setVisible(false);
+
+        userFindField = new TextField("Username", skin);
+        findButton = new TextButton("Find User", skin);
     }
 
     @Override
@@ -50,14 +55,12 @@ public class LobbyMenu implements Screen {
 
         table.add(titleLabel);
         table.row().pad(15);
-        table.add(creatLobbyButton);
-        table.row().pad(15);
-        table.add(joinLobbyButton);
+        table.add(userFindField).width(300);
+        table.add(findButton);
         table.row().pad(15);
         table.add(backButton);
         table.row().pad(15);
-        table.add(lobbyIDField);
-        table.add(findButton);
+        table.add(startGameButton);
 
         table.center();
         stage.addActor(table);
@@ -72,46 +75,48 @@ public class LobbyMenu implements Screen {
         Main.batch.draw(GameAssetManager.assetManager.get("menu assets/loading screen.png", Texture.class), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Main.batch.end();
 
-        lobbyIDField.addListener(new ClickListener() {
+        if (lobby.getUsers().size() > 1) startGameButton.setVisible(true);
+
+        userFindField.addListener(new ClickListener() {
             boolean cleared = false;
 
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (!cleared) {
-                    lobbyIDField.setText("");
+                    userFindField.setText("");
                     cleared = true;
                 }
             }
         });
 
-        lobbyIDField.addListener(new FocusListener() {
+        userFindField.addListener(new FocusListener() {
             @Override
             public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
-                if (!focused && lobbyIDField.getText().isEmpty()) {
-                    lobbyIDField.setText("Lobby ID");
+                if (!focused && userFindField.getText().isEmpty()) {
+                    userFindField.setText("Username");
                 }
-            }
-        });
-
-        creatLobbyButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Main.getMain().setScreen(new PreGameMenu(Main.getMain().skin));
-            }
-        });
-
-        joinLobbyButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Main.getMain().setScreen(new ProfileMenu(Main.getMain().skin));
             }
         });
 
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                App.setCurrentUser(null);
-                Main.getMain().setScreen(new LoginMenu(Main.getMain().skin));
+                App.setCurrentLobby(null);
+                Main.getMain().setScreen(new MainMenu(Main.getMain().skin));
+            }
+        });
+
+        startGameButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Main.getMain().setScreen(new PreGameMenu(Main.getMain().skin, lobby));
+            }
+        });
+
+        findButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //TODO Add the selected user with lobby.addUser(User);
             }
         });
 
