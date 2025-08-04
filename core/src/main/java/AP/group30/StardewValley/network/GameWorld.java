@@ -26,7 +26,7 @@ public class GameWorld {
         ServerPlayer p = new ServerPlayer(join.playerId, join.displayName, farmMapId, 0, 0);
         players.put(join.playerId, p);
 
-        maps.get(farmMapId).addPlayer(p.id, 0, 0);
+        maps.get(farmMapId).addPlayer(p.id, p.displayName,0, 0);
     }
 
     public void movePlayer(String playerId, float x, float y) {
@@ -40,7 +40,7 @@ public class GameWorld {
         ServerMap newMap = maps.get(newMapId);
 
         oldMap.removePlayer(playerId);
-        newMap.addPlayer(p.id, 0, 0);
+        newMap.addPlayer(p.id, p.displayName,0, 0);
         p.currentMapId = newMapId;
     }
 

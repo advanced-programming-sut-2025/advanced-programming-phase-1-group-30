@@ -44,9 +44,7 @@ public class NetworkClient {
                     System.out.println("received WorldState from server");
                     WorldState ws = (WorldState) object;
                     // Pass it into your MVC model so GameScreen.render() can draw it:
-                    System.out.println(ws.players.size());
                     App.getCurrentGame().getModel().setCurrentWorldState(ws);
-                    System.out.println(App.getCurrentGame().getModel().getOtherPlayers().size());
                     return;
                 }
 

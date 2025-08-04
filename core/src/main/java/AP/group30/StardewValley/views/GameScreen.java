@@ -19,6 +19,7 @@ import AP.group30.StardewValley.models.Items.Tools.Tool;
 import AP.group30.StardewValley.models.Maps.*;
 import AP.group30.StardewValley.models.Players.Direction;
 import AP.group30.StardewValley.models.Players.Player;
+import AP.group30.StardewValley.models.Players.RemotePlayer;
 import AP.group30.StardewValley.models.TimeAndDate.Season;
 import AP.group30.StardewValley.network.MessageClasses.MapTransfer;
 import AP.group30.StardewValley.network.MessageClasses.PlayerMove;
@@ -53,6 +54,7 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
 import javax.management.MBeanRegistration;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -769,11 +771,11 @@ public class GameScreen implements Screen {
                 x = proposedX;
                 y = proposedY;
             }
-            PlayerMove pm = new PlayerMove();
-            pm.playerId = String.valueOf(Main.getMain().id);
-            pm.x = x;
-            pm.y = y;
-            App.getCurrentGame().networkClient.send(pm);
+//            PlayerMove pm = new PlayerMove();
+//            pm.playerId = String.valueOf(Main.getMain().id);
+//            pm.x = x;
+//            pm.y = y;
+//            App.getCurrentGame().networkClient.send(pm);
 
             player.getPlayerRect().setPosition(x, y);
             player.setX((int)x);

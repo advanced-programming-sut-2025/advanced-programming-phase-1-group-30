@@ -1730,7 +1730,6 @@ public class GameMenuController {
         for (Animal animal : player.getAnimals()) {
             if (animal.getName().equals(name)) {
                 if (animal.isProductReady()) {
-                    System.out.println("yes");
                     animal.collectProduct();
                     return;
                 } else {
@@ -2739,7 +2738,6 @@ public class GameMenuController {
             throw new IllegalStateException(from.getUsername() + " lacks " + count + "x " + itemName);
         }
         src.setCount(src.getCount() - count);
-        System.out.println("kam shod");
         if (src.getCount() == 0) {
             from.getBackPack().getItems().remove(src);
         }
@@ -2751,7 +2749,6 @@ public class GameMenuController {
             to.getBackPack().getItems().add(new Item(count, itemName, src.getPrice()));
         } else {
             dst.setCount(dst.getCount() + count);
-            System.out.println("ziad shod");
         }
     }
     public static void tradeHistory() {
