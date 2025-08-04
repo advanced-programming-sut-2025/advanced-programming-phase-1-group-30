@@ -145,8 +145,16 @@ public class NetworkServer {
             cityMap.addPlayer(player.id, player.displayName,0, 0);
             System.out.println(cityMap.getPlayers().size());
             player.currentMapId = "city";
-            connection.sendTCP(cityMap.snapshot());
-            server.sendToAllTCP(cityMap.snapshot());
+            WorldState cityState = cityMap.snapshot();
+
+            for (Connection c : server.getConnections()) {
+                String otherId = connToPlayerId.get(c);
+                if (otherId == null) continue;
+                ServerPlayer other = world.players.get(otherId);
+                if ("city".equals(other.currentMapId)) {
+                    c.sendTCP(cityState);
+                }
+            }
             System.out.println("sent city map to all players");
             return;
         }
@@ -176,18 +184,7 @@ public class NetworkServer {
         String mapId = player.currentMapId;
         ServerMap map = world.maps.get(mapId);
         if (map == null) return;     // map not found
-
-        if ("city".equals(mapId)) {
-            WorldState cityState = map.snapshot();
-            for (Connection c : server.getConnections()) {
-//                 you’ll need a way to track connection → playerId:
-                String otherId = connToPlayerId.get(c);
-                ServerPlayer other = world.players.get(otherId);
-                if (other != null && "city".equals(other.currentMapId)) {
-                    c.sendTCP(cityState);
-                }
-            }
-        }
+        
         // 2) Optional: enforce passability
 //        if (!map.isPassable(msg.x, msg.y)) {
 //            // You could send an “illegal move” message back here
@@ -198,10 +195,15 @@ public class NetworkServer {
         player.x = msg.x;
         player.y = msg.y;
         map.movePlayer(player.id, player.x, player.y);
+        WorldState cityState = map.snapshot();
+        for (Connection c : server.getConnections()) {
+            String otherId = connToPlayerId.get(c);
+            if (otherId != null && "city".equals(world.players.get(otherId).currentMapId)) {
+                c.sendTCP(cityState);
+            }
+        }
 //        System.out.println(map.getPlayers().size());
 
         // 4) Broadcast the updated map state to everyone on this map
-        WorldState update = map.snapshot();
-        server.sendToAllTCP(update);
     }
 }

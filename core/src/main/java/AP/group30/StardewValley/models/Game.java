@@ -122,7 +122,7 @@ public class Game {
 
         networkClient = new NetworkClient();
         try {
-            networkClient.connect("192.168.1.106", 54555, 54777); // adjust IP if needed
+            networkClient.connect("192.168.1.112", 54555, 54777); // adjust IP if needed
         } catch (IOException e) {
             e.printStackTrace();
         }
