@@ -282,8 +282,7 @@ public class RegisterMenu implements Screen {
                         genderBox.getSelected(), answerField.getText(), questionBox.getSelected());
                 if (result == 1) {
                     Main.getMain().setScreen(new
-                            LoginMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json",
-                            Skin.class)));
+                            LoginMenu(Main.getMain().skin));
                 }
             }
         });
@@ -292,8 +291,7 @@ public class RegisterMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Main.getMain().setScreen(new
-                    LoginMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json",
-                    Skin.class)));
+                    LoginMenu(Main.getMain().skin));
             }
         });
 

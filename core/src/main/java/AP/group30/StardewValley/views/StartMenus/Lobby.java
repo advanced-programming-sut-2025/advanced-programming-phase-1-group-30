@@ -1,6 +1,5 @@
 package AP.group30.StardewValley.views.StartMenus;
 
-
 import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameAssetManager;
@@ -8,27 +7,37 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class MainMenu implements Screen {
+public class Lobby implements Screen {
     private Stage stage;
     private final Table table;
     private final Label titleLabel;
-    private final TextButton startGameButton;
-    private final TextButton profileButton;
-    private final TextButton logoutButton;
+    private final TextButton creatLobbyButton;
+    private final TextButton joinLobbyButton;
+    private final TextButton backButton;
 
-    public MainMenu(Skin skin) {
+    private final TextField lobbyIDField;
+    private final TextButton findButton;
+
+    public Lobby(Skin skin) {
         table = new Table(skin);
-        titleLabel = new Label("Main Menu", skin);
-        startGameButton = new TextButton("Start Game", skin);
-        profileButton = new TextButton("Profile", skin);
-        logoutButton = new TextButton("Logout", skin);
+        titleLabel = new Label("Lobby", skin);
+        creatLobbyButton = new TextButton("Creat Lobby", skin);
+        joinLobbyButton = new TextButton("Join a Lobby", skin);
+        backButton = new TextButton("Back", skin);
+
+        lobbyIDField = new TextField("Lobby ID", skin);
+        lobbyIDField.setVisible(false);
+        findButton = new TextButton("Find Lobby", skin);
+        findButton.setVisible(false);
     }
 
     @Override
@@ -41,11 +50,14 @@ public class MainMenu implements Screen {
 
         table.add(titleLabel);
         table.row().pad(15);
-        table.add(startGameButton);
+        table.add(creatLobbyButton);
         table.row().pad(15);
-        table.add(profileButton);
+        table.add(joinLobbyButton);
         table.row().pad(15);
-        table.add(logoutButton);
+        table.add(backButton);
+        table.row().pad(15);
+        table.add(lobbyIDField);
+        table.add(findButton);
 
         table.center();
         stage.addActor(table);
@@ -60,21 +72,42 @@ public class MainMenu implements Screen {
         Main.batch.draw(GameAssetManager.assetManager.get("menu assets/loading screen.png", Texture.class), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Main.batch.end();
 
-        startGameButton.addListener(new ClickListener() {
+        lobbyIDField.addListener(new ClickListener() {
+            boolean cleared = false;
+
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Main.getMain().setScreen(new PreLobby(Main.getMain().skin));
+                if (!cleared) {
+                    lobbyIDField.setText("");
+                    cleared = true;
+                }
             }
         });
 
-        profileButton.addListener(new ClickListener() {
+        lobbyIDField.addListener(new FocusListener() {
+            @Override
+            public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
+                if (!focused && lobbyIDField.getText().isEmpty()) {
+                    lobbyIDField.setText("Lobby ID");
+                }
+            }
+        });
+
+        creatLobbyButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Main.getMain().setScreen(new PreGameMenu(Main.getMain().skin));
+            }
+        });
+
+        joinLobbyButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Main.getMain().setScreen(new ProfileMenu(Main.getMain().skin));
             }
         });
 
-        logoutButton.addListener(new ClickListener() {
+        backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 App.setCurrentUser(null);
@@ -110,15 +143,4 @@ public class MainMenu implements Screen {
     public void dispose() {
 
     }
-//    @Override
-//    public void check(String command, Scanner scanner) {
-//        Matcher matcher;
-//
-//        matcher = LoginMenuCommands.USER_LOGOUT.regexMatcher(command);
-//        if (matcher.matches()) {
-//            MainMenuController.logout();
-//            return;
-//        }
-//        System.out.println("Invalid command");
-//    }
 }
