@@ -312,7 +312,7 @@ public class ProfileMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Main.getMain().setScreen(new
-                    MainMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
+                    MainMenu(Main.getMain().skin));
             }
         });
 
@@ -368,49 +368,4 @@ public class ProfileMenu implements Screen {
     public void dispose() {
 
     }
-
-//    @Override
-//    public void check(String command, Scanner scanner) {
-//        Matcher matcher;
-//
-//        matcher = ProfileMenuCommands.CHANGE_USERNAME.regexMatcher(command);
-//        if (matcher.matches()) {
-//            String username = matcher.group("username");
-//
-//            ProfileMenuController.ChangeUsername(username);
-//            return;
-//        }
-//
-//        matcher = ProfileMenuCommands.CHANGE_NICKNAME.regexMatcher(command);
-//        if (matcher.matches()) {
-//            String nickname = matcher.group("nickname");
-//
-//            ProfileMenuController.ChangeNickname(nickname);
-//            return;
-//        }
-//
-//        matcher = ProfileMenuCommands.CHANGE_EMAIL.regexMatcher(command);
-//        if (matcher.matches()) {
-//            String email = matcher.group("email");
-//
-//            ProfileMenuController.ChangeEmail(email);
-//            return;
-//        }
-//
-//        matcher = ProfileMenuCommands.CHANGE_PASSWORD.regexMatcher(command);
-//        if (matcher.matches()) {
-//            String newPassword = matcher.group("newPassword");
-//            String oldPassword = matcher.group("oldPassword");
-//
-//            ProfileMenuController.ChangePassword(newPassword, oldPassword);
-//            return;
-//        }
-//
-//        matcher = ProfileMenuCommands.USER_INFO.regexMatcher(command);
-//        if (matcher.matches()) {
-//            ProfileMenuController.UserInfo();
-//            return;
-//        }
-//        System.out.println("Invalid command");
-//    }
 }

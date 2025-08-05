@@ -63,14 +63,14 @@ public class MainMenu implements Screen {
         startGameButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Main.getMain().setScreen(new PreGameMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
+                Main.getMain().setScreen(new PreLobbyMenu(Main.getMain().skin));
             }
         });
 
         profileButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Main.getMain().setScreen(new ProfileMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
+                Main.getMain().setScreen(new ProfileMenu(Main.getMain().skin));
             }
         });
 
@@ -78,7 +78,7 @@ public class MainMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 App.setCurrentUser(null);
-                Main.getMain().setScreen(new LoginMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
+                Main.getMain().setScreen(new LoginMenu(Main.getMain().skin));
             }
         });
 

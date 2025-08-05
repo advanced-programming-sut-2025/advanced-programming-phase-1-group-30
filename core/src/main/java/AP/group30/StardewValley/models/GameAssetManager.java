@@ -61,6 +61,10 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> lightning6 = new AssetDescriptor<>("lightning pictures/lightning5.png", Texture.class);
     public static final AssetDescriptor<Texture> lightning7 = new AssetDescriptor<>("lightning pictures/lightning6.png", Texture.class);
     public static final AssetDescriptor<Texture> lightning8 = new AssetDescriptor<>("lightning pictures/lightning7.png", Texture.class);
+    public static final AssetDescriptor<Texture> playerPassOut0 = new AssetDescriptor<>("player/30.png", Texture.class);
+    public static final AssetDescriptor<Texture> playerPassOut1 = new AssetDescriptor<>("player/31.png", Texture.class);
+    public static final AssetDescriptor<Texture> playerPassOut2 = new AssetDescriptor<>("player/32.png", Texture.class);
+    public static final AssetDescriptor<Texture> playerPassOut3 = new AssetDescriptor<>("player/33.png", Texture.class);
 
 
     public static final AssetDescriptor<Texture> insideHouse = new AssetDescriptor<>("Building/InsideHut.png", Texture.class);
@@ -916,6 +920,11 @@ public class GameAssetManager {
         assetManager.load(rainy);
         assetManager.load(stormy);
         assetManager.load(snowy);
+
+        assetManager.load(playerPassOut0);
+        assetManager.load(playerPassOut1);
+        assetManager.load(playerPassOut2);
+        assetManager.load(playerPassOut3);
 
     }
 

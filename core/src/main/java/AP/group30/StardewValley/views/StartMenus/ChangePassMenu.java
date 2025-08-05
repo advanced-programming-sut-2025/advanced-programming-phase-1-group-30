@@ -229,7 +229,7 @@ public class ChangePassMenu implements Screen {
                 if (LoginMenuController.changePassword(usernameField.getText(), passField.getText(),
                     confirmPassField.getText()))
                     Main.getMain().setScreen(new
-                        MainMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json", Skin.class)));
+                        MainMenu(Main.getMain().skin));
             }
         });
 

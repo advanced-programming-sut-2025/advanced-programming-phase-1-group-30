@@ -17,6 +17,9 @@ public class App {
 
     private static ArrayList<Game> games = new ArrayList<>();
 
+    private static Lobby currentLobby = null;
+    private static ArrayList<Lobby> lobbies = new ArrayList<>();
+
     public static ArrayList<String> getQuestions() {return questions;}
 
     public static User getCurrentUser() {
@@ -61,5 +64,25 @@ public class App {
 
     public static ArrayList<Game> getGames() {
         return games;
+    }
+
+    public static Lobby getCurrentLobby() {
+        return currentLobby;
+    }
+
+    public static void setCurrentLobby(Lobby currentLobby) {
+        App.currentLobby = currentLobby;
+    }
+
+    public static ArrayList<Lobby> getLobbies() {
+        return lobbies;
+    }
+
+    public static void addLobby(Lobby lobby) {
+        lobbies.add(lobby);
+    }
+
+    public static void removeLobby(Lobby lobby) {
+        lobbies.remove(lobby);
     }
 }

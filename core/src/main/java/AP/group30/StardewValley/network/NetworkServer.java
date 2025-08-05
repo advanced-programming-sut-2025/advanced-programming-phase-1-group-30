@@ -202,7 +202,6 @@ public class NetworkServer {
                 c.sendTCP(cityState);
             }
         }
-//        System.out.println(map.getPlayers().size());
 
         // 4) Broadcast the updated map state to everyone on this map
     }
