@@ -11,14 +11,22 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class LobbyMenu implements Screen {
     private Stage stage;
@@ -31,10 +39,19 @@ public class LobbyMenu implements Screen {
     private final TextButton findButton;
 
     private final Label errorLabel;
-
     private final Lobby lobby;
 
+    private final Map<String, Image> playerImages = new HashMap<>();
+    private final Map<String, Label> playerLabels = new HashMap<>();
+    private final ArrayList<Texture> playerTextures = new ArrayList<>();
+
+    private Animation<TextureRegion> playerAnimation;
+    private float stateTime = 0;
+
+    private final Skin skin;
+
     public LobbyMenu(Skin skin) {
+        this.skin = skin;
         lobby = App.getCurrentLobby();
 
         table = new Table(skin);
@@ -50,6 +67,29 @@ public class LobbyMenu implements Screen {
         errorLabel = new Label("", skin);
         errorLabel.setVisible(false);
         errorLabel.setColor(Color.RED);
+
+        loadPlayerAnimation();
+    }
+
+    private void loadPlayerAnimation() {
+        Texture t1 = new Texture(Gdx.files.internal("Lobby/1.png"));
+        Texture t2 = new Texture(Gdx.files.internal("Lobby/2.png"));
+        Texture t3 = new Texture(Gdx.files.internal("Lobby/3.png"));
+        Texture t4 = new Texture(Gdx.files.internal("Lobby/4.png"));
+
+        playerTextures.add(t1);
+        playerTextures.add(t2);
+        playerTextures.add(t3);
+        playerTextures.add(t4);
+
+        playerAnimation = new Animation<>(
+            0.2f,
+            new TextureRegion(t1),
+            new TextureRegion(t2),
+            new TextureRegion(t3),
+            new TextureRegion(t4)
+        );
+        playerAnimation.setPlayMode(Animation.PlayMode.LOOP);
     }
 
     @Override
@@ -114,9 +154,37 @@ public class LobbyMenu implements Screen {
                 } else if (result == 4) {
                     errorLabel.setVisible(false);
                     errorLabel.setText("");
+
+                    List<User> users = lobby.getUsers();
+                    User newUser = users.getLast();
+                    addUserToStage(newUser, users.size() - 1);
                 }
             }
         });
+
+        int index = 0;
+        for (User user : lobby.getUsers()) {
+            Label nameLabel = new Label(user.getUsername(), skin);
+            nameLabel.setColor(Color.WHITE);
+
+            Image animImage = new Image(playerAnimation.getKeyFrame(0));
+
+            Table playerTable = new Table();
+            playerTable.add(nameLabel).padBottom(5).row();
+            playerTable.add(animImage).size(128, 128);
+
+            float x = 600 + (index * 250);
+            float y = 200;
+
+            playerTable.setPosition(x, y);
+            playerTable.setTransform(true);
+            stage.addActor(playerTable);
+
+            playerImages.put(user.getUsername(), animImage);
+            playerLabels.put(user.getUsername(), nameLabel);
+
+            index++;
+        }
     }
 
     @Override
@@ -128,8 +196,15 @@ public class LobbyMenu implements Screen {
         Main.batch.draw(GameAssetManager.assetManager.get("menu assets/loading screen.png", Texture.class), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Main.batch.end();
 
+        stateTime += delta;
+
+        for (Map.Entry<String, Image> entry : playerImages.entrySet()) {
+            TextureRegion frame = playerAnimation.getKeyFrame(stateTime, true);
+            entry.getValue().setDrawable(new TextureRegionDrawable(frame));
+        }
+
         if (lobby.getUsers().size() > 1) startGameButton.setVisible(true);
-        if (lobby.getUsers().size() > 4) {
+        if (lobby.getUsers().size() > 3) {
             findButton.setVisible(false);
             userFindField.setVisible(false);
         }
@@ -159,28 +234,37 @@ public class LobbyMenu implements Screen {
         stage.draw();
     }
 
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
+    @Override public void resize(int width, int height) {}
+    @Override public void pause() {}
+    @Override public void resume() {}
+    @Override public void hide() {}
 
     @Override
     public void dispose() {
+        stage.dispose();
+        for (Texture t : playerTextures) {
+            t.dispose();
+        }
+    }
 
+    private void addUserToStage(User user, int index) {
+        Label nameLabel = new Label(user.getUsername(), skin);
+        nameLabel.setColor(Color.WHITE);
+
+        Image animImage = new Image(playerAnimation.getKeyFrame(0));
+
+        Table playerTable = new Table();
+        playerTable.add(nameLabel).padBottom(5).row();
+        playerTable.add(animImage).size(128, 128);
+
+        float x = 600 + (index * 250);
+        float y = 200;
+
+        playerTable.setPosition(x, y);
+        playerTable.setTransform(true);
+        stage.addActor(playerTable);
+
+        playerImages.put(user.getUsername(), animImage);
+        playerLabels.put(user.getUsername(), nameLabel);
     }
 }
