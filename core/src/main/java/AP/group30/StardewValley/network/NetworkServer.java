@@ -184,7 +184,7 @@ public class NetworkServer {
         String mapId = player.currentMapId;
         ServerMap map = world.maps.get(mapId);
         if (map == null) return;     // map not found
-        
+
         // 2) Optional: enforce passability
 //        if (!map.isPassable(msg.x, msg.y)) {
 //            // You could send an “illegal move” message back here
