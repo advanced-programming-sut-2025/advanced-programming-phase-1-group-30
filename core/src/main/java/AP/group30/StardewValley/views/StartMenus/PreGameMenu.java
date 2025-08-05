@@ -29,9 +29,9 @@ public class PreGameMenu implements Screen {
     private final Label titleLabel;
     private final Label numberOfPlayersLabel;
     private final Label mapPlayer1Label;
-    private final Label mapPlayer2Label;
-    private final Label mapPlayer3Label;
-    private final Label mapPlayer4Label;
+    private Label mapPlayer2Label;
+    private Label mapPlayer3Label;
+    private Label mapPlayer4Label;
     private final SelectBox<String> mapPlayer1Box;
     private final SelectBox<String> mapPlayer2Box;
     private final SelectBox<String> mapPlayer3Box;
@@ -63,6 +63,13 @@ public class PreGameMenu implements Screen {
         searchButton = new TextButton("Start", skin);
         backButton = new TextButton("Back", skin);
         errorLabel = new Label("", skin);
+
+        if (lobby.getUsers().size() > 1)
+            mapPlayer2Label = new Label(App.getCurrentLobby().getUsers().get(1).getUsername() + "'s Map :", skin);
+        if (lobby.getUsers().size() > 2)
+            mapPlayer3Label = new Label(App.getCurrentLobby().getUsers().get(2).getUsername() + "'s Map :", skin);
+        if (lobby.getUsers().size() > 3)
+            mapPlayer4Label = new Label(App.getCurrentLobby().getUsers().get(3).getUsername() + "'s Map :", skin);
     }
 
     public static void printResult(String message) {
@@ -139,8 +146,6 @@ public class PreGameMenu implements Screen {
             mapPlayer2Label.setVisible(true);
             mapPlayer3Label.setVisible(false);
             mapPlayer4Label.setVisible(false);
-
-            mapPlayer2Label.setText(App.getCurrentLobby().getUsers().get(1).getUsername() + "'s Map :");
         } else if (lobby.getUsers().size() == 3) {
             mapPlayer2Box.setVisible(true);
             mapPlayer3Box.setVisible(true);
@@ -148,9 +153,6 @@ public class PreGameMenu implements Screen {
             mapPlayer2Label.setVisible(true);
             mapPlayer3Label.setVisible(true);
             mapPlayer4Label.setVisible(false);
-
-            mapPlayer2Label.setText(App.getCurrentLobby().getUsers().get(1).getUsername() + "'s Map :");
-            mapPlayer3Label.setText(App.getCurrentLobby().getUsers().get(2).getUsername() + "'s Map :");
         } else if (lobby.getUsers().size() == 4) {
             mapPlayer2Box.setVisible(true);
             mapPlayer3Box.setVisible(true);
@@ -158,34 +160,28 @@ public class PreGameMenu implements Screen {
             mapPlayer2Label.setVisible(true);
             mapPlayer3Label.setVisible(true);
             mapPlayer4Label.setVisible(true);
-
-            mapPlayer2Label.setText(App.getCurrentLobby().getUsers().get(1).getUsername() + "'s Map :");
-            mapPlayer3Label.setText(App.getCurrentLobby().getUsers().get(2).getUsername() + "'s Map :");
-            mapPlayer4Label.setText(App.getCurrentLobby().getUsers().get(3).getUsername() + "'s Map :");
         }
 
         searchButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                String user1 = "username 1";
-                String user2 = "username 2";
-                String user3 = "username 3";
+                User user1 = null;
+                User user2 = null;
+                User user3 = null;
                 if (lobby.getUsers().size() > 1)
-                    user1 = App.getCurrentLobby().getUsers().get(1).getUsername();
+                    user1 = App.getCurrentLobby().getUsers().get(1);
                 if (lobby.getUsers().size() > 2)
-                    user2 = App.getCurrentLobby().getUsers().get(2).getUsername();
+                    user2 = App.getCurrentLobby().getUsers().get(2);
                 if (lobby.getUsers().size() > 3)
-                    user3 = App.getCurrentLobby().getUsers().get(3).getUsername();
+                    user3 = App.getCurrentLobby().getUsers().get(3);
 
                 Game result = NewGameController.NewGame(lobby.getUsers().size(),
                     user1, user2, user3, Integer.parseInt(mapPlayer1Box.getSelected()),
                     Integer.parseInt(mapPlayer2Box.getSelected()), Integer.parseInt(mapPlayer3Box.getSelected()),
                     Integer.parseInt(mapPlayer4Box.getSelected()));
-                if (result != null) {
-                    RegisterMenu.gameScreen = new GameScreen(result);
-                    RegisterMenu.cityScreen = new CityScreen(result);
-                    Main.getMain().setScreen(RegisterMenu.gameScreen);
-                }
+                RegisterMenu.gameScreen = new GameScreen(result);
+                RegisterMenu.cityScreen = new CityScreen(result);
+                Main.getMain().setScreen(new LoadingScreen(RegisterMenu.gameScreen));
             }
         });
 
@@ -199,11 +195,6 @@ public class PreGameMenu implements Screen {
 
         stage.act(delta);
         stage.draw();
-
-        for (User user : lobby.getUsers()) {
-            System.out.println(user.getUsername());
-        }
-        System.out.println("--------------------------------");
     }
 
     @Override
