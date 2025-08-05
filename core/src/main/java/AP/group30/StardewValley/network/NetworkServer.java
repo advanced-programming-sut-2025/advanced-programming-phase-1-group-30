@@ -198,7 +198,7 @@ public class NetworkServer {
         player.x = msg.x;
         player.y = msg.y;
         map.movePlayer(player.id, player.x, player.y);
-//        System.out.println(map.getPlayers().size());
+//        System.out.println(map.getUsers().size());
 
         // 4) Broadcast the updated map state to everyone on this map
         WorldState update = map.snapshot();

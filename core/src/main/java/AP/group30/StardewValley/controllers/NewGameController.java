@@ -24,12 +24,8 @@ import AP.group30.StardewValley.views.GameMenu;
 import AP.group30.StardewValley.views.StartMenus.PreGameMenu;
 
 public class NewGameController {
-    public static Game NewGame(int numberOfPlayers, String username1, String username2, String username3,
+    public static Game NewGame(int numberOfPlayers, User user1, User user2, User user3,
                                   int mapNumber1, int mapNumber2, int mapNumber3, int mapNumber4) {
-        User user1 = null;
-        User user2 = null;
-        User user3 = null;
-
         App.getMaps().add(new Map(1));
         App.getMaps().add(new Map(2));
         App.getMaps().add(new Map(3));
@@ -49,27 +45,6 @@ public class NewGameController {
         players.add(currentPlayer);
 
         if (numberOfPlayers >= 2) {
-            if (username1.equals(App.getCurrentUser().getUsername())) {
-                PreGameMenu.printResult("You Can't Choose Yourself!");
-                return null;
-            }
-
-            if (username1.equals("username 1")) {
-                PreGameMenu.printResult("Please enter username 1");
-                return null;
-            }
-
-            user1 = User.findUserByUsername(username1);
-            if (user1 == null) {
-                PreGameMenu.printResult("Invalid User1");
-                return null;
-            }
-
-            if (user1.isInGame()) {
-                PreGameMenu.printResult("User1 already in Game");
-                return null;
-            }
-
             Player player1 = new Player(user1,user1.getUsername(), 1, user1.getGender(),
                 Map.getMapById(mapNumber2));
             user1.setPlayer(player1);
@@ -78,31 +53,6 @@ public class NewGameController {
         }
 
         if (numberOfPlayers >= 3) {
-            if (username2.equals(App.getCurrentUser().getUsername())) {
-                PreGameMenu.printResult("You Can't Choose Yourself!");
-                return null;
-            }
-
-            if (username2.equals(username1)) {
-                PreGameMenu.printResult("Please enter another username 2");
-                return null;
-            }
-
-            if (username2.equals("username 2")) {
-                PreGameMenu.printResult("Please enter username 2");
-                return null;
-            }
-
-            user2 = User.findUserByUsername(username2);
-            if (user2 == null) {
-                PreGameMenu.printResult("Invalid User2");
-                return null;
-            }
-            if (user2.isInGame()) {
-                PreGameMenu.printResult("User2 already in Game");
-                return null;
-            }
-
             Player player2 = new Player(user2,user2.getUsername(), 2, user2.getGender(),
                 Map.getMapById(mapNumber3));
             user2.setPlayer(player2);
@@ -111,36 +61,6 @@ public class NewGameController {
         }
 
         if (numberOfPlayers >= 4) {
-            if (username3.equals(App.getCurrentUser().getUsername())) {
-                PreGameMenu.printResult("You Can't Choose Yourself!");
-                return null;
-            }
-
-            if (username3.equals(username1)) {
-                PreGameMenu.printResult("Please enter another username 3");
-                return null;
-            }
-
-            if (username3.equals(username2)) {
-                PreGameMenu.printResult("Please enter another username 3");
-                return null;
-            }
-
-            if (username3.equals("username 3")) {
-                PreGameMenu.printResult("Please enter username 3");
-                return null;
-            }
-
-            user3 = User.findUserByUsername(username3);
-            if (user3 == null) {
-                PreGameMenu.printResult("Invalid User3");
-                return null;
-            }
-            if (user3.isInGame()) {
-                PreGameMenu.printResult("User3 already in Game");
-                return null;
-            }
-
             Player player3 = new Player(user3,user3.getUsername(), 3, user3.getGender(),
                 Map.getMapById(mapNumber4));
             user3.setPlayer(player3);

@@ -145,8 +145,7 @@ public class LoginMenu implements Screen {
                         stayLoggedInBox.isChecked());
                 if (result) {
                     Main.getMain().setScreen(new
-                            MainMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json",
-                            Skin.class)));
+                            MainMenu(Main.getMain().skin));
                 }
             }
         });
@@ -154,7 +153,7 @@ public class LoginMenu implements Screen {
         gotoRegisterMenuButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Main.getMain().setScreen(new RegisterMenu(GameAssetManager.assetManager.get(GameAssetManager.menuSkin)));
+                Main.getMain().setScreen(new RegisterMenu(Main.getMain().skin));
             }
         });
 
@@ -162,8 +161,7 @@ public class LoginMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Main.getMain().setScreen(new
-                        ChangePassMenu(GameAssetManager.assetManager.get("skin/pixthulhu-ui.json",
-                        Skin.class)));
+                        ChangePassMenu(Main.getMain().skin));
             }
         });
 
