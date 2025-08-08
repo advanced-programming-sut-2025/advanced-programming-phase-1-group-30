@@ -790,8 +790,7 @@ public class GameScreen implements Screen {
             MapTransfer mt = new MapTransfer();
             mt.playerId    = String.valueOf(Main.getMain().id);
             mt.targetMapId = "city";  // or farm_<id>, etc.
-            App.getCurrentGame().networkClient.send(mt);
-
+            App.getNetworkClient().send(mt);
             Main.getMain().setScreen(RegisterMenu.cityScreen);
         }
 

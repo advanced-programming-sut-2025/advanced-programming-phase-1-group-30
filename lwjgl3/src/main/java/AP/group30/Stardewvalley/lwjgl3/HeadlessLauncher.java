@@ -8,18 +8,18 @@ import java.io.IOException;
 
 public class HeadlessLauncher {
     public static void main(String[] args) {
-        HeadlessApplicationConfiguration cfg = new HeadlessApplicationConfiguration();
-        // cfg.updatesPerSecond = 30; // optional tick rate
+        int tcpPort  = args.length > 0 ? Integer.parseInt(args[0]) : 54555;
+        int udpPort  = args.length > 1 ? Integer.parseInt(args[1]) : 54777;
 
+        HeadlessApplicationConfiguration cfg = new HeadlessApplicationConfiguration();
         NetworkServer server = new NetworkServer();
         try {
-            server.start(54555, 54777);
+            server.start(tcpPort, udpPort);
         } catch (IOException e) {
             e.printStackTrace();
             return;
         }
 
-        // hook it into the libGDX headless loop (so you can schedule tasks in render())
         new HeadlessApplication(new HeadlessGame(server), cfg);
     }
 }

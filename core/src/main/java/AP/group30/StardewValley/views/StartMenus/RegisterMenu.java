@@ -306,7 +306,7 @@ public class RegisterMenu implements Screen {
             PlayerJoin playerJoin = new PlayerJoin();
             playerJoin.playerId = String.valueOf(Main.getMain().id);
             playerJoin.displayName = game.getCurrentPlayer().getUsername();
-            game.networkClient.send(playerJoin);
+            App.getNetworkClient().send(playerJoin);
 
             game.getModel().setMyPlayerId(String.valueOf(Main.getMain().id));
 

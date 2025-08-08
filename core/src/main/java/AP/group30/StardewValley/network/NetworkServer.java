@@ -1,14 +1,19 @@
 package AP.group30.StardewValley.network;
 
-import AP.group30.StardewValley.network.MessageClasses.MapTransfer;
-import AP.group30.StardewValley.network.MessageClasses.PlayerJoin;
-import AP.group30.StardewValley.network.MessageClasses.PlayerMove;
-import AP.group30.StardewValley.network.MessageClasses.WorldState;
+import AP.group30.StardewValley.network.MessageClasses.*;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,12 +23,14 @@ public class NetworkServer {
     private final Map<Connection, String> connToPlayerId = new HashMap<>();
     private final Map<String, Connection> playerIdToConn = new HashMap<>();
     private int numPlayers = 1;
+    public static String serverId = "Hamedd's Game";
 
     public void start(int tcpPort, int udpPort) throws IOException {
         server = new Server();
         Kryo kryo = server.getKryo(); // or client.getKryo()
         server.getKryo().register(Ping.class);
         kryo.register(PlayerJoin.class);
+        kryo.register(PlayerJoinedLobby.class);
         kryo.register(PlayerMove.class);
         kryo.register(WorldState.class);
         kryo.register(MapTransfer.class);
@@ -53,6 +60,15 @@ public class NetworkServer {
                 } else if (object instanceof MapTransfer) {
                     System.out.println("Received map transfer for player");
                     handleMapTransfer(connection, (MapTransfer) object);
+                } if (object instanceof PlayerJoinedLobby) {
+                    PlayerJoinedLobby pjl = (PlayerJoinedLobby) object;
+                    System.out.println("[Server] Player joined lobby: " + pjl.username);
+                    // Optionally, broadcast to all players in the lobby
+                    for (Connection c : server.getConnections()) {
+                        c.sendTCP(pjl); // send to all connected clients
+                    }
+                } else {
+                    System.out.println("[Server] Unknown message type: " + object.getClass().getSimpleName());
                 }
             }
 
@@ -86,6 +102,51 @@ public class NetworkServer {
         server.bind(tcpPort, udpPort);
         server.start();
         System.out.println("[Server] listening on TCP/" + tcpPort + " UDP/" + udpPort);
+
+        new Thread(() -> {
+            try (DatagramSocket sock = new DatagramSocket()) {
+                sock.setBroadcast(true);
+
+                while (!Thread.currentThread().isInterrupted()) {
+                    try {
+                        // Build JSON snapshot each time (players may change)
+                        JSONObject obj = new JSONObject();
+                        obj.put("id", serverId);
+                        obj.put("tcp", tcpPort);
+                        obj.put("udp", udpPort);
+
+                        // collect player display names
+                        // Use synchronization if world.players is not thread-safe
+                        org.json.JSONArray playersArray = new org.json.JSONArray();
+                        synchronized (world) { // if world is not synchronized, replace with appropriate lock
+                            for (ServerPlayer sp : world.players.values()) {
+                                // use displayName (or username field) — choose what to show
+                                playersArray.put(sp.displayName);
+                            }
+                        }
+                        obj.put("players", playersArray);
+
+                        byte[] data = obj.toString().getBytes(StandardCharsets.UTF_8);
+
+                        DatagramPacket packet = new DatagramPacket(
+                            data, data.length,
+                            InetAddress.getByName("255.255.255.255"), 8888
+                        );
+
+                        sock.send(packet);
+                        Thread.sleep(2000);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                        break;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        // continue broadcasting on non-fatal errors
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }, "Lobby-Announcer").start();
     }
 
     public void stop() {
@@ -116,6 +177,11 @@ public class NetworkServer {
         conn.sendTCP(farmMap.snapshot());
         numPlayers++;
 
+        PlayerJoinedLobby joinedPacket = new PlayerJoinedLobby(join.displayName);
+        for (Connection c : server.getConnections()) {
+            c.sendTCP(joinedPacket);
+        }
+
         System.out.println("received player join: " + join.displayName + " with id " + join.playerId);
     }
 
@@ -145,8 +211,16 @@ public class NetworkServer {
             cityMap.addPlayer(player.id, player.displayName,0, 0);
             System.out.println(cityMap.getPlayers().size());
             player.currentMapId = "city";
-            connection.sendTCP(cityMap.snapshot());
-            server.sendToAllTCP(cityMap.snapshot());
+            WorldState cityState = cityMap.snapshot();
+
+            for (Connection c : server.getConnections()) {
+                String otherId = connToPlayerId.get(c);
+                if (otherId == null) continue;
+                ServerPlayer other = world.players.get(otherId);
+                if ("city".equals(other.currentMapId)) {
+                    c.sendTCP(cityState);
+                }
+            }
             System.out.println("sent city map to all players");
             return;
         }
@@ -177,17 +251,6 @@ public class NetworkServer {
         ServerMap map = world.maps.get(mapId);
         if (map == null) return;     // map not found
 
-        if ("city".equals(mapId)) {
-            WorldState cityState = map.snapshot();
-            for (Connection c : server.getConnections()) {
-//                 you’ll need a way to track connection → playerId:
-                String otherId = connToPlayerId.get(c);
-                ServerPlayer other = world.players.get(otherId);
-                if (other != null && "city".equals(other.currentMapId)) {
-                    c.sendTCP(cityState);
-                }
-            }
-        }
         // 2) Optional: enforce passability
 //        if (!map.isPassable(msg.x, msg.y)) {
 //            // You could send an “illegal move” message back here
@@ -198,10 +261,14 @@ public class NetworkServer {
         player.x = msg.x;
         player.y = msg.y;
         map.movePlayer(player.id, player.x, player.y);
-//        System.out.println(map.getUsers().size());
+        WorldState cityState = map.snapshot();
+        for (Connection c : server.getConnections()) {
+            String otherId = connToPlayerId.get(c);
+            if (otherId != null && "city".equals(world.players.get(otherId).currentMapId)) {
+                c.sendTCP(cityState);
+            }
+        }
 
         // 4) Broadcast the updated map state to everyone on this map
-        WorldState update = map.snapshot();
-        server.sendToAllTCP(update);
     }
 }

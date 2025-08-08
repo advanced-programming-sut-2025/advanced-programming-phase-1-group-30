@@ -15,7 +15,6 @@ import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.models.Players.Trade;
 import AP.group30.StardewValley.models.TimeAndDate.Time;
 import AP.group30.StardewValley.network.MessageClasses.PlayerJoin;
-import AP.group30.StardewValley.network.NetworkClient;
 import com.badlogic.gdx.assets.AssetManager;
 
 
@@ -85,7 +84,6 @@ public class Game {
 
 
 
-    public NetworkClient networkClient;
     private GameModel model;
 
     public GameModel getModel() {
@@ -119,13 +117,6 @@ public class Game {
         buildings.add(jojaMart);
         buildings.add(ranch);
         buildings.add(saloon);
-
-        networkClient = new NetworkClient();
-        try {
-            networkClient.connect("192.168.1.106", 54555, 54777); // adjust IP if needed
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         model = new GameModel();
     }

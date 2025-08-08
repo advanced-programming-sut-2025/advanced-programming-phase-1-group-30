@@ -2,10 +2,9 @@ package AP.group30.StardewValley.network;
 
 import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.models.App;
-import AP.group30.StardewValley.network.MessageClasses.MapTransfer;
-import AP.group30.StardewValley.network.MessageClasses.PlayerJoin;
-import AP.group30.StardewValley.network.MessageClasses.PlayerMove;
-import AP.group30.StardewValley.network.MessageClasses.WorldState;
+import AP.group30.StardewValley.network.MessageClasses.*;
+import AP.group30.StardewValley.views.StartMenus.LobbyMenu;
+import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
@@ -23,6 +22,7 @@ public class NetworkClient {
         Kryo kryo = client.getKryo(); // or client.getKryo()
         client.getKryo().register(Ping.class); // register shared message types
         kryo.register(PlayerJoin.class);
+        kryo.register(PlayerJoinedLobby.class);
         kryo.register(PlayerMove.class);
         kryo.register(WorldState.class);
         kryo.register(MapTransfer.class);
@@ -54,6 +54,21 @@ public class NetworkClient {
                     // Update only that one player in your model:
                     App.getCurrentGame().getModel().moveOtherPlayers(pm);
                     return;
+                }
+                if (object instanceof PlayerJoinedLobby) {
+                    PlayerJoinedLobby pjl = (PlayerJoinedLobby) object;
+
+                    // Add to the current lobby’s user list
+                    App.getCurrentLobby().getUsers().add(pjl.username);
+
+                    // Update UI if we are in LobbyMenu
+                    if (Main.getMain().getScreen() instanceof LobbyMenu) {
+                        Gdx.app.postRunnable(() -> {
+                            LobbyMenu lm = (LobbyMenu) Main.getMain().getScreen();
+                            lm.addUserToStage(pjl.username,
+                                App.getCurrentLobby().getUsers().size() - 1);
+                        });
+                    }
                 }
             }
         });
