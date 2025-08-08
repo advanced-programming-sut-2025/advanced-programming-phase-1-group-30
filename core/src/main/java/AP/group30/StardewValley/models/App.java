@@ -3,6 +3,7 @@ package AP.group30.StardewValley.models;
 //import AP.group30.StardewValley.models.Commands.Menus;
 import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Users.User;
+import AP.group30.StardewValley.network.NetworkClient;
 import AP.group30.StardewValley.views.CityScreen;
 
 import java.util.ArrayList;
@@ -19,6 +20,8 @@ public class App {
 
     private static Lobby currentLobby = null;
     private static ArrayList<Lobby> lobbies = new ArrayList<>();
+
+    private static NetworkClient networkClient; // Add this line
 
     public static ArrayList<String> getQuestions() {return questions;}
 
@@ -84,5 +87,13 @@ public class App {
 
     public static void removeLobby(Lobby lobby) {
         lobbies.remove(lobby);
+    }
+
+    public static NetworkClient getNetworkClient() {
+        return networkClient;
+    }
+
+    public static void setNetworkClient(NetworkClient client) {
+        networkClient = client;
     }
 }

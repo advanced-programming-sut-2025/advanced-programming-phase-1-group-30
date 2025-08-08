@@ -65,11 +65,11 @@ public class PreGameMenu implements Screen {
         errorLabel = new Label("", skin);
 
         if (lobby.getUsers().size() > 1)
-            mapPlayer2Label = new Label(App.getCurrentLobby().getUsers().get(1).getUsername() + "'s Map :", skin);
+            mapPlayer2Label = new Label(App.getCurrentLobby().getUsers().get(1) + "'s Map :", skin);
         if (lobby.getUsers().size() > 2)
-            mapPlayer3Label = new Label(App.getCurrentLobby().getUsers().get(2).getUsername() + "'s Map :", skin);
+            mapPlayer3Label = new Label(App.getCurrentLobby().getUsers().get(2) + "'s Map :", skin);
         if (lobby.getUsers().size() > 3)
-            mapPlayer4Label = new Label(App.getCurrentLobby().getUsers().get(3).getUsername() + "'s Map :", skin);
+            mapPlayer4Label = new Label(App.getCurrentLobby().getUsers().get(3) + "'s Map :", skin);
     }
 
     public static void printResult(String message) {
@@ -168,12 +168,12 @@ public class PreGameMenu implements Screen {
                 User user1 = null;
                 User user2 = null;
                 User user3 = null;
-                if (lobby.getUsers().size() > 1)
-                    user1 = App.getCurrentLobby().getUsers().get(1);
-                if (lobby.getUsers().size() > 2)
-                    user2 = App.getCurrentLobby().getUsers().get(2);
-                if (lobby.getUsers().size() > 3)
-                    user3 = App.getCurrentLobby().getUsers().get(3);
+//                if (lobby.getUsers().size() > 1)
+//                    user1 = App.getCurrentLobby().getUsers().get(1);
+//                if (lobby.getUsers().size() > 2)
+//                    user2 = App.getCurrentLobby().getUsers().get(2);
+//                if (lobby.getUsers().size() > 3)
+//                    user3 = App.getCurrentLobby().getUsers().get(3);
 
                 Game result = NewGameController.NewGame(lobby.getUsers().size(),
                     user1, user2, user3, Integer.parseInt(mapPlayer1Box.getSelected()),

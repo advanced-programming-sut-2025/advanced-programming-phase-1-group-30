@@ -17,6 +17,7 @@ public class Main extends Game {
     public static SpriteBatch batch;
     public Skin skin;
     public int id;
+    public NetworkClient client = new NetworkClient();
 
     @Override
     public void create() {

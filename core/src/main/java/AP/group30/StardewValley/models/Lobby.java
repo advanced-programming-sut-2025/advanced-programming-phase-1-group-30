@@ -5,27 +5,27 @@ import AP.group30.StardewValley.models.Users.User;
 import java.util.ArrayList;
 
 public class Lobby {
-    private final int lobbyID;
+    private final String lobbyID;
 
-    private final ArrayList<User> users;
-    private final User admin;
+    private final ArrayList<String> users;
+    private final String admin;
 
-    public Lobby(int lobbyID, User admin) {
+    public Lobby(String lobbyID, String admin) {
         this.lobbyID = lobbyID;
         this.users = new ArrayList<>();
-        this.users.add(admin);
+//        this.users.add(admin);
         this.admin = admin;
     }
 
-    public int getLobbyID() {
+    public String getLobbyID() {
         return lobbyID;
     }
 
-    public ArrayList<User> getUsers() {
+    public ArrayList<String> getUsers() {
         return users;
     }
 
-    public void addUser(User user) {
+    public void addUser(String user) {
         users.add(user);
     }
 
@@ -33,7 +33,7 @@ public class Lobby {
         users.remove(user);
     }
 
-    public User getAdmin() {
+    public String getAdmin() {
         return admin;
     }
 }

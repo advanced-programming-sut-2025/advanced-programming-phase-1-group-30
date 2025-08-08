@@ -19,7 +19,7 @@ apply plugin: 'io.github.fourlastor.construo'
 import io.github.fourlastor.construo.Target
 
 sourceSets.main.resources.srcDirs += [ rootProject.file('assets').path ]
-mainClassName = 'AP.group30.StardewValley.lwjgl3.Lwjgl3Launcher'
+mainClassName = 'AP.group30.Stardewvalley.lwjgl3.Lwjgl3Launcher'
 application.setMainClass(mainClassName)
 eclipse.project.name = appName + '-lwjgl3'
 java.sourceCompatibility = 21
@@ -194,4 +194,18 @@ startScripts.classpath = project.tasks.jar.outputs.files
 
 if(enableGraalNative == 'true') {
   apply from: file("nativeimage.gradle")
+}
+
+
+// This is your normal run task:
+application {
+  mainClass = 'AP.group30.Stardewvalley.lwjgl3.Lwjgl3Launcher'
+}
+
+// Now add a second JavaExec task for headless:
+tasks.register('runHeadless', JavaExec) {
+  group = 'application'
+  description = 'Runs the headless server via HeadlessLauncher'
+  classpath = sourceSets.main.runtimeClasspath
+  mainClass.set('AP.group30.Stardewvalley.lwjgl3.HeadlessLauncher')
 }

@@ -3,6 +3,19 @@ package AP.group30.StardewValley.views.StartMenus;
 import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.controllers.LobbyManagerController;
 import AP.group30.StardewValley.models.GameAssetManager;
+
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import AP.group30.StardewValley.models.Lobby;
+import AP.group30.StardewValley.network.ServerInfo;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -18,33 +31,69 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class PreLobbyMenu implements Screen {
     private Stage stage;
+    private Skin skin;
     private final Table table;
     private final Label titleLabel;
     private final TextButton creatLobbyButton;
     private final TextButton joinLobbyButton;
     private final TextButton backButton;
 
-    private final TextField lobbyIDField;
-    private final TextButton findButton;
+    private ScrollPane lobbyListPane;
+    private Table lobbyListTable;
+    private Dialog lobbySelectDialog;
 
     private final Label errorLabel;
 
+    List<ServerInfo> lobbies = Collections.synchronizedList(new ArrayList<>());
+    private static boolean listenerStarted = false;
+
+
     public PreLobbyMenu(Skin skin) {
+        this.skin = skin;
         table = new Table(skin);
         titleLabel = new Label("Lobby", skin);
         creatLobbyButton = new TextButton("Creat Lobby", skin);
         joinLobbyButton = new TextButton("Join a Lobby", skin);
         backButton = new TextButton("Back", skin);
 
-        lobbyIDField = new TextField("Lobby ID", skin);
-        lobbyIDField.setVisible(false);
-        lobbyIDField.setTextFieldFilter(new TextField.TextFieldFilter.DigitsOnlyFilter());
-        findButton = new TextButton("Find Lobby", skin);
-        findButton.setVisible(false);
-
         errorLabel = new Label("Lobby Not Found!", skin);
         errorLabel.setVisible(false);
         errorLabel.setColor(Color.RED);
+    }
+
+    // Add this method to refresh the lobby list UI
+    private void refreshLobbyListUI() {
+        if (lobbyListTable == null) return;
+        lobbyListTable.clear();
+        synchronized (lobbies) {
+            if (lobbies.isEmpty()) {
+                Label noLobbiesLabel = new Label("No lobbies found.", skin);
+                lobbyListTable.add(noLobbiesLabel).pad(10);
+            } else {
+                for (ServerInfo lobby : lobbies) {
+                    TextButton lobbyBtn = new TextButton(
+                        lobby.serverId + " (" + lobby.host + ":" + lobby.tcpPort + ")",
+                        skin
+                    );
+                    lobbyBtn.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            // Connect to the selected lobby
+                            try {
+//                                        LobbyManagerController.joinLobby(lobby.host, lobby.tcpPort);
+                                Main.getMain().setScreen(new LobbyMenu(Main.getMain().skin, false));
+                            } catch (Exception e) {
+                                errorLabel.setText("Failed to join lobby: " + e.getMessage());
+                                errorLabel.setVisible(true);
+                            }
+                            if (lobbySelectDialog != null) lobbySelectDialog.hide();
+                        }
+                    });
+                    lobbyListTable.row();
+                    lobbyListTable.add(lobbyBtn).width(300).pad(5);
+                }
+            }
+        }
     }
 
     @Override
@@ -61,16 +110,49 @@ public class PreLobbyMenu implements Screen {
         table.row().pad(15);
         table.add(joinLobbyButton);
         table.row().pad(15);
-        table.add(lobbyIDField).width(200);
-        table.row().pad(15);
-        table.add(findButton);
-        table.row().pad(15);
         table.add(backButton);
         table.row().pad(15);
         table.add(errorLabel);
 
         table.center();
         stage.addActor(table);
+//        if (!listenerStarted) {
+//            startLobbyListener();
+//            listenerStarted = true;
+//        }
+
+        joinLobbyButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Main.getMain().setScreen(new JoinLobbyMenu(skin));
+            }
+        });
+
+        creatLobbyButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                LobbyManagerController.createLobby();
+
+                // Add the created lobby to the list manually
+                ServerInfo localLobby = new ServerInfo();
+                localLobby.serverId = "Hamed's Game"; // Match the serverId in NetworkServer
+                localLobby.host = "127.0.0.1";
+                localLobby.tcpPort = 54555; // Default TCP port
+                localLobby.lastHeard = System.currentTimeMillis();
+                synchronized (lobbies) {
+                    lobbies.add(localLobby);
+                }
+
+                Main.getMain().setScreen(new LobbyMenu(Main.getMain().skin, false));
+            }
+        });
+
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Main.getMain().setScreen(new MainMenu(Main.getMain().skin));
+            }
+        });
     }
 
     @Override
@@ -82,67 +164,7 @@ public class PreLobbyMenu implements Screen {
         Main.batch.draw(GameAssetManager.assetManager.get("menu assets/loading screen.png", Texture.class), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Main.batch.end();
 
-        lobbyIDField.addListener(new ClickListener() {
-            boolean cleared = false;
-
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (!cleared) {
-                    lobbyIDField.setText("");
-                    cleared = true;
-                }
-            }
-        });
-
-        lobbyIDField.addListener(new FocusListener() {
-            @Override
-            public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
-                if (!focused && lobbyIDField.getText().isEmpty()) {
-                    lobbyIDField.setText("Lobby ID");
-                }
-            }
-        });
-
-        creatLobbyButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                LobbyManagerController.createLobby();
-                Main.getMain().setScreen(new LobbyMenu(Main.getMain().skin));
-            }
-        });
-
-        findButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (LobbyManagerController.findLobby(Integer.parseInt(lobbyIDField.getText()))) {
-                    errorLabel.setVisible(false);
-
-                    Main.getMain().setScreen(new LobbyMenu(Main.getMain().skin));
-                }
-                else
-                    errorLabel.setVisible(true);
-            }
-        });
-
-        joinLobbyButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                creatLobbyButton.setVisible(false);
-                joinLobbyButton.setVisible(false);
-
-                lobbyIDField.setVisible(true);
-                findButton.setVisible(true);
-            }
-        });
-
-        backButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Main.getMain().setScreen(new MainMenu(Main.getMain().skin));
-            }
-        });
-
-        stage.act(delta);
+        stage.act();
         stage.draw();
     }
 
@@ -170,4 +192,52 @@ public class PreLobbyMenu implements Screen {
     public void dispose() {
 
     }
+
+//    private void startLobbyListener() {
+//        new Thread(() -> {
+//            try (DatagramSocket sock = new DatagramSocket(null)) {
+//                sock.setReuseAddress(true);
+//                sock.bind(new java.net.InetSocketAddress(8888));
+//                sock.setSoTimeout(0);
+//
+//                byte[] buf = new byte[256];
+//                DatagramPacket pack = new DatagramPacket(buf, buf.length);
+//                while (true) {
+//                    sock.receive(pack);
+//                    String s = new String(pack.getData(), 0, pack.getLength(), StandardCharsets.UTF_8);
+//                    if (s.startsWith("LOBBY:")) {
+//                        String[] parts = s.substring(6).split("\\|");
+//                        String id = parts[0];
+//                        int port = Integer.parseInt(parts[1].substring(5));
+//                        String host = pack.getAddress().getHostAddress();
+//
+//                        synchronized (lobbies) {
+//                            System.out.println("Lobbies size: " + lobbies.size());
+//                            Optional<ServerInfo> exists = lobbies.stream()
+//                                .filter(si -> si.serverId.equals(id)).findFirst();
+//                            if (exists.isPresent()) {
+//                                exists.get().lastHeard = System.currentTimeMillis();
+//                            } else {
+//                                ServerInfo si = new ServerInfo();
+//                                si.serverId = id;
+//                                si.host = host;
+//                                si.tcpPort = port;
+//                                si.lastHeard = System.currentTimeMillis();
+//                                lobbies.add(si);
+//
+//                                // Update UI on the main thread
+//                                Gdx.app.postRunnable(() -> {
+//                                    System.out.println("Discovered lobby: " + id + " at " + host + ":" + port);
+//                                    // Instead of adding a button directly, refresh the whole list
+//                                    refreshLobbyListUI();
+//                                });
+//                            }
+//                        }
+//                    }
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }, "Lobby-Listener").start();
+//    }
 }

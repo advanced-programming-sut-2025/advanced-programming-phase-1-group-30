@@ -3,15 +3,16 @@ package AP.group30.StardewValley.controllers;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Lobby;
 import AP.group30.StardewValley.models.Users.User;
+import AP.group30.StardewValley.network.NetworkServer;
 
 import java.util.Random;
 
 public class LobbyManagerController {
-    public static boolean findLobby(int lobbyID) {
+    public static boolean findLobby(String lobbyID) {
         for (Lobby lobby : App.getLobbies()) {
             if (lobby.getLobbyID() == lobbyID) {
                 App.setCurrentLobby(lobby);
-                lobby.addUser(App.getCurrentUser());
+                lobby.addUser(App.getCurrentUser().getUsername());
 
                 return true;
             }
@@ -21,15 +22,10 @@ public class LobbyManagerController {
     }
 
     public static void createLobby() {
-        Random rand = new Random();
-        int id = rand.nextInt(100000);
+        String id = NetworkServer.serverId;
 
-        while (isIdUsed(id)) {
-            id = rand.nextInt(100000);
-        }
-
-        Lobby lobby = new Lobby(id, App.getCurrentUser());
-
+        Lobby lobby = new Lobby(id, App.getCurrentUser().getUsername());
+        lobby.addUser(App.getCurrentUser().getUsername());
         App.addLobby(lobby);
         App.setCurrentLobby(lobby);
     }
@@ -43,19 +39,11 @@ public class LobbyManagerController {
 
         if (user.isInGame()) return 2;
 
-        for (User lobbyUser : App.getCurrentLobby().getUsers()) {
+        for (String lobbyUser : App.getCurrentLobby().getUsers()) {
             if (user.equals(lobbyUser)) return 3;
         }
 
-        App.getCurrentLobby().addUser(user);
+//        App.getCurrentLobby().addUser(user);
         return 4;
-    }
-
-    private static boolean isIdUsed(int id) {
-        for (Lobby lobby : App.getLobbies()) {
-            if (lobby.getLobbyID() == id) return true;
-        }
-
-        return false;
     }
 }

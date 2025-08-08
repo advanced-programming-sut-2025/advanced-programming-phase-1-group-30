@@ -314,7 +314,7 @@ public class CityScreen implements Screen {
                 pm.playerId = String.valueOf(Main.getMain().id);
                 pm.x = proposedX;
                 pm.y = proposedY;
-                App.getCurrentGame().networkClient.send(pm);
+                App.getNetworkClient().send(pm);
                 timeSinceLastSend = 0;
             }
         }
