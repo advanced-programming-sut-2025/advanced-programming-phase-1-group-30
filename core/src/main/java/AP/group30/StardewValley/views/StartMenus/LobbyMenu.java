@@ -161,10 +161,10 @@ public class LobbyMenu implements Screen {
                 String lobbyName = lobbyNameField.getText();
                 //File projectRoot = new File("/home/hamed/University/StardewValley");
                 File projectRoot = new File("D:/Amir/University/Term_2/Advanced_Programming/Project/advanced-programming-phase-1-group-30");
-                String os = System.getProperty("os.name").toLowerCase();
-                String command = os.contains("win") ? "gradlew.bat" : "./gradlew";
+//                String os = System.getProperty("os.name").toLowerCase();
+//                String command = os.contains("win") ? "gradlew.bat" : "./gradlew";
                 ProcessBuilder pb = new ProcessBuilder(
-                    command,
+                    "gradlew.bat",
                     ":lwjgl3:runHeadless",
                     "--args=" + tcpPort + " " + udpPort + " " + lobbyName
                 );
