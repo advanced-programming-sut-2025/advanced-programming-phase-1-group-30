@@ -35,7 +35,6 @@ public class JoinLobbyMenu implements Screen {
     private ScrollPane lobbyListPane;
     private Table lobbyListTable;
     private Label errorLabel;
-    private long lastRefresh = 0;
     private Thread listenerThread;
     private DatagramSocket listenerSocket;
     private volatile boolean listenerRunning = false;
@@ -63,7 +62,7 @@ public class JoinLobbyMenu implements Screen {
         lobbyListPane = new ScrollPane(lobbyListTable, skin);
         table.add(new Label("Select a Lobby", skin)).pad(10);
         table.row();
-        table.add(lobbyListPane).width(350).height(300).pad(10);
+        table.add(lobbyListPane).width(850).height(700).pad(10);
         table.row();
         table.add(errorLabel).pad(10);
         table.row();
@@ -74,6 +73,14 @@ public class JoinLobbyMenu implements Screen {
                 Main.getMain().setScreen(new PreLobbyMenu(skin));
             }
         });
+        TextButton refreshButton = new TextButton("Refresh", skin);
+        refreshButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                refreshLobbyListUI();
+            }
+        });
+        table.add(refreshButton).pad(10).row();
         table.add(backButton).pad(10);
 
         stage.addActor(table);
@@ -94,7 +101,7 @@ public class JoinLobbyMenu implements Screen {
             } else {
                 for (ServerInfo lobby : lobbies) {
                     TextButton lobbyBtn = new TextButton(
-                        lobby.serverId + " (" + lobby.host + ":" + lobby.tcpPort + ")",
+                        lobby.serverId + " Online players: " + lobby.users.size() + "| Port:" + lobby.tcpPort,
                         skin
                     );
                     lobbyBtn.addListener(new ClickListener() {
@@ -107,7 +114,9 @@ public class JoinLobbyMenu implements Screen {
                                 }
                                 App.setCurrentLobby(lobby1);
                                 Main.getMain().client.connect(lobby.host, lobby.tcpPort, lobby.udpPort);
-                                PlayerJoinedLobby pjl = new PlayerJoinedLobby(App.getCurrentUser().getUsername());
+                                PlayerJoinedLobby pjl = new PlayerJoinedLobby();
+                                pjl.username = App.getCurrentUser().getUsername();
+                                pjl.playerId = String.valueOf(Main.getMain().id);
                                 Main.getMain().client.send(pjl);
                                 stopLobbyListener();
                                 Main.getMain().setScreen(new LobbyMenu(Main.getMain().skin, true));
@@ -118,7 +127,7 @@ public class JoinLobbyMenu implements Screen {
                         }
                     });
                     lobbyListTable.row();
-                    lobbyListTable.add(lobbyBtn).width(600).pad(50);
+                    lobbyListTable.add(lobbyBtn).width(700).pad(50);
                 }
             }
         }
@@ -148,7 +157,7 @@ public class JoinLobbyMenu implements Screen {
 
                         synchronized (lobbies) {
                             Optional<ServerInfo> exists = lobbies.stream()
-                                .filter(si -> si.serverId.equals(id)).findFirst();
+                                .filter(si -> si.tcpPort == tcp).findFirst();
                             if (exists.isPresent()) {
                                 ServerInfo existing = exists.get();
                                 existing.lastHeard = System.currentTimeMillis();
@@ -227,11 +236,6 @@ public class JoinLobbyMenu implements Screen {
         Main.batch.begin();
         Main.batch.draw(GameAssetManager.assetManager.get("menu assets/loading screen.png", Texture.class), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Main.batch.end();
-
-        if (System.currentTimeMillis() - lastRefresh > 1000) { // every 1s
-            refreshLobbyListUI();
-            lastRefresh = System.currentTimeMillis();
-        }
 
         stage.act();
         stage.draw();

@@ -1,10 +1,9 @@
 package AP.group30.StardewValley.network.MessageClasses;
 
+import java.util.ArrayList;
+
 public class PlayerJoinedLobby {
     public String username;
-
-    public PlayerJoinedLobby() {}
-    public PlayerJoinedLobby(String username) {
-        this.username = username;
-    }
+    public String playerId;
+    public ArrayList<String> playersInLobby = new ArrayList<>();
 }

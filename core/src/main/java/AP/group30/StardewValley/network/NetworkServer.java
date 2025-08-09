@@ -3,6 +3,7 @@ package AP.group30.StardewValley.network;
 import AP.group30.StardewValley.network.MessageClasses.*;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.FrameworkMessage;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import org.json.JSONObject;
@@ -13,20 +14,25 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class NetworkServer {
     private Server server;
+    private Thread announcerThread;
+    private DatagramSocket announcerSocket;
     private final GameWorld world = new GameWorld();
     private final Map<Connection, String> connToPlayerId = new HashMap<>();
     private final Map<String, Connection> playerIdToConn = new HashMap<>();
+    private final ArrayList<String> players = new ArrayList<>();
     private int numPlayers = 1;
-    public static String serverId = "Hamedd's Game";
+    public static String serverId = "default";
 
-    public void start(int tcpPort, int udpPort) throws IOException {
+    public void start(int tcpPort, int udpPort, String serverId) throws IOException {
         server = new Server();
+        NetworkServer.serverId = serverId;
         Kryo kryo = server.getKryo(); // or client.getKryo()
         server.getKryo().register(Ping.class);
         kryo.register(PlayerJoin.class);
@@ -36,6 +42,7 @@ public class NetworkServer {
         kryo.register(MapTransfer.class);
         kryo.register(WorldState.Position.class);
         kryo.register(HashMap.class);
+        kryo.register(ArrayList.class);
 
         // Correct: extend Listener, don’t implement it
         server.addListener(new Listener() {
@@ -62,11 +69,21 @@ public class NetworkServer {
                     handleMapTransfer(connection, (MapTransfer) object);
                 } if (object instanceof PlayerJoinedLobby) {
                     PlayerJoinedLobby pjl = (PlayerJoinedLobby) object;
+                    connToPlayerId.put(connection, pjl.playerId);
+                    playerIdToConn.put(pjl.playerId, connection);
+                    if (!players.contains(pjl.username)) {
+                        players.add(pjl.username);
+                    }
+                    for (String user : players) {
+                        pjl.playersInLobby.add(user);
+                    }
                     System.out.println("[Server] Player joined lobby: " + pjl.username);
                     // Optionally, broadcast to all players in the lobby
                     for (Connection c : server.getConnections()) {
                         c.sendTCP(pjl); // send to all connected clients
                     }
+                } else if (object instanceof FrameworkMessage.KeepAlive) {
+                    // Ignore keep-alive messages, they are handled internally by KryoNet
                 } else {
                     System.out.println("[Server] Unknown message type: " + object.getClass().getSimpleName());
                 }
@@ -115,13 +132,10 @@ public class NetworkServer {
                         obj.put("tcp", tcpPort);
                         obj.put("udp", udpPort);
 
-                        // collect player display names
-                        // Use synchronization if world.players is not thread-safe
                         org.json.JSONArray playersArray = new org.json.JSONArray();
-                        synchronized (world) { // if world is not synchronized, replace with appropriate lock
-                            for (ServerPlayer sp : world.players.values()) {
-                                // use displayName (or username field) — choose what to show
-                                playersArray.put(sp.displayName);
+                        synchronized (world) {
+                            for (String sp : players) {
+                                playersArray.put(sp);
                             }
                         }
                         obj.put("players", playersArray);
@@ -149,8 +163,25 @@ public class NetworkServer {
         }, "Lobby-Announcer").start();
     }
 
-    public void stop() {
-        server.stop();
+    public synchronized void stop() {
+        // stop announcer
+        if (announcerThread != null) {
+            announcerThread.interrupt();
+            if (announcerSocket != null && !announcerSocket.isClosed()) announcerSocket.close();
+            announcerThread = null;
+            announcerSocket = null;
+        }
+
+        // stop KryoNet server
+        if (server != null) {
+            try {
+                server.stop(); // stops threads & closes sockets
+            } catch (Exception ignored) {}
+            try {
+                server.close();
+            } catch (Exception ignored) {}
+            server = null;
+        }
         System.out.println("[Server] stopped.");
     }
 
@@ -160,8 +191,6 @@ public class NetworkServer {
         ServerMap farmMap = new ServerMap(farmId);
         world.maps.put(farmId, farmMap);
 
-        connToPlayerId.put(conn, join.playerId);
-        playerIdToConn.put(join.playerId, conn);
         ServerPlayer sp = new ServerPlayer(
             join.playerId,
             join.displayName,
@@ -177,7 +206,8 @@ public class NetworkServer {
         conn.sendTCP(farmMap.snapshot());
         numPlayers++;
 
-        PlayerJoinedLobby joinedPacket = new PlayerJoinedLobby(join.displayName);
+        PlayerJoinedLobby joinedPacket = new PlayerJoinedLobby();
+        joinedPacket.username = join.displayName;
         for (Connection c : server.getConnections()) {
             c.sendTCP(joinedPacket);
         }
