@@ -7,6 +7,7 @@ import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Lobby;
 import AP.group30.StardewValley.models.Users.RegisterQuestions;
 import AP.group30.StardewValley.models.Users.User;
+import AP.group30.StardewValley.network.MessageClasses.PlayerJoinedLobby;
 import AP.group30.StardewValley.network.NetworkClient;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class LobbyMenu implements Screen {
     private Stage stage;
@@ -40,13 +42,14 @@ public class LobbyMenu implements Screen {
 
     private final TextField TCPField;
     private final TextField UDPField;
+    private final TextField lobbyNameField;
     private final TextButton createButton;
 
     private final Label errorLabel;
     private final Lobby lobby;
 
-    private final Map<String, Image> playerImages = new HashMap<>();
-    private final Map<String, Label> playerLabels = new HashMap<>();
+    public Map<String, Image> playerImages = new HashMap<>();
+    public Map<String, Label> playerLabels = new HashMap<>();
     private final ArrayList<Texture> playerTextures = new ArrayList<>();
 
     private Animation<TextureRegion> playerAnimation;
@@ -72,6 +75,7 @@ public class LobbyMenu implements Screen {
 
         TCPField = new TextField("TCP", skin);
         UDPField = new TextField("UDP", skin);
+        lobbyNameField = new TextField("Lobby Name", skin);
         createButton = new TextButton("Create Lobby", skin);
 
         errorLabel = new Label("", skin);
@@ -114,6 +118,7 @@ public class LobbyMenu implements Screen {
         table.row().pad(15);
         table.add(TCPField).width(180);
         table.add(UDPField).width(180);
+        table.add(lobbyNameField).width(250);
         table.add(createButton);
         table.row().pad(15);
         table.add(backButton);
@@ -128,16 +133,14 @@ public class LobbyMenu implements Screen {
         if (!App.getCurrentUser().getUsername().equals(App.getCurrentLobby().getAdmin())) {
             TCPField.setVisible(false);
             UDPField.setVisible(false);
+            lobbyNameField.setVisible(false);
             createButton.setVisible(false);
         }
 
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Kill server process if running
-                if (serverProcess != null && serverProcess.isAlive()) {
-                    serverProcess.destroy();
-                }
+                stopServer();
                 App.setCurrentLobby(null);
                 Main.getMain().setScreen(new MainMenu(Main.getMain().skin));
             }
@@ -155,21 +158,34 @@ public class LobbyMenu implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 String tcpPort = TCPField.getText();
                 String udpPort = UDPField.getText();
-
+                String lobbyName = lobbyNameField.getText();
                 File projectRoot = new File("/home/hamed/University/StardewValley");
                 ProcessBuilder pb = new ProcessBuilder(
                     "./gradlew",
                     ":lwjgl3:runHeadless",
-                    "--args=" + tcpPort + " " + udpPort
+                    "--args=" + tcpPort + " " + udpPort + " " + lobbyName
                 );
                 pb.directory(projectRoot);
-                pb.inheritIO();
+                pb.inheritIO(); // prints server output in console
                 try {
-                    serverProcess = pb.start(); // Save process reference
+                    serverProcess = pb.start();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
 
+                titleLabel.setText(lobbyNameField.getText());
+                // Add a shutdown hook in parent too — in case parent is killed, try to stop child
+                Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                    if (serverProcess != null && serverProcess.isAlive()) {
+                        serverProcess.destroy();
+                        try {
+                            serverProcess.waitFor(2, TimeUnit.SECONDS);
+                        } catch (InterruptedException ignored) {
+                            Thread.currentThread().interrupt();
+                        }
+                        if (serverProcess.isAlive()) serverProcess.destroyForcibly();
+                    }
+                }));
                 // Show waiting message
                 errorLabel.setText("Starting server...");
                 errorLabel.setVisible(true);
@@ -178,6 +194,7 @@ public class LobbyMenu implements Screen {
                 createButton.setVisible(false);
                 TCPField.setVisible(false);
                 UDPField.setVisible(false);
+                lobbyNameField.setVisible(false);
 
                 // Wait for server to start, then connect client
                 new Thread(() -> {
@@ -190,7 +207,10 @@ public class LobbyMenu implements Screen {
                             Thread.sleep(800);
                             Main.getMain().client.connect("127.0.0.1", tcp, udp);
                             connected = true;
-                            addUserToStage(lobby.getAdmin(), 0);
+                            PlayerJoinedLobby pjl = new PlayerJoinedLobby();
+                            pjl.username = App.getCurrentUser().getUsername();
+                            pjl.playerId = String.valueOf(Main.getMain().id);
+                            Main.getMain().client.send(pjl);
                         } catch (IOException ex) {
                             retries++;
                         } catch (InterruptedException ie) {
@@ -211,32 +231,22 @@ public class LobbyMenu implements Screen {
                 }).start();
             }
         });
+    }
 
-        int index = 0;
-        for (String user : lobby.getUsers()) {
-            if (user.equals(App.getCurrentLobby().getAdmin())) continue;
-            Label nameLabel = new Label(user, skin);
-            nameLabel.setColor(Color.WHITE);
-
-            Image animImage = new Image(playerAnimation.getKeyFrame(0));
-
-            Table playerTable = new Table();
-            playerTable.add(nameLabel).padBottom(5).row();
-            playerTable.add(animImage).size(128, 128);
-
-            float x = 600 + (index * 250);
-            float y = 200;
-
-            playerTable.setPosition(x, y);
-            playerTable.setTransform(true);
-            stage.addActor(playerTable);
-
-            playerImages.put(user, animImage);
-            playerLabels.put(user, nameLabel);
-
-            index++;
-            addUserToStage(user, index);
+    private void stopServer() {
+        if (serverProcess == null) return;
+        if (serverProcess.isAlive()) {
+            serverProcess.destroy(); // sends SIGTERM on Unix
+            try {
+                boolean exited = serverProcess.waitFor(2, TimeUnit.SECONDS);
+                if (!exited && serverProcess.isAlive()) {
+                    serverProcess.destroyForcibly();
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
+        serverProcess = null;
     }
 
     @Override
@@ -284,6 +294,18 @@ public class LobbyMenu implements Screen {
             }
         });
 
+        lobbyNameField.addListener(new ClickListener() {
+            boolean cleared = false;
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (!cleared) {
+                    lobbyNameField.setText("");
+                    cleared = true;
+                }
+            }
+        });
+
+
         TCPField.addListener(new FocusListener() {
             @Override
             public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
@@ -298,6 +320,15 @@ public class LobbyMenu implements Screen {
             public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
                 if (!focused && UDPField.getText().isEmpty()) {
                     UDPField.setText("UDP");
+                }
+            }
+        });
+
+        lobbyNameField.addListener(new FocusListener() {
+            @Override
+            public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
+                if (!focused && lobbyNameField.getText().isEmpty()) {
+                    lobbyNameField.setText("Lobby Name");
                 }
             }
         });

@@ -11,6 +11,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -28,6 +29,7 @@ public class NetworkClient {
         kryo.register(MapTransfer.class);
         kryo.register(WorldState.Position.class);
         kryo.register(HashMap.class);
+        kryo.register(ArrayList.class);
     }
 
     public void connect(String ip, int tcpPort, int udpPort) throws IOException {
@@ -59,14 +61,23 @@ public class NetworkClient {
                     PlayerJoinedLobby pjl = (PlayerJoinedLobby) object;
 
                     // Add to the current lobby’s user list
-                    App.getCurrentLobby().getUsers().add(pjl.username);
+                    for (String user : pjl.playersInLobby) {
+                        if (!App.getCurrentLobby().getUsers().contains(user)) {
+                            App.getCurrentLobby().getUsers().add(user);
+                        }
+                    }
 
                     // Update UI if we are in LobbyMenu
                     if (Main.getMain().getScreen() instanceof LobbyMenu) {
                         Gdx.app.postRunnable(() -> {
                             LobbyMenu lm = (LobbyMenu) Main.getMain().getScreen();
-                            lm.addUserToStage(pjl.username,
-                                App.getCurrentLobby().getUsers().size() - 1);
+                            lm.playerLabels.clear();
+                            lm.playerImages.clear();
+                            int index = 0;
+                            for (String user : pjl.playersInLobby) {
+                                lm.addUserToStage(user, index);
+                                index++;
+                            }
                         });
                     }
                 }
