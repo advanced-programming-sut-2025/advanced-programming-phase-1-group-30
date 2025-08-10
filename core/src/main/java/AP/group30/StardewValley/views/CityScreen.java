@@ -35,7 +35,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -69,6 +71,7 @@ public class CityScreen implements Screen {
     private HutScreen hut;
     private ShopScreen shopScreen;
     private QuestScreen questScreen;
+    private ReactionMenu reactionMenu;
     private final SpriteBatch batch;
     private OrthographicCamera camera;
 
@@ -110,6 +113,7 @@ public class CityScreen implements Screen {
         inventoryScreen = new InventoryScreen(batch, Main.getMain().skin);
         skillScreen = new SkillScreen(batch, Main.getMain().skin);
         questScreen = new QuestScreen(batch, Main.getMain().skin);
+        reactionMenu = new ReactionMenu(batch, Main.getMain().skin);
     }
 
     @Override
@@ -119,9 +123,9 @@ public class CityScreen implements Screen {
         stateTime += delta;
         player.setStateTime(stateTime);
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.E)) inventoryScreen.toggle();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E) && !reactionMenu.isVisible()) inventoryScreen.toggle();
         RegisterMenu.gameScreen.passTime();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.N)) skillScreen.toggle();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.N) && !reactionMenu.isVisible()) skillScreen.toggle();
 
         camera.position.set(x + playerRegion.getRegionWidth() / 2f, y + playerRegion.getRegionHeight() / 2f, 0);
         camera.update();
@@ -130,7 +134,7 @@ public class CityScreen implements Screen {
 
         entities.sort(Comparator.comparing(GameObjects::getRenderY).reversed());
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.O)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.O) && !reactionMenu.isVisible()) {
             if (shopScreen == null) {
                 shopScreen = findShopScreen();
                 if (shopScreen != null) {
@@ -138,11 +142,15 @@ public class CityScreen implements Screen {
                 }
             }
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            if (shopScreen != null) {
-                shopScreen.hide();
-                shopScreen.dispose();
-                shopScreen = null;
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) &&  shopScreen != null && shopScreen.isVisible()) {
+            shopScreen.hide();
+            shopScreen.dispose();
+            shopScreen = null;
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE) && reactionMenu.isVisible()) {
+            if (reactionMenu != null) {
+                reactionMenu.toggle();
             }
         }
 
@@ -196,11 +204,20 @@ public class CityScreen implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.TAB)) {
             drawOtherPlayersList();
         }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.M) && !reactionMenu.isVisible()) {
+            reactionMenu.toggle();
+        }
+
+        if (player.getReactionTime() > 0f) {
+            player.decreaseReactionTimer(delta);
+            player.renderReaction(batch);
+        }
         batch.end();
 
         inventoryScreen.render();
         skillScreen.render();
         questScreen.render();
+        reactionMenu.render();
         if (shopScreen != null) {
             if (!shopScreen.render(batch, camera)) {
                 shopScreen.hide();
@@ -233,6 +250,7 @@ public class CityScreen implements Screen {
     @Override
     public void dispose() {
         questScreen.dispose();
+        reactionMenu.dispose();
     }
 
     private void handleInput(float delta) {
@@ -351,7 +369,8 @@ public class CityScreen implements Screen {
         }
         return inventoryScreen.isVisible() ||
             skillScreen.isVisible() ||
-            questScreen.isVisible();
+            questScreen.isVisible() ||
+            reactionMenu.isVisible();
     }
 
     public OrthographicCamera getCamera() {
@@ -443,5 +462,36 @@ public class CityScreen implements Screen {
             textY -= lineHeight;
         }
         font.setColor(Color.BLACK);
+    }
+
+    public static void showReaction(Player thisPlayer, String text) {
+        Texture reactionTexture;
+
+        switch (text){
+            case "happy":
+                reactionTexture = GameAssetManager.assetManager.get(GameAssetManager.happyEmote);
+                break;
+            case "sad":
+                reactionTexture = GameAssetManager.assetManager.get(GameAssetManager.sadEmote);
+                break;
+            case "angry":
+                reactionTexture = GameAssetManager.assetManager.get(GameAssetManager.angryEmote);
+                break;
+            case "heart":
+                reactionTexture = GameAssetManager.assetManager.get(GameAssetManager.heartEmote);
+                break;
+            case "yes":
+                reactionTexture = GameAssetManager.assetManager.get(GameAssetManager.yesEmote);
+                break;
+            case "no":
+                reactionTexture = GameAssetManager.assetManager.get(GameAssetManager.noEmote);
+                break;
+            default:
+                reactionTexture = GameAssetManager.assetManager.get(GameAssetManager.chat);
+                thisPlayer.setChat(text);
+        }
+
+        thisPlayer.setReactionTexture(reactionTexture);
+        thisPlayer.setReactionTime(3f);
     }
 }
