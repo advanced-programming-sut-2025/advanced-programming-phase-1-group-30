@@ -61,8 +61,8 @@ public class NetworkServer {
                     pong.text = "Pong!";
                     pong.playerId = String.valueOf(numPlayers);
                     connection.sendTCP(pong);
-                }
-                if (object instanceof PlayerJoin) {
+                    numPlayers++;
+                } else if (object instanceof PlayerJoin) {
                     PlayerJoin pj = (PlayerJoin) object;
                     handlePlayerJoin(connection, pj);
                 } else if (object instanceof PlayerMove) {
@@ -70,7 +70,7 @@ public class NetworkServer {
                 } else if (object instanceof MapTransfer) {
                     System.out.println("Received map transfer for player");
                     handleMapTransfer(connection, (MapTransfer) object);
-                } if (object instanceof PlayerJoinedLobby) {
+                } else if (object instanceof PlayerJoinedLobby) {
                     startTime = System.currentTimeMillis();
                     PlayerJoinedLobby pjl = (PlayerJoinedLobby) object;
                     connToPlayerId.put(connection, pjl.playerId);
@@ -95,17 +95,18 @@ public class NetworkServer {
                     for (String user : players) {
                         pjl.playersInLobby.add(user);
                     }
-                    System.out.println("[Server] Player joined lobby: " + pjl.username);
+                    System.out.println("[Server] Player left lobby: " + pjl.username);
                     // Optionally, broadcast to all players in the lobby
                     for (Connection c : server.getConnections()) {
                         c.sendTCP(pjl); // send to all connected clients
+                    }
                 } else if (object instanceof StartGame) {
                     for (Connection c : server.getConnections()) {
-                        c.sendTCP((StartGame) object);
+                        c.sendTCP(object);
                     }
                 } else if (object instanceof MapChanged) {
                     for (Connection c : server.getConnections()) {
-                        c.sendTCP((MapChanged) object);
+                        c.sendTCP(object);
                     }
                 } else if (object instanceof Ready) {
                     for (Connection c : server.getConnections()) {
@@ -256,7 +257,6 @@ public class NetworkServer {
 
         // Send initial snapshot
         conn.sendTCP(farmMap.snapshot());
-        numPlayers++;
 
         PlayerJoinedLobby joinedPacket = new PlayerJoinedLobby();
         joinedPacket.username = join.displayName;
@@ -269,13 +269,10 @@ public class NetworkServer {
 
     private void handleMapTransfer(Connection connection, MapTransfer msg) {
         // 1) Look up the player
-        System.out.println(msg.playerId);
         ServerPlayer player = world.players.get(msg.playerId);
         if (player == null) {
             return;
         }
-        System.out.println(msg.playerId);
-
         // 2) Remove from old map
         ServerMap oldMap = world.maps.get(player.currentMapId);
         if (oldMap != null) {
@@ -291,7 +288,6 @@ public class NetworkServer {
             }
             // Add player to city map at a default position
             cityMap.addPlayer(player.id, player.displayName,0, 0);
-            System.out.println(cityMap.getPlayers().size());
             player.currentMapId = "city";
             WorldState cityState = cityMap.snapshot();
 

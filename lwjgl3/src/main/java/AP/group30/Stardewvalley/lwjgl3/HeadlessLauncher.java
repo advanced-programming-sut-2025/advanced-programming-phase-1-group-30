@@ -8,6 +8,9 @@ import java.io.IOException;
 
 public class HeadlessLauncher {
     public static void main(String[] args) {
+        System.out.println("CHILD CLASSPATH=" + System.getProperty("java.class.path"));
+        try { Class.forName("AP.group30.StardewValley.network.ServerPlayer"); System.out.println("ServerPlayer OK"); }
+        catch (Throwable t) { t.printStackTrace(); }
         int tcpPort  = args.length > 0 ? Integer.parseInt(args[0]) : 54555;
         int udpPort  = args.length > 1 ? Integer.parseInt(args[1]) : 54777;
         String serverId = args.length > 2 ? args[2] : "default";

@@ -147,11 +147,11 @@ public class JoinLobbyMenu implements Screen {
                     App.setCurrentLobby(lobby1);
                     App.setNetworkClient(Main.getMain().client);
                     Main.getMain().client.connect(lobby.host, lobby.tcpPort, lobby.udpPort);
-                    PlayerJoinedLobby pjl = new PlayerJoinedLobby();
-                    pjl.username = App.getCurrentUser().getUsername();
-                    pjl.playerId = String.valueOf(Main.getMain().id);
+//                    PlayerJoinedLobby pjl = new PlayerJoinedLobby();
+//                    pjl.username = App.getCurrentUser().getUsername();
+//                    pjl.playerId = String.valueOf(Main.getMain().id);
                     Main.getMain().setScreen(new LobbyMenu(Main.getMain().skin, true));
-                    Main.getMain().client.send(pjl);
+//                    Main.getMain().client.send(pjl);
                     stopLobbyListener();
                 } catch (Exception e) {
                     errorLabel.setText("Failed to join lobby: " + e.getMessage());
@@ -268,6 +268,10 @@ public class JoinLobbyMenu implements Screen {
         }
         listenerThread = null;
         listenerSocket = null;
+        PlayerJoinedLobby pjl = new PlayerJoinedLobby();
+        pjl.username = App.getCurrentUser().getUsername();
+        pjl.playerId = String.valueOf(Main.getMain().id);
+        Main.getMain().client.send(pjl);
     }
 
 
