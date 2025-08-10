@@ -30,6 +30,7 @@ public class NetworkClient {
         kryo.register(WorldState.Position.class);
         kryo.register(HashMap.class);
         kryo.register(ArrayList.class);
+        kryo.register(GoToPreGame.class);
     }
 
     public void connect(String ip, int tcpPort, int udpPort) throws IOException {
@@ -80,6 +81,10 @@ public class NetworkClient {
                             }
                         });
                     }
+                }
+
+                if (object instanceof GoToPreGame) {
+                    App.getCurrentLobby().setGoToPreGame(true);
                 }
             }
         });

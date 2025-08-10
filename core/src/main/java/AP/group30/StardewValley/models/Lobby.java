@@ -10,11 +10,14 @@ public class Lobby {
     private final ArrayList<String> users;
     private final String admin;
 
+    private boolean goToPreGame;
+
     public Lobby(String lobbyID, String admin) {
         this.lobbyID = lobbyID;
         this.users = new ArrayList<>();
 //        this.users.add(admin);
         this.admin = admin;
+        this.goToPreGame = false;
     }
 
     public String getLobbyID() {
@@ -35,5 +38,13 @@ public class Lobby {
 
     public String getAdmin() {
         return admin;
+    }
+
+    public boolean isGoToPreGame() {
+        return goToPreGame;
+    }
+
+    public void setGoToPreGame(boolean goToPreGame) {
+        this.goToPreGame = goToPreGame;
     }
 }

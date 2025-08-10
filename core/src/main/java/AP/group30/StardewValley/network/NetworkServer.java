@@ -1,5 +1,6 @@
 package AP.group30.StardewValley.network;
 
+import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.network.MessageClasses.*;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
@@ -43,6 +44,7 @@ public class NetworkServer {
         kryo.register(WorldState.Position.class);
         kryo.register(HashMap.class);
         kryo.register(ArrayList.class);
+        kryo.register(GoToPreGame.class);
 
         // Correct: extend Listener, don’t implement it
         server.addListener(new Listener() {
@@ -81,6 +83,10 @@ public class NetworkServer {
                     // Optionally, broadcast to all players in the lobby
                     for (Connection c : server.getConnections()) {
                         c.sendTCP(pjl); // send to all connected clients
+                    }
+                } else if (object instanceof GoToPreGame) {
+                    for (Connection c : server.getConnections()) {
+                        c.sendTCP((GoToPreGame) object);
                     }
                 } else if (object instanceof FrameworkMessage.KeepAlive) {
                     // Ignore keep-alive messages, they are handled internally by KryoNet
