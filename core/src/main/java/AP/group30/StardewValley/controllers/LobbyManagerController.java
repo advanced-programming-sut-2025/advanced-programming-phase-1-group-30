@@ -25,7 +25,6 @@ public class LobbyManagerController {
         String id = NetworkServer.serverId;
 
         Lobby lobby = new Lobby(id, App.getCurrentUser().getUsername());
-        lobby.addUser(App.getCurrentUser().getUsername());
         App.addLobby(lobby);
         App.setCurrentLobby(lobby);
     }

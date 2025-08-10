@@ -24,7 +24,7 @@ import AP.group30.StardewValley.views.GameMenu;
 import AP.group30.StardewValley.views.StartMenus.PreGameMenu;
 
 public class NewGameController {
-    public static Game NewGame(int numberOfPlayers, User user1, User user2, User user3,
+    public static Game NewGame(int numberOfPlayers, User user1, User user2, User user3, User user4,
                                   int mapNumber1, int mapNumber2, int mapNumber3, int mapNumber4) {
         App.getMaps().add(new Map(1));
         App.getMaps().add(new Map(2));
@@ -37,46 +37,46 @@ public class NewGameController {
         App.getGames().add(game);
 
         ArrayList<Player> players = new ArrayList<>();
-        Player currentPlayer = new Player(App.getCurrentUser(), App.getCurrentUser().getUsername(), 0,
-            App.getCurrentUser().getGender(), Map.getMapById(mapNumber1));
-        App.getCurrentUser().setPlayer(currentPlayer);
-        App.getCurrentUser().setNumOfGames(App.getCurrentUser().getNumOfGames() + 1);
+        Player player1 = new Player(user1, user1.getUsername(), 0,
+            user1.getGender(), Map.getMapById(mapNumber1));
+        user1.setPlayer(player1);
+        user1.setNumOfGames(user1.getNumOfGames() + 1);
 
-        players.add(currentPlayer);
+        players.add(player1);
 
         if (numberOfPlayers >= 2) {
-            Player player1 = new Player(user1,user1.getUsername(), 1, user1.getGender(),
+            Player player2 = new Player(user2,user2.getUsername(), 1, user2.getGender(),
                 Map.getMapById(mapNumber2));
-            user1.setPlayer(player1);
-            user1.setNumOfGames(user1.getNumOfGames() + 1);
-            players.add(player1);
-        }
-
-        if (numberOfPlayers >= 3) {
-            Player player2 = new Player(user2,user2.getUsername(), 2, user2.getGender(),
-                Map.getMapById(mapNumber3));
             user2.setPlayer(player2);
             user2.setNumOfGames(user2.getNumOfGames() + 1);
             players.add(player2);
         }
 
-        if (numberOfPlayers >= 4) {
-            Player player3 = new Player(user3,user3.getUsername(), 3, user3.getGender(),
-                Map.getMapById(mapNumber4));
+        if (numberOfPlayers >= 3) {
+            Player player3 = new Player(user3,user3.getUsername(), 2, user3.getGender(),
+                Map.getMapById(mapNumber3));
             user3.setPlayer(player3);
             user3.setNumOfGames(user3.getNumOfGames() + 1);
             players.add(player3);
         }
 
-        App.getCurrentUser().changeInGame();
-        if(user1 != null) {
-            user1.changeInGame();
+        if (numberOfPlayers >= 4) {
+            Player player4 = new Player(user4,user4.getUsername(), 3, user4.getGender(),
+                Map.getMapById(mapNumber4));
+            user4.setPlayer(player4);
+            user4.setNumOfGames(user4.getNumOfGames() + 1);
+            players.add(player4);
         }
+
+        user1.changeInGame();
         if(user2 != null) {
             user2.changeInGame();
         }
         if(user3 != null) {
             user3.changeInGame();
+        }
+        if(user4 != null) {
+            user4.changeInGame();
         }
 
         App.getCurrentGame().getGreatMap().setCityMap(App.getMaps().get(4));
@@ -87,6 +87,7 @@ public class NewGameController {
             player.setY(16);
             player.setCityY(-1);
             player.setCityX(-1);
+            if (player.getUsername().equals(App.getCurrentUser().getUsername())) game.setCurrentPlayer(player);
         }
 
         for (Player player : players) {
@@ -99,7 +100,6 @@ public class NewGameController {
 
         game.setPlayers(players);
         game.setTomorrowWeather(Weather.SUNNY);
-        game.setCurrentPlayer(currentPlayer);
         MaintainerController.updateAllShops();
         return game;
     }

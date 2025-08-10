@@ -28,6 +28,7 @@ import AP.group30.StardewValley.models.Users.User;
 import AP.group30.StardewValley.views.GameMenu;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -97,6 +98,11 @@ public class Player implements GameObjects {
     private Animal nearbyAnimal;
     private float stateTime = 0f;
     private boolean facingLeft = false;
+
+    private Texture reactionTexture;
+    private float reactionTime = 0f;
+    private String chat = null;
+
 
 
     public Player(User user,String username, int selectionNumber, String gender, Map map) {
@@ -724,5 +730,43 @@ public class Player implements GameObjects {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public Texture getReactionTexture() {
+        return reactionTexture;
+    }
+
+    public float getReactionTime() {
+        return reactionTime;
+    }
+
+    public String getChat() {
+        return chat;
+    }
+
+    public void setChat(String chat) {
+        this.chat = chat;
+    }
+
+    public void setReactionTime(float reactionTime) {
+        this.reactionTime = reactionTime;
+    }
+
+    public void setReactionTexture(Texture reactionTexture) {
+        this.reactionTexture = reactionTexture;
+    }
+
+    public void decreaseReactionTimer(float delta) {
+        this.reactionTime -= delta;
+    }
+
+    public void renderReaction(SpriteBatch batch) {
+        if (chat != null) {
+            batch.draw(reactionTexture, x, y + 70, chat.length() * 15 + 50, 60);
+            BitmapFont font = GameAssetManager.assetManager.get(GameAssetManager.skin).getFont("font");
+            font.draw(batch, chat, x + 25, y + 115);
+        } else {
+            batch.draw(reactionTexture, x, y + 70, 40 , 40);
+        }
     }
 }

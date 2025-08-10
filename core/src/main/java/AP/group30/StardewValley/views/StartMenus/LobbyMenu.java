@@ -1,15 +1,14 @@
 package AP.group30.StardewValley.views.StartMenus;
 
 import AP.group30.StardewValley.Main;
-import AP.group30.StardewValley.controllers.LobbyManagerController;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Lobby;
 import AP.group30.StardewValley.models.Users.RegisterQuestions;
 import AP.group30.StardewValley.models.Users.User;
 import AP.group30.StardewValley.network.MessageClasses.LeaveLobby;
+import AP.group30.StardewValley.network.MessageClasses.StartGame;
 import AP.group30.StardewValley.network.MessageClasses.PlayerJoinedLobby;
-import AP.group30.StardewValley.network.NetworkClient;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -31,7 +30,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -169,7 +167,10 @@ public class LobbyMenu implements Screen {
         startGameButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Main.getMain().setScreen(new PreGameMenu(Main.getMain().skin, lobby));
+                App.getCurrentLobby().setGoToPreGame(true);
+                StartGame start = new StartGame();
+                start.goToPreGame = true;
+                Main.getMain().client.send(start);
             }
         });
 
@@ -183,6 +184,8 @@ public class LobbyMenu implements Screen {
                 String password = lobbyPassword.getText();
                 boolean isVisible = !visible.isChecked();
                 uniqueId = MathUtils.random(9000) + 1000;
+              
+              
                 String os = System.getProperty("os.name").toLowerCase();
                 String command = os.contains("win") ? "gradlew.bat" : "./gradlew";
                 ProcessBuilder pb = new ProcessBuilder(
@@ -298,7 +301,8 @@ public class LobbyMenu implements Screen {
             entry.getValue().setDrawable(new TextureRegionDrawable(frame));
         }
 
-        if (lobby.getUsers().size() > 1) startGameButton.setVisible(true);
+        if (lobby.getUsers().size() > 1 && lobby.getAdmin().equals(App.getCurrentUser().getUsername()))
+            startGameButton.setVisible(true);
         if (lobby.getUsers().size() > 3) {
             createButton.setVisible(false);
             TCPField.setVisible(false);
@@ -307,6 +311,8 @@ public class LobbyMenu implements Screen {
             visible.setVisible(false);
             lobbyPassword.setVisible(false);
         }
+        if (App.getCurrentLobby().isGoToPreGame())
+            Main.getMain().setScreen(new PreGameMenu(Main.getMain().skin, lobby, serverProcess));
 
         TCPField.addListener(new ClickListener() {
             boolean cleared = false;

@@ -302,7 +302,7 @@ public class RegisterMenu implements Screen {
             App.getAppUsers().add(user1);
             App.getAppUsers().add(user2);
             App.setCurrentUser(user1);
-            Game game = NewGameController.NewGame(2, user1, null, null, 2, 3, 2, 3);
+            Game game = NewGameController.NewGame(2, user1, null, null, null, 2, 3, 2, 3);
             PlayerJoin playerJoin = new PlayerJoin();
             playerJoin.playerId = String.valueOf(Main.getMain().id);
             playerJoin.displayName = game.getCurrentPlayer().getUsername();

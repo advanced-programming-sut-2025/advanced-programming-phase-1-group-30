@@ -6,7 +6,12 @@ import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Lobby;
+import AP.group30.StardewValley.models.Users.RegisterQuestions;
 import AP.group30.StardewValley.models.Users.User;
+import AP.group30.StardewValley.network.MessageClasses.MapChanged;
+import AP.group30.StardewValley.network.MessageClasses.PlayerJoin;
+import AP.group30.StardewValley.network.MessageClasses.Ready;
+import AP.group30.StardewValley.network.MessageClasses.StartGame;
 import AP.group30.StardewValley.views.CityScreen;
 import AP.group30.StardewValley.views.GameScreen;
 import AP.group30.StardewValley.views.LoadingScreen;
@@ -18,58 +23,52 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import java.util.concurrent.TimeUnit;
 
 public class PreGameMenu implements Screen {
     private Stage stage;
     private final Table table;
     private final Label titleLabel;
     private final Label numberOfPlayersLabel;
+    private final Label mapPlayerLabel;
     private final Label mapPlayer1Label;
-    private Label mapPlayer2Label;
-    private Label mapPlayer3Label;
-    private Label mapPlayer4Label;
-    private final SelectBox<String> mapPlayer1Box;
-    private final SelectBox<String> mapPlayer2Box;
-    private final SelectBox<String> mapPlayer3Box;
-    private final SelectBox<String> mapPlayer4Box;
-    private final TextButton searchButton;
+    private final Label mapPlayer2Label;
+    private final Label mapPlayer3Label;
+    private final Label mapPlayer4Label;
+    private final SelectBox<String> mapPlayerBox;
+    private final TextButton startButton;
+    private final TextButton readyButton;
     private final TextButton backButton;
     private static Label errorLabel;
     private Texture background;
 
     private final Lobby lobby;
+    private Process serverProcess;
 
-    public PreGameMenu(Skin skin, Lobby theLobby) {
+    public PreGameMenu(Skin skin, Lobby theLobby, Process theServerProcess) {
         table = new Table(skin);
         titleLabel = new Label("PreGame Menu", skin);
         lobby = theLobby;
         numberOfPlayersLabel = new Label("Number Of Players: " + lobby.getUsers().size(), skin);
-        mapPlayer1Label = new Label("Your Map :", skin);
-        mapPlayer2Label = new Label("Player1 Map :", skin);
-        mapPlayer3Label = new Label("Player2 Map :", skin);
-        mapPlayer4Label = new Label("Player3 Map :", skin);
-        mapPlayer1Box = new SelectBox<>(skin);
-        mapPlayer1Box.setItems("1", "2", "3", "4");
-        mapPlayer2Box = new SelectBox<>(skin);
-        mapPlayer2Box.setItems("1", "2", "3", "4");
-        mapPlayer3Box = new SelectBox<>(skin);
-        mapPlayer3Box.setItems("1", "2", "3", "4");
-        mapPlayer4Box = new SelectBox<>(skin);
-        mapPlayer4Box.setItems("1", "2", "3", "4");
-        searchButton = new TextButton("Start", skin);
+        mapPlayerLabel = new Label("Your Map :", skin);
+        mapPlayer1Label = new Label("Player1 Map :", skin);
+        mapPlayer2Label = new Label("Player2 Map :", skin);
+        mapPlayer3Label = new Label("Player3 Map :", skin);
+        mapPlayer4Label = new Label("Player4 Map :", skin);
+        mapPlayerBox = new SelectBox<>(skin);
+        mapPlayerBox.setItems("1", "2", "3", "4");
+        startButton = new TextButton("Start", skin);
+        readyButton = new TextButton("Ready", skin);
         backButton = new TextButton("Back", skin);
         errorLabel = new Label("", skin);
 
-        if (lobby.getUsers().size() > 1)
-            mapPlayer2Label = new Label(App.getCurrentLobby().getUsers().get(1) + "'s Map :", skin);
-        if (lobby.getUsers().size() > 2)
-            mapPlayer3Label = new Label(App.getCurrentLobby().getUsers().get(2) + "'s Map :", skin);
-        if (lobby.getUsers().size() > 3)
-            mapPlayer4Label = new Label(App.getCurrentLobby().getUsers().get(3) + "'s Map :", skin);
+        serverProcess = theServerProcess;
+        if (lobby.getUsers().contains("127.0.0.1")) lobby.removeUser("127.0.0.1");
     }
 
     public static void printResult(String message) {
@@ -91,35 +90,38 @@ public class PreGameMenu implements Screen {
         errorLabel.setColor(Color.RED);
         errorLabel.setVisible(false);
 
-        mapPlayer3Box.setVisible(false);
-        mapPlayer4Box.setVisible(false);
         mapPlayer3Label.setVisible(false);
         mapPlayer4Label.setVisible(false);
 
         titleLabel.setColor(Color.BLACK);
         numberOfPlayersLabel.setColor(Color.BLACK);
+        mapPlayerLabel.setColor(Color.BLACK);
         mapPlayer1Label.setColor(Color.BLACK);
         mapPlayer2Label.setColor(Color.BLACK);
         mapPlayer3Label.setColor(Color.BLACK);
         mapPlayer4Label.setColor(Color.BLACK);
 
+        startButton.setVisible(false);
+        if (lobby.getAdmin().equals(App.getCurrentUser().getUsername())) readyButton.setVisible(false);
+
         table.add(titleLabel);
         table.row().pad(15);
         table.add(numberOfPlayersLabel).width(200);
         table.row().pad(15);
+        table.add(mapPlayerLabel).width(200);
+        table.add(mapPlayerBox).width(100);
+        table.row().pad(45);
         table.add(mapPlayer1Label).width(200);
-        table.add(mapPlayer1Box).width(100);
         table.row().pad(15);
         table.add(mapPlayer2Label).width(200);
-        table.add(mapPlayer2Box).width(100);
         table.row().pad(15);
         table.add(mapPlayer3Label).width(200);
-        table.add(mapPlayer3Box).width(100);
         table.row().pad(15);
         table.add(mapPlayer4Label).width(200);
-        table.add(mapPlayer4Box).width(100);
         table.row().pad(15);
-        table.add(searchButton);
+        table.add(startButton);
+        table.row().pad(15);
+        table.add(readyButton);
         table.row().pad(15);
         table.add(backButton);
         table.row().pad(15);
@@ -127,6 +129,48 @@ public class PreGameMenu implements Screen {
 
         table.center();
         stage.addActor(table);
+
+        mapPlayerBox.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                MapChanged mapChanged = new MapChanged();
+                mapChanged.username = App.getCurrentUser().getUsername();
+                mapChanged.number = Integer.parseInt(mapPlayerBox.getSelected());
+                Main.getMain().client.send(mapChanged);
+            }
+        });
+
+        startButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                App.getCurrentLobby().setGoToMainGame(true);
+                StartGame start = new StartGame();
+                start.goToPreGame = false;
+                Main.getMain().client.send(start);
+            }
+        });
+
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                stopServer();
+                App.setCurrentLobby(null);
+                Main.getMain().setScreen(new MainMenu(Main.getMain().skin));
+            }
+        });
+
+        readyButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Ready ready = new Ready();
+                ready.username = App.getCurrentUser().getUsername();
+                Main.getMain().client.send(ready);
+
+                readyButton.setVisible(false);
+                mapPlayerLabel.setVisible(false);
+                mapPlayerBox.setVisible(false);
+            }
+        });
     }
 
     @Override
@@ -140,61 +184,77 @@ public class PreGameMenu implements Screen {
         Main.batch.end();
 
         if (lobby.getUsers().size() == 2) {
-            mapPlayer2Box.setVisible(true);
-            mapPlayer3Box.setVisible(false);
-            mapPlayer4Box.setVisible(false);
             mapPlayer2Label.setVisible(true);
             mapPlayer3Label.setVisible(false);
             mapPlayer4Label.setVisible(false);
         } else if (lobby.getUsers().size() == 3) {
-            mapPlayer2Box.setVisible(true);
-            mapPlayer3Box.setVisible(true);
-            mapPlayer4Box.setVisible(false);
             mapPlayer2Label.setVisible(true);
             mapPlayer3Label.setVisible(true);
             mapPlayer4Label.setVisible(false);
         } else if (lobby.getUsers().size() == 4) {
-            mapPlayer2Box.setVisible(true);
-            mapPlayer3Box.setVisible(true);
-            mapPlayer4Box.setVisible(true);
             mapPlayer2Label.setVisible(true);
             mapPlayer3Label.setVisible(true);
             mapPlayer4Label.setVisible(true);
         }
 
-        searchButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                User user1 = null;
-                User user2 = null;
-                User user3 = null;
-//                if (lobby.getUsers().size() > 1)
-//                    user1 = App.getCurrentLobby().getUsers().get(1);
-//                if (lobby.getUsers().size() > 2)
-//                    user2 = App.getCurrentLobby().getUsers().get(2);
-//                if (lobby.getUsers().size() > 3)
-//                    user3 = App.getCurrentLobby().getUsers().get(3);
+        boolean allReady = true;
 
-                Game result = NewGameController.NewGame(lobby.getUsers().size(),
-                    user1, user2, user3, Integer.parseInt(mapPlayer1Box.getSelected()),
-                    Integer.parseInt(mapPlayer2Box.getSelected()), Integer.parseInt(mapPlayer3Box.getSelected()),
-                    Integer.parseInt(mapPlayer4Box.getSelected()));
-                RegisterMenu.gameScreen = new GameScreen(result);
-                RegisterMenu.cityScreen = new CityScreen(result);
-                Main.getMain().setScreen(new LoadingScreen(RegisterMenu.gameScreen));
-            }
-        });
+        mapPlayer1Label.setText(lobby.getUsers().get(0) + "'s Map :" + lobby.getMaps().get(0) + " (Ready)");
+        if (lobby.getUsers().size() > 1) {
+            mapPlayer2Label.setText(lobby.getUsers().get(1) + "'s Map :" + lobby.getMaps().get(1));
+            if (lobby.getReadies().get(1))
+                mapPlayer2Label.setText(lobby.getUsers().get(1) + "'s Map :" + lobby.getMaps().get(1) + " (Ready)");
 
-        backButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                App.setCurrentLobby(null);
-                Main.getMain().setScreen(new MainMenu(Main.getMain().skin));
-            }
-        });
+            if (!lobby.getReadies().get(1)) allReady = false;
+        }
+        if (lobby.getUsers().size() > 2) {
+            mapPlayer3Label.setText(lobby.getUsers().get(2) + "'s Map :" + lobby.getMaps().get(2));
+            if (lobby.getReadies().get(2))
+                mapPlayer3Label.setText(lobby.getUsers().get(2) + "'s Map :" + lobby.getMaps().get(2) + " (Ready)");
+
+            if (!lobby.getReadies().get(2)) allReady = false;
+        }
+        if (lobby.getUsers().size() > 3) {
+            mapPlayer4Label.setText(lobby.getUsers().get(3) + "'s Map :" + lobby.getMaps().get(3));
+            if (lobby.getReadies().get(3))
+                mapPlayer4Label.setText(lobby.getUsers().get(3) + "'s Map :" + lobby.getMaps().get(3) + " (Ready)");
+
+            if (!lobby.getReadies().get(3)) allReady = false;
+        }
+
+        if (lobby.getAdmin().equals(App.getCurrentUser().getUsername()) && allReady) startButton.setVisible(true);
 
         stage.act(delta);
         stage.draw();
+
+        if (lobby.isGoToMainGame()) {
+            User user1 = new User(lobby.getUsers().get(0), "1", "1", "1", RegisterQuestions.Your_Best_Friend, "1", "male");
+            User user2 = null;
+            User user3 = null;
+            User user4 = null;
+
+            if (lobby.getUsers().size() > 1) {
+                user2 = new User(lobby.getUsers().get(1), "1", "1", "1", RegisterQuestions.Your_Best_Friend, "1", "male");
+            }
+            if (lobby.getUsers().size() > 2) {
+                user3 = new User(lobby.getUsers().get(2), "1", "1", "1", RegisterQuestions.Your_Best_Friend, "1", "male");
+            }
+            if (lobby.getUsers().size() > 3) {
+                user4 = new User(lobby.getUsers().get(3), "1", "1", "1", RegisterQuestions.Your_Best_Friend, "1", "male");
+            }
+
+            Game game = NewGameController.NewGame(2, user1, user2, user3, user4, lobby.getMaps().get(0), lobby.getMaps().get(1), lobby.getMaps().get(2), lobby.getMaps().get(3));
+            PlayerJoin playerJoin = new PlayerJoin();
+            playerJoin.playerId = String.valueOf(Main.getMain().id);
+            playerJoin.displayName = game.getCurrentPlayer().getUsername();
+            App.getNetworkClient().send(playerJoin);
+
+            game.getModel().setMyPlayerId(String.valueOf(Main.getMain().id));
+
+            RegisterMenu.gameScreen = new GameScreen(game);
+            RegisterMenu.cityScreen = new CityScreen(game);
+            Main.getMain().setScreen(new LoadingScreen(RegisterMenu.gameScreen));
+        }
     }
 
     @Override
@@ -219,6 +279,24 @@ public class PreGameMenu implements Screen {
 
     @Override
     public void dispose() {
+        if (serverProcess != null && serverProcess.isAlive()) {
+            serverProcess.destroy();
+        }
+    }
 
+    private void stopServer() {
+        if (serverProcess == null) return;
+        if (serverProcess.isAlive()) {
+            serverProcess.destroy(); // sends SIGTERM on Unix
+            try {
+                boolean exited = serverProcess.waitFor(2, TimeUnit.SECONDS);
+                if (!exited && serverProcess.isAlive()) {
+                    serverProcess.destroyForcibly();
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }
+        serverProcess = null;
     }
 }

@@ -12,10 +12,8 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -46,6 +44,9 @@ public class NetworkServer {
         kryo.register(HashMap.class);
         kryo.register(ArrayList.class);
         kryo.register(ServerStop.class);
+        kryo.register(StartGame.class);
+        kryo.register(MapChanged.class);
+        kryo.register(Ready.class);
         startTime = System.currentTimeMillis();
 
         // Correct: extend Listener, don’t implement it
@@ -98,6 +99,17 @@ public class NetworkServer {
                     // Optionally, broadcast to all players in the lobby
                     for (Connection c : server.getConnections()) {
                         c.sendTCP(pjl); // send to all connected clients
+                } else if (object instanceof StartGame) {
+                    for (Connection c : server.getConnections()) {
+                        c.sendTCP((StartGame) object);
+                    }
+                } else if (object instanceof MapChanged) {
+                    for (Connection c : server.getConnections()) {
+                        c.sendTCP((MapChanged) object);
+                    }
+                } else if (object instanceof Ready) {
+                    for (Connection c : server.getConnections()) {
+                        c.sendTCP((Ready) object);
                     }
                 } else if (object instanceof FrameworkMessage.KeepAlive) {
                     // Ignore keep-alive messages, they are handled internally by KryoNet
