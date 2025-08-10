@@ -27,23 +27,27 @@ public class NetworkServer {
     private final ArrayList<String> players = new ArrayList<>();
     private int numPlayers = 1;
     public static String serverId = "default";
+    long startTime;
 
-    public void start(int tcpPort, int udpPort, String serverId) throws IOException {
+    public void start(int tcpPort, int udpPort, String serverId, boolean isPrivate, String password, boolean isVisible, String uniqueId) throws IOException {
         server = new Server();
         NetworkServer.serverId = serverId;
         Kryo kryo = server.getKryo(); // or client.getKryo()
         server.getKryo().register(Ping.class);
         kryo.register(PlayerJoin.class);
         kryo.register(PlayerJoinedLobby.class);
+        kryo.register(LeaveLobby.class);
         kryo.register(PlayerMove.class);
         kryo.register(WorldState.class);
         kryo.register(MapTransfer.class);
         kryo.register(WorldState.Position.class);
         kryo.register(HashMap.class);
         kryo.register(ArrayList.class);
+        kryo.register(ServerStop.class);
         kryo.register(StartGame.class);
         kryo.register(MapChanged.class);
         kryo.register(Ready.class);
+        startTime = System.currentTimeMillis();
 
         // Correct: extend Listener, don’t implement it
         server.addListener(new Listener() {
@@ -52,9 +56,7 @@ public class NetworkServer {
                 if (object instanceof Ping) {
                     Ping ping = (Ping) object;
                     System.out.println("[Server] got ping: " + ping.text);
-
                     String playerId = ping.playerId; // e.g. "player1"
-
                     Ping pong = new Ping();
                     pong.text = "Pong!";
                     pong.playerId = String.valueOf(numPlayers);
@@ -69,6 +71,7 @@ public class NetworkServer {
                     System.out.println("Received map transfer for player");
                     handleMapTransfer(connection, (MapTransfer) object);
                 } if (object instanceof PlayerJoinedLobby) {
+                    startTime = System.currentTimeMillis();
                     PlayerJoinedLobby pjl = (PlayerJoinedLobby) object;
                     connToPlayerId.put(connection, pjl.playerId);
                     playerIdToConn.put(pjl.playerId, connection);
@@ -83,6 +86,19 @@ public class NetworkServer {
                     for (Connection c : server.getConnections()) {
                         c.sendTCP(pjl); // send to all connected clients
                     }
+                } else if (object instanceof LeaveLobby) {
+                    LeaveLobby leaveLobby = (LeaveLobby) object;
+                    connToPlayerId.remove(connection);
+                    playerIdToConn.remove(leaveLobby.id);
+                    players.remove(leaveLobby.username);
+                    PlayerJoinedLobby pjl = new PlayerJoinedLobby();
+                    for (String user : players) {
+                        pjl.playersInLobby.add(user);
+                    }
+                    System.out.println("[Server] Player joined lobby: " + pjl.username);
+                    // Optionally, broadcast to all players in the lobby
+                    for (Connection c : server.getConnections()) {
+                        c.sendTCP(pjl); // send to all connected clients
                 } else if (object instanceof StartGame) {
                     for (Connection c : server.getConnections()) {
                         c.sendTCP((StartGame) object);
@@ -134,6 +150,22 @@ public class NetworkServer {
         System.out.println("[Server] listening on TCP/" + tcpPort + " UDP/" + udpPort);
 
         new Thread(() -> {
+            try {
+                while (true) {
+                    Thread.sleep(5_000); // Check every 10 seconds
+                    long elapsed = System.currentTimeMillis() - startTime;
+                    synchronized (players) {
+                        if (players.isEmpty() || elapsed >= 5 * 60_000) { // 5 min in ms
+                            System.out.println("[Server] No players joined in 5 minutes. Shutting down...");
+                            stop();
+                            break;
+                        }
+                    }
+                }
+            } catch (InterruptedException ignored) {}
+        }, "Auto-Stop-Timer").start();
+
+        new Thread(() -> {
             try (DatagramSocket sock = new DatagramSocket()) {
                 sock.setBroadcast(true);
 
@@ -152,6 +184,10 @@ public class NetworkServer {
                             }
                         }
                         obj.put("players", playersArray);
+                        obj.put("isPrivate", isPrivate);
+                        obj.put("password", password);
+                        obj.put("isVisible", isVisible);
+                        obj.put("uniqueId", uniqueId);
 
                         byte[] data = obj.toString().getBytes(StandardCharsets.UTF_8);
 
@@ -177,6 +213,9 @@ public class NetworkServer {
     }
 
     public synchronized void stop() {
+        for (Connection c : server.getConnections()) {
+            c.sendTCP(new ServerStop());
+        }
         // stop announcer
         if (announcerThread != null) {
             announcerThread.interrupt();
