@@ -184,15 +184,15 @@ public class LobbyMenu implements Screen {
                 String password = lobbyPassword.getText();
                 boolean isVisible = !visible.isChecked();
                 uniqueId = MathUtils.random(9000) + 1000;
-              
-              
-                String os = System.getProperty("os.name").toLowerCase();
-                String command = os.contains("win") ? "gradlew.bat" : "./gradlew";
+
+                File projectRoot = new File("/home/hamed/University/StardewValley");
+                String wrapper = System.getProperty("os.name").toLowerCase().contains("win") ? "gradlew.bat" : "gradlew";
                 ProcessBuilder pb = new ProcessBuilder(
-                    command,
+                    new File(projectRoot, wrapper).getAbsolutePath(),
                     ":lwjgl3:runHeadless",
                     "--args=" + tcpPort + " " + udpPort + " " + lobbyName + " " + isPrivate + " " + password + " " + isVisible + " " + uniqueId
                 );
+                pb.directory(projectRoot);
                 pb.inheritIO(); // prints server output in console
                 try {
                     serverProcess = pb.start();
@@ -237,6 +237,7 @@ public class LobbyMenu implements Screen {
                         try {
                             Thread.sleep(800);
                             Main.getMain().client.connect("127.0.0.1", tcp, udp);
+                            Thread.sleep(800);
                             connected = true;
                             PlayerJoinedLobby pjl = new PlayerJoinedLobby();
                             pjl.username = App.getCurrentUser().getUsername();
