@@ -1,6 +1,5 @@
 package AP.group30.StardewValley.network;
 
-import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.network.MessageClasses.*;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
@@ -13,10 +12,8 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,7 +41,7 @@ public class NetworkServer {
         kryo.register(WorldState.Position.class);
         kryo.register(HashMap.class);
         kryo.register(ArrayList.class);
-        kryo.register(GoToPreGame.class);
+        kryo.register(StartGame.class);
         kryo.register(MapChanged.class);
         kryo.register(Ready.class);
 
@@ -86,9 +83,9 @@ public class NetworkServer {
                     for (Connection c : server.getConnections()) {
                         c.sendTCP(pjl); // send to all connected clients
                     }
-                } else if (object instanceof GoToPreGame) {
+                } else if (object instanceof StartGame) {
                     for (Connection c : server.getConnections()) {
-                        c.sendTCP((GoToPreGame) object);
+                        c.sendTCP((StartGame) object);
                     }
                 } else if (object instanceof MapChanged) {
                     for (Connection c : server.getConnections()) {
