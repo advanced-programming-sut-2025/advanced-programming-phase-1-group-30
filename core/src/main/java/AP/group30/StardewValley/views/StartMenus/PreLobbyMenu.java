@@ -61,41 +61,6 @@ public class PreLobbyMenu implements Screen {
         errorLabel.setColor(Color.RED);
     }
 
-    // Add this method to refresh the lobby list UI
-    private void refreshLobbyListUI() {
-        if (lobbyListTable == null) return;
-        lobbyListTable.clear();
-        synchronized (lobbies) {
-            if (lobbies.isEmpty()) {
-                Label noLobbiesLabel = new Label("No lobbies found.", skin);
-                lobbyListTable.add(noLobbiesLabel).pad(10);
-            } else {
-                for (ServerInfo lobby : lobbies) {
-                    TextButton lobbyBtn = new TextButton(
-                        lobby.serverId + " (" + lobby.host + ":" + lobby.tcpPort + ")",
-                        skin
-                    );
-                    lobbyBtn.addListener(new ClickListener() {
-                        @Override
-                        public void clicked(InputEvent event, float x, float y) {
-                            // Connect to the selected lobby
-                            try {
-//                                        LobbyManagerController.joinLobby(lobby.host, lobby.tcpPort);
-                                Main.getMain().setScreen(new LobbyMenu(Main.getMain().skin, false));
-                            } catch (Exception e) {
-                                errorLabel.setText("Failed to join lobby: " + e.getMessage());
-                                errorLabel.setVisible(true);
-                            }
-                            if (lobbySelectDialog != null) lobbySelectDialog.hide();
-                        }
-                    });
-                    lobbyListTable.row();
-                    lobbyListTable.add(lobbyBtn).width(300).pad(5);
-                }
-            }
-        }
-    }
-
     @Override
     public void show() {
         stage = new Stage(new ScreenViewport());

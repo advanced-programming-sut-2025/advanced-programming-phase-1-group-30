@@ -7,6 +7,7 @@ import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Lobby;
 import AP.group30.StardewValley.models.Users.RegisterQuestions;
 import AP.group30.StardewValley.models.Users.User;
+import AP.group30.StardewValley.network.MessageClasses.LeaveLobby;
 import AP.group30.StardewValley.network.MessageClasses.PlayerJoinedLobby;
 import AP.group30.StardewValley.network.NetworkClient;
 import com.badlogic.gdx.Gdx;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -39,11 +41,16 @@ public class LobbyMenu implements Screen {
     private final Label titleLabel;
     private final TextButton backButton;
     private final TextButton startGameButton;
+    private final Map<String, Table> playerTables = new HashMap<>();
 
     private final TextField TCPField;
     private final TextField UDPField;
     private final TextField lobbyNameField;
+    private final CheckBox privateLobby;
+    private final CheckBox visible;
+    private final TextField lobbyPassword;
     private final TextButton createButton;
+    int uniqueId;
 
     private final Label errorLabel;
     private final Lobby lobby;
@@ -59,15 +66,13 @@ public class LobbyMenu implements Screen {
 
     private boolean waitingForPlayers = false;
     private Process serverProcess; // Store server process
-    private boolean client;
 
     public LobbyMenu(Skin skin, boolean client) {
         this.skin = skin;
-        client = client;
         lobby = App.getCurrentLobby();
 
         table = new Table(skin);
-        titleLabel = new Label("Lobby: " + lobby.getLobbyID(), skin);
+        titleLabel = new Label(lobby.getLobbyID(), skin);
 
         backButton = new TextButton("Back", skin);
         startGameButton = new TextButton("Start", skin);
@@ -75,7 +80,10 @@ public class LobbyMenu implements Screen {
 
         TCPField = new TextField("TCP", skin);
         UDPField = new TextField("UDP", skin);
-        lobbyNameField = new TextField("Lobby Name", skin);
+        lobbyNameField = new TextField("LobbyID", skin);
+        privateLobby = new CheckBox("Private Lobby", skin);
+        visible = new CheckBox("Invisible", skin);
+        lobbyPassword = new TextField("Password", skin);
         createButton = new TextButton("Create Lobby", skin);
 
         errorLabel = new Label("", skin);
@@ -119,6 +127,10 @@ public class LobbyMenu implements Screen {
         table.add(TCPField).width(180);
         table.add(UDPField).width(180);
         table.add(lobbyNameField).width(250);
+        table.row().pad(15);
+        table.add(privateLobby);
+        table.add(lobbyPassword).width(250);
+        table.add(visible);
         table.add(createButton);
         table.row().pad(15);
         table.add(backButton);
@@ -130,18 +142,26 @@ public class LobbyMenu implements Screen {
         table.center();
         stage.addActor(table);
 
+        lobbyPassword.setVisible(false);
+
         if (!App.getCurrentUser().getUsername().equals(App.getCurrentLobby().getAdmin())) {
             TCPField.setVisible(false);
             UDPField.setVisible(false);
             lobbyNameField.setVisible(false);
             createButton.setVisible(false);
+            privateLobby.setVisible(false);
+            visible.setVisible(false);
+            lobbyPassword.setVisible(false);
         }
 
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                LeaveLobby leaveLobby = new LeaveLobby();
+                leaveLobby.username = App.getCurrentUser().getUsername();
+                leaveLobby.id = String.valueOf(Main.getMain().id);
+                Main.getMain().client.send(leaveLobby);
                 stopServer();
-                App.setCurrentLobby(null);
                 Main.getMain().setScreen(new MainMenu(Main.getMain().skin));
             }
         });
@@ -159,13 +179,17 @@ public class LobbyMenu implements Screen {
                 String tcpPort = TCPField.getText();
                 String udpPort = UDPField.getText();
                 String lobbyName = lobbyNameField.getText();
-                File projectRoot = new File("/home/hamed/University/StardewValley");
+                boolean isPrivate = privateLobby.isChecked();
+                String password = lobbyPassword.getText();
+                boolean isVisible = !visible.isChecked();
+                uniqueId = MathUtils.random(9000) + 1000;
+                String os = System.getProperty("os.name").toLowerCase();
+                String command = os.contains("win") ? "gradlew.bat" : "./gradlew";
                 ProcessBuilder pb = new ProcessBuilder(
-                    "./gradlew",
+                    command,
                     ":lwjgl3:runHeadless",
-                    "--args=" + tcpPort + " " + udpPort + " " + lobbyName
+                    "--args=" + tcpPort + " " + udpPort + " " + lobbyName + " " + isPrivate + " " + password + " " + isVisible + " " + uniqueId
                 );
-                pb.directory(projectRoot);
                 pb.inheritIO(); // prints server output in console
                 try {
                     serverProcess = pb.start();
@@ -173,7 +197,7 @@ public class LobbyMenu implements Screen {
                     throw new RuntimeException(e);
                 }
 
-                titleLabel.setText(lobbyNameField.getText());
+                titleLabel.setText(lobbyNameField.getText() + " (ID: " + uniqueId + ")");
                 // Add a shutdown hook in parent too — in case parent is killed, try to stop child
                 Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                     if (serverProcess != null && serverProcess.isAlive()) {
@@ -194,7 +218,11 @@ public class LobbyMenu implements Screen {
                 createButton.setVisible(false);
                 TCPField.setVisible(false);
                 UDPField.setVisible(false);
+                privateLobby.setVisible(false);
                 lobbyNameField.setVisible(false);
+                lobbyPassword.setVisible(false);
+                visible.setVisible(false);
+                lobbyPassword.setVisible(false);
 
                 // Wait for server to start, then connect client
                 new Thread(() -> {
@@ -253,6 +281,11 @@ public class LobbyMenu implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
         Gdx.gl.glClearColor(0, 0, 0, 1);
+        if (privateLobby.isChecked()) {
+            lobbyPassword.setVisible(true);
+        } else {
+            lobbyPassword.setVisible(false);
+        }
 
         Main.batch.begin();
         Main.batch.draw(GameAssetManager.assetManager.get("menu assets/loading screen.png", Texture.class), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -270,6 +303,9 @@ public class LobbyMenu implements Screen {
             createButton.setVisible(false);
             TCPField.setVisible(false);
             UDPField.setVisible(false);
+            privateLobby.setVisible(false);
+            visible.setVisible(false);
+            lobbyPassword.setVisible(false);
         }
 
         TCPField.addListener(new ClickListener() {
@@ -305,6 +341,16 @@ public class LobbyMenu implements Screen {
             }
         });
 
+        lobbyPassword.addListener(new ClickListener() {
+            boolean cleared = false;
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (!cleared) {
+                    lobbyPassword.setText("");
+                    cleared = true;
+                }
+            }
+        });
 
         TCPField.addListener(new FocusListener() {
             @Override
@@ -328,7 +374,16 @@ public class LobbyMenu implements Screen {
             @Override
             public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
                 if (!focused && lobbyNameField.getText().isEmpty()) {
-                    lobbyNameField.setText("Lobby Name");
+                    lobbyNameField.setText("LobbyID");
+                }
+            }
+        });
+
+        lobbyPassword.addListener(new FocusListener() {
+            @Override
+            public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
+                if (!focused && lobbyPassword.getText().isEmpty()) {
+                    lobbyPassword.setText("Password");
                 }
             }
         });
@@ -364,9 +419,13 @@ public class LobbyMenu implements Screen {
     }
 
     public void addUserToStage(String user, int index) {
+        for (String u : playerTables.keySet()) {
+            if (!lobby.getUsers().contains(u)) {
+                playerTables.get(u).setVisible(false);
+            }
+        }
         Label nameLabel = new Label(user, skin);
         nameLabel.setColor(Color.WHITE);
-
         Image animImage = new Image(playerAnimation.getKeyFrame(0));
 
         Table playerTable = new Table();
@@ -382,5 +441,10 @@ public class LobbyMenu implements Screen {
 
         playerImages.put(user, animImage);
         playerLabels.put(user, nameLabel);
+        playerTables.put(user, playerTable);
+    }
+
+    public Label getLabel() {
+        return errorLabel;
     }
 }

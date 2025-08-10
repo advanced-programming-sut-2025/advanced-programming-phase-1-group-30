@@ -10,10 +10,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import org.json.JSONObject;
@@ -38,12 +40,16 @@ public class JoinLobbyMenu implements Screen {
     private Thread listenerThread;
     private DatagramSocket listenerSocket;
     private volatile boolean listenerRunning = false;
+    private TextField lobbyUniqueID;
+    private TextField passwordField;
 
     private List<ServerInfo> lobbies = Collections.synchronizedList(new ArrayList<>());
-    private static boolean listenerStarted = false;
+    private boolean listenerStarted = false;
 
     public JoinLobbyMenu(Skin skin) {
         this.skin = skin;
+        lobbyUniqueID = new TextField("Lobby ID", skin);
+        passwordField = new TextField("Password", skin);
     }
 
     @Override
@@ -53,7 +59,7 @@ public class JoinLobbyMenu implements Screen {
 
         table = new Table(skin);
         table.setFillParent(true);
-        errorLabel = new Label("Lobby Not Found!", skin);
+        errorLabel = new Label("Enter the password for the private lobby", skin);
         errorLabel.setVisible(false);
         errorLabel.setColor(Color.RED);
 
@@ -62,7 +68,7 @@ public class JoinLobbyMenu implements Screen {
         lobbyListPane = new ScrollPane(lobbyListTable, skin);
         table.add(new Label("Select a Lobby", skin)).pad(10);
         table.row();
-        table.add(lobbyListPane).width(850).height(700).pad(10);
+        table.add(lobbyListPane).width(900).height(550).pad(10);
         table.row();
         table.add(errorLabel).pad(10);
         table.row();
@@ -71,6 +77,7 @@ public class JoinLobbyMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Main.getMain().setScreen(new PreLobbyMenu(skin));
+                stopLobbyListener();
             }
         });
         TextButton refreshButton = new TextButton("Refresh", skin);
@@ -78,8 +85,17 @@ public class JoinLobbyMenu implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 refreshLobbyListUI();
+                for (ServerInfo lobby : lobbies) {
+                    if (!lobby.isVisible) {
+                        if (lobby.uniqueId.equals(lobbyUniqueID.getText())) {
+                            lobbyButton(lobby);
+                        }
+                    }
+                }
             }
         });
+        table.add(passwordField).width(200).pad(10).row();
+        table.add(lobbyUniqueID).width(200).pad(10).row();
         table.add(refreshButton).pad(10).row();
         table.add(backButton).pad(10);
 
@@ -100,37 +116,50 @@ public class JoinLobbyMenu implements Screen {
                 lobbyListTable.add(noLobbiesLabel).pad(10);
             } else {
                 for (ServerInfo lobby : lobbies) {
-                    TextButton lobbyBtn = new TextButton(
-                        lobby.serverId + " Online players: " + lobby.users.size() + "| Port:" + lobby.tcpPort,
-                        skin
-                    );
-                    lobbyBtn.addListener(new ClickListener() {
-                        @Override
-                        public void clicked(InputEvent event, float x, float y) {
-                            try {
-                                Lobby lobby1 = new Lobby(lobby.serverId, lobby.host);
-                                for (String user : lobby.users) {
-                                    lobby1.addUser(user);
-                                }
-                                App.setCurrentLobby(lobby1);
-                                Main.getMain().client.connect(lobby.host, lobby.tcpPort, lobby.udpPort);
-                                PlayerJoinedLobby pjl = new PlayerJoinedLobby();
-                                pjl.username = App.getCurrentUser().getUsername();
-                                pjl.playerId = String.valueOf(Main.getMain().id);
-                                Main.getMain().client.send(pjl);
-                                stopLobbyListener();
-                                Main.getMain().setScreen(new LobbyMenu(Main.getMain().skin, true));
-                            } catch (Exception e) {
-                                errorLabel.setText("Failed to join lobby: " + e.getMessage());
-                                errorLabel.setVisible(true);
-                            }
-                        }
-                    });
-                    lobbyListTable.row();
-                    lobbyListTable.add(lobbyBtn).width(700).pad(50);
+                    if (lobby.isVisible) {
+                        lobbyButton(lobby);
+                    }
                 }
             }
         }
+    }
+
+    private void lobbyButton(ServerInfo lobby) {
+        TextButton lobbyBtn = new TextButton(
+            lobby.serverId + "| Online players: " + lobby.users.size() + "| Port:" + lobby.tcpPort + "| " + (lobby.isPrivate ? "Private" : "Open"),
+            skin
+        );
+        lobbyBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (lobby.isPrivate) {
+                    if (!passwordField.getText().equals(lobby.password)) {
+                        errorLabel.setText("password incorrect");
+                        errorLabel.setVisible(true);
+                        return;
+                    }
+                }
+                try {
+                    Lobby lobby1 = new Lobby(lobby.serverId, lobby.host);
+                    for (String user : lobby.users) {
+                        lobby1.addUser(user);
+                    }
+                    App.setCurrentLobby(lobby1);
+                    Main.getMain().client.connect(lobby.host, lobby.tcpPort, lobby.udpPort);
+                    PlayerJoinedLobby pjl = new PlayerJoinedLobby();
+                    pjl.username = App.getCurrentUser().getUsername();
+                    pjl.playerId = String.valueOf(Main.getMain().id);
+                    Main.getMain().setScreen(new LobbyMenu(Main.getMain().skin, true));
+                    Main.getMain().client.send(pjl);
+                    stopLobbyListener();
+                } catch (Exception e) {
+                    errorLabel.setText("Failed to join lobby: " + e.getMessage());
+                    errorLabel.setVisible(true);
+                }
+            }
+        });
+        lobbyListTable.row();
+        lobbyListTable.add(lobbyBtn).width(800).pad(50);
     }
 
     private void startLobbyListener() {
@@ -151,6 +180,10 @@ public class JoinLobbyMenu implements Screen {
                         String id = obj.optString("id", "").trim();
                         int tcp = obj.optInt("tcp", -1);
                         int udp = obj.optInt("udp", -1);
+                        boolean isPrivate = obj.optBoolean("isPrivate", false);
+                        String password = obj.optString("password", "");
+                        boolean isVisible = obj.optBoolean("isVisible", true);
+                        String uniqueId = obj.optString("uniqueId", "");
                         if (id.isEmpty() || tcp <= 0) continue;
 
                         String host = pack.getAddress().getHostAddress();
@@ -164,6 +197,10 @@ public class JoinLobbyMenu implements Screen {
                                 existing.host = host;
                                 existing.tcpPort = tcp;
                                 existing.udpPort = udp;
+                                existing.isPrivate = isPrivate;
+                                existing.password = password;
+                                existing.isVisible = isVisible;
+                                existing.uniqueId = uniqueId;
 
                                 // Update users list
                                 existing.users.clear();
@@ -179,6 +216,10 @@ public class JoinLobbyMenu implements Screen {
                                 si.host = host;
                                 si.tcpPort = tcp;
                                 si.udpPort = udp;
+                                si.isPrivate = isPrivate;
+                                si.password = password;
+                                si.isVisible = isVisible;
+                                si.uniqueId = uniqueId;
                                 si.lastHeard = System.currentTimeMillis();
 
                                 org.json.JSONArray arr = obj.optJSONArray("players");
@@ -194,7 +235,7 @@ public class JoinLobbyMenu implements Screen {
                         }
 
                         // Refresh UI safely on main thread
-                        Gdx.app.postRunnable(this::refreshLobbyListUI);
+//                        Gdx.app.postRunnable(this::refreshLobbyListUI);
 
                     } catch (org.json.JSONException je) {
                         System.err.println("Received non-JSON discovery packet, ignoring: " + s);
@@ -236,6 +277,46 @@ public class JoinLobbyMenu implements Screen {
         Main.batch.begin();
         Main.batch.draw(GameAssetManager.assetManager.get("menu assets/loading screen.png", Texture.class), 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         Main.batch.end();
+
+        lobbyUniqueID.addListener(new ClickListener() {
+            boolean cleared = false;
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (!cleared) {
+                    lobbyUniqueID.setText("");
+                    cleared = true;
+                }
+            }
+        });
+
+        lobbyUniqueID.addListener(new FocusListener() {
+            @Override
+            public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
+                if (!focused && lobbyUniqueID.getText().isEmpty()) {
+                    lobbyUniqueID.setText("Lobby ID");
+                }
+            }
+        });
+
+        passwordField.addListener(new ClickListener() {
+            boolean cleared = false;
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (!cleared) {
+                    passwordField.setText("");
+                    cleared = true;
+                }
+            }
+        });
+
+        passwordField.addListener(new FocusListener() {
+            @Override
+            public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
+                if (!focused && passwordField.getText().isEmpty()) {
+                    passwordField.setText("Password");
+                }
+            }
+        });
 
         stage.act();
         stage.draw();
