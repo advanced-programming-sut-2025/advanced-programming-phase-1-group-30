@@ -14,6 +14,7 @@ public class Lobby {
     private final String admin;
 
     private boolean goToPreGame;
+    private boolean goToMainGame;
 
     public Lobby(String lobbyID, String admin) {
         this.lobbyID = lobbyID;
@@ -23,6 +24,7 @@ public class Lobby {
         this.users.add(admin);
         this.admin = admin;
         this.goToPreGame = false;
+        this.goToMainGame = false;
     }
 
     public String getLobbyID() {
@@ -67,5 +69,13 @@ public class Lobby {
 
     public void changeReady(int index) {
         readies.set(index, true);
+    }
+
+    public boolean isGoToMainGame() {
+        return goToMainGame;
+    }
+
+    public void setGoToMainGame(boolean goToMainGame) {
+        this.goToMainGame = goToMainGame;
     }
 }

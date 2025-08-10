@@ -13,7 +13,6 @@ import com.esotericsoftware.kryonet.Listener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.UUID;
 
 public class NetworkClient {
     private final Client client;
@@ -30,7 +29,7 @@ public class NetworkClient {
         kryo.register(WorldState.Position.class);
         kryo.register(HashMap.class);
         kryo.register(ArrayList.class);
-        kryo.register(GoToPreGame.class);
+        kryo.register(StartGame.class);
         kryo.register(MapChanged.class);
         kryo.register(Ready.class);
     }
@@ -85,8 +84,12 @@ public class NetworkClient {
                     }
                 }
 
-                if (object instanceof GoToPreGame) {
-                    App.getCurrentLobby().setGoToPreGame(true);
+                if (object instanceof StartGame) {
+                    StartGame sg = (StartGame) object;
+                    if (sg.goToPreGame)
+                        App.getCurrentLobby().setGoToPreGame(true);
+                    else
+                        App.getCurrentLobby().setGoToMainGame(true);
                 }
 
                 if (object instanceof MapChanged) {
