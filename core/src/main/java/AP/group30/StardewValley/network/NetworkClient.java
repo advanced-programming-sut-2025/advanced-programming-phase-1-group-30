@@ -30,6 +30,9 @@ public class NetworkClient {
         kryo.register(WorldState.Position.class);
         kryo.register(HashMap.class);
         kryo.register(ArrayList.class);
+        kryo.register(GoToPreGame.class);
+        kryo.register(MapChanged.class);
+        kryo.register(Ready.class);
     }
 
     public void connect(String ip, int tcpPort, int udpPort) throws IOException {
@@ -80,6 +83,20 @@ public class NetworkClient {
                             }
                         });
                     }
+                }
+
+                if (object instanceof GoToPreGame) {
+                    App.getCurrentLobby().setGoToPreGame(true);
+                }
+
+                if (object instanceof MapChanged) {
+                    MapChanged mc = (MapChanged) object;
+                    App.getCurrentLobby().changeMap(App.getCurrentLobby().getUsers().indexOf(mc.username), mc.number);
+                }
+
+                if (object instanceof Ready) {
+                    Ready r = (Ready) object;
+                    App.getCurrentLobby().changeReady(App.getCurrentLobby().getUsers().indexOf(r.username));
                 }
             }
         });

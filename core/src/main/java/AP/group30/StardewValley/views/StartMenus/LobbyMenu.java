@@ -7,6 +7,7 @@ import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Lobby;
 import AP.group30.StardewValley.models.Users.RegisterQuestions;
 import AP.group30.StardewValley.models.Users.User;
+import AP.group30.StardewValley.network.MessageClasses.GoToPreGame;
 import AP.group30.StardewValley.network.MessageClasses.PlayerJoinedLobby;
 import AP.group30.StardewValley.network.NetworkClient;
 import com.badlogic.gdx.Gdx;
@@ -149,7 +150,9 @@ public class LobbyMenu implements Screen {
         startGameButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Main.getMain().setScreen(new PreGameMenu(Main.getMain().skin, lobby));
+                App.getCurrentLobby().setGoToPreGame(true);
+                GoToPreGame pre = new GoToPreGame();
+                Main.getMain().client.send(pre);
             }
         });
 
@@ -159,9 +162,12 @@ public class LobbyMenu implements Screen {
                 String tcpPort = TCPField.getText();
                 String udpPort = UDPField.getText();
                 String lobbyName = lobbyNameField.getText();
-                File projectRoot = new File("/home/hamed/University/StardewValley");
+                //File projectRoot = new File("/home/hamed/University/StardewValley");
+                File projectRoot = new File("D:/Amir/University/Term_2/Advanced_Programming/Project/advanced-programming-phase-1-group-30");
+//                String os = System.getProperty("os.name").toLowerCase();
+//                String command = os.contains("win") ? "gradlew.bat" : "./gradlew";
                 ProcessBuilder pb = new ProcessBuilder(
-                    "./gradlew",
+                    "gradlew.bat",
                     ":lwjgl3:runHeadless",
                     "--args=" + tcpPort + " " + udpPort + " " + lobbyName
                 );
@@ -265,12 +271,15 @@ public class LobbyMenu implements Screen {
             entry.getValue().setDrawable(new TextureRegionDrawable(frame));
         }
 
-        if (lobby.getUsers().size() > 1) startGameButton.setVisible(true);
+        if (lobby.getUsers().size() > 1 && lobby.getAdmin().equals(App.getCurrentUser().getUsername()))
+            startGameButton.setVisible(true);
         if (lobby.getUsers().size() > 3) {
             createButton.setVisible(false);
             TCPField.setVisible(false);
             UDPField.setVisible(false);
         }
+        if (App.getCurrentLobby().isGoToPreGame())
+            Main.getMain().setScreen(new PreGameMenu(Main.getMain().skin, lobby, serverProcess));
 
         TCPField.addListener(new ClickListener() {
             boolean cleared = false;
