@@ -2,8 +2,11 @@ package AP.group30.StardewValley.network;
 
 import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.models.App;
+import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.network.MessageClasses.*;
 import AP.group30.StardewValley.views.StartMenus.LobbyMenu;
+import AP.group30.StardewValley.views.StartMenus.MainMenu;
+import AP.group30.StardewValley.views.StartMenus.PreLobbyMenu;
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
@@ -23,12 +26,14 @@ public class NetworkClient {
         client.getKryo().register(Ping.class); // register shared message types
         kryo.register(PlayerJoin.class);
         kryo.register(PlayerJoinedLobby.class);
+        kryo.register(LeaveLobby.class);
         kryo.register(PlayerMove.class);
         kryo.register(WorldState.class);
         kryo.register(MapTransfer.class);
         kryo.register(WorldState.Position.class);
         kryo.register(HashMap.class);
         kryo.register(ArrayList.class);
+        kryo.register(ServerStop.class);
         kryo.register(StartGame.class);
         kryo.register(MapChanged.class);
         kryo.register(Ready.class);
@@ -52,21 +57,31 @@ public class NetworkClient {
                     return;
                 }
 
-                // 2) (Optional) Incremental player moves
                 if (object instanceof PlayerMove) {
                     PlayerMove pm = (PlayerMove) object;
                     // Update only that one player in your model:
                     App.getCurrentGame().getModel().moveOtherPlayers(pm);
                     return;
                 }
+                if (object instanceof ServerStop) {
+                    Main.getMain().client.close();
+                    ((LobbyMenu)Main.getMain().getScreen()).getLabel().setText("Server stopped! Please return to the Main Menu");
+                }
+
                 if (object instanceof PlayerJoinedLobby) {
                     PlayerJoinedLobby pjl = (PlayerJoinedLobby) object;
+                    if (App.getCurrentLobby() == null) {
+                        return;
+                    }
+                    App.getCurrentLobby().getUsers().clear();
 
                     // Add to the current lobby’s user list
                     for (String user : pjl.playersInLobby) {
-                        if (!App.getCurrentLobby().getUsers().contains(user)) {
-                            App.getCurrentLobby().getUsers().add(user);
-                        }
+                        App.getCurrentLobby().getUsers().add(user);
+                    }
+                    if (!App.getCurrentLobby().getUsers().contains(App.getCurrentUser().getUsername())) {
+                        App.setCurrentLobby(null);
+                        return;
                     }
 
                     // Update UI if we are in LobbyMenu
