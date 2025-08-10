@@ -113,6 +113,7 @@ public class JoinLobbyMenu implements Screen {
                                     lobby1.addUser(user);
                                 }
                                 App.setCurrentLobby(lobby1);
+                                App.setNetworkClient(Main.getMain().client);
                                 Main.getMain().client.connect(lobby.host, lobby.tcpPort, lobby.udpPort);
                                 PlayerJoinedLobby pjl = new PlayerJoinedLobby();
                                 pjl.username = App.getCurrentUser().getUsername();
