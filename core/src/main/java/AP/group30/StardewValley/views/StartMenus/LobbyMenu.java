@@ -279,7 +279,7 @@ public class LobbyMenu implements Screen {
             UDPField.setVisible(false);
         }
         if (App.getCurrentLobby().isGoToPreGame())
-            Main.getMain().setScreen(new PreGameMenu(Main.getMain().skin, lobby));
+            Main.getMain().setScreen(new PreGameMenu(Main.getMain().skin, lobby, serverProcess));
 
         TCPField.addListener(new ClickListener() {
             boolean cleared = false;
