@@ -483,6 +483,17 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> stormy = new AssetDescriptor<>("Stardew_Valley_Images/Clock/stormy.png", Texture.class);
     public static final AssetDescriptor<Texture> snowy = new AssetDescriptor<>("Stardew_Valley_Images/Clock/snowy.png", Texture.class);
 
+    public static final AssetDescriptor<Texture> reaction = new AssetDescriptor<>("Stardew_Valley_Images/Sprites/Reaction Menu.png", Texture.class);
+    public static final AssetDescriptor<Texture> angryEmote = new AssetDescriptor<>("Stardew_Valley_Images/Emote/angry.png", Texture.class);
+    public static final AssetDescriptor<Texture> happyEmote = new AssetDescriptor<>("Stardew_Valley_Images/Emote/happy.png", Texture.class);
+    public static final AssetDescriptor<Texture> heartEmote = new AssetDescriptor<>("Stardew_Valley_Images/Emote/heart.png", Texture.class);
+    public static final AssetDescriptor<Texture> laughEmote = new AssetDescriptor<>("Stardew_Valley_Images/Emote/laugh.png", Texture.class);
+    public static final AssetDescriptor<Texture> noEmote = new AssetDescriptor<>("Stardew_Valley_Images/Emote/no.png", Texture.class);
+    public static final AssetDescriptor<Texture> sadEmote = new AssetDescriptor<>("Stardew_Valley_Images/Emote/sad.png", Texture.class);
+    public static final AssetDescriptor<Texture> yesEmote = new AssetDescriptor<>("Stardew_Valley_Images/Emote/yes.png", Texture.class);
+    public static final AssetDescriptor<Texture> sickEmote = new AssetDescriptor<>("Stardew_Valley_Images/Emote/sick.png", Texture.class);
+    public static final AssetDescriptor<Texture> chat = new AssetDescriptor<>("Stardew_Valley_Images/Chat/chat box.png", Texture.class);
+
     public static void queueAsset() {
         assetManager.load(background);
         assetManager.load(blackBackground);
@@ -925,6 +936,17 @@ public class GameAssetManager {
         assetManager.load(playerPassOut1);
         assetManager.load(playerPassOut2);
         assetManager.load(playerPassOut3);
+
+        assetManager.load(reaction);
+        assetManager.load(angryEmote);
+        assetManager.load(happyEmote);
+        assetManager.load(sadEmote);
+        assetManager.load(heartEmote);
+        assetManager.load(laughEmote);
+        assetManager.load(noEmote);
+        assetManager.load(yesEmote);
+        assetManager.load(sickEmote);
+        assetManager.load(chat);
 
     }
 
