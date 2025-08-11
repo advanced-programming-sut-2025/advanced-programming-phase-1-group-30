@@ -33,6 +33,7 @@ public class NetworkClient {
         kryo.register(GoToPreGame.class);
         kryo.register(MapChanged.class);
         kryo.register(Ready.class);
+        kryo.register(Reaction.class);
     }
 
     public void connect(String ip, int tcpPort, int udpPort) throws IOException {
@@ -97,6 +98,11 @@ public class NetworkClient {
                 if (object instanceof Ready) {
                     Ready r = (Ready) object;
                     App.getCurrentLobby().changeReady(App.getCurrentLobby().getUsers().indexOf(r.username));
+                }
+
+                if (object instanceof Reaction) {
+                    Reaction r = (Reaction) object;
+                    App.getCurrentGame().getModel().reactionPlayer(r);
                 }
             }
         });

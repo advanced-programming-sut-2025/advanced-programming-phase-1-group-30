@@ -1,8 +1,11 @@
 package AP.group30.StardewValley.views.InGameMenus;
 
+import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
+import AP.group30.StardewValley.network.MessageClasses.MapTransfer;
+import AP.group30.StardewValley.network.MessageClasses.Reaction;
 import AP.group30.StardewValley.views.CityScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -111,6 +114,10 @@ public class ReactionMenu implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 toggle();
                 CityScreen.showReaction(App.getCurrentGame().getCurrentPlayer(), "happy");
+                Reaction r = new Reaction();
+                r.playerId    = String.valueOf(Main.getMain().id);
+                r.reaction = "happy";
+                App.getNetworkClient().send(r);
             }
         }));
         if (sadButton.addListener(new ClickListener() {
@@ -118,6 +125,10 @@ public class ReactionMenu implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 toggle();
                 CityScreen.showReaction(App.getCurrentGame().getCurrentPlayer(), "sad");
+                Reaction r = new Reaction();
+                r.playerId    = String.valueOf(Main.getMain().id);
+                r.reaction = "sad";
+                App.getNetworkClient().send(r);
             }
         }));
         if (heartButton.addListener(new ClickListener() {
@@ -125,6 +136,10 @@ public class ReactionMenu implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 toggle();
                 CityScreen.showReaction(App.getCurrentGame().getCurrentPlayer(), "heart");
+                Reaction r = new Reaction();
+                r.playerId    = String.valueOf(Main.getMain().id);
+                r.reaction = "heart";
+                App.getNetworkClient().send(r);
             }
         }));
         if (angryButton.addListener(new ClickListener() {
@@ -132,6 +147,10 @@ public class ReactionMenu implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 toggle();
                 CityScreen.showReaction(App.getCurrentGame().getCurrentPlayer(), "angry");
+                Reaction r = new Reaction();
+                r.playerId    = String.valueOf(Main.getMain().id);
+                r.reaction = "angry";
+                App.getNetworkClient().send(r);
             }
         }));
         if (yesButton.addListener(new ClickListener() {
@@ -139,6 +158,10 @@ public class ReactionMenu implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 toggle();
                 CityScreen.showReaction(App.getCurrentGame().getCurrentPlayer(), "yes");
+                Reaction r = new Reaction();
+                r.playerId    = String.valueOf(Main.getMain().id);
+                r.reaction = "yes";
+                App.getNetworkClient().send(r);
             }
         }));
         if (noButton.addListener(new ClickListener() {
@@ -146,6 +169,10 @@ public class ReactionMenu implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 toggle();
                 CityScreen.showReaction(App.getCurrentGame().getCurrentPlayer(), "no");
+                Reaction r = new Reaction();
+                r.playerId    = String.valueOf(Main.getMain().id);
+                r.reaction = "no";
+                App.getNetworkClient().send(r);
             }
         }));
 
@@ -179,6 +206,10 @@ public class ReactionMenu implements Screen {
                 } else {
                     toggle();
                     CityScreen.showReaction(App.getCurrentGame().getCurrentPlayer(), chat.getText());
+                    Reaction r = new Reaction();
+                    r.playerId    = String.valueOf(Main.getMain().id);
+                    r.reaction = chat.getText();
+                    App.getNetworkClient().send(r);
                 }
             }
         }));

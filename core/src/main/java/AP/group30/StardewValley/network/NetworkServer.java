@@ -47,6 +47,7 @@ public class NetworkServer {
         kryo.register(GoToPreGame.class);
         kryo.register(MapChanged.class);
         kryo.register(Ready.class);
+        kryo.register(Reaction.class);
 
         // Correct: extend Listener, don’t implement it
         server.addListener(new Listener() {
@@ -97,6 +98,10 @@ public class NetworkServer {
                 } else if (object instanceof Ready) {
                     for (Connection c : server.getConnections()) {
                         c.sendTCP((Ready) object);
+                    }
+                } else if (object instanceof Reaction) {
+                    for (Connection c : server.getConnections()) {
+                        c.sendTCP((Reaction) object);
                     }
                 } else if (object instanceof FrameworkMessage.KeepAlive) {
                     // Ignore keep-alive messages, they are handled internally by KryoNet
