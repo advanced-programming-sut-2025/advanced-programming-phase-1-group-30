@@ -117,6 +117,7 @@ public class NetworkServer {
                 } else if (object instanceof Reaction) {
                     for (Connection c : server.getConnections()) {
                         c.sendTCP((Reaction) object);
+                    }
                 } else if (object instanceof LeaderBoardUpdate) {
                     for (Connection c : server.getConnections()) {
                         c.sendTCP((LeaderBoardUpdate) object);
