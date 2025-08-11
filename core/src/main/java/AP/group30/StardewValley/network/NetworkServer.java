@@ -47,6 +47,7 @@ public class NetworkServer {
         kryo.register(StartGame.class);
         kryo.register(MapChanged.class);
         kryo.register(Ready.class);
+        kryo.register(Reaction.class);
         kryo.register(LeaderBoardUpdate.class);
         startTime = System.currentTimeMillis();
 
@@ -113,6 +114,9 @@ public class NetworkServer {
                     for (Connection c : server.getConnections()) {
                         c.sendTCP((Ready) object);
                     }
+                } else if (object instanceof Reaction) {
+                    for (Connection c : server.getConnections()) {
+                        c.sendTCP((Reaction) object);
                 } else if (object instanceof LeaderBoardUpdate) {
                     for (Connection c : server.getConnections()) {
                         c.sendTCP((LeaderBoardUpdate) object);

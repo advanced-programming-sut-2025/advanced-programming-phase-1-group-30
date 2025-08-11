@@ -162,6 +162,10 @@ public class CityScreen implements Screen {
         renderNPCs(batch, stateTime);
         for (RemotePlayer p : game.getModel().getOtherPlayers()) {
             p.render(batch);
+            if (p.getReactionTime() > 0f) {
+                p.decreaseReactionTimer(delta);
+                p.renderReaction(batch);
+            }
         }
         if (game.getCurrentTime().getHour() >= 18) {
             batch.setColor(0, 0, 0, 0.6f);
@@ -465,6 +469,37 @@ public class CityScreen implements Screen {
     }
 
     public static void showReaction(Player thisPlayer, String text) {
+        Texture reactionTexture;
+
+        switch (text){
+            case "happy":
+                reactionTexture = GameAssetManager.assetManager.get(GameAssetManager.happyEmote);
+                break;
+            case "sad":
+                reactionTexture = GameAssetManager.assetManager.get(GameAssetManager.sadEmote);
+                break;
+            case "angry":
+                reactionTexture = GameAssetManager.assetManager.get(GameAssetManager.angryEmote);
+                break;
+            case "heart":
+                reactionTexture = GameAssetManager.assetManager.get(GameAssetManager.heartEmote);
+                break;
+            case "yes":
+                reactionTexture = GameAssetManager.assetManager.get(GameAssetManager.yesEmote);
+                break;
+            case "no":
+                reactionTexture = GameAssetManager.assetManager.get(GameAssetManager.noEmote);
+                break;
+            default:
+                reactionTexture = GameAssetManager.assetManager.get(GameAssetManager.chat);
+                thisPlayer.setChat(text);
+        }
+
+        thisPlayer.setReactionTexture(reactionTexture);
+        thisPlayer.setReactionTime(3f);
+    }
+
+    public static void showReaction(RemotePlayer thisPlayer, String text) {
         Texture reactionTexture;
 
         switch (text){

@@ -38,6 +38,7 @@ public class NetworkClient {
         kryo.register(StartGame.class);
         kryo.register(MapChanged.class);
         kryo.register(Ready.class);
+        kryo.register(Reaction.class);
         kryo.register(LeaderBoardUpdate.class);
     }
 
@@ -119,6 +120,11 @@ public class NetworkClient {
                     App.getCurrentLobby().changeReady(App.getCurrentLobby().getUsers().indexOf(r.username));
                 }
 
+                if (object instanceof Reaction) {
+                    Reaction r = (Reaction) object;
+                    App.getCurrentGame().getModel().reactionPlayer(r);
+                }
+              
                 if (object instanceof LeaderBoardUpdate) {
                     LeaderBoardUpdate lbu = (LeaderBoardUpdate) object;
 
