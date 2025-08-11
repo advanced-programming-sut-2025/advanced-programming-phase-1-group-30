@@ -34,7 +34,7 @@ public class InventoryScreen extends InGameMenuScreen{
     private final Label errorLabel;
 
     public InventoryScreen(SpriteBatch batch, Skin skin) {
-        super(batch, skin, GameAssetManager.inventoryScreen, 1, 0);
+        super(batch, skin, GameAssetManager.inventoryScreen, 1, 0, 0);
 
         errorLabel = new Label("You can't sell this Item!", skin);
         errorLabel.setColor(Color.RED);

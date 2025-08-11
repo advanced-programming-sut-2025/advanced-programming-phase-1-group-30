@@ -56,8 +56,8 @@ public class Player implements GameObjects {
     private int selectionNumber;
     private boolean isPassedOut = false;
     private Item wield;
-    private int farming = 5;
-    private int foraging = 10;
+    private int farming = 0;
+    private int foraging = 0;
     private int fishing = 0;
     private int mining = 0;
     private int maxEnergy;

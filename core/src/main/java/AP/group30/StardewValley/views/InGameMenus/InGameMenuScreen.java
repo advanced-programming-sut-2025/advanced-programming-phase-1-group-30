@@ -30,7 +30,7 @@ abstract public class InGameMenuScreen {
     protected final int positionY;
 
     protected InGameMenuScreen(SpriteBatch batch, Skin skin, AssetDescriptor<Texture> backgroundAssetDescriptor
-                                , int tableHeightDivider, int tableHorizonMove) {
+                                , int tableHeightDivider, int tableHorizonMove, int widthChanger) {
         this.stage = new Stage(new ScreenViewport(), batch);
         this.skin = skin;
         this.table = new Table();
@@ -42,7 +42,7 @@ abstract public class InGameMenuScreen {
 
         table.setVisible(false);
         table.setBackground(backgroundDrawable);
-        table.setSize(800, (float) 600 / tableHeightDivider);
+        table.setSize(800 + widthChanger, (float) 600 / tableHeightDivider);
         table.setPosition(
             (Gdx.graphics.getWidth() - table.getWidth()) / 2f,
             (Gdx.graphics.getHeight() - table.getHeight()) / 2f + tableHorizonMove
