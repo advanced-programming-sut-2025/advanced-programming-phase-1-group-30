@@ -37,35 +37,35 @@ public class NewGameController {
         App.getGames().add(game);
 
         ArrayList<Player> players = new ArrayList<>();
-        Player currentPlayer = new Player(user1, user1.getUsername(), 0,
+        Player player1 = new Player(user1, user1.getUsername(), 0,
             user1.getGender(), Map.getMapById(mapNumber1));
-        user1.setPlayer(currentPlayer);
+        user1.setPlayer(player1);
         user1.setNumOfGames(user1.getNumOfGames() + 1);
 
-        players.add(currentPlayer);
+        players.add(player1);
 
         if (numberOfPlayers >= 2) {
-            Player player1 = new Player(user2,user2.getUsername(), 1, user2.getGender(),
+            Player player2 = new Player(user2,user2.getUsername(), 1, user2.getGender(),
                 Map.getMapById(mapNumber2));
-            user2.setPlayer(player1);
+            user2.setPlayer(player2);
             user2.setNumOfGames(user2.getNumOfGames() + 1);
-            players.add(player1);
-        }
-
-        if (numberOfPlayers >= 3) {
-            Player player2 = new Player(user3,user3.getUsername(), 2, user3.getGender(),
-                Map.getMapById(mapNumber3));
-            user3.setPlayer(player2);
-            user3.setNumOfGames(user3.getNumOfGames() + 1);
             players.add(player2);
         }
 
-        if (numberOfPlayers >= 4) {
-            Player player3 = new Player(user4,user4.getUsername(), 3, user4.getGender(),
-                Map.getMapById(mapNumber4));
-            user4.setPlayer(player3);
-            user4.setNumOfGames(user4.getNumOfGames() + 1);
+        if (numberOfPlayers >= 3) {
+            Player player3 = new Player(user3,user3.getUsername(), 2, user3.getGender(),
+                Map.getMapById(mapNumber3));
+            user3.setPlayer(player3);
+            user3.setNumOfGames(user3.getNumOfGames() + 1);
             players.add(player3);
+        }
+
+        if (numberOfPlayers >= 4) {
+            Player player4 = new Player(user4,user4.getUsername(), 3, user4.getGender(),
+                Map.getMapById(mapNumber4));
+            user4.setPlayer(player4);
+            user4.setNumOfGames(user4.getNumOfGames() + 1);
+            players.add(player4);
         }
 
         user1.changeInGame();
@@ -87,6 +87,7 @@ public class NewGameController {
             player.setY(16);
             player.setCityY(-1);
             player.setCityX(-1);
+            if (player.getUsername().equals(App.getCurrentUser().getUsername())) game.setCurrentPlayer(player);
         }
 
         for (Player player : players) {
@@ -99,7 +100,6 @@ public class NewGameController {
 
         game.setPlayers(players);
         game.setTomorrowWeather(Weather.SUNNY);
-        game.setCurrentPlayer(currentPlayer);
         MaintainerController.updateAllShops();
         return game;
     }

@@ -23,7 +23,7 @@ public class CraftInfoScreen extends InGameMenuScreen {
     private final Image itemImage;
 
     public CraftInfoScreen(SpriteBatch batch, Skin skin) {
-        super(batch, skin, GameAssetManager.inventoryItem, 1, 0);
+        super(batch, skin, GameAssetManager.inventoryItem, 1, 0, 0);
 
         showButton = new TextButton("Show", skin);
         showButton.setPosition(table.getX() + table.getWidth() / 2f - showButton.getWidth() / 2f - 100,

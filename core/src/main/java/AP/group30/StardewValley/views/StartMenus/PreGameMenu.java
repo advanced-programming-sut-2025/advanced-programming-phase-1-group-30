@@ -11,6 +11,7 @@ import AP.group30.StardewValley.models.Users.User;
 import AP.group30.StardewValley.network.MessageClasses.MapChanged;
 import AP.group30.StardewValley.network.MessageClasses.PlayerJoin;
 import AP.group30.StardewValley.network.MessageClasses.Ready;
+import AP.group30.StardewValley.network.MessageClasses.StartGame;
 import AP.group30.StardewValley.views.CityScreen;
 import AP.group30.StardewValley.views.GameScreen;
 import AP.group30.StardewValley.views.LoadingScreen;
@@ -142,32 +143,10 @@ public class PreGameMenu implements Screen {
         startButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                User user1 = new User(lobby.getUsers().get(0), "1", "1", "1", RegisterQuestions.Your_Best_Friend, "1", "male");
-                User user2 = null;
-                User user3 = null;
-                User user4 = null;
-
-                if (lobby.getUsers().size() > 1) {
-                    user2 = new User(lobby.getUsers().get(1), "1", "1", "1", RegisterQuestions.Your_Best_Friend, "1", "male");
-                }
-                if (lobby.getUsers().size() > 2) {
-                    user3 = new User(lobby.getUsers().get(2), "1", "1", "1", RegisterQuestions.Your_Best_Friend, "1", "male");
-                }
-                if (lobby.getUsers().size() > 3) {
-                    user4 = new User(lobby.getUsers().get(3), "1", "1", "1", RegisterQuestions.Your_Best_Friend, "1", "male");
-                }
-
-                Game game = NewGameController.NewGame(2, user1, user2, user3, user4, lobby.getMaps().get(0), lobby.getMaps().get(1), lobby.getMaps().get(2), lobby.getMaps().get(3));
-                PlayerJoin playerJoin = new PlayerJoin();
-                playerJoin.playerId = String.valueOf(Main.getMain().id);
-                playerJoin.displayName = game.getCurrentPlayer().getUsername();
-                App.getNetworkClient().send(playerJoin);
-
-                game.getModel().setMyPlayerId(String.valueOf(Main.getMain().id));
-
-                RegisterMenu.gameScreen = new GameScreen(game);
-                RegisterMenu.cityScreen = new CityScreen(game);
-                Main.getMain().setScreen(new LoadingScreen(RegisterMenu.gameScreen));
+                App.getCurrentLobby().setGoToMainGame(true);
+                StartGame start = new StartGame();
+                start.goToPreGame = false;
+                Main.getMain().client.send(start);
             }
         });
 
@@ -247,6 +226,35 @@ public class PreGameMenu implements Screen {
 
         stage.act(delta);
         stage.draw();
+
+        if (lobby.isGoToMainGame()) {
+            User user1 = new User(lobby.getUsers().get(0), "1", "1", "1", RegisterQuestions.Your_Best_Friend, "1", "male");
+            User user2 = null;
+            User user3 = null;
+            User user4 = null;
+
+            if (lobby.getUsers().size() > 1) {
+                user2 = new User(lobby.getUsers().get(1), "1", "1", "1", RegisterQuestions.Your_Best_Friend, "1", "male");
+            }
+            if (lobby.getUsers().size() > 2) {
+                user3 = new User(lobby.getUsers().get(2), "1", "1", "1", RegisterQuestions.Your_Best_Friend, "1", "male");
+            }
+            if (lobby.getUsers().size() > 3) {
+                user4 = new User(lobby.getUsers().get(3), "1", "1", "1", RegisterQuestions.Your_Best_Friend, "1", "male");
+            }
+
+            Game game = NewGameController.NewGame(lobby.getUsers().size(), user1, user2, user3, user4, lobby.getMaps().get(0), lobby.getMaps().get(1), lobby.getMaps().get(2), lobby.getMaps().get(3));
+            PlayerJoin playerJoin = new PlayerJoin();
+            playerJoin.playerId = String.valueOf(Main.getMain().id);
+            playerJoin.displayName = game.getCurrentPlayer().getUsername();
+            App.getNetworkClient().send(playerJoin);
+
+            game.getModel().setMyPlayerId(String.valueOf(Main.getMain().id));
+
+            RegisterMenu.gameScreen = new GameScreen(game);
+            RegisterMenu.cityScreen = new CityScreen(game);
+            Main.getMain().setScreen(new LoadingScreen(RegisterMenu.gameScreen));
+        }
     }
 
     @Override

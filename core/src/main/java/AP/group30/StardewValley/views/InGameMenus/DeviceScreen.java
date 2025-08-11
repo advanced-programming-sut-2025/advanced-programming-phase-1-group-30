@@ -44,7 +44,7 @@ public class DeviceScreen extends InGameMenuScreen{
     private final Label itemLabel;
 
     public DeviceScreen(SpriteBatch batch, Skin skin) {
-        super(batch, skin, GameAssetManager.inventoryScreen, 1, 0);
+        super(batch, skin, GameAssetManager.inventoryScreen, 1, 0, 0);
 
         errorLabel = new Label("", skin);
         errorLabel.setColor(Color.RED);

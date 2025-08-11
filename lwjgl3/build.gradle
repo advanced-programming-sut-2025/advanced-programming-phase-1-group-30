@@ -206,6 +206,22 @@ application {
 tasks.register('runHeadless', JavaExec) {
   group = 'application'
   description = 'Runs the headless server via HeadlessLauncher'
-  classpath = sourceSets.main.runtimeClasspath
+
+  // Ensure core is compiled before we run
+  dependsOn project(':core').tasks.named('classes')
+
+  // Make classpath explicit: include this module's runtimeClasspath AND the core output classes
+  classpath = files(sourceSets.main.runtimeClasspath, project(':core').sourceSets.main.output)
+
+  // main class — be exact about case here
   mainClass.set('AP.group30.Stardewvalley.lwjgl3.HeadlessLauncher')
+
+  // Optional: print classpath in Gradle console (helpful for debugging)
+  doFirst {
+    println "=== runHeadless classpath ==="
+    classpath.each { println " - $it" }
+  }
+
+  // forward args via --args=... ; Gradle will pass them to main()
+  // you can also set jvmArgs here if needed
 }

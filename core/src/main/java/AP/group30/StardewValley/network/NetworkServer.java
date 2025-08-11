@@ -1,6 +1,5 @@
 package AP.group30.StardewValley.network;
 
-import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.network.MessageClasses.*;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
@@ -13,10 +12,8 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,24 +27,29 @@ public class NetworkServer {
     private final ArrayList<String> players = new ArrayList<>();
     private int numPlayers = 1;
     public static String serverId = "default";
+    long startTime;
 
-    public void start(int tcpPort, int udpPort, String serverId) throws IOException {
+    public void start(int tcpPort, int udpPort, String serverId, boolean isPrivate, String password, boolean isVisible, String uniqueId) throws IOException {
         server = new Server();
         NetworkServer.serverId = serverId;
         Kryo kryo = server.getKryo(); // or client.getKryo()
         server.getKryo().register(Ping.class);
         kryo.register(PlayerJoin.class);
         kryo.register(PlayerJoinedLobby.class);
+        kryo.register(LeaveLobby.class);
         kryo.register(PlayerMove.class);
         kryo.register(WorldState.class);
         kryo.register(MapTransfer.class);
         kryo.register(WorldState.Position.class);
         kryo.register(HashMap.class);
         kryo.register(ArrayList.class);
-        kryo.register(GoToPreGame.class);
+        kryo.register(ServerStop.class);
+        kryo.register(StartGame.class);
         kryo.register(MapChanged.class);
         kryo.register(Ready.class);
         kryo.register(Reaction.class);
+        kryo.register(LeaderBoardUpdate.class);
+        startTime = System.currentTimeMillis();
 
         // Correct: extend Listener, don’t implement it
         server.addListener(new Listener() {
@@ -56,15 +58,13 @@ public class NetworkServer {
                 if (object instanceof Ping) {
                     Ping ping = (Ping) object;
                     System.out.println("[Server] got ping: " + ping.text);
-
                     String playerId = ping.playerId; // e.g. "player1"
-
                     Ping pong = new Ping();
                     pong.text = "Pong!";
                     pong.playerId = String.valueOf(numPlayers);
                     connection.sendTCP(pong);
-                }
-                if (object instanceof PlayerJoin) {
+                    numPlayers++;
+                } else if (object instanceof PlayerJoin) {
                     PlayerJoin pj = (PlayerJoin) object;
                     handlePlayerJoin(connection, pj);
                 } else if (object instanceof PlayerMove) {
@@ -72,7 +72,8 @@ public class NetworkServer {
                 } else if (object instanceof MapTransfer) {
                     System.out.println("Received map transfer for player");
                     handleMapTransfer(connection, (MapTransfer) object);
-                } if (object instanceof PlayerJoinedLobby) {
+                } else if (object instanceof PlayerJoinedLobby) {
+                    startTime = System.currentTimeMillis();
                     PlayerJoinedLobby pjl = (PlayerJoinedLobby) object;
                     connToPlayerId.put(connection, pjl.playerId);
                     playerIdToConn.put(pjl.playerId, connection);
@@ -87,13 +88,27 @@ public class NetworkServer {
                     for (Connection c : server.getConnections()) {
                         c.sendTCP(pjl); // send to all connected clients
                     }
-                } else if (object instanceof GoToPreGame) {
+                } else if (object instanceof LeaveLobby) {
+                    LeaveLobby leaveLobby = (LeaveLobby) object;
+                    connToPlayerId.remove(connection);
+                    playerIdToConn.remove(leaveLobby.id);
+                    players.remove(leaveLobby.username);
+                    PlayerJoinedLobby pjl = new PlayerJoinedLobby();
+                    for (String user : players) {
+                        pjl.playersInLobby.add(user);
+                    }
+                    System.out.println("[Server] Player left lobby: " + pjl.username);
+                    // Optionally, broadcast to all players in the lobby
                     for (Connection c : server.getConnections()) {
-                        c.sendTCP((GoToPreGame) object);
+                        c.sendTCP(pjl); // send to all connected clients
+                    }
+                } else if (object instanceof StartGame) {
+                    for (Connection c : server.getConnections()) {
+                        c.sendTCP(object);
                     }
                 } else if (object instanceof MapChanged) {
                     for (Connection c : server.getConnections()) {
-                        c.sendTCP((MapChanged) object);
+                        c.sendTCP(object);
                     }
                 } else if (object instanceof Ready) {
                     for (Connection c : server.getConnections()) {
@@ -102,6 +117,9 @@ public class NetworkServer {
                 } else if (object instanceof Reaction) {
                     for (Connection c : server.getConnections()) {
                         c.sendTCP((Reaction) object);
+                } else if (object instanceof LeaderBoardUpdate) {
+                    for (Connection c : server.getConnections()) {
+                        c.sendTCP((LeaderBoardUpdate) object);
                     }
                 } else if (object instanceof FrameworkMessage.KeepAlive) {
                     // Ignore keep-alive messages, they are handled internally by KryoNet
@@ -142,6 +160,22 @@ public class NetworkServer {
         System.out.println("[Server] listening on TCP/" + tcpPort + " UDP/" + udpPort);
 
         new Thread(() -> {
+            try {
+                while (true) {
+                    Thread.sleep(5_000); // Check every 10 seconds
+                    long elapsed = System.currentTimeMillis() - startTime;
+                    synchronized (players) {
+                        if (players.isEmpty() || elapsed >= 5 * 60_000) { // 5 min in ms
+                            System.out.println("[Server] No players joined in 5 minutes. Shutting down...");
+                            stop();
+                            break;
+                        }
+                    }
+                }
+            } catch (InterruptedException ignored) {}
+        }, "Auto-Stop-Timer").start();
+
+        new Thread(() -> {
             try (DatagramSocket sock = new DatagramSocket()) {
                 sock.setBroadcast(true);
 
@@ -160,6 +194,10 @@ public class NetworkServer {
                             }
                         }
                         obj.put("players", playersArray);
+                        obj.put("isPrivate", isPrivate);
+                        obj.put("password", password);
+                        obj.put("isVisible", isVisible);
+                        obj.put("uniqueId", uniqueId);
 
                         byte[] data = obj.toString().getBytes(StandardCharsets.UTF_8);
 
@@ -185,6 +223,9 @@ public class NetworkServer {
     }
 
     public synchronized void stop() {
+        for (Connection c : server.getConnections()) {
+            c.sendTCP(new ServerStop());
+        }
         // stop announcer
         if (announcerThread != null) {
             announcerThread.interrupt();
@@ -225,7 +266,6 @@ public class NetworkServer {
 
         // Send initial snapshot
         conn.sendTCP(farmMap.snapshot());
-        numPlayers++;
 
         PlayerJoinedLobby joinedPacket = new PlayerJoinedLobby();
         joinedPacket.username = join.displayName;
@@ -238,13 +278,10 @@ public class NetworkServer {
 
     private void handleMapTransfer(Connection connection, MapTransfer msg) {
         // 1) Look up the player
-        System.out.println(msg.playerId);
         ServerPlayer player = world.players.get(msg.playerId);
         if (player == null) {
             return;
         }
-        System.out.println(msg.playerId);
-
         // 2) Remove from old map
         ServerMap oldMap = world.maps.get(player.currentMapId);
         if (oldMap != null) {
@@ -260,7 +297,6 @@ public class NetworkServer {
             }
             // Add player to city map at a default position
             cityMap.addPlayer(player.id, player.displayName,0, 0);
-            System.out.println(cityMap.getPlayers().size());
             player.currentMapId = "city";
             WorldState cityState = cityMap.snapshot();
 

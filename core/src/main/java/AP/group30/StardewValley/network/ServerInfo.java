@@ -8,5 +8,9 @@ public class ServerInfo {
     public int    tcpPort;     // the port clients should connect to
     public int    udpPort;
     public long   lastHeard;   // timestamp in millis of last announcement
+    public boolean isPrivate;
+    public String password;
+    public boolean isVisible;
+    public String uniqueId;
     public ArrayList<String> users = new ArrayList<>();
 }
