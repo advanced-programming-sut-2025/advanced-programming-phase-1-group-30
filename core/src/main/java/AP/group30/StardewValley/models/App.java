@@ -2,6 +2,7 @@ package AP.group30.StardewValley.models;
 
 //import AP.group30.StardewValley.models.Commands.Menus;
 import AP.group30.StardewValley.models.Maps.Map;
+import AP.group30.StardewValley.models.Players.PlayerLeaderboard;
 import AP.group30.StardewValley.models.Users.User;
 import AP.group30.StardewValley.network.NetworkClient;
 import AP.group30.StardewValley.views.CityScreen;
@@ -22,6 +23,8 @@ public class App {
     private static ArrayList<Lobby> lobbies = new ArrayList<>();
 
     private static NetworkClient networkClient; // Add this line
+
+    private static final ArrayList<PlayerLeaderboard> playerLeaderboards = new ArrayList<>();
 
     public static ArrayList<String> getQuestions() {return questions;}
 
@@ -95,5 +98,31 @@ public class App {
 
     public static void setNetworkClient(NetworkClient client) {
         networkClient = client;
+    }
+
+    public static ArrayList<PlayerLeaderboard> getPlayerLeaderboards() {
+        return playerLeaderboards;
+    }
+
+    public static void addPlayerLeaderboard(PlayerLeaderboard playerLeaderboard) {
+        PlayerLeaderboard wantedPlayerLeaderboard = null;
+        for (PlayerLeaderboard playerLeaderboard1 : playerLeaderboards) {
+            if (playerLeaderboard1.getUsername().equals(playerLeaderboard.getUsername())) {
+                wantedPlayerLeaderboard = playerLeaderboard1;
+                break;
+            }
+        }
+
+        if (wantedPlayerLeaderboard != null) {
+            wantedPlayerLeaderboard.setMoney(playerLeaderboard.getMoney());
+            wantedPlayerLeaderboard.setFarming(playerLeaderboard.getFarming());
+            wantedPlayerLeaderboard.setMining(playerLeaderboard.getMining());
+            wantedPlayerLeaderboard.setFishing(playerLeaderboard.getFishing());
+            wantedPlayerLeaderboard.setForaging(playerLeaderboard.getForaging());
+            wantedPlayerLeaderboard.setNumberOfQuests(playerLeaderboard.getNumberOfQuests());
+        }
+        else {
+            playerLeaderboards.add(playerLeaderboard);
+        }
     }
 }

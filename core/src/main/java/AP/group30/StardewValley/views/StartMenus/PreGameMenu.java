@@ -228,7 +228,7 @@ public class PreGameMenu implements Screen {
         stage.draw();
 
         if (lobby.isGoToMainGame()) {
-            User user1 = new User(App.getCurrentUser().getUsername(), "1", "1", "1", RegisterQuestions.Your_Best_Friend, "1", "male");
+            User user1 = new User(lobby.getUsers().get(0), "1", "1", "1", RegisterQuestions.Your_Best_Friend, "1", "male");
             User user2 = null;
             User user3 = null;
             User user4 = null;
@@ -243,7 +243,7 @@ public class PreGameMenu implements Screen {
                 user4 = new User(lobby.getUsers().get(3), "1", "1", "1", RegisterQuestions.Your_Best_Friend, "1", "male");
             }
 
-            Game game = NewGameController.NewGame(1, user1, user2, user3, user4, lobby.getMaps().get(0), lobby.getMaps().get(1), lobby.getMaps().get(2), lobby.getMaps().get(3));
+            Game game = NewGameController.NewGame(lobby.getUsers().size(), user1, user2, user3, user4, lobby.getMaps().get(0), lobby.getMaps().get(1), lobby.getMaps().get(2), lobby.getMaps().get(3));
             PlayerJoin playerJoin = new PlayerJoin();
             playerJoin.playerId = String.valueOf(Main.getMain().id);
             playerJoin.displayName = game.getCurrentPlayer().getUsername();
