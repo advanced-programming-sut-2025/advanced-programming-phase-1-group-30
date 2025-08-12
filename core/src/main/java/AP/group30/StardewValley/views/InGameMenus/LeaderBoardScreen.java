@@ -17,14 +17,21 @@ import com.badlogic.gdx.utils.Timer;
 
 import java.util.Comparator;
 
-public class ScoreBoardScreen extends InGameMenuScreen {
+public class LeaderBoardScreen extends InGameMenuScreen {
     private ArrayList<PlayerLeaderboard> playerLeaderboards = new ArrayList<>();
     private String currentSortKey = "money";
     private boolean ascending = false;
 
-    public ScoreBoardScreen(SpriteBatch batch, Skin skin) {
+    public LeaderBoardScreen(SpriteBatch batch, Skin skin) {
         super(batch, skin, GameAssetManager.skill, 1, 0, 300);
         stage.addActor(table);
+
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                if (isVisible()) refresh();
+            }
+        },0, 10);
     }
 
     @Override
@@ -37,13 +44,7 @@ public class ScoreBoardScreen extends InGameMenuScreen {
     protected void refresh() {
         updateLeaderBoard();
 
-        table.clear();
-        Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                buildScoreTable();
-            }
-        }, 1.0f);
+        buildScoreTable();
     }
 
     private void updateLeaderBoard() {
@@ -71,6 +72,8 @@ public class ScoreBoardScreen extends InGameMenuScreen {
     }
 
     private void buildScoreTable() {
+        table.clear();
+
         // Header row
         addHeader("Username", "username");
         addHeader("Money", "money");
@@ -109,7 +112,6 @@ public class ScoreBoardScreen extends InGameMenuScreen {
                     currentSortKey = sortKey;
                     ascending = false;
                 }
-                table.clear();
                 buildScoreTable();
             }
         });
@@ -117,32 +119,15 @@ public class ScoreBoardScreen extends InGameMenuScreen {
     }
 
     private void sortLeaderboard() {
-        Comparator<PlayerLeaderboard> comparator;
-        switch (currentSortKey) {
-            case "username":
-                comparator = Comparator.comparing(PlayerLeaderboard::getUsername, String.CASE_INSENSITIVE_ORDER);
-                break;
-            case "money":
-                comparator = Comparator.comparingInt(PlayerLeaderboard::getMoney);
-                break;
-            case "farming":
-                comparator = Comparator.comparingInt(PlayerLeaderboard::getFarming);
-                break;
-            case "foraging":
-                comparator = Comparator.comparingInt(PlayerLeaderboard::getForaging);
-                break;
-            case "fishing":
-                comparator = Comparator.comparingInt(PlayerLeaderboard::getFishing);
-                break;
-            case "mining":
-                comparator = Comparator.comparingInt(PlayerLeaderboard::getMining);
-                break;
-            case "quests":
-                comparator = Comparator.comparingInt(PlayerLeaderboard::getNumberOfQuests);
-                break;
-            default:
-                comparator = Comparator.comparingInt(PlayerLeaderboard::getMoney);
-        }
+        Comparator<PlayerLeaderboard> comparator = switch (currentSortKey) {
+            case "username" -> Comparator.comparing(PlayerLeaderboard::getUsername, String.CASE_INSENSITIVE_ORDER);
+            case "farming" -> Comparator.comparingInt(PlayerLeaderboard::getFarming);
+            case "foraging" -> Comparator.comparingInt(PlayerLeaderboard::getForaging);
+            case "fishing" -> Comparator.comparingInt(PlayerLeaderboard::getFishing);
+            case "mining" -> Comparator.comparingInt(PlayerLeaderboard::getMining);
+            case "quests" -> Comparator.comparingInt(PlayerLeaderboard::getNumberOfQuests);
+            default -> Comparator.comparingInt(PlayerLeaderboard::getMoney);
+        };
         if (!ascending) {
             comparator = comparator.reversed();
         }
