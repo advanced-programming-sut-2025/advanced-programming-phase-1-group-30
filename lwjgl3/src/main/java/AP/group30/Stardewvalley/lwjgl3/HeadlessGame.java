@@ -17,6 +17,6 @@ public class HeadlessGame implements ApplicationListener {
     @Override public void pause() { }
     @Override public void resume() { }
     @Override public void dispose() {
-        server.stop();
+        server.stop(true);
     }
 }

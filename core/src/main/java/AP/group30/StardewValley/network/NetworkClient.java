@@ -5,9 +5,11 @@ import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Players.PlayerLeaderboard;
 import AP.group30.StardewValley.network.MessageClasses.*;
+import AP.group30.StardewValley.views.GameScreen;
 import AP.group30.StardewValley.views.StartMenus.LobbyMenu;
 import AP.group30.StardewValley.views.StartMenus.MainMenu;
 import AP.group30.StardewValley.views.StartMenus.PreLobbyMenu;
+import AP.group30.StardewValley.views.StartMenus.RegisterMenu;
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
@@ -38,6 +40,8 @@ public class NetworkClient {
         kryo.register(StartGame.class);
         kryo.register(MapChanged.class);
         kryo.register(Ready.class);
+        kryo.register(Vote.class);
+        kryo.register(RemoveFromServer.class);
         kryo.register(Reaction.class);
         kryo.register(LeaderBoardUpdate.class);
     }
@@ -68,7 +72,9 @@ public class NetworkClient {
                 }
                 if (object instanceof ServerStop) {
                     Main.getMain().client.close();
-                    ((LobbyMenu)Main.getMain().getScreen()).getLabel().setText("Server stopped! Please return to the Main Menu");
+                    if (Main.getMain().getScreen() instanceof LobbyMenu) {
+                        ((LobbyMenu)Main.getMain().getScreen()).getLabel().setText("Server stopped! Please return to the Main Menu");
+                    }
                 }
 
                 if (object instanceof PlayerJoinedLobby) {
@@ -100,24 +106,30 @@ public class NetworkClient {
                             }
                         });
                     }
-                }
-
-                if (object instanceof StartGame) {
+                } else if (object instanceof StartGame) {
                     StartGame sg = (StartGame) object;
                     if (sg.goToPreGame)
                         App.getCurrentLobby().setGoToPreGame(true);
                     else
                         App.getCurrentLobby().setGoToMainGame(true);
-                }
-
-                if (object instanceof MapChanged) {
+                } else if (object instanceof MapChanged) {
                     MapChanged mc = (MapChanged) object;
                     App.getCurrentLobby().changeMap(App.getCurrentLobby().getUsers().indexOf(mc.username), mc.number);
-                }
-
-                if (object instanceof Ready) {
+                } else if (object instanceof Ready) {
                     Ready r = (Ready) object;
                     App.getCurrentLobby().changeReady(App.getCurrentLobby().getUsers().indexOf(r.username));
+                } else if (object instanceof Vote) {
+                    Vote v = (Vote) object;
+                    if (v.finished) {
+                        App.getCurrentGame().getModel().setVote(null);
+                        App.getCurrentGame().setVoting(false);
+                    } else {
+                        App.getCurrentGame().getModel().setVote(v);
+                        App.getCurrentGame().setVoting(true);
+                    }
+                } else if (object instanceof RemoveFromServer) {
+                    RegisterMenu.gameScreen.setLeave(true);
+                    Main.getMain().client.close();
                 }
 
                 if (object instanceof Reaction) {

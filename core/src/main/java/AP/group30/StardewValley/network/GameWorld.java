@@ -18,16 +18,16 @@ public class GameWorld {
         // Per-player farm maps will be added as players join
     }
 
-    public void addPlayer(PlayerJoin join) {
-        String farmMapId = "farm_" + join.playerId;
-        ServerMap farm = new ServerMap(farmMapId);
-        maps.put(farmMapId, farm);
-
-        ServerPlayer p = new ServerPlayer(join.playerId, join.displayName, farmMapId, 0, 0);
-        players.put(join.playerId, p);
-
-        maps.get(farmMapId).addPlayer(p.id, p.displayName,0, 0);
-    }
+//    public void addPlayer(PlayerJoin join) {
+//        String farmMapId = "farm_" + join.playerId;
+//        ServerMap farm = new ServerMap(farmMapId);
+//        maps.put(farmMapId, farm);
+//
+//        ServerPlayer p = new ServerPlayer(join.playerId, join.displayName, farmMapId, 0, 0, );
+//        players.put(join.playerId, p);
+//
+//        maps.get(farmMapId).addPlayer(p.id, p.displayName,0, 0);
+//    }
 
     public void movePlayer(String playerId, float x, float y) {
         ServerPlayer p = players.get(playerId);

@@ -247,13 +247,13 @@ public class PreGameMenu implements Screen {
             PlayerJoin playerJoin = new PlayerJoin();
             playerJoin.playerId = String.valueOf(Main.getMain().id);
             playerJoin.displayName = game.getCurrentPlayer().getUsername();
-            App.getNetworkClient().send(playerJoin);
 
             game.getModel().setMyPlayerId(String.valueOf(Main.getMain().id));
 
             RegisterMenu.gameScreen = new GameScreen(game);
             RegisterMenu.cityScreen = new CityScreen(game);
             Main.getMain().setScreen(new LoadingScreen(RegisterMenu.gameScreen));
+            App.getNetworkClient().send(playerJoin);
         }
     }
 

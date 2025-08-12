@@ -23,10 +23,12 @@ import AP.group30.StardewValley.models.Players.RemotePlayer;
 import AP.group30.StardewValley.models.TimeAndDate.Season;
 import AP.group30.StardewValley.network.MessageClasses.MapTransfer;
 import AP.group30.StardewValley.network.MessageClasses.PlayerMove;
+import AP.group30.StardewValley.network.MessageClasses.Vote;
 import AP.group30.StardewValley.network.Ping;
 import AP.group30.StardewValley.views.FishingMiniGame.FishingMiniGame;
 import AP.group30.StardewValley.views.InGameMenus.*;
 import AP.group30.StardewValley.views.InGameMenus.Hut.*;
+import AP.group30.StardewValley.views.StartMenus.MainMenu;
 import AP.group30.StardewValley.views.StartMenus.RegisterMenu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -43,13 +45,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
 import javax.management.MBeanRegistration;
@@ -124,6 +125,14 @@ public class GameScreen implements Screen {
     private boolean fiveSecPassed = false;
     private Timer.Task fishingTimer;
     private FishingMiniGame fishingMiniGame;
+
+    private Table votingTable; // Add a table for voting
+    private boolean votingActive = false; // Track if voting is active
+    private boolean leave = false;
+    public void setLeave(boolean leave) {
+        this.leave = leave;
+    }
+    private boolean voted = false;
 
     public GameScreen(Game game) {
         this.game = game;
@@ -205,6 +214,10 @@ public class GameScreen implements Screen {
 
         makeInGameMenus();
         findHut();
+
+        votingTable = new Table(GameAssetManager.assetManager.get(GameAssetManager.skin));
+        votingTable.setVisible(false); // Initially hidden
+        stage.addActor(votingTable);
     }
 
     @Override
@@ -337,7 +350,7 @@ public class GameScreen implements Screen {
         }
         if (!isFishing && !(stage.getKeyboardFocus() instanceof TextField)) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.E) && openMenu(inventoryScreen)) inventoryScreen.toggle();
-            if (Gdx.input.isKeyJustPressed(Input.Keys.N) && openMenu(skillScreen)) skillScreen.toggle();
+            if (Gdx.input.isKeyJustPressed(Input.Keys.Z) && openMenu(skillScreen)) skillScreen.toggle();
             if (Gdx.input.isKeyJustPressed(Input.Keys.B) && openMenu(craftingScreen)) craftingScreen.toggle();
             if (Gdx.input.isKeyJustPressed(Input.Keys.I) && openMenu(artisanScreen)) artisanScreen.toggle();
             if (Gdx.input.isKeyJustPressed(Input.Keys.L) && openMenu(scoreBoardScreen)) scoreBoardScreen.toggle();
@@ -360,6 +373,16 @@ public class GameScreen implements Screen {
         }
         renderEnergyBar(player, camera, energyBar, batch, shapeRenderer);
         renderTime(batch, camera, clock, font, game);
+        if (Gdx.input.isKeyPressed(Input.Keys.TAB)) {
+            CityScreen.drawOtherPlayersList(font, batch, camera);
+        }
+        if (game.isVoting()) {
+            if (game.getModel().getVote().forceTermination) {
+                font.draw(batch, "Vote for stopping the server\n" + game.getModel().getVote().agree + " out of " + game.getModel().getVote().voters + " agreed users\nPress Y for yes and N for No", camera.position.x - Gdx.graphics.getWidth() / 2f + 50, camera.position.y + Gdx.graphics.getHeight() / 4.53f);
+
+            } else
+                font.draw(batch, "Vote for removing " + game.getModel().getVote().targetUsername + "\n" + game.getModel().getVote().agree + " out of " + game.getModel().getVote().voters + " agreed users\nPress Y for yes and N for No", camera.position.x - Gdx.graphics.getWidth() / 2f + 50, camera.position.y + Gdx.graphics.getHeight() / 4.53f);
+        }
         batch.end();
 
         Tile currentTile = getTileUnderPlayer(x, y);
@@ -371,6 +394,22 @@ public class GameScreen implements Screen {
             batch.end();
 
             if (Gdx.input.isKeyJustPressed(Input.Keys.H)) hut.toggle();
+        }
+
+        if (game.isVoting()) {
+            if (!voted) {
+                if (Gdx.input.isKeyJustPressed(Input.Keys.Y)) {
+                    game.getModel().getVote().agree++;
+                    game.getModel().getVote().voters++;
+                    voted = true;
+                    Main.getMain().client.send(game.getModel().getVote());
+                } else if (Gdx.input.isKeyJustPressed(Input.Keys.N)) {
+                    game.getModel().getVote().voters++;
+                    Main.getMain().client.send(game.getModel().getVote());
+                    voted = true;
+                }
+
+            }
         }
 
         if (32 <= currentTile.getX() && currentTile.getX() < 38 &&
@@ -391,9 +430,16 @@ public class GameScreen implements Screen {
         artisanScreen.render();
         scoreBoardScreen.render();
         fishingMiniGame.render(delta);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
+            toggleVoting();
+        }
 
         stage.act(delta);
         stage.draw();
+
+        if (leave) {
+            Main.getMain().setScreen(new MainMenu(GameAssetManager.assetManager.get(GameAssetManager.menuSkin)));
+        }
     }
 
     private void renderLightning(float delta) {
@@ -433,6 +479,93 @@ public class GameScreen implements Screen {
             }
         }
     }
+
+    private void renderVotingTable() {
+        votingTable.clear();
+        votingTable.setVisible(true);
+        votingTable.setPosition(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f);
+        votingTable.align(Align.center);
+
+        Label title = new Label("Vote for a Player:", GameAssetManager.assetManager.get(GameAssetManager.menuSkin));
+        votingTable.add(title).colspan(2).padBottom(10);
+        votingTable.row();
+
+        for (RemotePlayer rp : App.getCurrentGame().getModel().getOtherPlayers()) {
+            Label playerLabel = new Label(rp.username, GameAssetManager.assetManager.get(GameAssetManager.menuSkin));
+            TextButton voteButton = new TextButton("Vote", GameAssetManager.assetManager.get(GameAssetManager.menuSkin));
+            voteButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if (!game.isVoting()) {
+                        Vote vote = new Vote();
+                        voted = true;
+                        vote.targetUsername = rp.username;
+                        vote.voterUsername = App.getCurrentUser().getUsername();
+                        vote.vote = true;
+                        vote.agree++;
+                        vote.voters++;
+                        Main.getMain().client.send(vote);
+                        System.out.println("Voted for: " + rp.username);
+                        game.setVoting(true);
+                        toggleVoting();
+                    }
+                }
+            });
+            votingTable.add(playerLabel).pad(5);
+            votingTable.add(voteButton).pad(5);
+            votingTable.row();
+        }
+        Label titleLabel = new Label("Force Termination", GameAssetManager.assetManager.get(GameAssetManager.menuSkin));
+        TextButton voteButton = new TextButton("Vote", GameAssetManager.assetManager.get(GameAssetManager.menuSkin));
+        voteButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (!game.isVoting()) {
+                    voted = true;
+                    Vote vote = new Vote();
+                    vote.forceTermination = true;
+                    vote.voterUsername = App.getCurrentUser().getUsername();
+                    vote.vote = true;
+                    vote.agree++;
+                    vote.voters++;
+                    Main.getMain().client.send(vote);
+                    System.out.println("Voted for: Ending the server");
+                    game.setVoting(true);
+                    toggleVoting();
+                }
+            }
+        });
+        votingTable.add(titleLabel).pad(5);
+        votingTable.add(voteButton).pad(5);
+        votingTable.row();
+    }
+
+    private void toggleVoting() {
+        if (!votingActive) {
+            renderVotingTable();
+            Gdx.input.setInputProcessor(stage);
+        } else {
+            Gdx.input.setInputProcessor(null);
+        }
+        votingActive = !votingActive;
+        votingTable.setVisible(votingActive);
+    }
+
+//    static void renderVoting() {
+//        for (RemotePlayer rp : App.getCurrentGame().getModel().getOtherPlayers()) {
+//            TextButton player = new TextButton(rp.username, GameAssetManager.assetManager.get(GameAssetManager.skin));
+//            player.addListener(new ClickListener() {
+//                @Override
+//                public void clicked(InputEvent event, float x, float y) {
+//                    Vote vote = new Vote();
+//                    vote.targetUsername = rp.username;
+//                    vote.voterUsername = App.getCurrentUser().getUsername();
+//                    vote.vote = true;
+//                    Main.getMain().client.send(vote);
+//                }
+//            });
+//        }
+//    }
 
     static int[][] generateGrassMap(Tile[][] tiles, int[][] grassMap, Random random) {
         int w = tiles.length + 100;
@@ -775,11 +908,6 @@ public class GameScreen implements Screen {
                 x = proposedX;
                 y = proposedY;
             }
-//            PlayerMove pm = new PlayerMove();
-//            pm.playerId = String.valueOf(Main.getMain().id);
-//            pm.x = x;
-//            pm.y = y;
-//            App.getCurrentGame().networkClient.send(pm);
 
             player.getPlayerRect().setPosition(x, y);
             player.setX((int)x);

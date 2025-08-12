@@ -1,5 +1,7 @@
 package AP.group30.StardewValley.network;
 
+import AP.group30.StardewValley.models.Players.Player;
+import AP.group30.StardewValley.models.Players.RemotePlayer;
 import AP.group30.StardewValley.network.MessageClasses.*;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
@@ -20,6 +22,7 @@ import java.util.Map;
 public class NetworkServer {
     private Server server;
     private Thread announcerThread;
+    private boolean gameStarted = false;
     private DatagramSocket announcerSocket;
     private final GameWorld world = new GameWorld();
     private final Map<Connection, String> connToPlayerId = new HashMap<>();
@@ -47,6 +50,8 @@ public class NetworkServer {
         kryo.register(StartGame.class);
         kryo.register(MapChanged.class);
         kryo.register(Ready.class);
+        kryo.register(Vote.class);
+        kryo.register(RemoveFromServer.class);
         kryo.register(Reaction.class);
         kryo.register(LeaderBoardUpdate.class);
         startTime = System.currentTimeMillis();
@@ -106,13 +111,49 @@ public class NetworkServer {
                     for (Connection c : server.getConnections()) {
                         c.sendTCP(object);
                     }
+                    gameStarted = true;
                 } else if (object instanceof MapChanged) {
                     for (Connection c : server.getConnections()) {
                         c.sendTCP(object);
                     }
                 } else if (object instanceof Ready) {
                     for (Connection c : server.getConnections()) {
-                        c.sendTCP((Ready) object);
+                        c.sendTCP(object);
+                    }
+                } else if (object instanceof Vote) {
+                    Vote vote = (Vote) object;
+                    if (!vote.forceTermination) {
+                        System.out.println("[Server] Received vote from " + vote.voterUsername + " for " + vote.targetUsername);
+                        // Handle vote logic here (e.g., tally votes, broadcast results, etc.)
+                        if (vote.agree > players.size() / 2) {
+                            for (ServerPlayer sp : world.players.values()) {
+                                if (sp.displayName.equals(vote.targetUsername)) {
+                                    playerIdToConn.get(sp.id).sendTCP(new RemoveFromServer());
+                                    players.remove(sp.displayName);
+                                    world.players.remove(sp.id);
+                                    connToPlayerId.remove(sp.connection);
+                                    playerIdToConn.remove(sp.id);
+                                }
+                            }
+                            vote.finished = true;
+                        }
+                        if (vote.voters == players.size()) {
+                            vote.finished = true;
+                        }
+                    } else {
+                        if (vote.agree == players.size()) {
+                            for (Connection c : server.getConnections()) {
+                                c.sendTCP(new RemoveFromServer());
+                            }
+                            stop(true);
+                        }
+                        if (vote.agree != players.size() && vote.voters == players.size()) {
+                            vote.finished = true;
+                        }
+                    }
+
+                    for (Connection c : server.getConnections()) {
+                        c.sendTCP(vote); // Broadcast the vote to all clients
                     }
                 } else if (object instanceof Reaction) {
                     for (Connection c : server.getConnections()) {
@@ -163,18 +204,20 @@ public class NetworkServer {
         new Thread(() -> {
             try {
                 while (true) {
-                    Thread.sleep(5_000); // Check every 10 seconds
+                    if (gameStarted) break;
+                    Thread.sleep(5_000);
                     long elapsed = System.currentTimeMillis() - startTime;
                     synchronized (players) {
                         if (players.isEmpty() || elapsed >= 5 * 60_000) { // 5 min in ms
                             System.out.println("[Server] No players joined in 5 minutes. Shutting down...");
-                            stop();
+                            stop(false);
                             break;
                         }
                     }
                 }
             } catch (InterruptedException ignored) {}
         }, "Auto-Stop-Timer").start();
+
 
         new Thread(() -> {
             try (DatagramSocket sock = new DatagramSocket()) {
@@ -223,9 +266,11 @@ public class NetworkServer {
         }, "Lobby-Announcer").start();
     }
 
-    public synchronized void stop() {
-        for (Connection c : server.getConnections()) {
-            c.sendTCP(new ServerStop());
+    public synchronized void stop(boolean serverTerminate) {
+        if (!serverTerminate) {
+            for (Connection c : server.getConnections()) {
+                c.sendTCP(new ServerStop());
+            }
         }
         // stop announcer
         if (announcerThread != null) {
@@ -259,11 +304,21 @@ public class NetworkServer {
             join.displayName,
             farmId,
             /* startX */ 10,
-            /* startY */ 10
+            /* startY */ 10,
+            conn
         );
 
         world.players.put(sp.id, sp);
         farmMap.addPlayer(sp.id, sp.displayName,sp.x, sp.y);
+        WorldState ws = new WorldState();
+
+        for (ServerPlayer serverPlayer : world.players.values()) {
+            WorldState.Position position = new WorldState.Position();
+            position.username = serverPlayer.displayName;
+            position.x = serverPlayer.x;
+            position.y = serverPlayer.y;
+            ws.players.put(serverPlayer.displayName, position);
+        }
 
         // Send initial snapshot
         conn.sendTCP(farmMap.snapshot());
@@ -272,6 +327,7 @@ public class NetworkServer {
         joinedPacket.username = join.displayName;
         for (Connection c : server.getConnections()) {
             c.sendTCP(joinedPacket);
+            c.sendTCP(ws);
         }
 
         System.out.println("received player join: " + join.displayName + " with id " + join.playerId);
@@ -327,6 +383,12 @@ public class NetworkServer {
         WorldState newMapState = newMap.snapshot();
         connection.sendTCP(newMapState);
         System.out.println("sent new map state to player " + player.id);
+
+        ServerMap cityMap = world.maps.get("city");
+        cityMap.removePlayer(player.id);
+        for (Connection c : server.getConnections()) {
+            c.sendTCP(cityMap.snapshot());
+        }
     }
 
     // Handles incoming PlayerMove messages

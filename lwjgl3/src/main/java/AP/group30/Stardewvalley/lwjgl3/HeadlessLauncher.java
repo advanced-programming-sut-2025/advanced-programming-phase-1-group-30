@@ -39,7 +39,7 @@ public class HeadlessLauncher {
         // Shutdown hook: called on normal termination (SIGTERM) so server.stop() runs.
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("Shutdown hook triggered: stopping server...");
-            server.stop();
+            server.stop(true);
             // Optionally call Gdx.app.exit() if you started a HeadlessApplication
             try { Thread.sleep(200); } catch (InterruptedException ignored) {}
         }));
