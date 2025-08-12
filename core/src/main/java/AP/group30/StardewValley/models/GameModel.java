@@ -2,6 +2,7 @@ package AP.group30.StardewValley.models;
 
 import AP.group30.StardewValley.models.Players.RemotePlayer;
 import AP.group30.StardewValley.network.MessageClasses.PlayerMove;
+import AP.group30.StardewValley.network.MessageClasses.Vote;
 import AP.group30.StardewValley.network.MessageClasses.WorldState;
 
 import java.util.Collection;
@@ -11,6 +12,7 @@ import java.util.Map;
 public class GameModel {
     private String myPlayerId;
     private Map<String, RemotePlayer> otherPlayers = new HashMap<>();
+    private Vote vote;
 
     public void setMyPlayerId(String id) { this.myPlayerId = id; }
 
@@ -20,8 +22,6 @@ public class GameModel {
         for (var entry : ws.players.entrySet()) {
             String pid = entry.getKey();
             WorldState.Position pos = entry.getValue();
-            if (pid.equals(myPlayerId)) continue; // skip yourself
-
             RemotePlayer rp = new RemotePlayer(pid, entry.getValue().username,pos.x, pos.y);
             otherPlayers.put(pid, rp);
         }
@@ -40,5 +40,13 @@ public class GameModel {
 
     public Collection<RemotePlayer> getOtherPlayers() {
         return otherPlayers.values();
+    }
+
+    public Vote getVote() {
+        return vote;
+    }
+
+    public void setVote(Vote vote) {
+        this.vote = vote;
     }
 }

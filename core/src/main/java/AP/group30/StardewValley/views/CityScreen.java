@@ -20,6 +20,7 @@ import AP.group30.StardewValley.models.Players.Direction;
 import AP.group30.StardewValley.models.Players.NPC.*;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.models.Players.RemotePlayer;
+import AP.group30.StardewValley.network.MessageClasses.MapTransfer;
 import AP.group30.StardewValley.network.MessageClasses.PlayerMove;
 import AP.group30.StardewValley.views.InGameMenus.Hut.*;
 import AP.group30.StardewValley.views.InGameMenus.*;
@@ -125,7 +126,7 @@ public class CityScreen implements Screen {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.E) && !reactionMenu.isVisible()) inventoryScreen.toggle();
         RegisterMenu.gameScreen.passTime();
-        if (Gdx.input.isKeyJustPressed(Input.Keys.N) && !reactionMenu.isVisible()) skillScreen.toggle();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.Z) && !reactionMenu.isVisible()) skillScreen.toggle();
 
         camera.position.set(x + playerRegion.getRegionWidth() / 2f, y + playerRegion.getRegionHeight() / 2f, 0);
         camera.update();
@@ -161,6 +162,7 @@ public class CityScreen implements Screen {
         GameScreen.renderEntities(batch, entities);
         renderNPCs(batch, stateTime);
         for (RemotePlayer p : game.getModel().getOtherPlayers()) {
+            if (p.username.equals(App.getCurrentUser().getUsername())) continue;
             p.render(batch);
         }
         if (game.getCurrentTime().getHour() >= 18) {
@@ -202,7 +204,7 @@ public class CityScreen implements Screen {
         GameScreen.renderEnergyBar(player, camera, energyBar, batch, shapeRenderer);
         GameScreen.renderTime(batch, camera, clock, font, game);
         if (Gdx.input.isKeyPressed(Input.Keys.TAB)) {
-            drawOtherPlayersList();
+            drawOtherPlayersList(font, batch, camera);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.M) && !reactionMenu.isVisible()) {
             reactionMenu.toggle();
@@ -339,6 +341,10 @@ public class CityScreen implements Screen {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             player.setInCity(false);
+            MapTransfer mapTransfer = new MapTransfer();
+            mapTransfer.targetMapId = "farm" + Main.getMain().id;
+            mapTransfer.playerId = String.valueOf(Main.getMain().id);
+            Main.getMain().client.send(mapTransfer);
             Main.getMain().setScreen(RegisterMenu.gameScreen);
         }
 
@@ -430,29 +436,17 @@ public class CityScreen implements Screen {
         Abigail.render(batch, stateTime);
     }
 
-    private void drawOtherPlayersList() {
-        Collection<RemotePlayer> others = game.getModel().getOtherPlayers();
+    public static void drawOtherPlayersList(BitmapFont font, SpriteBatch batch, OrthographicCamera camera) {
+        Collection<RemotePlayer> others = App.getCurrentGame().getModel().getOtherPlayers();
         int count = others.size();
         int padding = 15;
         int lineHeight = 20;
         int boxWidth = 200;
         int boxHeight = padding * 2 + count * lineHeight;
         int x = 10;
-        int y = Gdx.graphics.getHeight() - 10;    // start 10px down from top
+        int y = Gdx.graphics.getHeight() - 10;
 
-        // 1) draw background
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-//        shapeRenderer.setColor(0f, 0f, 0f, 0.7f);
-//        shapeRenderer.rect(camera.position.x + Gdx.graphics.getWidth() / 4.5f,camera.position.y + Gdx.graphics.getHeight() / 2.53f - boxHeight, boxWidth, boxHeight);
-//        shapeRenderer.end();
-//
-//        // 2) draw border (optional)
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//        shapeRenderer.setColor(1f, 1f, 1f, 0.8f);
-//        shapeRenderer.rect(camera.position.x + Gdx.graphics.getWidth() / 4.5f,camera.position.y + Gdx.graphics.getHeight() / 2.53f - boxHeight, boxWidth, boxHeight);
-//        shapeRenderer.end();
 
-        // 3) draw each player ID
         font.setColor(Color.WHITE);
         int textX = x + padding;
         int textY = -padding - lineHeight + (int)font.getLineHeight();

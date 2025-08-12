@@ -32,6 +32,7 @@ public class Game {
     private ArrayList<NPC> NPCs = new ArrayList<>();
     private Map currentMap;
     private Map cityMap = new Map(-1);
+    private boolean voting = false;
 
     private final Blacksmith blacksmith;
     private final Carpenter carpenter;
@@ -201,5 +202,13 @@ public class Game {
 
     public GreenHouse getGreenHouse() {
         return greenHouse;
+    }
+
+    public boolean isVoting() {
+        return voting;
+    }
+
+    public void setVoting(boolean voting) {
+        this.voting = voting;
     }
 }
