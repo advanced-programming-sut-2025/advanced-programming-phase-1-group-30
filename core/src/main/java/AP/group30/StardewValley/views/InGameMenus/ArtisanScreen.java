@@ -29,7 +29,7 @@ public class ArtisanScreen extends InGameMenuScreen{
     private final ArtisanScreen artisanScreen;
 
     public ArtisanScreen(SpriteBatch batch, Skin skin) {
-        super(batch, skin, GameAssetManager.refrigerator, 2, 200);
+        super(batch, skin, GameAssetManager.refrigerator, 2, 200, 0);
 
         deviceScreen = new DeviceScreen(batch, skin);
         artisanScreen = this;

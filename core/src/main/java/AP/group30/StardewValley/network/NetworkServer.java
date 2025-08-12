@@ -52,6 +52,8 @@ public class NetworkServer {
         kryo.register(Ready.class);
         kryo.register(Vote.class);
         kryo.register(RemoveFromServer.class);
+        kryo.register(Reaction.class);
+        kryo.register(LeaderBoardUpdate.class);
         startTime = System.currentTimeMillis();
 
         // Correct: extend Listener, don’t implement it
@@ -152,6 +154,14 @@ public class NetworkServer {
 
                     for (Connection c : server.getConnections()) {
                         c.sendTCP(vote); // Broadcast the vote to all clients
+                    }
+                } else if (object instanceof Reaction) {
+                    for (Connection c : server.getConnections()) {
+                        c.sendTCP((Reaction) object);
+                    }
+                } else if (object instanceof LeaderBoardUpdate) {
+                    for (Connection c : server.getConnections()) {
+                        c.sendTCP((LeaderBoardUpdate) object);
                     }
                 } else if (object instanceof FrameworkMessage.KeepAlive) {
                     // Ignore keep-alive messages, they are handled internally by KryoNet

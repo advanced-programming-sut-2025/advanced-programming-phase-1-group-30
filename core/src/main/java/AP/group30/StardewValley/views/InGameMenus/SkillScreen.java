@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class SkillScreen extends InGameMenuScreen{
     public SkillScreen(SpriteBatch batch, Skin skin) {
-        super(batch, skin, GameAssetManager.skill, 2, 0);
+        super(batch, skin, GameAssetManager.skill, 2, 0, 0);
 
         stage.addActor(table);
 

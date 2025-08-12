@@ -185,7 +185,8 @@ public class LobbyMenu implements Screen {
                 boolean isVisible = !visible.isChecked();
                 uniqueId = MathUtils.random(9000) + 1000;
 
-                File projectRoot = new File("/home/hamed/University/StardewValley");
+//                File projectRoot = new File("/home/hamed/University/StardewValley");
+                File projectRoot = new File("D:\\Amir\\University\\Term_2\\Advanced_Programming\\Project\\advanced-programming-phase-1-group-30");
                 String wrapper = System.getProperty("os.name").toLowerCase().contains("win") ? "gradlew.bat" : "gradlew";
                 ProcessBuilder pb = new ProcessBuilder(
                     new File(projectRoot, wrapper).getAbsolutePath(),

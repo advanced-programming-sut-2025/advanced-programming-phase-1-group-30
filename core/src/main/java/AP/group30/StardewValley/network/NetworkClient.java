@@ -3,6 +3,7 @@ package AP.group30.StardewValley.network;
 import AP.group30.StardewValley.Main;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameAssetManager;
+import AP.group30.StardewValley.models.Players.PlayerLeaderboard;
 import AP.group30.StardewValley.network.MessageClasses.*;
 import AP.group30.StardewValley.views.GameScreen;
 import AP.group30.StardewValley.views.StartMenus.LobbyMenu;
@@ -41,6 +42,8 @@ public class NetworkClient {
         kryo.register(Ready.class);
         kryo.register(Vote.class);
         kryo.register(RemoveFromServer.class);
+        kryo.register(Reaction.class);
+        kryo.register(LeaderBoardUpdate.class);
     }
 
     public void connect(String ip, int tcpPort, int udpPort) throws IOException {
@@ -127,6 +130,35 @@ public class NetworkClient {
                 } else if (object instanceof RemoveFromServer) {
                     RegisterMenu.gameScreen.setLeave(true);
                     Main.getMain().client.close();
+                }
+
+                if (object instanceof Reaction) {
+                    Reaction r = (Reaction) object;
+                    App.getCurrentGame().getModel().reactionPlayer(r);
+                }
+              
+                if (object instanceof LeaderBoardUpdate) {
+                    LeaderBoardUpdate lbu = (LeaderBoardUpdate) object;
+
+                    if (lbu.send) {
+                        if (lbu.receiverUsername.equals(App.getCurrentGame().getCurrentPlayer().getUsername())) {
+                            lbu.send = false;
+                            lbu.money = App.getCurrentGame().getCurrentPlayer().getMoney();
+                            lbu.farming = App.getCurrentGame().getCurrentPlayer().getFarming();
+                            lbu.foraging = App.getCurrentGame().getCurrentPlayer().getForaging();
+                            lbu.mining = App.getCurrentGame().getCurrentPlayer().getMining();
+                            lbu.fishing = App.getCurrentGame().getCurrentPlayer().getFishing();
+                            lbu.numberOfQuests = App.getCurrentGame().getCurrentPlayer().getActivatedQuestNPC().size();
+
+                            Main.getMain().client.send(lbu);
+                        }
+                    } else {
+                        if (lbu.senderUsername.equals(App.getCurrentGame().getCurrentPlayer().getUsername())) {
+                            PlayerLeaderboard playerLeaderboard = new PlayerLeaderboard(lbu.receiverUsername,
+                                lbu.money, lbu.farming, lbu.foraging, lbu.fishing, lbu.mining, lbu.numberOfQuests);
+                            App.addPlayerLeaderboard(playerLeaderboard);
+                        }
+                    }
                 }
             }
         });

@@ -3,7 +3,9 @@ package AP.group30.StardewValley.models;
 import AP.group30.StardewValley.models.Players.RemotePlayer;
 import AP.group30.StardewValley.network.MessageClasses.PlayerMove;
 import AP.group30.StardewValley.network.MessageClasses.Vote;
+import AP.group30.StardewValley.network.MessageClasses.Reaction;
 import AP.group30.StardewValley.network.MessageClasses.WorldState;
+import AP.group30.StardewValley.views.CityScreen;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -37,6 +39,16 @@ public class GameModel {
             }
         }
     }
+
+    public void reactionPlayer(Reaction pm) {
+        for (RemotePlayer rp : otherPlayers.values()) {
+            if (rp.id.equals(pm.playerId)) {
+                CityScreen.showReaction(rp, pm.reaction);
+                return;
+            }
+        }
+    }
+
 
     public Collection<RemotePlayer> getOtherPlayers() {
         return otherPlayers.values();

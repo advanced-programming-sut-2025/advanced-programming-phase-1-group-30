@@ -29,7 +29,7 @@ public class CraftingScreen extends InGameMenuScreen {
     private final Label errorLabel;
 
     public CraftingScreen(SpriteBatch batch, Skin skin) {
-        super(batch, skin, GameAssetManager.crafting, 2, 200);
+        super(batch, skin, GameAssetManager.crafting, 2, 200, 0);
 
         craftingButton = new TextButton("Craft", skin);
         craftingButton.setPosition(table.getX() + table.getWidth() / 2f - craftingButton.getWidth() / 2f - 50,
