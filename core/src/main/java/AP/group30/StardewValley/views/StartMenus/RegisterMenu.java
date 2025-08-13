@@ -1,6 +1,7 @@
 package AP.group30.StardewValley.views.StartMenus;
 
 import AP.group30.StardewValley.Main;
+import AP.group30.StardewValley.controllers.GameMenuController;
 import AP.group30.StardewValley.controllers.NewGameController;
 import AP.group30.StardewValley.controllers.RegisterMenuController;
 import AP.group30.StardewValley.models.App;
@@ -25,6 +26,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import java.io.IOException;
 
 public class RegisterMenu implements Screen {
     private Stage stage;
@@ -122,16 +125,6 @@ public class RegisterMenu implements Screen {
 
         table.center();
         stage.addActor(table);
-    }
-
-    @Override
-    public void render(float delta) {
-        ScreenUtils.clear(0, 0, 0, 1);
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-
-        Main.batch.begin();
-        Main.batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        Main.batch.end();
 
         passField.addListener(new ClickListener() {
             boolean cleared = false;
@@ -263,26 +256,15 @@ public class RegisterMenu implements Screen {
             }
         });
 
-        if (randomPassBox.isChecked() && !randomPassIsChecked) {
-            passField.setText(RegisterMenuController.RandomPasswordGenerator());
-            passField.setPasswordMode(false);
-            confirmPassField.setText(passField.getText());
-            confirmPassField.setPasswordMode(false);
-            randomPassIsChecked = true;
-        }
-        if (!randomPassBox.isChecked() && randomPassIsChecked) {
-            randomPassIsChecked = false;
-        }
-
         signupButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 int result = RegisterMenuController.register(usernameField.getText(), passField.getText(),
-                        confirmPassField.getText(), emailField.getText(), nicknameField.getText(),
-                        genderBox.getSelected(), answerField.getText(), questionBox.getSelected());
+                    confirmPassField.getText(), emailField.getText(), nicknameField.getText(),
+                    genderBox.getSelected(), answerField.getText(), questionBox.getSelected());
                 if (result == 1) {
                     Main.getMain().setScreen(new
-                            LoginMenu(Main.getMain().skin));
+                        LoginMenu(Main.getMain().skin));
                 }
             }
         });
@@ -294,6 +276,27 @@ public class RegisterMenu implements Screen {
                     LoginMenu(Main.getMain().skin));
             }
         });
+    }
+
+    @Override
+    public void render(float delta) {
+        ScreenUtils.clear(0, 0, 0, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+
+        Main.batch.begin();
+        Main.batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        Main.batch.end();
+
+        if (randomPassBox.isChecked() && !randomPassIsChecked) {
+            passField.setText(RegisterMenuController.RandomPasswordGenerator());
+            passField.setPasswordMode(false);
+            confirmPassField.setText(passField.getText());
+            confirmPassField.setPasswordMode(false);
+            randomPassIsChecked = true;
+        }
+        if (!randomPassBox.isChecked() && randomPassIsChecked) {
+            randomPassIsChecked = false;
+        }
 
         // TODO maintainer code block!
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
@@ -302,13 +305,13 @@ public class RegisterMenu implements Screen {
             App.getAppUsers().add(user1);
             App.getAppUsers().add(user2);
             App.setCurrentUser(user1);
-            Game game = NewGameController.NewGame(2, user1, null, null, null, 2, 3, 2, 3);
-            PlayerJoin playerJoin = new PlayerJoin();
-            playerJoin.playerId = String.valueOf(Main.getMain().id);
-            playerJoin.displayName = game.getCurrentPlayer().getUsername();
-            App.getNetworkClient().send(playerJoin);
-
-            game.getModel().setMyPlayerId(String.valueOf(Main.getMain().id));
+            Game game = NewGameController.NewGame(2, user1, user2, null, null, 2, 3, 2, 3);
+//            PlayerJoin playerJoin = new PlayerJoin();
+//            playerJoin.playerId = String.valueOf(Main.getMain().id);
+//            playerJoin.displayName = game.getCurrentPlayer().getUsername();
+//            App.getNetworkClient().send(playerJoin);
+//
+//            game.getModel().setMyPlayerId(String.valueOf(Main.getMain().id));
 
             gameScreen = new GameScreen(game);
             cityScreen = new CityScreen(game);

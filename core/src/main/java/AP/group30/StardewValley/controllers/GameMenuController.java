@@ -5,6 +5,7 @@ import AP.group30.StardewValley.models.Animals.*;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.Buildings.*;
 //import AP.group30.StardewValley.models.Commands.Menus;
+import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.Inventory.BackPackType;
 import AP.group30.StardewValley.models.Items.Gift;
 import AP.group30.StardewValley.models.Items.ItemTexture;
@@ -24,6 +25,9 @@ import AP.group30.StardewValley.models.Maps.Map;
 import AP.group30.StardewValley.models.Players.Direction;
 import AP.group30.StardewValley.models.Players.Friendship;
 import AP.group30.StardewValley.models.Players.NPC.NPC;
+import AP.group30.StardewValley.models.SaveData.SaveGame;
+import AP.group30.StardewValley.models.SaveData.SavePlayer;
+import AP.group30.StardewValley.models.SaveData.SaveUser;
 import AP.group30.StardewValley.models.TimeAndDate.Season;
 import AP.group30.StardewValley.models.Players.Player;
 import AP.group30.StardewValley.models.Players.Trade;
@@ -38,7 +42,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 
@@ -3322,4 +3331,30 @@ public class GameMenuController {
         GameMenu.printResult("Redirecting to AP.group30.StardewValley.Main Menu");
     }
 
+    public static void saveGame() throws IOException {
+        String filePath = Gdx.files.local("/Data/Game.json").file().getAbsolutePath();
+        Gson gson = new GsonBuilder()
+            .setPrettyPrinting()
+            .create();
+
+        SaveGame saveGame = SaveLoadController.convertToSaveGame();
+        try (FileWriter writer = new FileWriter(filePath)) {
+            gson.toJson(saveGame, writer);
+        }
+    }
+
+    public static Game loadGame() throws IOException {
+        String filePath = Gdx.files.local("/Data/Game.json").file().getAbsolutePath();
+        Gson gson = new GsonBuilder()
+            .setPrettyPrinting()
+            .create();
+
+        SaveGame saveGame = null;
+        try (FileReader reader = new FileReader(filePath)) {
+            saveGame = gson.fromJson(reader, SaveGame.class);
+        }
+
+        if (saveGame != null) return SaveLoadController.convertToLoadGame(saveGame);
+        else return null;
+    }
 }

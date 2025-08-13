@@ -44,6 +44,7 @@ public class Game {
     private Hut hut;
     private GreenHouse greenHouse;
     private java.util.Map<ItemsInteface, Integer> dailyShopCounter = new java.util.HashMap<>();
+    private GameModel model;
 
     public Blacksmith getBlacksmith() {
         return blacksmith;
@@ -81,11 +82,6 @@ public class Game {
     public Saloon getSaloon() {
         return saloon;
     }
-
-
-
-
-    private GameModel model;
 
     public GameModel getModel() {
         return model;
@@ -210,5 +206,9 @@ public class Game {
 
     public void setVoting(boolean voting) {
         this.voting = voting;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

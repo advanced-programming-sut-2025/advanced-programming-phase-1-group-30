@@ -1,7 +1,9 @@
 package AP.group30.StardewValley.views.StartMenus;
 
 import AP.group30.StardewValley.Main;
+import AP.group30.StardewValley.controllers.GameMenuController;
 import AP.group30.StardewValley.models.App;
+import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Lobby;
 import AP.group30.StardewValley.models.Users.RegisterQuestions;
@@ -9,6 +11,9 @@ import AP.group30.StardewValley.models.Users.User;
 import AP.group30.StardewValley.network.MessageClasses.LeaveLobby;
 import AP.group30.StardewValley.network.MessageClasses.StartGame;
 import AP.group30.StardewValley.network.MessageClasses.PlayerJoinedLobby;
+import AP.group30.StardewValley.views.CityScreen;
+import AP.group30.StardewValley.views.GameScreen;
+import AP.group30.StardewValley.views.LoadingScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -33,12 +38,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import static AP.group30.StardewValley.views.StartMenus.RegisterMenu.gameScreen;
+
 public class LobbyMenu implements Screen {
     private Stage stage;
     private final Table table;
     private final Label titleLabel;
     private final TextButton backButton;
     private final TextButton startGameButton;
+    private final TextButton loadButton;
     private final Map<String, Table> playerTables = new HashMap<>();
 
     private final TextField TCPField;
@@ -75,6 +83,8 @@ public class LobbyMenu implements Screen {
         backButton = new TextButton("Back", skin);
         startGameButton = new TextButton("Start", skin);
         startGameButton.setVisible(false);
+        loadButton = new TextButton("Load", skin);
+        loadButton.setVisible(false);
 
         TCPField = new TextField("TCP", skin);
         UDPField = new TextField("UDP", skin);
@@ -134,6 +144,7 @@ public class LobbyMenu implements Screen {
         table.add(backButton);
         table.row().pad(15);
         table.add(startGameButton);
+        table.add(loadButton);
         table.row().pad(15);
         table.add(errorLabel);
 
@@ -174,6 +185,23 @@ public class LobbyMenu implements Screen {
             }
         });
 
+        loadButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Game game = null;
+                try {
+                    game = GameMenuController.loadGame();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                App.setCurrentGame(game);
+                RegisterMenu.gameScreen = new GameScreen(game);
+                RegisterMenu.cityScreen = new CityScreen(game);
+                Main.getMain().setScreen(new LoadingScreen(gameScreen));
+            }
+        });
+
         createButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -187,6 +215,7 @@ public class LobbyMenu implements Screen {
 
 //                File projectRoot = new File("/home/hamed/University/StardewValley");
                 File projectRoot = new File("D:\\Amir\\University\\Term_2\\Advanced_Programming\\Project\\advanced-programming-phase-1-group-30");
+//                File projectRoot = new File(String.valueOf(Gdx.files.local(""))); //TODO Will Work?!
                 String wrapper = System.getProperty("os.name").toLowerCase().contains("win") ? "gradlew.bat" : "gradlew";
                 ProcessBuilder pb = new ProcessBuilder(
                     new File(projectRoot, wrapper).getAbsolutePath(),
@@ -303,8 +332,10 @@ public class LobbyMenu implements Screen {
             entry.getValue().setDrawable(new TextureRegionDrawable(frame));
         }
 
-        if (lobby.getUsers().size() > 1 && lobby.getAdmin().equals(App.getCurrentUser().getUsername()))
+        if (lobby.getUsers().size() > 1 && lobby.getAdmin().equals(App.getCurrentUser().getUsername())) {
             startGameButton.setVisible(true);
+            loadButton.setVisible(true);
+        }
         if (lobby.getUsers().size() > 3) {
             createButton.setVisible(false);
             TCPField.setVisible(false);
@@ -401,6 +432,7 @@ public class LobbyMenu implements Screen {
             if (lobby.getUsers().size() > 1) {
                 errorLabel.setVisible(false);
                 startGameButton.setVisible(true);
+                loadButton.setVisible(true);
                 waitingForPlayers = false;
             }
         }
