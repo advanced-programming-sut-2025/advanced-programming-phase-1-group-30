@@ -24,6 +24,7 @@ public class HutScreen {
     private final RefrigeratorScreen refrigerator;
     private final CookingScreen cooking;
     private final ShippingBinScreen shippingBin;
+    private final RadioScreen radioScreen;
 
     public HutScreen(SpriteBatch batch, Skin skin) {
         this.skin = skin;
@@ -48,6 +49,7 @@ public class HutScreen {
         refrigerator = new RefrigeratorScreen(batch, skin);
         cooking = new CookingScreen(batch, skin);
         shippingBin = new ShippingBinScreen(batch, skin);
+        radioScreen = new RadioScreen(batch, skin);
     }
 
     public void show() {
@@ -79,10 +81,12 @@ public class HutScreen {
             if (Gdx.input.isKeyJustPressed(Input.Keys.R)) refrigerator.toggle();
             if (Gdx.input.isKeyJustPressed(Input.Keys.C)) cooking.toggle();
             if (Gdx.input.isKeyJustPressed(Input.Keys.S)) shippingBin.toggle();
+            if (Gdx.input.isKeyJustPressed(Input.Keys.N)) radioScreen.toggle();
 
             refrigerator.render();
             cooking.render();
             shippingBin.render();
+            radioScreen.render();
         }
     }
 

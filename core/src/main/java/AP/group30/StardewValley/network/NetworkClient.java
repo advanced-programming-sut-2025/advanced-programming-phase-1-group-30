@@ -44,6 +44,7 @@ public class NetworkClient {
         kryo.register(RemoveFromServer.class);
         kryo.register(Reaction.class);
         kryo.register(LeaderBoardUpdate.class);
+        kryo.register(Radio.class);
     }
 
     public void connect(String ip, int tcpPort, int udpPort) throws IOException {
@@ -136,7 +137,7 @@ public class NetworkClient {
                     Reaction r = (Reaction) object;
                     App.getCurrentGame().getModel().reactionPlayer(r);
                 }
-              
+
                 if (object instanceof LeaderBoardUpdate) {
                     LeaderBoardUpdate lbu = (LeaderBoardUpdate) object;
 
@@ -157,6 +158,23 @@ public class NetworkClient {
                             PlayerLeaderboard playerLeaderboard = new PlayerLeaderboard(lbu.receiverUsername,
                                 lbu.money, lbu.farming, lbu.foraging, lbu.fishing, lbu.mining, lbu.numberOfQuests);
                             App.addPlayerLeaderboard(playerLeaderboard);
+                        }
+                    }
+                }
+
+                if (object instanceof Radio) {
+                    Radio r = (Radio) object;
+
+                    if (r.send) {
+                        if (r.receiverUsername.equals(App.getCurrentGame().getCurrentPlayer().getUsername())) {
+                            r.send = false;
+                            r.path = App.getCurrentRadio();
+
+                            Main.getMain().client.send(r);
+                        }
+                    } else {
+                        if (r.senderUsername.equals(App.getCurrentGame().getCurrentPlayer().getUsername())) {
+                            App.addOtherPlayerRadio(r.receiverUsername, r.path);
                         }
                     }
                 }
