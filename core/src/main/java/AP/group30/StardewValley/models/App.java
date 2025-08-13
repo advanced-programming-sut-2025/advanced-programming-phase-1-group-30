@@ -8,6 +8,7 @@ import AP.group30.StardewValley.network.NetworkClient;
 import AP.group30.StardewValley.views.CityScreen;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class App {
     private static User currentUser;
@@ -25,6 +26,8 @@ public class App {
     private static NetworkClient networkClient; // Add this line
 
     private static final ArrayList<PlayerLeaderboard> playerLeaderboards = new ArrayList<>();
+    private static final HashMap<String, String> otherPlayersRadio = new HashMap<>();
+    private static String currentRadio = null;
 
     public static ArrayList<String> getQuestions() {return questions;}
 
@@ -124,5 +127,26 @@ public class App {
         else {
             playerLeaderboards.add(playerLeaderboard);
         }
+    }
+
+    public static HashMap<String, String> getOtherPlayersRadio() {
+        return otherPlayersRadio;
+    }
+
+    public static void addOtherPlayerRadio(String username, String radio) {
+        if (!otherPlayersRadio.containsKey(username)) {
+            otherPlayersRadio.put(username, radio);
+        }
+        else {
+            otherPlayersRadio.replace(username, radio);
+        }
+    }
+
+    public static String getCurrentRadio() {
+        return currentRadio;
+    }
+
+    public static void setCurrentRadio(String currentRadio) {
+        App.currentRadio = currentRadio;
     }
 }

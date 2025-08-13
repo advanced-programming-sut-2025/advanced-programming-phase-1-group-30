@@ -54,6 +54,7 @@ public class NetworkServer {
         kryo.register(RemoveFromServer.class);
         kryo.register(Reaction.class);
         kryo.register(LeaderBoardUpdate.class);
+        kryo.register(Radio.class);
         startTime = System.currentTimeMillis();
 
         // Correct: extend Listener, don’t implement it
@@ -163,7 +164,11 @@ public class NetworkServer {
                     for (Connection c : server.getConnections()) {
                         c.sendTCP((LeaderBoardUpdate) object);
                     }
-                } else if (object instanceof FrameworkMessage.KeepAlive) {
+                } else if (object instanceof Radio) {
+                    for (Connection c : server.getConnections()) {
+                        c.sendTCP((Radio) object);
+                    }
+                }else if (object instanceof FrameworkMessage.KeepAlive) {
                     // Ignore keep-alive messages, they are handled internally by KryoNet
                 } else {
                     System.out.println("[Server] Unknown message type: " + object.getClass().getSimpleName());
