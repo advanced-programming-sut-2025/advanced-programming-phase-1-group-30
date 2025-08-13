@@ -566,6 +566,10 @@ public class Map {
         }
     }
 
+    public int getId() {
+        return id;
+    }
+
     public Tile[][] getTiles() {
         return tiles;
     }

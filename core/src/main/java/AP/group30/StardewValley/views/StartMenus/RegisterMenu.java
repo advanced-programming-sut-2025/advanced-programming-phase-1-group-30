@@ -1,6 +1,7 @@
 package AP.group30.StardewValley.views.StartMenus;
 
 import AP.group30.StardewValley.Main;
+import AP.group30.StardewValley.controllers.GameMenuController;
 import AP.group30.StardewValley.controllers.NewGameController;
 import AP.group30.StardewValley.controllers.RegisterMenuController;
 import AP.group30.StardewValley.models.App;
@@ -25,6 +26,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
+import java.io.IOException;
 
 public class RegisterMenu implements Screen {
     private Stage stage;
@@ -302,13 +305,13 @@ public class RegisterMenu implements Screen {
             App.getAppUsers().add(user1);
             App.getAppUsers().add(user2);
             App.setCurrentUser(user1);
-            Game game = NewGameController.NewGame(2, user1, null, null, null, 2, 3, 2, 3);
-            PlayerJoin playerJoin = new PlayerJoin();
-            playerJoin.playerId = String.valueOf(Main.getMain().id);
-            playerJoin.displayName = game.getCurrentPlayer().getUsername();
-            App.getNetworkClient().send(playerJoin);
-
-            game.getModel().setMyPlayerId(String.valueOf(Main.getMain().id));
+            Game game = NewGameController.NewGame(2, user1, user2, null, null, 2, 3, 2, 3);
+//            PlayerJoin playerJoin = new PlayerJoin();
+//            playerJoin.playerId = String.valueOf(Main.getMain().id);
+//            playerJoin.displayName = game.getCurrentPlayer().getUsername();
+//            App.getNetworkClient().send(playerJoin);
+//
+//            game.getModel().setMyPlayerId(String.valueOf(Main.getMain().id));
 
             gameScreen = new GameScreen(game);
             cityScreen = new CityScreen(game);

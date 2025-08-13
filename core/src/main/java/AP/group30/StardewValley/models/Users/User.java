@@ -109,6 +109,10 @@ public class User {
         this.isInGame = !this.isInGame;
     }
 
+    public void setInGame(boolean inGame) {
+        isInGame = inGame;
+    }
+
     public static User findUserByUsername(String username) {
         for (User user : App.getAppUsers()) {
             if (user.getUsername().equals(username)) return user;

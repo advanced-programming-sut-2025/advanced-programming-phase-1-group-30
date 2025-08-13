@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
 public class ForagingMineral extends Product implements GameObjects {
-    private Texture texture;
+    private Texture foragingTexture;
     private final ForagingMineralType type;
     private float width, height;
     private Rectangle rect = new Rectangle();
@@ -20,7 +20,7 @@ public class ForagingMineral extends Product implements GameObjects {
         this.type = type;
         this.x = x;
         this.y = y;
-        this.texture = texture;
+        this.foragingTexture = texture;
         width = 32;
         height = 32;
     }
@@ -42,6 +42,6 @@ public class ForagingMineral extends Product implements GameObjects {
     @Override
     public void render(SpriteBatch batch) {
         batch.draw(GameAssetManager.assetManager.get(GameAssetManager.stone2), x, y, width, height);
-        batch.draw(texture, x, y, width, height);
+        batch.draw(foragingTexture, x, y, width, height);
     }
 }

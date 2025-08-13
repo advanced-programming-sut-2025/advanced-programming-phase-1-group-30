@@ -52,7 +52,6 @@ public class Player implements GameObjects {
     private Refrigerator refrigerator;
     private int money;
     private final HashMap<Player, Friendship> friendships = new HashMap<>();
-    private final ArrayList<Skills> skills = new ArrayList<>();
     private int selectionNumber;
     private boolean isPassedOut = false;
     private Item wield;
@@ -61,7 +60,7 @@ public class Player implements GameObjects {
     private int fishing = 0;
     private int mining = 0;
     private int maxEnergy;
-    private final ArrayList<Item> products = new ArrayList<>();
+    private ArrayList<Item> products = new ArrayList<>();
     java.util.Map<Item, Integer> itemsBoughtToday = new HashMap<>();
     private final ArrayList<Animal> playerAnimals = new ArrayList<>();
     private ArrayList<IndustrialProductType> craftingRecipes = new ArrayList<>();
@@ -75,7 +74,6 @@ public class Player implements GameObjects {
     private Player askedMarriage = null;
     private String gender;
     private boolean inCity;
-    private Map savedMap;
     private int lastEnergy;
     private boolean energyBuff = false;
     private boolean levelBuff = false;
@@ -113,7 +111,7 @@ public class Player implements GameObjects {
         this.energy = 1000;
         initializePlayerAnimations();
         playerRegion = new TextureRegion(playerTexture);
-        this.shippingBin = new ShippingBin(ShippingBinType.REGULAR, 70, 10);
+        this.shippingBin = new ShippingBin(ShippingBinType.REGULAR);
         this.refrigerator = new Refrigerator();
         this.backPack = new BackPack(BackPackType.INITIAL_BACKPACK);
         this.backPack.addItem(new Axe(1, AxeType.NORMAL));
@@ -246,10 +244,6 @@ public class Player implements GameObjects {
 
     public void setPassedOut(boolean passedOut) {
         isPassedOut = passedOut;
-    }
-
-    public ArrayList<Skills> getSkills() {
-        return skills;
     }
 
     public int getSelectionNumber() {
@@ -403,6 +397,10 @@ public class Player implements GameObjects {
         this.products.remove(product);
     }
 
+    public void setProducts(ArrayList<Item> products) {
+        this.products = products;
+    }
+
     public java.util.Map<Item, Integer> getItemsBoughtToday() {
         return itemsBoughtToday;
     }
@@ -503,14 +501,6 @@ public class Player implements GameObjects {
         this.inCity = inCity;
     }
 
-    public Map getSavedMap() {
-        return savedMap;
-    }
-
-    public void setSavedMap(Map savedMap) {
-        this.savedMap = savedMap;
-    }
-
     public int getCityX() {
         return cityX;
     }
@@ -599,6 +589,10 @@ public class Player implements GameObjects {
 
     public ArrayList<ArtisanItemProsses> getArtisanItemsProsses() {
         return artisanItemsProsses;
+    }
+
+    public void setArtisanItemsProsses(ArrayList<ArtisanItemProsses> artisanItemsProsses) {
+        this.artisanItemsProsses = artisanItemsProsses;
     }
 
     public void addArtisanItemProsses(ArtisanItemProsses artisanItemProsses) {
@@ -768,5 +762,29 @@ public class Player implements GameObjects {
         } else {
             batch.draw(reactionTexture, x, y + 70, 40 , 40);
         }
+    }
+
+    public boolean isMoving() {
+        return isMoving;
+    }
+
+    public float getStateTime() {
+        return stateTime;
+    }
+
+    public void setItemsBoughtToday(java.util.Map<Item, Integer> itemsBoughtToday) {
+        this.itemsBoughtToday = itemsBoughtToday;
+    }
+
+    public void setCraftingRecipes(ArrayList<IndustrialProductType> craftingRecipes) {
+        this.craftingRecipes = craftingRecipes;
+    }
+
+    public void setDevices(ArrayList<IndustrialProductType> devices) {
+        this.devices = devices;
+    }
+
+    public void setRecipes(ArrayList<FoodType> recipes) {
+        this.recipes = recipes;
     }
 }

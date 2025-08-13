@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Stone extends Item implements GameObjects {
-    private final Texture texture = GameAssetManager.assetManager.get(GameAssetManager.stones);
-    private final float width = texture.getWidth(), height = texture.getHeight();
+    private final Texture stoneTexture = GameAssetManager.assetManager.get(GameAssetManager.stones);
+    private final float width = stoneTexture.getWidth(), height = stoneTexture.getHeight();
     private Rectangle rect = new Rectangle();
     private int x, y;
 
@@ -39,7 +39,7 @@ public class Stone extends Item implements GameObjects {
     }
 
     public Texture getTexture() {
-        return texture;
+        return stoneTexture;
     }
 
     public float getWidth() {
@@ -60,6 +60,6 @@ public class Stone extends Item implements GameObjects {
 
     @Override
     public void render(SpriteBatch batch) {
-        batch.draw(texture, x, y, width, height);
+        batch.draw(stoneTexture, x, y, width, height);
     }
 }

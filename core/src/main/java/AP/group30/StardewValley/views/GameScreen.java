@@ -54,6 +54,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
 import javax.management.MBeanRegistration;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -438,6 +439,15 @@ public class GameScreen implements Screen {
         stage.draw();
 
         if (leave) {
+            Main.getMain().setScreen(new MainMenu(GameAssetManager.assetManager.get(GameAssetManager.menuSkin)));
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.X)) {
+            try {
+                GameMenuController.saveGame();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             Main.getMain().setScreen(new MainMenu(GameAssetManager.assetManager.get(GameAssetManager.menuSkin)));
         }
     }

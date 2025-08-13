@@ -89,6 +89,7 @@ public class NewGameController {
             player.setCityX(-1);
             if (player.getUsername().equals(App.getCurrentUser().getUsername())) game.setCurrentPlayer(player);
         }
+        game.setCurrentMap(game.getCurrentPlayer().getMap());
 
         for (Player player : players) {
             for (Player p : players) {

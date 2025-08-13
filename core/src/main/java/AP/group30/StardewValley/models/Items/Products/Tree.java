@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 public class Tree extends Product implements GameObjects {
     private final TreeType type;
     private boolean isHitByThunder;
-    private Texture texture;
+    private Texture treeTexture;
     private Texture summerTexture;
     private Texture springTexture;
     private Texture fallTexture;
@@ -50,7 +50,7 @@ public class Tree extends Product implements GameObjects {
     }
 
     public Texture getTexture() {
-        return texture;
+        return treeTexture;
     }
 
     public float getWidth() {
