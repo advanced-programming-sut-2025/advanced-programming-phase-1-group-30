@@ -19,6 +19,8 @@ public class Harvey extends NPC {
     private static Animation<TextureRegion> animation;
     private static int x;
     private static int y;
+    public static float reactionTimer = 0.0f;
+
     public Harvey() {
         super(NPCDetail.HARVEY);
         TextureRegion[] Region = new TextureRegion[4];
@@ -215,5 +217,9 @@ public class Harvey extends NPC {
         currentFrame = animation.getKeyFrame(stateTime);
         TextureRegion playerRegion = currentFrame;
         batch.draw(currentFrame, x, y, playerRegion.getRegionWidth() * 2f , playerRegion.getRegionHeight() * 2f);
+        batch.draw(GameAssetManager.assetManager.get(GameAssetManager.chatNPC), x + 18, y + 50, 35 , 24);
+        if (Harvey.reactionTimer > 0) {
+            batch.draw(reactionTexture, x, y + 70, 40 , 40);
+        }
     }
 }

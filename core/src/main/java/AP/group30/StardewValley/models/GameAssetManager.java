@@ -493,6 +493,8 @@ public class GameAssetManager {
     public static final AssetDescriptor<Texture> yesEmote = new AssetDescriptor<>("Stardew_Valley_Images/Emote/yes.png", Texture.class);
     public static final AssetDescriptor<Texture> sickEmote = new AssetDescriptor<>("Stardew_Valley_Images/Emote/sick.png", Texture.class);
     public static final AssetDescriptor<Texture> chat = new AssetDescriptor<>("Stardew_Valley_Images/Chat/chat box.png", Texture.class);
+    public static final AssetDescriptor<Texture> chatNPC = new AssetDescriptor<>("Stardew_Valley_Images/Chat/npc chat.png", Texture.class);
+
 
     public static void queueAsset() {
         assetManager.load(background);
@@ -947,6 +949,7 @@ public class GameAssetManager {
         assetManager.load(yesEmote);
         assetManager.load(sickEmote);
         assetManager.load(chat);
+        assetManager.load(chatNPC);
 
     }
 

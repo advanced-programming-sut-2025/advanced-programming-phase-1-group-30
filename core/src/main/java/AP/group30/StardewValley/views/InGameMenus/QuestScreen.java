@@ -3,8 +3,9 @@ package AP.group30.StardewValley.views.InGameMenus;
 import AP.group30.StardewValley.controllers.GameMenuController;
 import AP.group30.StardewValley.models.App;
 import AP.group30.StardewValley.models.GameAssetManager;
-import AP.group30.StardewValley.models.Players.NPC.NPC;
+import AP.group30.StardewValley.models.Players.NPC.*;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.StringBuilder;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class QuestScreen {
@@ -177,24 +179,6 @@ public class QuestScreen {
             }
         });
 
-
-        stage.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                // Only handle if quest screen is visible
-                if (!table1.isVisible()) {
-                    return false;
-                }
-
-                if (x < 480 || x > 1430 ||
-                    y < 300 || y > 820) {
-                    toggle();
-                    return true;
-                }
-                return false;
-            }
-        });
-
         stage.addActor(table1);
         stage.addActor(table2);
         stage.addActor(errorLabel);
@@ -232,6 +216,9 @@ public class QuestScreen {
         if (visible) {
             stage.act();
             stage.draw();
+            if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+                toggle();
+            }
         }
     }
 
@@ -321,6 +308,16 @@ public class QuestScreen {
 
     private void handleMove() {
         errorLabel.setText(GameMenuController.giftNPC(currentNPC.getName(),giftTextField.getText()));
+        if (!errorLabel.getText().equals("You don't have this gift!")) {
+            toggle();
+            switch (currentNPC.getDetail()){
+                case LEAH -> Leah.reactionTimer = 3;
+                case ABIGAIL -> Abigail.reactionTimer = 3;
+                case ROBIN -> Robin.reactionTimer = 3;
+                case HARVEY -> Harvey.reactionTimer = 3;
+                case SEBASTIAN -> Sebastian.reactionTimer = 3;
+            }
+        }
         errorLabel.setVisible(true);
     }
 
