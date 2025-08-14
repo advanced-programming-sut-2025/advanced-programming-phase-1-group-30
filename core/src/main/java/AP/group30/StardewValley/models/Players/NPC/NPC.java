@@ -1,5 +1,7 @@
 package AP.group30.StardewValley.models.Players.NPC;
 
+import AP.group30.StardewValley.models.Game;
+import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Maps.Tile;
 import com.badlogic.gdx.Gdx;
 
@@ -7,6 +9,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -22,6 +25,7 @@ public abstract class NPC {
     private int tillQuest3;
     private Rectangle rectangle = new Rectangle();
     protected float dialogueTimer = 0.0f;
+    protected static Texture reactionTexture = GameAssetManager.assetManager.get(GameAssetManager.heartEmote);
 
     public NPC(NPCDetail detail) {
         name = detail.name;

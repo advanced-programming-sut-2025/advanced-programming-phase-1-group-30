@@ -1,6 +1,7 @@
 package AP.group30.StardewValley.models.Players.NPC;
 
 import AP.group30.StardewValley.models.App;
+import AP.group30.StardewValley.models.Game;
 import AP.group30.StardewValley.models.GameAssetManager;
 import AP.group30.StardewValley.models.Items.Foods.FoodType;
 import AP.group30.StardewValley.models.Items.IndustrialProducts.IndustrialProduct;
@@ -19,10 +20,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import static AP.group30.StardewValley.models.GameAssetManager.reaction;
+
 public class Leah extends NPC {
     private static Animation<TextureRegion> animation;
     private static int x;
     private static int y;
+    public static float reactionTimer = 0.0f;
     public Leah() {
         super(NPCDetail.LEAH);
         TextureRegion[] Region = new TextureRegion[4];
@@ -210,5 +214,9 @@ public class Leah extends NPC {
         currentFrame = animation.getKeyFrame(stateTime);
         TextureRegion playerRegion = currentFrame;
         batch.draw(currentFrame, x, y, playerRegion.getRegionWidth() * 2f , playerRegion.getRegionHeight() * 2f);
+        batch.draw(GameAssetManager.assetManager.get(GameAssetManager.chatNPC), x + 18, y + 50, 35 , 24);
+        if (Leah.reactionTimer > 0) {
+            batch.draw(reactionTexture, x, y + 70, 40 , 40);
+        }
     }
 }

@@ -160,7 +160,7 @@ public class CityScreen implements Screen {
         GameScreen.renderWallsAroundMap(tiles, batch);
         GameScreen.renderMap(batch, map);
         GameScreen.renderEntities(batch, entities);
-        renderNPCs(batch, stateTime);
+        renderNPCs(batch, stateTime, delta);
         for (RemotePlayer p : game.getModel().getOtherPlayers()) {
             if (p.username.equals(App.getCurrentUser().getUsername())) continue;
             p.render(batch);
@@ -432,12 +432,27 @@ public class CityScreen implements Screen {
         return shopRect;
     }
 
-    static void renderNPCs(SpriteBatch batch, float stateTime) {
+    static void renderNPCs(SpriteBatch batch, float stateTime, float delta) {
         Leah.render(batch, stateTime);
+        if (Leah.reactionTimer > 0) {
+            Leah.reactionTimer -= delta;
+        }
         Harvey.render(batch, stateTime);
+        if (Harvey.reactionTimer > 0) {
+            Harvey.reactionTimer -= delta;
+        }
         Robin.render(batch, stateTime);
+        if (Robin.reactionTimer > 0) {
+            Robin.reactionTimer -= delta;
+        }
         Sebastian.render(batch, stateTime);
+        if (Sebastian.reactionTimer > 0) {
+            Sebastian.reactionTimer -= delta;
+        }
         Abigail.render(batch, stateTime);
+        if (Abigail.reactionTimer > 0) {
+            Abigail.reactionTimer -= delta;
+        }
     }
 
     public static void drawOtherPlayersList(BitmapFont font, SpriteBatch batch, OrthographicCamera camera) {

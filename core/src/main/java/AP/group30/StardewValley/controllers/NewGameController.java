@@ -45,11 +45,11 @@ public class NewGameController {
         players.add(player1);
 
         if (numberOfPlayers >= 2) {
-            Player player2 = new Player(user2,user2.getUsername(), 1, user2.getGender(),
-                Map.getMapById(mapNumber2));
-            user2.setPlayer(player2);
-            user2.setNumOfGames(user2.getNumOfGames() + 1);
-            players.add(player2);
+//            Player player2 = new Player(user2,user2.getUsername(), 1, user2.getGender(),
+//                Map.getMapById(mapNumber2));
+//            user2.setPlayer(player2);
+//            user2.setNumOfGames(user2.getNumOfGames() + 1);
+//            players.add(player2);
         }
 
         if (numberOfPlayers >= 3) {
